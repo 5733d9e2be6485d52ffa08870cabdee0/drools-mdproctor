@@ -396,8 +396,8 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
     }
 
     public List<NetworkNode> getNodesInSegment() {
-        List<NetworkNode> nodes = new java.util.LinkedList<>();
-        NetworkNode currentNode = tipNode;
+        List<NetworkNode> nodes       = new java.util.LinkedList<>();
+        NetworkNode       currentNode = tipNode;
         while (currentNode != rootNode) {
             nodes.add(0, currentNode);
             currentNode = ((LeftTupleSinkNode)currentNode).getLeftTupleSource();

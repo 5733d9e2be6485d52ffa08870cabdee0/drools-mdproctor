@@ -32,10 +32,10 @@ import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
 import org.drools.core.base.ObjectType;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
-import org.drools.core.util.index.IndexUtil;
+import org.drools.core.util.index.MemoryFactory;
 import org.kie.internal.conf.IndexPrecedenceOption;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.getEmptyPropertyReactiveMask;
+import static org.drools.core.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
 import static org.drools.core.util.index.IndexUtil.compositeAllowed;
 import static org.drools.core.util.index.IndexUtil.isIndexableForNode;
 
@@ -213,7 +213,7 @@ public class DefaultBetaConstraints
 
     public BetaMemory createBetaMemory(final RuleBaseConfiguration config,
                                        final short nodeType ) {
-        return IndexUtil.Factory.createBetaMemory(config, nodeType, constraints);
+        return MemoryFactory.createBetaMemory(config, nodeType, constraints);
     }
 
     public int hashCode() {

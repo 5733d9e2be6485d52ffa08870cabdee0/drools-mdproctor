@@ -44,7 +44,7 @@ import static org.drools.core.common.PhreakPropagationContextFactory.createPropa
 public class SlidingTimeWindow
         implements
         Externalizable,
-        Behavior {
+        BehaviorRuntime {
 
     protected long size;
     // stateless job
@@ -85,8 +85,8 @@ public class SlidingTimeWindow
     }
 
     @Override
-    public BehaviorType getType() {
-        return BehaviorType.TIME_WINDOW;
+    public Behavior.BehaviorType getType() {
+        return Behavior.BehaviorType.TIME_WINDOW;
     }
 
     public void setWindowNode(WindowNode windowNode) {
@@ -108,14 +108,13 @@ public class SlidingTimeWindow
     }
 
     @Override
-    public Behavior.Context createContext() {
+    public BehaviourContext createContext() {
         return new SlidingTimeWindowContext();
     }
 
     @Override
     public boolean assertFact(final Object context,
                               final InternalFactHandle fact,
-                              final PropagationContext pctx,
                               final ReteEvaluator reteEvaluator) {
         final SlidingTimeWindowContext queue = (SlidingTimeWindowContext) context;
         final EventFactHandle handle = (EventFactHandle) fact;
@@ -139,7 +138,6 @@ public class SlidingTimeWindow
     @Override
     public void retractFact(final Object context,
                             final InternalFactHandle fact,
-                            final PropagationContext pctx,
                             final ReteEvaluator reteEvaluator) {
         final SlidingTimeWindowContext queue = (SlidingTimeWindowContext) context;
         final EventFactHandle handle = (EventFactHandle) fact;
@@ -164,7 +162,6 @@ public class SlidingTimeWindow
 
     @Override
     public void expireFacts(final Object context,
-                            final PropagationContext pctx,
                             final ReteEvaluator reteEvaluator) {
         TimerService clock = reteEvaluator.getTimerService();
         long currentTime = clock.getCurrentTime();
@@ -197,7 +194,7 @@ public class SlidingTimeWindow
 
     protected void updateNextExpiration(final InternalFactHandle fact,
                                         final ReteEvaluator reteEvaluator,
-                                        final Behavior.Context context,
+                                        final BehaviourContext context,
                                         final int nodeId) {
         TimerService clock = reteEvaluator.getTimerService();
         if ( fact != null ) {
@@ -234,7 +231,7 @@ public class SlidingTimeWindow
 
     public static class SlidingTimeWindowContext
             implements
-            Behavior.Context,
+            BehaviourContext,
             Externalizable {
 
         private PriorityQueue<EventFactHandle> queue;
@@ -312,14 +309,14 @@ public class SlidingTimeWindow
             JobContext,
             Externalizable {
         public ReteEvaluator         reteEvaluator;
-        public int                   nodeId;
-        public Behavior              behavior;
-        public Behavior.Context      behaviorContext;
+        public int              nodeId;
+        public BehaviorRuntime  behavior;
+        public BehaviourContext behaviorContext;
 
         public BehaviorJobContext(int                   nodeId,
                                   ReteEvaluator reteEvaluator,
-                                  Behavior behavior,
-                                  Behavior.Context behaviorContext) {
+                                  BehaviorRuntime behavior,
+                                  BehaviourContext behaviorContext) {
             super();
             this.nodeId = nodeId;
             this.reteEvaluator = reteEvaluator;
@@ -375,15 +372,15 @@ public class SlidingTimeWindow
     public static class BehaviorExpireWMAction
             extends PropagationEntry.AbstractPropagationEntry
             implements WorkingMemoryAction {
-        protected Behavior behavior;
-        protected Behavior.Context context;
-        protected int nodeId;
+        protected BehaviorRuntime  behavior;
+        protected BehaviourContext context;
+        protected int              nodeId;
 
         protected BehaviorExpireWMAction() { }
 
         public BehaviorExpireWMAction(final int nodeId,
-                                      Behavior behavior,
-                                      Behavior.Context context) {
+                                      BehaviorRuntime behavior,
+                                      BehaviourContext context) {
             super();
             this.nodeId = nodeId;
             this.behavior = behavior;
@@ -396,7 +393,7 @@ public class SlidingTimeWindow
 
             WindowMemory memory = inCtx.getWorkingMemory().getNodeMemory( windowNode );
 
-            Behavior.Context[] behaviorContext = memory.behaviorContext;
+            BehaviourContext[] behaviorContext = memory.behaviorContext;
 
             int i = inCtx.readInt();
 
@@ -406,7 +403,7 @@ public class SlidingTimeWindow
 
         @Override
         public void execute(ReteEvaluator reteEvaluator) {
-            this.behavior.expireFacts( context, null, reteEvaluator );
+            this.behavior.expireFacts(context, reteEvaluator);
         }
     }
 }

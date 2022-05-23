@@ -17,6 +17,9 @@
 package org.kie.api.runtime.rule;
 
 public interface AgendaGroup {
+
+    String MAIN = "MAIN";
+
     /**
      * @return
      *      The AgendaGroup name

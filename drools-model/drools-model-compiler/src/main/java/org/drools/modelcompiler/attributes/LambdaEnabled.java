@@ -16,6 +16,8 @@
 
 package org.drools.modelcompiler.attributes;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.rule.Declaration;
@@ -32,8 +34,8 @@ public class LambdaEnabled extends DynamicAttributeEvaluator<Boolean> implements
     }
 
     @Override
-    public boolean getValue( Tuple tuple, Declaration[] declrs, RuleImpl rule, ReteEvaluator reteEvaluator ) {
-        Object[] facts = declarationsToFacts( reteEvaluator, tuple, getDeclarations(tuple), supplier.getVariables() );
+    public boolean getValue(BaseTuple tuple, Declaration[] declrs, RuleImpl rule, ValueResolver valueResolver) {
+        Object[] facts = declarationsToFacts( valueResolver, (Tuple) tuple, getDeclarations(tuple), supplier.getVariables() );
         return supplier.supply( facts );
     }
 }

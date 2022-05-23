@@ -29,7 +29,7 @@ import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.common.PropagationContext;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
 
 public class BeliefSystemLogicalCallback extends PropagationEntry.AbstractPropagationEntry implements WorkingMemoryAction {
 

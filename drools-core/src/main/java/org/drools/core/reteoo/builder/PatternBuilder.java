@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.drools.core.base.ClassObjectType;
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.WindowNode;
 import org.drools.core.rule.Accumulate;
-import org.drools.core.rule.Behavior;
+import org.drools.core.rule.BehaviorRuntime;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.EntryPointId;
 import org.drools.core.rule.GroupElement;
@@ -124,7 +124,7 @@ public class PatternBuilder
     }
 
     private void buildBehaviors(BuildContext context, BuildUtils utils, Pattern pattern, Constraints constraints) {
-        final List<Behavior> behaviors = pattern.getBehaviors();
+        final List<BehaviorRuntime> behaviors = pattern.getBehaviors();
         if ( pattern.getSource() == null ||
                 ( !( pattern.getSource() instanceof WindowReference) &&
                   ( context.getCurrentEntryPoint() != EntryPointId.DEFAULT || ! behaviors.isEmpty() ) ) ){
@@ -334,7 +334,7 @@ public class PatternBuilder
         
         if ( pattern.getObjectType() instanceof ClassObjectType ) {
             // Is this the query node, if so we don't want any memory
-            if ( DroolsQuery.class == ((ClassObjectType) pattern.getObjectType()).getClassType() ) {
+            if (DroolsQueryImpl.class == ((ClassObjectType) pattern.getObjectType()).getClassType() ) {
                 context.setTupleMemoryEnabled( false );
                 context.setObjectTypeNodeMemoryEnabled( false );
             }
@@ -353,7 +353,7 @@ public class PatternBuilder
             } else {
                 // otherwise calculate it based on behaviours and temporal constraints
                 long offset = NEVER_EXPIRES;
-                for ( Behavior behavior : pattern.getBehaviors() ) {
+                for ( BehaviorRuntime behavior : pattern.getBehaviors() ) {
                     if ( behavior.getExpirationOffset() != NEVER_EXPIRES ) {
                         offset = Math.max( behavior.getExpirationOffset(), offset );
                     }

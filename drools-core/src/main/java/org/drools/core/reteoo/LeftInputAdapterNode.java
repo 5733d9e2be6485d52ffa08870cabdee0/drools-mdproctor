@@ -50,7 +50,7 @@ import static org.drools.core.phreak.AddRemoveRule.findPathsToFlushFromRia;
 import static org.drools.core.phreak.AddRemoveRule.flushLeftTupleIfNecessary;
 import static org.drools.core.phreak.AddRemoveRule.forceFlushLeftTuple;
 import static org.drools.core.phreak.AddRemoveRule.forceFlushPath;
-import static org.drools.core.reteoo.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
 
 /**
  * All asserting Facts must propagated into the right <code>ObjectSink</code> side of a BetaNode, if this is the first Pattern

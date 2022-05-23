@@ -39,7 +39,7 @@ import org.drools.core.rule.accessor.FieldValue;
 import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.util.index.AlphaRangeIndex;
-import org.drools.core.util.index.IndexUtil.ConstraintType;
+import org.drools.core.util.index.ConstraintOperatorType;
 
 public class CompositeObjectSinkAdapter implements ObjectSinkPropagator {
 
@@ -204,9 +204,9 @@ public class CompositeObjectSinkAdapter implements ObjectSinkPropagator {
     }
 
     private static boolean isHashable( IndexableConstraint indexableConstraint ) {
-        return indexableConstraint.getConstraintType() == ConstraintType.EQUAL && indexableConstraint.getField() != null &&
+        return indexableConstraint.getConstraintType() == ConstraintOperatorType.EQUAL && indexableConstraint.getField() != null &&
                 indexableConstraint.getFieldExtractor().getValueType() != ValueType.OBJECT_TYPE &&
-                // our current implementation does not support hashing of deeply nested properties
+               // our current implementation does not support hashing of deeply nested properties
                 indexableConstraint.getFieldExtractor().getIndex() >= 0;
     }
 
@@ -468,8 +468,8 @@ public class CompositeObjectSinkAdapter implements ObjectSinkPropagator {
     private boolean isRangeIndexable(AlphaNode alphaNode) {
         AlphaNodeFieldConstraint fieldConstraint = alphaNode.getConstraint();
         if (fieldConstraint instanceof IndexableConstraint) {
-            IndexableConstraint indexableConstraint = (IndexableConstraint) fieldConstraint;
-            ConstraintType constraintType = indexableConstraint.getConstraintType();
+            IndexableConstraint    indexableConstraint = (IndexableConstraint) fieldConstraint;
+            ConstraintOperatorType constraintType      = indexableConstraint.getConstraintType();
             return (constraintType.isAscending() || constraintType.isDescending()) &&
                     indexableConstraint.getField() != null && !indexableConstraint.getField().isNull() &&
                     indexableConstraint.getFieldExtractor().getValueType() != ValueType.OBJECT_TYPE &&

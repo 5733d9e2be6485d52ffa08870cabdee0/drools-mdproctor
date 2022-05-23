@@ -16,6 +16,7 @@
 
 package org.drools.core.phreak;
 
+import org.drools.core.base.BaseTuple;
 import org.drools.core.reteoo.Tuple;
 
 import java.util.Collection;
@@ -26,14 +27,14 @@ public class AbstractReactiveObject implements ReactiveObject {
 
     private Collection<Tuple> lts;
 
-    public void addLeftTuple(Tuple leftTuple) {
+    public void addTuple(BaseTuple tuple) {
         if (lts == null) {
             lts = new HashSet<>();
         }
-        lts.add(leftTuple);
+        lts.add(tuple);
     }
 
-    public Collection<Tuple> getLeftTuples() {
+    public Collection<BaseTuple> getTuples() {
         return lts != null ? lts : Collections.emptyList();
     }
 
@@ -42,7 +43,7 @@ public class AbstractReactiveObject implements ReactiveObject {
     }
 
     @Override
-    public void removeLeftTuple(Tuple leftTuple) {
-        lts.remove(leftTuple);
+    public void removeTuple(BaseTuple tuple) {
+        lts.remove(tuple);
     }
 }

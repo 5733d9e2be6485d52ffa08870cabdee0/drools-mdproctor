@@ -21,8 +21,8 @@ import java.io.Externalizable;
 import org.drools.core.common.BaseNode;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.common.RuleBasePartitionId;
 import org.drools.core.common.PropagationContext;
+import org.drools.core.common.RuleBasePartitionId;
 
 public interface ObjectSinkPropagator
     extends
@@ -31,7 +31,7 @@ public interface ObjectSinkPropagator
     ObjectSinkPropagator addObjectSink(ObjectSink sink, int alphaNodeHashingThreshold, int alphaNodeRangeIndexThreshold);
     ObjectSinkPropagator removeObjectSink(ObjectSink sink);
 
-    default void changeSinkPartition( ObjectSink sink, RuleBasePartitionId oldPartition, RuleBasePartitionId newPartition, int alphaNodeHashingThreshold, int alphaNodeRangeIndexThreshold ) { }
+    default void changeSinkPartition(ObjectSink sink, RuleBasePartitionId oldPartition, RuleBasePartitionId newPartition, int alphaNodeHashingThreshold, int alphaNodeRangeIndexThreshold) { }
 
     void propagateAssertObject(InternalFactHandle factHandle,
                                PropagationContext context,

@@ -24,7 +24,7 @@ import java.util.Map;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.reteoo.RuleTerminalNode;
+import org.drools.core.rule.SortDeclarations;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.accessor.Enabled;
 import org.drools.core.reteoo.Tuple;
@@ -108,7 +108,7 @@ public class MVELEnabledExpression
         for ( Declaration declr : declrs ) {
             enabledDeclarations[i++] = decls.get( declr.getIdentifier() );
         }
-        Arrays.sort( enabledDeclarations, RuleTerminalNode.SortDeclarations.instance );
+        Arrays.sort(enabledDeclarations, SortDeclarations.instance);
         return enabledDeclarations;
     }
 }

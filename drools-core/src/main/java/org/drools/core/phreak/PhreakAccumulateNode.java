@@ -15,14 +15,16 @@
 
 package org.drools.core.phreak;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.BetaConstraints;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TupleSets;
 import org.drools.core.common.TupleSetsImpl;
 import org.drools.core.reteoo.AccumulateNode;
-import org.drools.core.reteoo.AccumulateNode.AccumulateContext;
-import org.drools.core.reteoo.AccumulateNode.AccumulateContextEntry;
+import org.drools.core.reteoo.AccumulateContext;
+import org.drools.core.rule.AccumulateContextEntry;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AccumulateNode.BaseAccumulation;
 import org.drools.core.reteoo.BetaMemory;
@@ -34,7 +36,6 @@ import org.drools.core.rule.Accumulate;
 import org.drools.core.rule.ContextEntry;
 import org.drools.core.rule.constraint.AlphaNodeFieldConstraint;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.AbstractHashTable;
 import org.drools.core.util.FastIterator;
 
@@ -201,10 +202,10 @@ public class PhreakAccumulateNode {
         return accContext;
     }
 
-    public static void initContext(Object workingMemoryContext, ReteEvaluator reteEvaluator, Accumulate accumulate, Tuple leftTuple, AccumulateContextEntry accContext) {
+    public static void initContext(Object workingMemoryContext, ValueResolver valueResolver, Accumulate accumulate, BaseTuple tuple, AccumulateContextEntry accContext) {
         // Create the function context, but allow init to override it.
         Object funcContext = accumulate.createFunctionContext();
-        funcContext = accumulate.init(workingMemoryContext, accContext, funcContext, leftTuple, reteEvaluator);
+        funcContext = accumulate.init(workingMemoryContext, accContext, funcContext, tuple, valueResolver);
         accContext.setFunctionContext(funcContext);
     }
 
@@ -574,8 +575,8 @@ public class PhreakAccumulateNode {
     protected void propagateDelete( TupleSets<LeftTuple> trgLeftTuples, TupleSets<LeftTuple> stagedLeftTuples, Object accPropCtx ) {
         AccumulateContextEntry entry =  (AccumulateContextEntry) accPropCtx;
         if ( entry.isPropagated() ) {
-            normalizeStagedTuples( stagedLeftTuples, entry.getResultLeftTuple() );
-            trgLeftTuples.addDelete( entry.getResultLeftTuple() );
+            normalizeStagedTuples( stagedLeftTuples, (LeftTuple) entry.getResultLeftTuple() );
+            trgLeftTuples.addDelete( (LeftTuple) entry.getResultLeftTuple() );
         }
     }
 
@@ -643,7 +644,7 @@ public class PhreakAccumulateNode {
         if ( !allowNullPropagation && result == null) {
             if ( accPropCtx.isPropagated()) {
                 // retract
-                trgLeftTuples.addDelete( accPropCtx.getResultLeftTuple());
+                trgLeftTuples.addDelete( (LeftTuple) accPropCtx.getResultLeftTuple());
                 accPropCtx.setPropagated( false );
             }
             return;
@@ -654,7 +655,7 @@ public class PhreakAccumulateNode {
             accPropCtx.setResultFactHandle(handle);
             accPropCtx.setResultLeftTuple( sink.createLeftTuple(handle, leftTuple, sink ));
         } else {
-            accPropCtx.getResultFactHandle().setObject( createResult(accNode, key, result) );
+            ((InternalFactHandle)accPropCtx.getResultFactHandle()).setObject( createResult(accNode, key, result) );
         }
 
         // First alpha node filters
@@ -676,7 +677,7 @@ public class PhreakAccumulateNode {
         }
 
 
-        LeftTuple childLeftTuple = accPropCtx.getResultLeftTuple();
+        LeftTuple childLeftTuple = (LeftTuple) accPropCtx.getResultLeftTuple();
         childLeftTuple.setPropagationContext( propagationContext != null ? propagationContext : leftTuple.getPropagationContext() );
 
         if ( accPropCtx.isPropagated()) {
@@ -780,7 +781,6 @@ public class PhreakAccumulateNode {
                                                  accctx,
                                                  tuple,
                                                  handle,
-                                                 rightParent,
                                                  match,
                                                  reteEvaluator);
         if (!reversed) {

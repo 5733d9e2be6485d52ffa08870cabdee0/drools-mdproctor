@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.core.base.ArrayElements;
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.factmodel.traits.TraitTypeEnum;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.RightTuple;
@@ -66,7 +66,7 @@ public class DisconnectedFactHandle
     private long   recency;
 
     /**
-     *  This could be a {@link DroolsQuery} object or other almost-impossible-to-serialize class
+     *  This could be a {@link DroolsQueryImpl} object or other almost-impossible-to-serialize class
      */
     @XmlElement
     private Object object;

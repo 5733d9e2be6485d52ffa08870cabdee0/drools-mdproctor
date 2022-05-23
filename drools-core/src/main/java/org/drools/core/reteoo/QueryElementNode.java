@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.base.InternalViewChangedEventListener;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.Memory;
@@ -127,33 +128,33 @@ public class QueryElementNode extends LeftTupleSource implements LeftTupleSinkNo
         return handle;
     }
     
-    public DroolsQuery createDroolsQuery(LeftTuple leftTuple,
-                                         InternalFactHandle handle,
-                                         StackEntry stackEntry,
-                                         final List<PathMemory> pmems,
-                                         QueryElementNodeMemory qmem,
-                                         LeftTupleSink sink,
-                                         ReteEvaluator reteEvaluator) {
+    public DroolsQueryImpl createDroolsQuery(LeftTuple leftTuple,
+                                             InternalFactHandle handle,
+                                             StackEntry stackEntry,
+                                             final List<PathMemory> pmems,
+                                             QueryElementNodeMemory qmem,
+                                             LeftTupleSink sink,
+                                             ReteEvaluator reteEvaluator) {
         UnificationNodeViewChangedEventListener collector = createCollector( leftTuple, queryElement.getVariableIndexes(), this.tupleMemoryEnabled );
         
         boolean executeAsOpenQuery = openQuery;
         if ( executeAsOpenQuery ) {
             // There is no point in doing an open query if the caller is a non-open query.
             Object object = leftTuple.get( 0 ).getObject();
-            if ( object instanceof DroolsQuery && !((DroolsQuery) object).isOpen() ) {
+            if (object instanceof DroolsQueryImpl && !((DroolsQueryImpl) object).isOpen() ) {
                 executeAsOpenQuery = false;
             }          
         }
 
-        DroolsQuery queryObject = new DroolsQuery( this.queryElement.getQueryName(),
-                                                   getActualArguments( leftTuple, reteEvaluator ),
-                                                   collector,
-                                                   executeAsOpenQuery,
-                                                   stackEntry,
-                                                   pmems,
+        DroolsQueryImpl queryObject = new DroolsQueryImpl(this.queryElement.getQueryName(),
+                                                          getActualArguments( leftTuple, reteEvaluator ),
+                                                          collector,
+                                                          executeAsOpenQuery,
+                                                          stackEntry,
+                                                          pmems,
                                                    qmem != null ? qmem.getResultLeftTuples() : null,
-                                                   qmem,
-                                                   sink);
+                                                          qmem,
+                                                          sink);
         collector.setFactHandle( handle );
         handle.setObject( queryObject );
         leftTuple.setContextObject( handle ); // so it can be retracted later and destroyed
@@ -261,9 +262,9 @@ public class QueryElementNode extends LeftTupleSource implements LeftTupleSinkNo
 
             QueryTerminalNode queryTerminalNode = resultLeftTuple.getTupleSink();
             QueryImpl query = queryTerminalNode.getQuery();
-            Declaration[] decls = queryTerminalNode.getRequiredDeclarations();
-            DroolsQuery dquery = (DroolsQuery) this.factHandle.getObject();
-            Object[] objects = new Object[ determineResultSize( query, dquery ) ];
+            Declaration[]   decls   = queryTerminalNode.getRequiredDeclarations();
+            DroolsQueryImpl dquery  = (DroolsQueryImpl) this.factHandle.getObject();
+            Object[]        objects = new Object[ determineResultSize( query, dquery ) ];
 
             Declaration decl;
             for (int variable : this.variables) {
@@ -330,7 +331,7 @@ public class QueryElementNode extends LeftTupleSource implements LeftTupleSinkNo
             rightTuple.setBlocked( null );
             resultLeftTuple.setContextObject( null );
 
-            DroolsQuery query = (DroolsQuery) this.factHandle.getObject();
+            DroolsQueryImpl      query      = (DroolsQueryImpl) this.factHandle.getObject();
             TupleSets<LeftTuple> leftTuples = query.getResultLeftTupleSets();
             LeftTuple childLeftTuple = rightTuple.getFirstChild();
 
@@ -366,7 +367,7 @@ public class QueryElementNode extends LeftTupleSource implements LeftTupleSinkNo
             QueryTerminalNode queryTerminalNode = resultLeftTuple.getTupleSink();
             Declaration[] decls = queryTerminalNode.getRequiredDeclarations();
             InternalFactHandle rootHandle = resultLeftTuple.get( 0 );
-            DroolsQuery dquery = (DroolsQuery) rootHandle.getObject();
+            DroolsQueryImpl    dquery     = (DroolsQueryImpl) rootHandle.getObject();
 
             Object[] objects = new Object[dquery.getElements().length];
 

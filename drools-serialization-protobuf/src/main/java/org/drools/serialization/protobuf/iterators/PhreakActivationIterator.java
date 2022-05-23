@@ -28,7 +28,7 @@ import org.drools.core.common.Memory;
 import org.drools.core.common.MemoryFactory;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.impl.RuleBase;
-import org.drools.core.reteoo.AccumulateNode.AccumulateContext;
+import org.drools.core.reteoo.AccumulateContext;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.BetaNode;
@@ -134,7 +134,7 @@ public class PhreakActivationIterator
                         Tuple lt = BetaNode.getFirstTuple( bm.getLeftTupleMemory(), it );
                         for (; lt != null; lt = (LeftTuple) it.next(lt)) {
                             AccumulateContext accctx = (AccumulateContext) lt.getContextObject();
-                            collectFromPeers(accctx.getResultLeftTuple(), agendaItems, nodeSet, reteEvaluator);
+                            collectFromPeers((LeftTuple) accctx.getResultLeftTuple(), agendaItems, nodeSet, reteEvaluator);
                         }
                     } else if ( NodeTypeEnums.ExistsNode == node.getType() ) {
                         bm = (BetaMemory) reteEvaluator.getNodeMemory((MemoryFactory) node);
@@ -215,7 +215,7 @@ public class PhreakActivationIterator
                 Object accctx = peer.getContextObject();
                 if (accctx instanceof AccumulateContext) {
                     // lefttuple representing an accumulated value now have that value as context object (it was null before) and must be skipped here
-                    collectFromLeftInput(((AccumulateContext) accctx).getResultLeftTuple(), agendaItems, nodeSet, reteEvaluator);
+                    collectFromLeftInput((LeftTuple) ((AccumulateContext) accctx).getResultLeftTuple(), agendaItems, nodeSet, reteEvaluator);
                 }
             } else if ( peer.getFirstChild() != null ) {
                 for (LeftTuple childLt = peer.getFirstChild(); childLt != null; childLt = childLt.getHandleNext()) {

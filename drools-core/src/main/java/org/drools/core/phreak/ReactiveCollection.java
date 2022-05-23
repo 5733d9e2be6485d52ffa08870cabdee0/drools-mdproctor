@@ -63,10 +63,10 @@ public class ReactiveCollection<T, W extends Collection<T>> extends AbstractReac
     public boolean add(T t) {
         boolean result = wrapped.add(t);
         if (result) {
-            ReactiveObjectUtil.notifyModification(t, getLeftTuples(), ModificationType.ADD);
+            ReactiveObjectUtil.notifyModification(t, getTuples(), ModificationType.ADD);
             if (t instanceof ReactiveObject) {
-                for (Tuple lts : getLeftTuples()) {
-                    ((ReactiveObject) t).addLeftTuple(lts);
+                for (Tuple lts : getTuples()) {
+                    ((ReactiveObject) t).addTuple(lts);
                 }
             }
         }
@@ -114,11 +114,11 @@ public class ReactiveCollection<T, W extends Collection<T>> extends AbstractReac
         boolean result = wrapped.remove(o);
         if (result) {
             if (o instanceof ReactiveObject) {
-                for (Tuple lts : getLeftTuples()) {
-                    ((ReactiveObject) o).removeLeftTuple(lts);
+                for (Tuple lts : getTuples()) {
+                    ((ReactiveObject) o).removeTuple(lts);
                 }
             }
-            ReactiveObjectUtil.notifyModification(o, getLeftTuples(), ModificationType.REMOVE);
+            ReactiveObjectUtil.notifyModification(o, getTuples(), ModificationType.REMOVE);
         }
         return result;
     }
@@ -153,11 +153,11 @@ public class ReactiveCollection<T, W extends Collection<T>> extends AbstractReac
             // the line above either throws UnsupportedOperationException or follows with:
             if (last != null) {
                 if (last instanceof ReactiveObject) {
-                    for (Tuple lts : getLeftTuples()) {
-                        ((ReactiveObject) last).removeLeftTuple(lts);
+                    for (Tuple lts : getTuples()) {
+                        ((ReactiveObject) last).removeTuple(lts);
                     }
                 }
-                ReactiveObjectUtil.notifyModification(last, getLeftTuples(), ModificationType.REMOVE);
+                ReactiveObjectUtil.notifyModification(last, getTuples(), ModificationType.REMOVE);
                 last = null;
             }
         }

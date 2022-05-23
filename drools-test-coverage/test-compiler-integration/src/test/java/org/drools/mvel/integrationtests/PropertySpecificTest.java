@@ -31,7 +31,7 @@ import org.drools.core.reteoo.AlphaNode;
 import org.drools.core.reteoo.BetaNode;
 import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.ObjectTypeNode;
-import org.drools.core.reteoo.PropertySpecificUtil;
+import org.drools.core.util.PropertySpecificUtil;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.base.ObjectType;
 import org.drools.core.util.bitmask.AllSetBitMask;
@@ -53,9 +53,13 @@ import org.kie.api.definition.type.Modifies;
 import org.kie.api.definition.type.PropertyReactive;
 import org.kie.api.runtime.KieSession;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.drools.core.reteoo.PropertySpecificUtil.calculateNegativeMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.calculatePositiveMask;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.drools.core.util.PropertySpecificUtil.calculateNegativeMask;
+import static org.drools.core.util.PropertySpecificUtil.calculatePositiveMask;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
 public class PropertySpecificTest {

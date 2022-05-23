@@ -33,7 +33,7 @@ import org.drools.tms.SimpleMode;
 import org.drools.tms.agenda.TruthMaintenanceSystemActivation;
 import org.drools.tms.beliefsystem.BeliefSystem;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
 
 /**
  * Default implementation emulates classical Drools TMS behaviour.

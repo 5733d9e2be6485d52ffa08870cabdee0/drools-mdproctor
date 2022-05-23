@@ -22,7 +22,7 @@ import org.drools.core.base.ObjectType;
 import org.drools.traits.core.base.evaluators.IsAEvaluatorDefinition;
 import org.drools.core.reteoo.AlphaNode;
 import org.drools.core.reteoo.ObjectSource;
-import org.drools.core.reteoo.PropertySpecificUtil;
+import org.drools.core.util.PropertySpecificUtil;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.mvel.EvaluatorConstraint;
 import org.drools.core.rule.constraint.AlphaNodeFieldConstraint;

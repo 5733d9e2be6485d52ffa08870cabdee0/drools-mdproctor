@@ -21,7 +21,7 @@ import org.drools.core.rule.Declaration;
 import org.drools.core.rule.accessor.FieldValue;
 import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.test.model.Cheese;
-import org.drools.core.util.index.IndexUtil;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.mvel.MVELConstraint;
 import org.mvel2.MVEL;
 import org.mvel2.ParserConfiguration;
@@ -44,10 +44,10 @@ public class MVELConstraintTestUtil extends MVELConstraint {
     }
 
     public MVELConstraintTestUtil(String expression, String operator, Declaration declaration, ReadAccessor extractor) {
-        this(expression, IndexUtil.ConstraintType.decode(operator), declaration, extractor);
+        this(expression, ConstraintOperatorType.decode(operator), declaration, extractor);
     }
 
-    public MVELConstraintTestUtil(String expression, IndexUtil.ConstraintType constraintType, Declaration declaration, ReadAccessor extractor) {
+    public MVELConstraintTestUtil(String expression, ConstraintOperatorType constraintType, Declaration declaration, ReadAccessor extractor) {
         super(new ArrayList<String>(), expression, new Declaration[] { declaration }, null, null, constraintType, declaration, extractor, expression.contains(":="));
     }
 
@@ -58,25 +58,25 @@ public class MVELConstraintTestUtil extends MVELConstraint {
         return parserConfiguration;
     }
 
-    private static IndexUtil.ConstraintType findConstraintTypeForExpression(String expression) {
+    private static ConstraintOperatorType findConstraintTypeForExpression(String expression) {
         if (expression.contains("==")) {
-            return IndexUtil.ConstraintType.EQUAL;
+            return ConstraintOperatorType.EQUAL;
         }
         if (expression.contains("!=")) {
-            return IndexUtil.ConstraintType.NOT_EQUAL;
+            return ConstraintOperatorType.NOT_EQUAL;
         }
         if (expression.contains(">")) {
-            return IndexUtil.ConstraintType.GREATER_THAN;
+            return ConstraintOperatorType.GREATER_THAN;
         }
         if (expression.contains(">=")) {
-            return IndexUtil.ConstraintType.GREATER_OR_EQUAL;
+            return ConstraintOperatorType.GREATER_OR_EQUAL;
         }
         if (expression.contains("<")) {
-            return IndexUtil.ConstraintType.LESS_THAN;
+            return ConstraintOperatorType.LESS_THAN;
         }
         if (expression.contains("<=")) {
-            return IndexUtil.ConstraintType.LESS_OR_EQUAL;
+            return ConstraintOperatorType.LESS_OR_EQUAL;
         }
-        return IndexUtil.ConstraintType.UNKNOWN;
+        return ConstraintOperatorType.UNKNOWN;
     }
 }

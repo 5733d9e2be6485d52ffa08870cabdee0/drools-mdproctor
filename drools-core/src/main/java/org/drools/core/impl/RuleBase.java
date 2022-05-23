@@ -50,7 +50,7 @@ import org.kie.api.definition.rule.Rule;
 import org.kie.api.definition.type.FactType;
 import org.kie.api.io.Resource;
 
-public interface RuleBase {
+public interface RuleBase extends org.drools.core.definitions.rule.RuleBase {
 
     Collection<KiePackage> getKiePackages();
     KiePackage getKiePackage( String packageName );

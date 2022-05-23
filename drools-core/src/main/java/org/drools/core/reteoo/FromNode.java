@@ -43,10 +43,10 @@ import org.drools.core.util.bitmask.AllSetBitMask;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.index.TupleList;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.calculateNegativeMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.calculatePositiveMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.getAccessibleProperties;
-import static org.drools.core.reteoo.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.core.util.PropertySpecificUtil.calculateNegativeMask;
+import static org.drools.core.util.PropertySpecificUtil.calculatePositiveMask;
+import static org.drools.core.util.PropertySpecificUtil.getAccessibleProperties;
+import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
 
 public class FromNode<T extends FromNode.FromMemory> extends LeftTupleSource
     implements

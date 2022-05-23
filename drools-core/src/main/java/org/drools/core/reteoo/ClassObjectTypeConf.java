@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.drools.core.base.ClassObjectType;
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.rule.EntryPointId;
 import org.drools.core.rule.TypeDeclaration;
@@ -175,7 +175,7 @@ public class ClassObjectTypeConf
         final List<ObjectTypeNode> cache = new ArrayList<>();
 
         for ( ObjectTypeNode node : ruleBase.getRete().getObjectTypeNodes( this.entryPoint ).values() ) {
-            if ( clazz == DroolsQuery.class ) {
+            if ( clazz == DroolsQueryImpl.class ) {
                 // for query objects only add direct matches
                 if ( ((ClassObjectType)node.getObjectType()).getClassType() == clazz ) {
                     cache.add( node );    

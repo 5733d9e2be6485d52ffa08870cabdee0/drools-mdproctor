@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 import org.drools.compiler.compiler.AnalysisResult;
 import org.drools.compiler.compiler.BoundIdentifiers;
 import org.drools.compiler.compiler.DescrBuildError;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.drl.ast.descr.AccumulateDescr;
 import org.drools.drl.ast.descr.AccumulateDescr.AccumulateFunctionCallDescr;
 import org.drools.drl.ast.descr.BaseDescr;
@@ -33,7 +34,7 @@ import org.drools.compiler.rule.builder.util.AccumulateUtil;
 import org.drools.compiler.rule.builder.util.PackageBuilderUtil;
 import org.drools.core.base.extractors.ArrayElementReader;
 import org.drools.core.base.extractors.SelfReferenceClassFieldReader;
-import org.drools.core.reteoo.RuleTerminalNode.SortDeclarations;
+import org.drools.core.rule.SortDeclarations;
 import org.drools.core.rule.Accumulate;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.MultiAccumulate;
@@ -46,7 +47,6 @@ import org.drools.core.rule.constraint.Constraint;
 import org.drools.core.rule.accessor.DeclarationScopeResolver;
 import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.rule.consequence.KnowledgeHelper;
-import org.drools.core.util.index.IndexUtil;
 import org.drools.mvel.MVELConstraint;
 import org.drools.mvel.MVELDialectRuntimeData;
 import org.drools.mvel.asm.AsmUtil;
@@ -238,19 +238,19 @@ public class MVELAccumulateBuilder
                                                                "Duplicate declaration for variable '" + func.getBind() + "' in the rule '" + context.getRule().getName() + "'" ) );
                     } else {
                         Declaration inner = context.getDeclarationResolver().getDeclaration( func.getBind() );
-                        Constraint c = new MVELConstraint( Collections.singletonList( context.getPkg().getName() ),
+                        Constraint c = new MVELConstraint(Collections.singletonList( context.getPkg().getName() ),
                                                            accumDescr.isMultiFunction()
                                                                 ? "this[ " + index + " ] == " + func.getBind()
                                                                 : "this == " + func.getBind(),
-                                                           new Declaration[] { inner },
-                                                           null,
-                                                           null,
-                                                           IndexUtil.ConstraintType.EQUAL,
-                                                           context.getDeclarationResolver().getDeclaration( func.getBind() ),
+                                                          new Declaration[] { inner },
+                                                          null,
+                                                          null,
+                                                          ConstraintOperatorType.EQUAL,
+                                                          context.getDeclarationResolver().getDeclaration( func.getBind() ),
                                                            accumDescr.isMultiFunction()
                                                                 ? new ArrayElementReader( arrayReader, index, function.getResultType() )
                                                                 : new SelfReferenceClassFieldReader( function.getResultType() ),
-                                                           true);
+                                                          true);
                         ((MutableTypeConstraint) c).setType( Constraint.ConstraintType.BETA );
                         pattern.addConstraint( c );
                         index++;

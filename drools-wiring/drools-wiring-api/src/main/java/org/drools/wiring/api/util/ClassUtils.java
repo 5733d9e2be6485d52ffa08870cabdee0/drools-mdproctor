@@ -42,7 +42,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.kie.api.definition.type.Modifies;
-import org.kie.internal.utils.ClassLoaderUtil;
+import org.kie.api.internal.utils.ClassLoaderUtil;
 
 public abstract class ClassUtils {
     private static final ProtectionDomain  PROTECTION_DOMAIN;

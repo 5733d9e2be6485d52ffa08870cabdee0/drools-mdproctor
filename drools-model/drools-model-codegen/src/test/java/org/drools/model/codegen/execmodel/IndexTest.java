@@ -26,8 +26,7 @@ import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ObjectSink;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.rule.IndexableConstraint;
-import org.drools.core.util.index.IndexUtil;
-import org.drools.core.util.index.IndexUtil.ConstraintType;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.model.codegen.execmodel.domain.Person;
 import org.drools.util.DateUtils;
@@ -148,9 +147,9 @@ public class IndexTest extends BaseModelTest {
 
         KieSession ksession = getKieSession(str);
 
-        assertConstraintType(ksession.getKieBase(), Person.class, "R1", IndexUtil.ConstraintType.EQUAL);
-        assertConstraintType(ksession.getKieBase(), Person.class, "R2", IndexUtil.ConstraintType.EQUAL);
-        assertConstraintType(ksession.getKieBase(), Person.class, "R3", IndexUtil.ConstraintType.EQUAL);
+        assertConstraintType(ksession.getKieBase(), Person.class, "R1", ConstraintOperatorType.EQUAL);
+        assertConstraintType(ksession.getKieBase(), Person.class, "R2", ConstraintOperatorType.EQUAL);
+        assertConstraintType(ksession.getKieBase(), Person.class, "R3", ConstraintOperatorType.EQUAL);
 
         Person person = new Person("John");
         person.setBirthDay(DateUtils.parseDate("01-Nov-2000"));
@@ -178,9 +177,9 @@ public class IndexTest extends BaseModelTest {
 
         KieSession ksession = getKieSession(str);
 
-        assertConstraintType(ksession.getKieBase(), Person.class, "R1", IndexUtil.ConstraintType.GREATER_THAN);
-        assertConstraintType(ksession.getKieBase(), Person.class, "R2", IndexUtil.ConstraintType.LESS_OR_EQUAL);
-        assertConstraintType(ksession.getKieBase(), Person.class, "R3", IndexUtil.ConstraintType.GREATER_OR_EQUAL);
+        assertConstraintType(ksession.getKieBase(), Person.class, "R1", ConstraintOperatorType.GREATER_THAN);
+        assertConstraintType(ksession.getKieBase(), Person.class, "R2", ConstraintOperatorType.LESS_OR_EQUAL);
+        assertConstraintType(ksession.getKieBase(), Person.class, "R3", ConstraintOperatorType.GREATER_OR_EQUAL);
 
         Person person = new Person("John");
         person.setBirthDay(DateUtils.parseDate("01-Nov-2000"));
@@ -189,7 +188,7 @@ public class IndexTest extends BaseModelTest {
         assertThat(ksession.fireAllRules()).isEqualTo(2);
     }
 
-    private void assertConstraintType(KieBase kbase, Class<?> factClass, String ruleName, ConstraintType expectedType) {
+    private void assertConstraintType(KieBase kbase, Class<?> factClass, String ruleName, ConstraintOperatorType expectedType) {
         boolean asserted = false;
         EntryPointNode epn = ((InternalKnowledgeBase) kbase).getRete().getEntryPointNodes().values().iterator().next();
         ObjectTypeNode otn = epn.getObjectTypeNodes().get(new ClassObjectType(factClass));

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.EventFactHandle;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
@@ -31,7 +32,7 @@ import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.reteoo.Tuple;
 import org.drools.model.Variable;
 
-public class LambdaConsequence implements Consequence {
+public class LambdaConsequence implements Consequence<KnowledgeHelper> {
 
     // Enable the optimization to extract from the activation tuple the arguments to be passed to this
     // consequence in linear time by traversing the tuple only once.
@@ -58,27 +59,27 @@ public class LambdaConsequence implements Consequence {
     }
 
     @Override
-    public void evaluate( KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator ) throws Exception {
+    public void evaluate( KnowledgeHelper knowledgeHelper, ValueResolver valueResolver ) throws Exception {
         if ( this.requiredDeclarations == null ) {
-            Declaration[] declarations = (( RuleTerminalNode ) knowledgeHelper.getMatch().getTuple().getTupleSink()).getRequiredDeclarations();
+            Declaration[] declarations = (( RuleTerminalNode ) ((Tuple)knowledgeHelper.getMatch().getTuple()).getTupleSink()).getRequiredDeclarations();
             if (enabledTupleOptimization) {
                 this.requiredDeclarations = declarations;
             } else {
-                Object[] facts = declarationsToFacts( knowledgeHelper, reteEvaluator, knowledgeHelper.getTuple(), declarations, consequence.getVariables(), consequence.isUsingDrools() );
+                Object[] facts = declarationsToFacts( knowledgeHelper, valueResolver, knowledgeHelper.getTuple(), declarations, consequence.getVariables(), consequence.isUsingDrools() );
                 consequence.getBlock().execute( facts );
                 return;
             }
         }
 
         // declarations is not null when first level rule is AND so it is possible to calculate them upfront
-        consequence.getBlock().execute( fetchFacts( knowledgeHelper, reteEvaluator ) );
+        consequence.getBlock().execute( fetchFacts( knowledgeHelper, valueResolver ) );
     }
 
-    public static Object[] declarationsToFacts(ReteEvaluator reteEvaluator, Tuple tuple, Declaration[] declarations, Variable[] vars ) {
-        return declarationsToFacts( null, reteEvaluator, tuple, declarations, vars, false );
+    public static Object[] declarationsToFacts(ValueResolver valueResolver, Tuple tuple, Declaration[] declarations, Variable[] vars ) {
+        return declarationsToFacts( null, valueResolver, tuple, declarations, vars, false );
     }
 
-    private static Object[] declarationsToFacts( KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator, Tuple tuple, Declaration[] declarations, Variable[] vars, boolean useDrools ) {
+    private static Object[] declarationsToFacts( KnowledgeHelper knowledgeHelper, ValueResolver valueResolver, Tuple tuple, Declaration[] declarations, Variable[] vars, boolean useDrools ) {
         Object[] objects;
         FactHandleLookup fhLookup = useDrools ? new FactHandleLookup.Multi() : null;
 
@@ -86,7 +87,7 @@ public class LambdaConsequence implements Consequence {
         if ( useDrools ) {
             index++;
             objects = new Object[vars.length + 1];
-            objects[0] = new DroolsImpl( knowledgeHelper, reteEvaluator, fhLookup );
+            objects[0] = new DroolsImpl( knowledgeHelper, valueResolver, fhLookup );
         } else {
             objects = new Object[vars.length];
         }
@@ -99,9 +100,9 @@ public class LambdaConsequence implements Consequence {
                 if ( useDrools ) {
                     fhLookup.put( fh.getObject(), fh );
                 }
-                objects[index++] = declaration.getValue( reteEvaluator, fh );
+                objects[index++] = declaration.getValue( valueResolver, fh );
             } else {
-                objects[index++] = reteEvaluator.getGlobal( var.getName() );
+                objects[index++] = valueResolver.getGlobal( var.getName() );
             }
         }
         return objects;
@@ -115,7 +116,8 @@ public class LambdaConsequence implements Consequence {
         return linkedFH != null ? linkedFH : handle;
     }
 
-    private Object[] fetchFacts( KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator ) {
+    private Object[] fetchFacts( KnowledgeHelper knowledgeHelper, ValueResolver valueResolver ) {
+        ReteEvaluator reteEvaluator = (ReteEvaluator) valueResolver;
         if (factSuppliers == null) {
             return initConsequence(knowledgeHelper, reteEvaluator);
         }

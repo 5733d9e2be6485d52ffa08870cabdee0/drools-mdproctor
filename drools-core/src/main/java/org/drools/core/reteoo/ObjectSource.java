@@ -32,8 +32,8 @@ import org.drools.core.util.bitmask.AllSetBitMask;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.bitmask.EmptyBitMask;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.getAccessibleProperties;
-import static org.drools.core.reteoo.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.core.util.PropertySpecificUtil.getAccessibleProperties;
+import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
 
 /**
  * A source of <code>FactHandle</code>s for an <code>ObjectSink</code>.

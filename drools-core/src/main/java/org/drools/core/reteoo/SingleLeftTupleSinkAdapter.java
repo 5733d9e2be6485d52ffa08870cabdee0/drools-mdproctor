@@ -29,8 +29,8 @@ public class SingleLeftTupleSinkAdapter extends AbstractLeftTupleSinkAdapter {
     private LeftTupleSink[] sinkArray;
 
     public SingleLeftTupleSinkAdapter() {
-        this( RuleBasePartitionId.MAIN_PARTITION,
-              null );
+        this(RuleBasePartitionId.MAIN_PARTITION,
+             null );
     }
 
     public SingleLeftTupleSinkAdapter(final RuleBasePartitionId partitionId,

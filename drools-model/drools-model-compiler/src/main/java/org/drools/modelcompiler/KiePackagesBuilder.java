@@ -36,6 +36,7 @@ import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.base.ClassFieldAccessorCache;
 import org.drools.core.base.ClassObjectType;
 import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.base.EnabledBoolean;
 import org.drools.core.base.SalienceInteger;
 import org.drools.core.base.accumulators.CountAccumulateFunction;
@@ -232,7 +233,7 @@ public class KiePackagesBuilder {
     }
 
     private InternalKnowledgePackage createKiePackage(String name) {
-        InternalKnowledgePackage kpkg = CoreComponentFactory.get().createKnowledgePackage( name );
+        InternalKnowledgePackage kpkg = (KnowledgePackageImpl) CoreComponentFactory.get().createKnowledgePackage( name );
         kpkg.setClassFieldAccessorCache(new ClassFieldAccessorCache( getClassLoader() ) );
         kpkg.setClassLoader( getClassLoader() );
         return kpkg;
@@ -359,7 +360,7 @@ public class KiePackagesBuilder {
                                        ClassObjectType.DroolsQuery_ObjectType,
                                        null );
 
-        ReadAccessor extractor = new LambdaReadAccessor(DroolsQuery.class, q -> ((DroolsQuery)q).getName());
+        ReadAccessor extractor = new LambdaReadAccessor(DroolsQueryImpl.class, q -> ((DroolsQueryImpl)q).getName());
         QueryNameConstraint constraint = new QueryNameConstraint( extractor, query.getName() );
         pattern.addConstraint( constraint );
         queryImpl.getLhs().addChild(pattern);
@@ -1135,7 +1136,7 @@ public class KiePackagesBuilder {
         ctx.getPkg().addWindowDeclaration(windowDeclaration);
     }
 
-    private Behavior createWindow( WindowDefinition window ) {
+    private Behavior createWindow(WindowDefinition window) {
         switch (window.getType()) {
             case LENGTH:
                 return new SlidingLengthWindow( (int) window.getValue() );

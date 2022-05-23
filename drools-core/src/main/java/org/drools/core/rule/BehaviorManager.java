@@ -33,27 +33,27 @@ public class BehaviorManager
     implements
     Externalizable {
 
-    public static final Behavior[] NO_BEHAVIORS = new Behavior[0];
+    public static final BehaviorRuntime[] NO_BEHAVIORS = new BehaviorRuntime[0];
 
-    private Behavior[]             behaviors;
+    private BehaviorRuntime[] behaviors;
 
     public BehaviorManager() {
         this( NO_BEHAVIORS );
     }
 
-    public BehaviorManager(List<Behavior> behaviors) {
+    public BehaviorManager(List<BehaviorRuntime> behaviors) {
         super();
-        this.behaviors = behaviors.toArray( new Behavior[behaviors.size()] );
+        this.behaviors = behaviors.toArray( new BehaviorRuntime[behaviors.size()]);
     }
 
-    public BehaviorManager(Behavior[] behaviors) {
+    public BehaviorManager(BehaviorRuntime[] behaviors) {
         super();
         this.behaviors = behaviors;
     }
 
     public void readExternal(ObjectInput in) throws IOException,
                                             ClassNotFoundException {
-        behaviors = (Behavior[]) in.readObject();
+        behaviors = (BehaviorRuntime[]) in.readObject();
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -63,8 +63,8 @@ public class BehaviorManager
     /**
      * Creates the behaviors' context 
      */
-    public Behavior.Context[] createBehaviorContext() {
-        Behavior.Context[] behaviorCtx = new Behavior.Context[behaviors.length];
+    public BehaviourContext[] createBehaviorContext() {
+        BehaviourContext[] behaviorCtx = new BehaviourContext[behaviors.length];
         for ( int i = 0; i < behaviors.length; i++ ) {
             behaviorCtx[i] = behaviors[i].createContext();
         }
@@ -82,7 +82,6 @@ public class BehaviorManager
         for ( int i = 0; i < behaviors.length; i++ ) {
             result = result && behaviors[i].assertFact( ((Object[]) behaviorContext)[i],
                                                         factHandle,
-                                                        pctx,
                                                         reteEvaluator );
         }
         return result;
@@ -98,7 +97,6 @@ public class BehaviorManager
         for ( int i = 0; i < behaviors.length; i++ ) {
             behaviors[i].retractFact( ((Object[]) behaviorContext)[i],
                                       factHandle,
-                                      pctx,
                                       reteEvaluator );
         }
     }
@@ -106,7 +104,7 @@ public class BehaviorManager
     /**
      * @return the behaviors
      */
-    public Behavior[] getBehaviors() {
+    public BehaviorRuntime[] getBehaviors() {
         return behaviors;
     }
 

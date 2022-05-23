@@ -33,7 +33,7 @@ import javax.xml.bind.JAXBContext;
 
 import org.drools.core.QueryResultsImpl;
 import org.drools.core.base.ClassObjectType;
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ObjectTypeNode;
@@ -435,7 +435,7 @@ public class QueryTest {
 
         Map<ObjectType, ObjectTypeNode> obnodes = defaultEntryPointNode.getObjectTypeNodes();
 
-        ObjectType key = new ClassObjectType( DroolsQuery.class );
+        ObjectType key = new ClassObjectType( DroolsQueryImpl.class );
         ObjectTypeNode droolsQueryNode = obnodes.get( key );
         Iterator<InternalFactHandle> it = ((ObjectTypeNodeMemory) sessionImpl.getNodeMemory( droolsQueryNode )).iterator();
         assertThat(it.hasNext()).isFalse();

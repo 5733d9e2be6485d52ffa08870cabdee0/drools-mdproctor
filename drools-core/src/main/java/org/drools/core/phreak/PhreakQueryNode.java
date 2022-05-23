@@ -15,7 +15,7 @@
 
 package org.drools.core.phreak;
 
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TupleSets;
@@ -65,10 +65,10 @@ public class PhreakQueryNode {
                                                                    reteEvaluator,
                                                                    leftTuple);
 
-            DroolsQuery dquery = queryNode.createDroolsQuery(leftTuple, handle, stackEntry,
-                                                             qmem.getSegmentMemory().getPathMemories(),
-                                                             qmem,
-                                                             stackEntry.getSink(), reteEvaluator);
+            DroolsQueryImpl dquery = queryNode.createDroolsQuery(leftTuple, handle, stackEntry,
+                                                                 qmem.getSegmentMemory().getPathMemories(),
+                                                                 qmem,
+                                                                 stackEntry.getSink(), reteEvaluator);
 
             LeftInputAdapterNode lian = (LeftInputAdapterNode) qmem.getQuerySegmentMemory().getRootNode();
             LiaNodeMemory lm = (LiaNodeMemory) qmem.getQuerySegmentMemory().getNodeMemories().get(0);
@@ -86,8 +86,8 @@ public class PhreakQueryNode {
         for (LeftTuple leftTuple = srcLeftTuples.getUpdateFirst(); leftTuple != null; ) {
             LeftTuple next = leftTuple.getStagedNext();
 
-            InternalFactHandle fh = (InternalFactHandle) leftTuple.getContextObject();
-            DroolsQuery dquery = (DroolsQuery) fh.getObject();
+            InternalFactHandle fh     = (InternalFactHandle) leftTuple.getContextObject();
+            DroolsQueryImpl    dquery = (DroolsQueryImpl) fh.getObject();
             dquery.setParameters( queryNode.getActualArguments( leftTuple, reteEvaluator ) );
 
             SegmentMemory qsmem = qmem.getQuerySegmentMemory();
@@ -117,8 +117,8 @@ public class PhreakQueryNode {
         for (LeftTuple leftTuple = srcLeftTuples.getDeleteFirst(); leftTuple != null; ) {
             LeftTuple next = leftTuple.getStagedNext();
 
-            InternalFactHandle fh = (InternalFactHandle) leftTuple.getContextObject();
-            DroolsQuery dquery = (DroolsQuery) fh.getObject();
+            InternalFactHandle fh     = (InternalFactHandle) leftTuple.getContextObject();
+            DroolsQueryImpl    dquery = (DroolsQueryImpl) fh.getObject();
             if (dquery.isOpen()) {
                 LeftInputAdapterNode lian = (LeftInputAdapterNode) qmem.getQuerySegmentMemory().getRootNode();
                 LiaNodeMemory lm = (LiaNodeMemory) qmem.getQuerySegmentMemory().getNodeMemories().get(0);

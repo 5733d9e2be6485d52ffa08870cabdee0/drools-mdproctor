@@ -26,7 +26,7 @@ import org.drools.core.util.index.TupleList;
  * A parent class for all specific LeftTuple specializations
  *
  */
-public class BaseLeftTuple extends BaseTuple implements LeftTuple {
+public class BaseLeftTuple extends BaseTupleImpl implements LeftTuple {
     private static final long  serialVersionUID = 540l;
 
     private int                index;

@@ -57,12 +57,12 @@ public class LambdaDataProvider implements DataProvider {
 
         if (isReactive()) {
             if ( result instanceof ReactiveObject ) {
-                (( ReactiveObject ) result).addLeftTuple( tuple );
+                (( ReactiveObject ) result).addTuple(tuple);
             }
             if ( result instanceof Iterable ) {
                 for (Object value : ( Iterable<?> ) result) {
                     if ( value instanceof ReactiveObject ) {
-                        (( ReactiveObject ) value).addLeftTuple( tuple );
+                        (( ReactiveObject ) value).addTuple(tuple);
                     }
                 }
             }

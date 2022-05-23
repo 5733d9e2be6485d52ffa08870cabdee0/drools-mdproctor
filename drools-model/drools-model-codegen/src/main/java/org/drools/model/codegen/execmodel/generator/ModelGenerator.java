@@ -477,11 +477,11 @@ public class ModelGenerator {
         } );
         for ( BehaviorDescr behaviorDescr : declaration.getBehaviors() ) {
             MethodCallExpr windowCall = createDslTopLevelMethod(WINDOW_CALL);
-            if ( Behavior.BehaviorType.TIME_WINDOW.matches(behaviorDescr.getSubType() ) ) {
+            if ( Behavior.BehaviorType.TIME_WINDOW.matches(behaviorDescr.getSubType()) ) {
                 windowCall.addArgument( "org.drools.model.Window.Type.TIME" );
                 windowCall.addArgument( "" + TimeUtils.parseTimeString(behaviorDescr.getParameters().get(0 ) ) );
             }
-            if ( Behavior.BehaviorType.LENGTH_WINDOW.matches( behaviorDescr.getSubType() ) ) {
+            if ( Behavior.BehaviorType.LENGTH_WINDOW.matches(behaviorDescr.getSubType()) ) {
                 windowCall.addArgument( "org.drools.model.Window.Type.LENGTH" );
                 windowCall.addArgument( "" + Integer.valueOf( behaviorDescr.getParameters().get( 0 ) ) );
             }

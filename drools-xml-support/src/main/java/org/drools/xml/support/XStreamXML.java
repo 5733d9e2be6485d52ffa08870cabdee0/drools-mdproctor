@@ -38,7 +38,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import org.drools.core.QueryResultsImpl;
 import org.drools.core.base.ClassObjectType;
-import org.drools.core.base.DroolsQuery;
 import org.drools.commands.runtime.AdvanceSessionTimeCommand;
 import org.drools.commands.runtime.BatchExecutionCommandImpl;
 import org.drools.commands.runtime.GetGlobalCommand;
@@ -64,6 +63,7 @@ import org.drools.commands.runtime.rule.InsertObjectCommand;
 import org.drools.commands.runtime.rule.ModifyCommand;
 import org.drools.commands.runtime.rule.QueryCommand;
 import org.drools.commands.runtime.rule.UpdateCommand;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.DefaultFactHandle;
 import org.drools.core.common.DisconnectedFactHandle;
 import org.drools.core.rule.Declaration;
@@ -1107,7 +1107,7 @@ public class XStreamXML {
                     Declaration declr = ((QueryResultsImpl) results).getDeclarations(0).get( identifier );
                     ObjectType objectType = declr.getPattern().getObjectType();
                     if ( objectType instanceof ClassObjectType ) {
-                        if ( ((ClassObjectType) objectType).getClassType() == DroolsQuery.class ) {
+                        if ( ((ClassObjectType) objectType).getClassType() == DroolsQueryImpl.class ) {
                             continue;
                         }
                     }
@@ -1117,7 +1117,7 @@ public class XStreamXML {
                 for( String identifier : results.getIdentifiers() ) {
                     for( QueryResultsRow row : ((FlatQueryResults) results) ) {
                        Object rowObj = row.get(identifier);
-                       if( rowObj != null && rowObj instanceof DroolsQuery ) {
+                       if( rowObj != null && rowObj instanceof DroolsQueryImpl) {
                           continue;
                        }
                        actualIds.add( identifier );

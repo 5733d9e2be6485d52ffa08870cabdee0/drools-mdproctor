@@ -19,7 +19,7 @@ import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.MemoryFactory;
 import org.drools.core.reteoo.AccumulateNode;
-import org.drools.core.reteoo.AccumulateNode.AccumulateContext;
+import org.drools.core.reteoo.AccumulateContext;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.BetaNode;
@@ -87,7 +87,7 @@ public class LeftTupleIterator
             Tuple leftTuple = BetaNode.getFirstTuple( memory.getLeftTupleMemory(), localIt );
             if( leftTuple != null ) {
                 AccumulateContext accctx = (AccumulateContext) leftTuple.getContextObject();
-                return accctx.getResultLeftTuple();
+                return (LeftTuple) accctx.getResultLeftTuple();
             }
             return null;
         }

@@ -25,9 +25,9 @@ import org.drools.core.common.ActivationNode;
 import org.drools.core.common.InternalAgendaGroup;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.rule.GroupElement;
 import org.drools.core.reteoo.Tuple;
+import org.kie.api.definition.rule.Rule;
 import org.kie.api.runtime.rule.Match;
 
 /**
@@ -43,7 +43,7 @@ public interface Activation extends Serializable, Match {
      * @return
      *     The rule that was activated.
      */
-    RuleImpl getRule();
+    Rule getRule();
 
     Consequence getConsequence();
     

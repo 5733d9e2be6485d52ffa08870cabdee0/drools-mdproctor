@@ -29,7 +29,7 @@ public class CompositeLeftTupleSinkAdapter extends AbstractLeftTupleSinkAdapter 
     private volatile LeftTupleSink[] sinkArray;
 
     public CompositeLeftTupleSinkAdapter() {
-        super( RuleBasePartitionId.MAIN_PARTITION );
+        super(RuleBasePartitionId.MAIN_PARTITION);
     }
 
     public CompositeLeftTupleSinkAdapter(final RuleBasePartitionId partitionId) {

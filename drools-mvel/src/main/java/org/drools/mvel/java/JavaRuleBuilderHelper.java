@@ -24,11 +24,11 @@ import java.util.Map.Entry;
 
 import org.drools.compiler.compiler.BoundIdentifiers;
 import org.drools.compiler.compiler.DescrBuildError;
+import org.drools.core.rule.SortDeclarations;
 import org.drools.drl.ast.descr.BaseDescr;
 import org.drools.drl.ast.descr.RuleDescr;
 import org.drools.compiler.rule.builder.RuleBuildContext;
 import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.JavaDialectRuntimeData;
 import org.drools.core.base.AcceptsClassObjectType;
@@ -135,7 +135,7 @@ public final class JavaRuleBuilderHelper {
             declrStr[j] = str;
             declarations[j++] = decls.get( str );
         }
-        Arrays.sort( declarations, RuleTerminalNode.SortDeclarations.instance  );
+        Arrays.sort(declarations, SortDeclarations.instance);
         for ( int i = 0; i < declrStr.length; i++) {
             declrStr[i] = declarations[i].getIdentifier();
         }

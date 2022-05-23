@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import org.kie.internal.utils.FastClassLoader;
+import org.kie.api.internal.utils.FastClassLoader;
 import org.kie.memorycompiler.WritableClassLoader;
 
 public class PackageClassLoader extends ClassLoader implements FastClassLoader, WritableClassLoader {

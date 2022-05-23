@@ -53,7 +53,7 @@ import org.drools.core.marshalling.MarshallerWriteContext;
 import org.drools.core.phreak.PropagationEntry;
 import org.drools.core.phreak.RuleAgendaItem;
 import org.drools.core.process.WorkItem;
-import org.drools.core.reteoo.BaseTuple;
+import org.drools.core.reteoo.BaseTupleImpl;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.ObjectTypeConf;
@@ -728,7 +728,7 @@ public class ProtobufOutputMarshaller {
         org.drools.core.reteoo.Tuple tuple = activation.getTuple();
         ProtobufMessages.Tuple.Builder _tb = ProtobufMessages.Tuple.newBuilder();
 
-        boolean serializeObjects = isDormient && hasNodeMemory((BaseTuple) activation);
+        boolean serializeObjects = isDormient && hasNodeMemory((BaseTupleImpl) activation);
 
         if (tuple != null) {
             // tuple can be null if this is a rule network evaluation activation, instead of terminal node left tuple.
@@ -751,7 +751,7 @@ public class ProtobufOutputMarshaller {
         return _tb.build();
     }
 
-    private static boolean hasNodeMemory(BaseTuple agendaItem) {
+    private static boolean hasNodeMemory(BaseTupleImpl agendaItem) {
         Sink tupleSink = agendaItem.getTupleSink();
         if (tupleSink instanceof TerminalNode ) {
             return PersisterHelper.hasNodeMemory( (TerminalNode) tupleSink );

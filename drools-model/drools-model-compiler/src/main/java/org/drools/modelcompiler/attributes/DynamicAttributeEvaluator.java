@@ -16,6 +16,7 @@
 
 package org.drools.modelcompiler.attributes;
 
+import org.drools.core.base.BaseTuple;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
@@ -28,9 +29,9 @@ public class DynamicAttributeEvaluator<T> {
         this.supplier = supplier;
     }
 
-    protected Declaration[] getDeclarations(Tuple tuple) {
+    protected Declaration[] getDeclarations(BaseTuple tuple) {
         Declaration[] declarations = new Declaration[supplier.getVariables().length];
-        Declaration[] allDeclarations = ((RuleTerminalNode) tuple.getTupleSink()).getAllDeclarations();
+        Declaration[] allDeclarations = ((RuleTerminalNode) ((Tuple)tuple).getTupleSink()).getAllDeclarations();
         for (int i = 0; i < supplier.getVariables().length; i++) {
             for (Declaration d : allDeclarations) {
                 if (d.getIdentifier().equals(supplier.getVariables()[i].getName())) {

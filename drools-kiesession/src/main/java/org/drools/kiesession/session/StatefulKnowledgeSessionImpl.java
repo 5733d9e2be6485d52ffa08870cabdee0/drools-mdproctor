@@ -40,7 +40,7 @@ import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.core.base.CalendarsImpl;
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.base.InternalViewChangedEventListener;
 import org.drools.core.base.MapGlobalResolver;
 import org.drools.core.base.NonCloningQueryViewListener;
@@ -136,7 +136,7 @@ import org.kie.internal.runtime.StatefulKnowledgeSession;
 
 import static java.util.stream.Collectors.toList;
 import static org.drools.core.base.ClassObjectType.InitialFact_ObjectType;
-import static org.drools.core.reteoo.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
 
 public class StatefulKnowledgeSessionImpl extends AbstractRuntime
         implements
@@ -630,10 +630,10 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
                 agenda.executeFlush();
             }
 
-            DroolsQuery queryObject = new DroolsQuery( queryName,
-                                                       arguments,
-                                                       getQueryListenerInstance(),
-                                                       false );
+            DroolsQueryImpl queryObject = new DroolsQueryImpl(queryName,
+                                                              arguments,
+                                                              getQueryListenerInstance(),
+                                                              false );
 
             InternalFactHandle handle = this.handleFactory.newFactHandle( queryObject,
                                                                           null,
@@ -688,10 +688,10 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
             this.kBase.executeQueuedActions();
             agenda.executeFlush();
 
-            DroolsQuery queryObject = new DroolsQuery( query,
-                                                       arguments,
-                                                       new OpenQueryViewChangedEventListenerAdapter( listener ),
-                                                       true);
+            DroolsQueryImpl queryObject = new DroolsQueryImpl(query,
+                                                              arguments,
+                                                              new OpenQueryViewChangedEventListenerAdapter( listener ),
+                                                              true);
             InternalFactHandle handle = this.handleFactory.newFactHandle(queryObject,
                                                                          null,
                                                                          this,
@@ -710,7 +710,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
         }
     }
 
-    private QueryTerminalNode[] evalQuery(final String queryName, final DroolsQuery queryObject, final InternalFactHandle handle, final PropagationContext pCtx, final boolean isCalledFromRHS) {
+    private QueryTerminalNode[] evalQuery(final String queryName, final DroolsQueryImpl queryObject, final InternalFactHandle handle, final PropagationContext pCtx, final boolean isCalledFromRHS) {
         PropagationEntry.ExecuteQuery executeQuery = new PropagationEntry.ExecuteQuery( queryName, queryObject, handle, pCtx, isCalledFromRHS);
         addPropagation( executeQuery );
         return executeQuery.getResult();

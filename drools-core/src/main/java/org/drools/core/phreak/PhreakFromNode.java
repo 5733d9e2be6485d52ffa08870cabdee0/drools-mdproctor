@@ -95,7 +95,6 @@ public class PhreakFromNode {
             betaConstraints.updateFromTuple(context, reteEvaluator, leftTuple);
 
             for (final java.util.Iterator<?> it = dataProvider.getResults(leftTuple, reteEvaluator,
-                                                                          propagationContext,
                                                                           fm.providerContext); it.hasNext(); ) {
                 final Object object = it.next();
                 if ( (object == null) || !resultClass.isAssignableFrom( object.getClass() ) ) {
@@ -146,7 +145,7 @@ public class PhreakFromNode {
             betaConstraints.updateFromTuple(context, reteEvaluator, leftTuple);
 
             FastIterator rightIt = LinkedList.fastIterator;
-            for (final java.util.Iterator<?> it = dataProvider.getResults(leftTuple, reteEvaluator, propagationContext, fm.providerContext); it.hasNext(); ) {
+            for (final java.util.Iterator<?> it = dataProvider.getResults(leftTuple, reteEvaluator, fm.providerContext); it.hasNext(); ) {
                 final Object object = it.next();
                 if ( (object == null) || !resultClass.isAssignableFrom( object.getClass() ) ) {
                     continue; // skip anything if it not assignable

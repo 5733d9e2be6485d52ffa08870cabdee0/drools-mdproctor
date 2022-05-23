@@ -42,7 +42,7 @@ public class ReactiveMVELDataProvider extends MVELDataProvider {
                                 final Object executionContext ) {
         Object result = evaluate( tuple, reteEvaluator );
         if (result instanceof ReactiveObject) {
-            ( (ReactiveObject) result ).addLeftTuple( tuple );
+            ( (ReactiveObject) result ).addTuple(tuple);
         }
         return asIterator( result );
     }

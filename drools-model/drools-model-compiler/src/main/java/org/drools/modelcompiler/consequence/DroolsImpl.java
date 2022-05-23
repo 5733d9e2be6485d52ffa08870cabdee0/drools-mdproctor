@@ -16,17 +16,18 @@
 
 package org.drools.modelcompiler.consequence;
 
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.AgendaItem;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemoryEntryPoint;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.model.BitMask;
 import org.drools.model.Channel;
 import org.drools.model.Drools;
 import org.drools.model.DroolsEntryPoint;
+import org.kie.api.definition.rule.Rule;
 import org.kie.api.runtime.KieRuntime;
 import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.runtime.rule.Match;
@@ -40,8 +41,8 @@ public class DroolsImpl implements Drools, org.kie.api.runtime.rule.RuleContext 
 
     private final FactHandleLookup fhLookup;
 
-    DroolsImpl(KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator, FactHandleLookup fhLookup) {
-        this.reteEvaluator = reteEvaluator;
+    DroolsImpl(KnowledgeHelper knowledgeHelper, ValueResolver valueResolver, FactHandleLookup fhLookup) {
+        this.reteEvaluator = (ReteEvaluator)valueResolver;
         this.knowledgeHelper = knowledgeHelper;
         this.fhLookup = fhLookup;
     }
@@ -68,7 +69,7 @@ public class DroolsImpl implements Drools, org.kie.api.runtime.rule.RuleContext 
     }
 
     @Override
-    public RuleImpl getRule() {
+    public Rule getRule() {
         return knowledgeHelper.getRule();
     }
 

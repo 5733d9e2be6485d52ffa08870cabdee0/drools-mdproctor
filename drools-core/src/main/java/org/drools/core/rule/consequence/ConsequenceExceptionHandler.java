@@ -17,7 +17,7 @@
 package org.drools.core.rule.consequence;
 
 import org.drools.core.WorkingMemory;
-
+import org.kie.api.runtime.rule.Match;
 
 /**
  * Care should be taken when implementing this class. Swallowing of consequence can be dangerous
@@ -25,5 +25,5 @@ import org.drools.core.WorkingMemory;
  * WorkingMemory invalid.
  */
 public interface ConsequenceExceptionHandler {
-    void handleException(Activation activation, WorkingMemory workingMemory, Exception exception);
+    void handleException(Match activation, WorkingMemory workingMemory, Exception exception);
 }

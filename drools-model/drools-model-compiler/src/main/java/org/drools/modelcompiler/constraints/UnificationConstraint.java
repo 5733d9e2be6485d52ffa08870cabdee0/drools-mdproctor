@@ -17,7 +17,7 @@
 package org.drools.modelcompiler.constraints;
 
 import org.drools.core.RuleBaseConfiguration;
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.rule.ContextEntry;
@@ -27,8 +27,8 @@ import org.drools.core.rule.MutableTypeConstraint;
 import org.drools.core.rule.accessor.FieldValue;
 import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.AbstractHashTable.FieldIndex;
-import org.drools.core.util.index.IndexUtil;
+import org.drools.core.util.FieldIndex;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.model.Index;
 import org.drools.modelcompiler.constraints.LambdaConstraint.LambdaContextEntry;
 
@@ -71,8 +71,8 @@ public class UnificationConstraint extends MutableTypeConstraint implements Inde
     }
 
     @Override
-    public IndexUtil.ConstraintType getConstraintType() {
-        return IndexUtil.ConstraintType.EQUAL;
+    public ConstraintOperatorType getConstraintType() {
+        return ConstraintOperatorType.EQUAL;
     }
 
     @Override
@@ -139,7 +139,7 @@ public class UnificationConstraint extends MutableTypeConstraint implements Inde
         if (!unification) {
             return evaluator.evaluate(handle, tuple, reteEvaluator);
         }
-        DroolsQuery query = ( DroolsQuery ) tuple.getObject( 0 );
+        DroolsQueryImpl query = (DroolsQueryImpl) tuple.getObject(0);
         if (query.getVariables()[indexingDeclaration.getExtractor().getIndex()] != null) {
             return true;
         }

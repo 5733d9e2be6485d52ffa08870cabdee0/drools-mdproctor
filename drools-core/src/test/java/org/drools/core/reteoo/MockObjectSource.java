@@ -41,7 +41,7 @@ public class MockObjectSource extends ObjectSource {
     }
 
     public MockObjectSource(final int id) {
-        super( id, RuleBasePartitionId.MAIN_PARTITION, false);
+        super(id, RuleBasePartitionId.MAIN_PARTITION, false);
         this.facts = new ArrayList();
     }
 

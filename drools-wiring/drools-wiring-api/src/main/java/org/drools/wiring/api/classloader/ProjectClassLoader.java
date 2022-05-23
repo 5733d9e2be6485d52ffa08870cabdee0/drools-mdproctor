@@ -36,12 +36,13 @@ import org.drools.wiring.api.ComponentsFactory;
 import org.drools.wiring.api.ResourceProvider;
 import org.drools.wiring.api.util.ClassUtils;
 import org.kie.internal.utils.KieTypeResolver;
+import org.kie.internal.wiring.ClassLoaderInitializer;
 import org.kie.memorycompiler.StoreClassLoader;
 import org.kie.memorycompiler.WritableClassLoader;
 
 import static org.drools.util.ClassUtils.findParentClassLoader;
 
-public abstract class ProjectClassLoader extends ClassLoader implements KieTypeResolver, StoreClassLoader, WritableClassLoader {
+public abstract class ProjectClassLoader extends ClassLoader implements ClassLoaderInitializer<ProjectClassLoader>, KieTypeResolver, StoreClassLoader, WritableClassLoader {
 
     private static final boolean CACHE_NON_EXISTING_CLASSES = true;
 

@@ -20,7 +20,7 @@ import java.util.Collection;
 
 import org.drools.core.common.NetworkNode;
 import org.drools.core.reteoo.AccumulateNode;
-import org.drools.core.reteoo.AccumulateNode.AccumulateContext;
+import org.drools.core.reteoo.AccumulateContext;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.BetaNode;
 import org.drools.core.reteoo.Tuple;

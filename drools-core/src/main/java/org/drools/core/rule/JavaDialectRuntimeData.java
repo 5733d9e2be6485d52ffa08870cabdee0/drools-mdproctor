@@ -444,7 +444,7 @@ public class JavaDialectRuntimeData implements DialectRuntimeData, Externalizabl
         }
     }
 
-    public boolean remove( final String resourceName ) {
+    public boolean remove(final String resourceName) {
         invokerLookups.remove( resourceName );
         if (getStore().remove( convertClassToResourcePath( resourceName ) ) != null) {
             this.wireList.remove( resourceName );

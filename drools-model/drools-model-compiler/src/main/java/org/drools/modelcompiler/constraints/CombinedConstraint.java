@@ -28,8 +28,8 @@ import org.drools.core.rule.accessor.FieldValue;
 import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.time.Interval;
-import org.drools.core.util.AbstractHashTable;
-import org.drools.core.util.index.IndexUtil;
+import org.drools.core.util.FieldIndex;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.model.Constraint;
 import org.drools.modelcompiler.constraints.LambdaConstraint.LambdaContextEntry;
 
@@ -58,8 +58,8 @@ public class CombinedConstraint extends AbstractConstraint {
     }
 
     @Override
-    public IndexUtil.ConstraintType getConstraintType() {
-        return IndexUtil.ConstraintType.UNKNOWN;
+    public ConstraintOperatorType getConstraintType() {
+        return ConstraintOperatorType.UNKNOWN;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class CombinedConstraint extends AbstractConstraint {
     }
 
     @Override
-    public AbstractHashTable.FieldIndex getFieldIndex() {
+    public FieldIndex getFieldIndex() {
         throw new UnsupportedOperationException();
     }
 

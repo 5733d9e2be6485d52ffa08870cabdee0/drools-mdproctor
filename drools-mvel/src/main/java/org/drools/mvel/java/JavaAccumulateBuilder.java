@@ -28,6 +28,8 @@ import java.util.TreeSet;
 import org.drools.compiler.compiler.AnalysisResult;
 import org.drools.compiler.compiler.BoundIdentifiers;
 import org.drools.compiler.compiler.DescrBuildError;
+import org.drools.core.rule.SortDeclarations;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.drl.ast.descr.AccumulateDescr;
 import org.drools.drl.ast.descr.AccumulateDescr.AccumulateFunctionCallDescr;
 import org.drools.drl.ast.descr.AndDescr;
@@ -41,7 +43,6 @@ import org.drools.compiler.rule.builder.util.PackageBuilderUtil;
 import org.drools.core.base.accumulators.JavaAccumulatorFunctionExecutor;
 import org.drools.core.base.extractors.ArrayElementReader;
 import org.drools.core.base.extractors.SelfReferenceClassFieldReader;
-import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.rule.Accumulate;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.MultiAccumulate;
@@ -53,7 +54,6 @@ import org.drools.core.rule.accessor.Accumulator;
 import org.drools.core.rule.constraint.Constraint;
 import org.drools.core.rule.accessor.DeclarationScopeResolver;
 import org.drools.core.rule.accessor.ReadAccessor;
-import org.drools.core.util.index.IndexUtil;
 import org.drools.mvel.MVELConstraint;
 import org.drools.mvel.builder.MVELExprAnalyzer;
 import org.kie.api.runtime.rule.AccumulateFunction;
@@ -137,7 +137,7 @@ public class JavaAccumulateBuilder
         final List<AccumulateFunctionCallDescr> funcCalls = accumDescr.getFunctions();
         // list of available source declarations
         final Declaration[] sourceDeclArr = source.getOuterDeclarations().values().toArray( new Declaration[source.getOuterDeclarations().size()] );
-        Arrays.sort( sourceDeclArr, RuleTerminalNode.SortDeclarations.instance );
+        Arrays.sort(sourceDeclArr, SortDeclarations.instance);
 
         // set of required previous declarations
         Set<Declaration> requiredDecl = new HashSet<>();
@@ -202,19 +202,19 @@ public class JavaAccumulateBuilder
                                                            "Duplicate declaration for variable '" + fc.getBind() + "' in the rule '" + context.getRule().getName() + "'" ) );
                 } else {
                     Declaration inner = context.getDeclarationResolver().getDeclaration( fc.getBind() );
-                    Constraint c = new MVELConstraint( Collections.singletonList( context.getPkg().getName() ),
+                    Constraint c = new MVELConstraint(Collections.singletonList( context.getPkg().getName() ),
                                                        index >= 0
                                                             ? "this[ " + index + " ] == " + fc.getBind()
                                                             : "this == " + fc.getBind(),
-                                                       new Declaration[] { inner },
-                                                       null,
-                                                       null,
-                                                       IndexUtil.ConstraintType.EQUAL,
-                                                       context.getDeclarationResolver().getDeclaration( fc.getBind() ),
+                                                      new Declaration[] { inner },
+                                                      null,
+                                                      null,
+                                                      ConstraintOperatorType.EQUAL,
+                                                      context.getDeclarationResolver().getDeclaration( fc.getBind() ),
                                                        index >= 0
                                                             ? new ArrayElementReader( readAccessor, index, resultType )
                                                             : readAccessor,
-                                                       true);
+                                                      true);
                     (( MutableTypeConstraint) c).setType( Constraint.ConstraintType.BETA );
                     pattern.addConstraint( c );
                 }
@@ -375,7 +375,7 @@ public class JavaAccumulateBuilder
             declarations[i] = decls.get( it.next() );
         }
         final Declaration[] sourceDeclArr = source.getOuterDeclarations().values().toArray( new Declaration[source.getOuterDeclarations().size()] );
-        Arrays.sort( sourceDeclArr, RuleTerminalNode.SortDeclarations.instance );
+        Arrays.sort(sourceDeclArr, SortDeclarations.instance);
 
         final Map<String, Object> map = createVariableContext( className,
                                                                null,

@@ -18,7 +18,7 @@ import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TupleSets;
 import org.drools.core.reteoo.AccumulateNode;
-import org.drools.core.reteoo.AccumulateNode.AccumulateContextEntry;
+import org.drools.core.rule.AccumulateContextEntry;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AccumulateNode.GroupByContext;
 import org.drools.core.reteoo.LeftTuple;

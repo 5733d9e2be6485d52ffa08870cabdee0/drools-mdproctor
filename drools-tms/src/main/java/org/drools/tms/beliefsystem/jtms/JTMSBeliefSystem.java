@@ -35,7 +35,7 @@ import org.drools.tms.beliefsystem.simple.SimpleLogicalDependency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
 
 public class JTMSBeliefSystem<M extends JTMSMode<M>>
         implements
@@ -44,7 +44,7 @@ public class JTMSBeliefSystem<M extends JTMSMode<M>>
     public static boolean STRICT = false;
 
     private   TruthMaintenanceSystem tms;
-    protected InternalWorkingMemoryEntryPoint        ep;
+    protected JTMSBeliefSystem        ep;
 
     public JTMSBeliefSystem(InternalWorkingMemoryEntryPoint ep,
                             TruthMaintenanceSystem tms) {

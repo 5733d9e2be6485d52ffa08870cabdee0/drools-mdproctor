@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
 import org.drools.core.base.ClassObjectType;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.BetaConstraints;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.Memory;
@@ -31,6 +33,7 @@ import org.drools.core.impl.RuleBase;
 import org.drools.core.phreak.PhreakAccumulateNode;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.Accumulate;
+import org.drools.core.rule.AccumulateContextEntry;
 import org.drools.core.rule.ContextEntry;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.Pattern;
@@ -280,89 +283,6 @@ public class AccumulateNode extends BetaNode {
         void setPropagationContext(PropagationContext propagationContext);
     }
 
-
-    public static class AccumulateContextEntry {
-        private Object             key;
-        private InternalFactHandle resultFactHandle;
-        private LeftTuple          resultLeftTuple;
-        private boolean            propagated;
-        private Object             functionContext;
-        private boolean            toPropagate;
-        private boolean            empty = true;
-
-        public AccumulateContextEntry(Object key) {
-            this.key = key;
-        }
-
-        public InternalFactHandle getResultFactHandle() {
-            return resultFactHandle;
-        }
-
-        public void setResultFactHandle(InternalFactHandle resultFactHandle) {
-            this.resultFactHandle = resultFactHandle;
-        }
-
-        public LeftTuple getResultLeftTuple() {
-            return resultLeftTuple;
-        }
-
-        public void setResultLeftTuple(LeftTuple resultLeftTuple) {
-            this.resultLeftTuple = resultLeftTuple;
-        }
-
-        public boolean isPropagated() {
-            return propagated;
-        }
-
-        public void setPropagated( boolean propagated ) {
-            this.propagated = propagated;
-        }
-
-        public boolean isToPropagate() {
-            return toPropagate;
-        }
-
-        public void setToPropagate(boolean toPropagate) {
-            this.toPropagate = toPropagate;
-        }
-
-        public Object getFunctionContext() {
-            return functionContext;
-        }
-
-        public void setFunctionContext(Object context) {
-            this.functionContext = context;
-        }
-
-        public Object getKey() {
-            return this.key;
-        }
-
-        public boolean isEmpty() {
-            return empty;
-        }
-
-        public void setEmpty( boolean empty ) {
-            this.empty = empty;
-        }
-    }
-
-    public static class AccumulateContext extends AccumulateContextEntry implements BaseAccumulation {
-        private PropagationContext  propagationContext;
-
-        public AccumulateContext() {
-            super(null);
-        }
-
-        public PropagationContext getPropagationContext() {
-            return propagationContext;
-        }
-
-        public void setPropagationContext(PropagationContext propagationContext) {
-            this.propagationContext = propagationContext;
-        }
-    }
-
     public static class GroupByContext implements BaseAccumulation {
         private PropagationContext                              propagationContext;
         private Map<Object, TupleList<AccumulateContextEntry> > groupsMap = new HashMap<>();
@@ -381,12 +301,12 @@ public class AccumulateNode extends BetaNode {
             return groupsMap;
         }
 
-        public TupleList<AccumulateContextEntry> getGroup(Object workingMemoryContext, Accumulate accumulate, Tuple leftTuple,
-                                                          Object key, ReteEvaluator reteEvaluator) {
+        public TupleList<AccumulateContextEntry> getGroup(Object workingMemoryContext, Accumulate accumulate, BaseTuple tuple,
+                                                          Object key, ValueResolver valueResolver) {
             return groupsMap.computeIfAbsent(key, k -> {
                 AccumulateContextEntry entry = new AccumulateContextEntry(key);
-                entry.setFunctionContext( accumulate.init(workingMemoryContext, entry, accumulate.createFunctionContext(), leftTuple, reteEvaluator) );
-                PhreakAccumulateNode.initContext(workingMemoryContext, reteEvaluator, accumulate, leftTuple, entry);
+                entry.setFunctionContext( accumulate.init(workingMemoryContext, entry, accumulate.createFunctionContext(), tuple, valueResolver) );
+                PhreakAccumulateNode.initContext(workingMemoryContext, valueResolver, accumulate, tuple, entry);
                 return new TupleList<>(entry);
             });
         }

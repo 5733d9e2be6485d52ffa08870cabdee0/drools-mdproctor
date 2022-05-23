@@ -24,7 +24,7 @@ import org.drools.drl.ast.descr.BaseDescr;
 import org.drools.drl.ast.descr.EvalDescr;
 import org.drools.compiler.rule.builder.RuleBuildContext;
 import org.drools.compiler.rule.builder.RuleConditionBuilder;
-import org.drools.core.reteoo.RuleTerminalNode.SortDeclarations;
+import org.drools.core.rule.SortDeclarations;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.EvalCondition;
 import org.drools.core.rule.EvalConditionFactory;

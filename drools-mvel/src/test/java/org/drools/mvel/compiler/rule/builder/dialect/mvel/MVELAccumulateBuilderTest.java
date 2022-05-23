@@ -20,6 +20,7 @@ import java.util.Collections;
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.compiler.DialectCompiletimeRegistry;
+import org.drools.core.reteoo.AccumulateContext;
 import org.drools.drl.ast.descr.AccumulateDescr;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.drl.ast.descr.PatternDescr;
@@ -28,7 +29,6 @@ import org.drools.compiler.rule.builder.RuleBuildContext;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
-import org.drools.core.reteoo.AccumulateNode;
 import org.drools.core.reteoo.FromNodeLeftTuple;
 import org.drools.core.reteoo.InitialFactImpl;
 import org.drools.core.reteoo.LeftTuple;
@@ -104,9 +104,9 @@ public class MVELAccumulateBuilderTest {
                                                        true );
 
 
-        Object wmContext = acc.createWorkingMemoryContext();
-        AccumulateNode.AccumulateContext accContext = new AccumulateNode.AccumulateContext();
-        Object funcContext = acc.createFunctionContext();
+        Object            wmContext   = acc.createWorkingMemoryContext();
+        AccumulateContext accContext  = new AccumulateContext();
+        Object            funcContext = acc.createFunctionContext();
 
         funcContext = acc.init(wmContext, accContext, funcContext, tuple, ksession);
         accContext.setFunctionContext(funcContext);
@@ -133,7 +133,6 @@ public class MVELAccumulateBuilderTest {
                        accContext,
                        tuple,
                        f1,
-                       null,
                        match,
                        ksession);
 

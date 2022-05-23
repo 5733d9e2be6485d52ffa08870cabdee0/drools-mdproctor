@@ -62,8 +62,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Arrays.asList;
-import static org.drools.core.reteoo.PropertySpecificUtil.allSetBitMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.calculatePositiveMask;
+import static org.drools.core.util.PropertySpecificUtil.allSetBitMask;
+import static org.drools.core.util.PropertySpecificUtil.calculatePositiveMask;
 
 public class NamedEntryPoint implements InternalWorkingMemoryEntryPoint, PropertyChangeListener  {
 

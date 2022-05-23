@@ -26,7 +26,7 @@ import org.drools.core.factmodel.traits.TraitType;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ModifyPreviousTuples;
 import org.drools.core.reteoo.ObjectTypeNode;
-import org.drools.core.reteoo.PropertySpecificUtil;
+import org.drools.core.util.PropertySpecificUtil;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.base.ObjectType;

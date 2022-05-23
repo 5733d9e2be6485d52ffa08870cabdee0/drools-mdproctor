@@ -19,7 +19,7 @@ package org.kie.internal.builder.fluent;
 import org.kie.api.builder.ReleaseId;
 import org.kie.api.runtime.Executable;
 import org.kie.api.runtime.KieContainer;
-import org.kie.internal.utils.ClassLoaderUtil;
+import org.kie.api.internal.utils.ClassLoaderUtil;
 
 public interface ExecutableBuilder extends TimeFluent<ExecutableBuilder>,
                                            ContextFluent<ExecutableBuilder, ExecutableBuilder> {

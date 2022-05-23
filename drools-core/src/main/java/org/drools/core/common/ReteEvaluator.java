@@ -21,6 +21,7 @@ import java.util.Collections;
 
 import org.drools.core.SessionConfiguration;
 import org.drools.core.WorkingMemoryEntryPoint;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.event.RuleEventListenerSupport;
 import org.drools.core.event.RuleRuntimeEventSupport;
 import org.drools.core.impl.RuleBase;
@@ -40,7 +41,7 @@ import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.time.SessionClock;
 
-public interface ReteEvaluator {
+public interface ReteEvaluator extends ValueResolver {
 
     ActivationsManager getActivationsManager();
 

@@ -78,7 +78,7 @@ public class FromNodeLeftTuple extends BaseLeftTuple {
             return Collections.emptyList();
         }
         Collection<Object> result = new ArrayList<>();
-        if ( getContextObject() instanceof AccumulateNode.AccumulateContext ) {
+        if ( getContextObject() instanceof AccumulateContext) {
             for (LeftTuple child = getFirstChild(); child != null; child = child.getHandleNext()) {
                 result.add(child.getContextObject());
             }

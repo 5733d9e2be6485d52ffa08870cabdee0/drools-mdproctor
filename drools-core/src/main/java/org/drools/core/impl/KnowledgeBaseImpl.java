@@ -89,7 +89,7 @@ import org.slf4j.LoggerFactory;
 import static org.drools.util.ClassUtils.convertClassToResourcePath;
 import static org.drools.util.BitMaskUtil.isSet;
 
-public class KnowledgeBaseImpl implements RuleBase {
+public class KnowledgeBaseImpl implements RuleBase, org.drools.core.definitions.rule.RuleBase {
 
     protected static final transient Logger logger = LoggerFactory.getLogger(KnowledgeBaseImpl.class);
 

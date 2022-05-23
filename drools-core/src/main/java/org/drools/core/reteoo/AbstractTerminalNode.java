@@ -30,7 +30,7 @@ import org.drools.core.util.bitmask.AllSetBitMask;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.bitmask.EmptyBitMask;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
 
 public abstract class AbstractTerminalNode extends BaseNode implements TerminalNode {
 

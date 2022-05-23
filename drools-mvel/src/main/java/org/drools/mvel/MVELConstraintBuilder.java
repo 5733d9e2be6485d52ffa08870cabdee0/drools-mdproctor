@@ -39,9 +39,13 @@ import org.drools.compiler.kie.util.BeanCreator;
 import org.drools.compiler.rule.builder.ConstraintBuilder;
 import org.drools.compiler.rule.builder.PatternBuilder;
 import org.drools.compiler.rule.builder.RuleBuildContext;
+import org.drools.core.base.BaseTuple;
 import org.drools.core.base.ClassObjectType;
-import org.drools.core.base.DroolsQuery;
 import org.drools.compiler.rule.builder.EvaluatorWrapper;
+import org.drools.core.base.DroolsQueryImpl;
+import org.drools.core.base.ValueResolver;
+import org.drools.core.rule.SortDeclarations;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.mvel.evaluators.AfterEvaluatorDefinition;
 import org.drools.mvel.evaluators.BeforeEvaluatorDefinition;
 import org.drools.mvel.evaluators.CoincidesEvaluatorDefinition;
@@ -61,9 +65,6 @@ import org.drools.core.base.ValueType;
 import org.drools.compiler.rule.builder.EvaluatorDefinition;
 import org.drools.drl.parser.impl.Operator;
 import org.drools.core.common.InternalWorkingMemory;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.reteoo.LeftTuple;
-import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.Pattern;
 import org.drools.core.rule.QueryArgument;
@@ -75,7 +76,6 @@ import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.base.ObjectType;
 import org.drools.core.time.TimerExpression;
-import org.drools.core.util.index.IndexUtil;
 import org.drools.drl.ast.descr.BaseDescr;
 import org.drools.drl.ast.descr.BindingDescr;
 import org.drools.drl.ast.descr.LiteralRestrictionDescr;
@@ -196,15 +196,15 @@ public class MVELConstraintBuilder implements ConstraintBuilder {
         }
 
         boolean isUnification = requiredDeclaration != null &&
-                                requiredDeclaration.getPattern().getObjectType().equals( new ClassObjectType( DroolsQuery.class ) ) &&
+                                requiredDeclaration.getPattern().getObjectType().equals( new ClassObjectType( DroolsQueryImpl.class )) &&
                                 Operator.BuiltInOperator.EQUAL.getSymbol().equals( operatorDescr.getOperator() );
         if (isUnification && leftValue.equals(rightValue)) {
             expression = resolveUnificationAmbiguity(expression, declarations, leftValue, rightValue);
         }
 
         expression = normalizeMVELVariableExpression(expression, leftValue, rightValue, relDescr);
-        IndexUtil.ConstraintType constraintType = IndexUtil.ConstraintType.decode(operatorDescr.getOperator(), operatorDescr.isNegated());
-        MVELCompilationUnit compilationUnit = isUnification ? null : buildCompilationUnit(context, pattern, expression, aliases);
+        ConstraintOperatorType constraintType  = ConstraintOperatorType.decode(operatorDescr.getOperator(), operatorDescr.isNegated());
+        MVELCompilationUnit    compilationUnit = isUnification ? null : buildCompilationUnit(context, pattern, expression, aliases);
         EvaluatorWrapper[] operators = getOperators(buildOperators(context, pattern, relDescr, aliases));
         return new MVELConstraint( Collections.singletonList( context.getPkg().getName() ), expression, declarations, operators, compilationUnit, constraintType, requiredDeclaration, extractor, isUnification);
     }
@@ -251,9 +251,9 @@ public class MVELConstraintBuilder implements ConstraintBuilder {
             return new EvaluatorConstraint(field, evaluator, extractor);
         }
 
-        String mvelExpr = normalizeMVELLiteralExpression(vtype, field, expression, leftValue, operator, rightValue, negated, restrictionDescr);
-        IndexUtil.ConstraintType constraintType = IndexUtil.ConstraintType.decode(operator, negated);
-        if (constraintType == IndexUtil.ConstraintType.EQUAL && negated) {
+        String                 mvelExpr       = normalizeMVELLiteralExpression(vtype, field, expression, leftValue, operator, rightValue, negated, restrictionDescr);
+        ConstraintOperatorType constraintType = ConstraintOperatorType.decode(operator, negated);
+        if (constraintType == ConstraintOperatorType.EQUAL && negated) {
             mvelExpr = normalizeDoubleNegation(mvelExpr);
         }
         MVELCompilationUnit compilationUnit = buildCompilationUnit(context, pattern, mvelExpr, aliases);
@@ -296,7 +296,7 @@ public class MVELConstraintBuilder implements ConstraintBuilder {
             if (!negated) {
                 return normalized;
             }
-            IndexUtil.ConstraintType constraintType = IndexUtil.ConstraintType.decode(operator);
+            ConstraintOperatorType constraintType = ConstraintOperatorType.decode(operator);
             return constraintType.getOperator() != null ?
                     leftValue + " " + constraintType.negate().getOperator() + getNormalizeDate( vtype, field ) :
                     "!(" + normalized + ")";
@@ -550,7 +550,7 @@ public class MVELConstraintBuilder implements ConstraintBuilder {
             for ( String id :  usedIdentifiers.getDeclrClasses().keySet() ) {
                 previousDeclarations[i++] = decls.get( id );
             }
-            Arrays.sort(previousDeclarations, RuleTerminalNode.SortDeclarations.instance);
+            Arrays.sort(previousDeclarations, SortDeclarations.instance);
 
             MVELCompilationUnit unit = dialect.getMVELCompilationUnit( expression,
                     analysis,
@@ -858,10 +858,10 @@ public class MVELConstraintBuilder implements ConstraintBuilder {
         }
 
         @Override
-        public Object getValue(ReteEvaluator reteEvaluator, LeftTuple leftTuple ) {
+        public Object getValue(ValueResolver valueResolver, BaseTuple tuple) {
             Map<String, Object> vars = new HashMap<>();
             for (Declaration d : declarations) {
-                vars.put(d.getBindingName(), QueryArgument.evaluateDeclaration( reteEvaluator, leftTuple, d ));
+                vars.put(d.getBindingName(), QueryArgument.evaluateDeclaration( valueResolver, tuple, d ));
             }
             return evaluator.evaluate( null, vars );
         }

@@ -27,7 +27,7 @@ import org.drools.core.QueryResultsImpl;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.core.base.CalendarsImpl;
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.base.MapGlobalResolver;
 import org.drools.core.base.NonCloningQueryViewListener;
 import org.drools.core.base.QueryRowWithSubruleIndex;
@@ -254,7 +254,7 @@ public class RuleUnitExecutorImpl implements ReteEvaluator {
     public QueryResults getQueryResults(String queryName, Object... arguments) {
         activationsManager.flushPropagations();
 
-        DroolsQuery queryObject = new DroolsQuery( queryName, arguments, new NonCloningQueryViewListener(), false );
+        DroolsQueryImpl queryObject = new DroolsQueryImpl(queryName, arguments, new NonCloningQueryViewListener(), false );
 
         InternalFactHandle handle = this.handleFactory.newFactHandle( queryObject, null, this, getDefaultEntryPoint() );
 

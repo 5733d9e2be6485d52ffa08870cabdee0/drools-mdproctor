@@ -17,7 +17,7 @@ package org.drools.core.phreak;
 
 import java.util.List;
 
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.ActivationsManager;
 import org.drools.core.common.BetaConstraints;
 import org.drools.core.common.Memory;
@@ -965,7 +965,7 @@ public class RuleNetworkEvaluator {
         if (!tupleSource.isLeftTupleMemoryEnabled()) {
             // This is a hack, to not add closed DroolsQuery objects
             Object object = tuple.getRootTuple().getFactHandle().getObject();
-            if (!(object instanceof DroolsQuery) || !((DroolsQuery) object).isOpen()) {
+            if (!(object instanceof DroolsQueryImpl) || !((DroolsQueryImpl) object).isOpen()) {
                 useLeftMemory = false;
             }
         }

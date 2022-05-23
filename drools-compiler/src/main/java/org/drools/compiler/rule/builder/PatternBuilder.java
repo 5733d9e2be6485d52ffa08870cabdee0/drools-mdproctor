@@ -35,6 +35,10 @@ import org.drools.compiler.compiler.AnalysisResult;
 import org.drools.compiler.compiler.BoundIdentifiers;
 import org.drools.compiler.compiler.DescrBuildError;
 import org.drools.compiler.compiler.Dialect;
+import org.drools.core.rule.Behavior;
+import org.drools.core.rule.accessor.ReadAccessor;
+import org.drools.core.util.index.ConstraintOperatorType;
+import org.drools.drl.parser.DrlExprParser;
 import org.drools.compiler.compiler.DroolsErrorWrapper;
 import org.drools.compiler.compiler.DroolsWarningWrapper;
 import org.drools.compiler.compiler.PackageRegistry;
@@ -57,8 +61,7 @@ import org.drools.core.factmodel.FieldDefinition;
 import org.drools.core.facttemplates.FactTemplate;
 import org.drools.core.facttemplates.FactTemplateFieldExtractor;
 import org.drools.core.facttemplates.FactTemplateObjectType;
-import org.drools.core.reteoo.RuleTerminalNode.SortDeclarations;
-import org.drools.core.rule.Behavior;
+import org.drools.core.rule.SortDeclarations;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.Pattern;
 import org.drools.core.rule.PatternSource;
@@ -72,12 +75,12 @@ import org.drools.core.rule.accessor.AcceptsReadAccessor;
 import org.drools.core.rule.accessor.DeclarationScopeResolver;
 import org.drools.core.rule.accessor.Evaluator;
 import org.drools.core.rule.accessor.FieldValue;
-import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.rule.constraint.Constraint;
 import org.drools.core.rule.constraint.NegConstraint;
 import org.drools.core.rule.constraint.XpathConstraint;
 import org.drools.core.time.TimeUtils;
-import org.drools.core.util.index.IndexUtil;
+import org.drools.util.ClassUtils;
+import org.drools.util.StringUtils;
 import org.drools.drl.ast.descr.AnnotationDescr;
 import org.drools.drl.ast.descr.AtomicExprDescr;
 import org.drools.drl.ast.descr.BaseDescr;
@@ -97,10 +100,7 @@ import org.drools.drl.ast.descr.PredicateDescr;
 import org.drools.drl.ast.descr.RelationalExprDescr;
 import org.drools.drl.ast.descr.ReturnValueRestrictionDescr;
 import org.drools.drl.ast.descr.RuleDescr;
-import org.drools.drl.parser.DrlExprParser;
 import org.drools.drl.parser.DroolsParserException;
-import org.drools.util.ClassUtils;
-import org.drools.util.StringUtils;
 import org.drools.util.TypeResolver;
 import org.kie.api.definition.rule.Watch;
 import org.kie.api.definition.type.Role;
@@ -373,7 +373,7 @@ public class PatternBuilder implements RuleConditionBuilder<PatternDescr> {
     private void processBehaviors(RuleBuildContext context, PatternDescr patternDescr, Pattern pattern) {
         for (BehaviorDescr behaviorDescr : patternDescr.getBehaviors()) {
             if (pattern.getObjectType().isEvent()) {
-                Behavior window = createWindow(behaviorDescr);
+                Behavior  window = createWindow(behaviorDescr);
                 if (window != null) {
                     pattern.addBehavior(window);
                     context.setNeedStreamMode();
@@ -994,7 +994,7 @@ public class PatternBuilder implements RuleConditionBuilder<PatternDescr> {
     }
 
     private String normalizeNegatedExpr(String expr, String operator) {
-        IndexUtil.ConstraintType constraintType = IndexUtil.ConstraintType.decode(operator);
+        ConstraintOperatorType constraintType = ConstraintOperatorType.decode(operator);
         return constraintType.getOperator() != null ?
                 expr.replace( constraintType.getOperator(), constraintType.negate().getOperator() ) :
                 "!(" + expr + ")";

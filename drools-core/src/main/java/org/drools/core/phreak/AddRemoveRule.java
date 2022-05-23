@@ -40,7 +40,7 @@ import org.drools.core.common.TupleSetsImpl;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.AbstractTerminalNode;
-import org.drools.core.reteoo.AccumulateNode.AccumulateContext;
+import org.drools.core.reteoo.AccumulateContext;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AlphaTerminalNode;
 import org.drools.core.reteoo.BetaMemory;
@@ -907,7 +907,7 @@ public class AddRemoveRule {
                     Tuple        lt = BetaNode.getFirstTuple(bm.getLeftTupleMemory(), it);
                     for (; lt != null; lt = (LeftTuple) it.next(lt)) {
                         AccumulateContext accctx = (AccumulateContext) lt.getContextObject();
-                        visitChild(accctx.getResultLeftTuple(), insert, wm, rule);
+                        visitChild((LeftTuple) accctx.getResultLeftTuple(), insert, wm, rule);
                     }
                 } else if (NodeTypeEnums.ExistsNode == node.getType() &&
                            !((BetaNode)node).isRightInputIsRiaNode()) { // do not process exists with subnetworks
@@ -1100,7 +1100,7 @@ public class AddRemoveRule {
             }
         } else {
             if (lt.getContextObject() instanceof AccumulateContext) {
-                LeftTuple resultLt = (( AccumulateContext ) lt.getContextObject()).getResultLeftTuple();
+                LeftTuple resultLt = (LeftTuple) (( AccumulateContext ) lt.getContextObject()).getResultLeftTuple();
                 if (resultLt != null) {
                     iterateLeftTuple( resultLt, wm );
                 }

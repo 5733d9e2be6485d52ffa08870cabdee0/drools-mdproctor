@@ -56,5 +56,5 @@ public interface ObjectSinkNode
      */
     void setPreviousObjectSinkNode(ObjectSinkNode previous);
 
-    void setPartitionIdWithSinks( RuleBasePartitionId partitionId );
+    void setPartitionIdWithSinks( RuleBasePartitionId partitionId);
 }

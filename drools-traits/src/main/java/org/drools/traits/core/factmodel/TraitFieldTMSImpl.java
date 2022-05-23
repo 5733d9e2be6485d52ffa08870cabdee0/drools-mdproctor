@@ -34,8 +34,8 @@ import org.drools.core.util.PropertyReactivityUtil;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.mvel.MVELSafeHelper;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.onlyTraitBitSetMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.setPropertyOnMask;
+import static org.drools.core.util.PropertySpecificUtil.onlyTraitBitSetMask;
+import static org.drools.core.util.PropertySpecificUtil.setPropertyOnMask;
 
 public class TraitFieldTMSImpl implements TraitFieldTMS, Externalizable {
 
@@ -46,10 +46,10 @@ public class TraitFieldTMSImpl implements TraitFieldTMS, Externalizable {
 
     private BitMask modificationMask = onlyTraitBitSetMask();
 
-    public void init( WorkingMemory wm ) {
-        this.workingMemory = wm;
+    public void init( Object wm ) {
+        this.workingMemory = (WorkingMemory) wm;
         if ( getTypeCache().needsInit() ) {
-            getTypeCache().init( wm );
+            getTypeCache().init( this.workingMemory );
         }
     }
 

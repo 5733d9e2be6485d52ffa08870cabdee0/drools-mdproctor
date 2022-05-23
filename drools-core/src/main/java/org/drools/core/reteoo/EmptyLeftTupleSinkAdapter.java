@@ -34,7 +34,7 @@ public class EmptyLeftTupleSinkAdapter extends AbstractLeftTupleSinkAdapter {
     }
 
     public EmptyLeftTupleSinkAdapter() {
-        super( RuleBasePartitionId.MAIN_PARTITION );
+        super(RuleBasePartitionId.MAIN_PARTITION);
         // constructor needed for serialisation
     }
 

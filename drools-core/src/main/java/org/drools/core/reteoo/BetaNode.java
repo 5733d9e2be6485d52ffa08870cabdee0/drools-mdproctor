@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 
 import static org.drools.core.phreak.AddRemoveRule.flushLeftTupleIfNecessary;
 import static org.drools.core.phreak.RuleNetworkEvaluator.doUpdatesReorderChildLeftTuple;
-import static org.drools.core.reteoo.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
 
 public abstract class BetaNode extends LeftTupleSource
         implements
@@ -181,7 +181,7 @@ public abstract class BetaNode extends LeftTupleSource
     }
 
     @Override
-    public void setPartitionId(BuildContext context, RuleBasePartitionId partitionId ) {
+    public void setPartitionId(BuildContext context, RuleBasePartitionId partitionId) {
         if (rightInput.getPartitionId() != RuleBasePartitionId.MAIN_PARTITION && !rightInput.getPartitionId().equals( partitionId )) {
             this.partitionId = rightInput.getPartitionId();
             context.setPartitionId( this.partitionId );

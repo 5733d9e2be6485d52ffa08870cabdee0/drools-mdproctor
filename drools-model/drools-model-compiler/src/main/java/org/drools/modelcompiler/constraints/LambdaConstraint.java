@@ -27,7 +27,7 @@ import org.drools.core.base.ValueType;
 import org.drools.core.base.field.ObjectFieldImpl;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.reteoo.PropertySpecificUtil;
+import org.drools.core.util.PropertySpecificUtil;
 import org.drools.core.rule.ContextEntry;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.accessor.FieldValue;
@@ -36,9 +36,9 @@ import org.drools.core.base.ObjectType;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.rule.accessor.TupleValueExtractor;
 import org.drools.core.time.Interval;
-import org.drools.core.util.AbstractHashTable.FieldIndex;
+import org.drools.core.util.FieldIndex;
 import org.drools.core.util.bitmask.BitMask;
-import org.drools.core.util.index.IndexUtil;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.model.AlphaIndex;
 import org.drools.model.BetaIndex;
 import org.drools.model.BetaIndex2;
@@ -53,7 +53,7 @@ import org.drools.model.functions.Function4;
 import org.drools.model.functions.PredicateInformation;
 
 import static org.drools.core.base.ValueType.determineValueType;
-import static org.drools.core.reteoo.PropertySpecificUtil.getEmptyPropertyReactiveMask;
+import static org.drools.core.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
 import static org.drools.modelcompiler.util.EvaluationUtil.adaptBitMask;
 
 public class LambdaConstraint extends AbstractConstraint {
@@ -216,27 +216,27 @@ public class LambdaConstraint extends AbstractConstraint {
     }
 
     @Override
-    public IndexUtil.ConstraintType getConstraintType() {
+    public ConstraintOperatorType getConstraintType() {
         Index index = evaluator.getIndex();
         if (index != null) {
             switch (index.getConstraintType()) {
                 case EQUAL:
-                    return IndexUtil.ConstraintType.EQUAL;
+                    return ConstraintOperatorType.EQUAL;
                 case NOT_EQUAL:
-                    return IndexUtil.ConstraintType.NOT_EQUAL;
+                    return ConstraintOperatorType.NOT_EQUAL;
                 case GREATER_THAN:
-                    return IndexUtil.ConstraintType.GREATER_THAN;
+                    return ConstraintOperatorType.GREATER_THAN;
                 case GREATER_OR_EQUAL:
-                    return IndexUtil.ConstraintType.GREATER_OR_EQUAL;
+                    return ConstraintOperatorType.GREATER_OR_EQUAL;
                 case LESS_THAN:
-                    return IndexUtil.ConstraintType.LESS_THAN;
+                    return ConstraintOperatorType.LESS_THAN;
                 case LESS_OR_EQUAL:
-                    return IndexUtil.ConstraintType.LESS_OR_EQUAL;
+                    return ConstraintOperatorType.LESS_OR_EQUAL;
                 case RANGE:
-                    return IndexUtil.ConstraintType.RANGE;
+                    return ConstraintOperatorType.RANGE;
             }
         }
-        return IndexUtil.ConstraintType.UNKNOWN;
+        return ConstraintOperatorType.UNKNOWN;
     }
 
     @Override

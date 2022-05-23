@@ -50,9 +50,9 @@ import org.mvel2.asm.Opcodes;
 
 import static org.drools.compiler.rule.builder.dialect.DialectUtil.buildBlockDescrs;
 import static org.drools.compiler.rule.builder.dialect.DialectUtil.findClassByName;
-import static org.drools.core.reteoo.PropertySpecificUtil.allSetButTraitBitMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.getEmptyPropertyReactiveMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.setPropertyOnMask;
+import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.core.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
+import static org.drools.core.util.PropertySpecificUtil.setPropertyOnMask;
 import static org.drools.util.ClassUtils.getter2property;
 import static org.drools.util.ClassUtils.setter2property;
 import static org.drools.util.StringUtils.extractFirstIdentifier;

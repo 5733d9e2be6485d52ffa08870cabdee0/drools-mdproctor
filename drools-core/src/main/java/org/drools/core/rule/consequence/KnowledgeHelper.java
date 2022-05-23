@@ -29,6 +29,7 @@ import org.drools.core.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.beliefsystem.Mode;
+import org.kie.api.definition.rule.Rule;
 import org.kie.api.runtime.Channel;
 import org.kie.api.runtime.rule.EntryPoint;
 import org.kie.api.runtime.rule.FactHandle;
@@ -115,7 +116,7 @@ public interface KnowledgeHelper
     /**
      * @return - The rule name
      */
-    RuleImpl getRule();
+    Rule getRule();
 
     Tuple getTuple();
 

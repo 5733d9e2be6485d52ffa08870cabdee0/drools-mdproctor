@@ -58,8 +58,8 @@ import org.kie.api.runtime.rule.EntryPoint;
 import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.runtime.rule.Match;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.allSetButTraitBitMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.onlyTraitBitSetMask;
+import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.core.util.PropertySpecificUtil.onlyTraitBitSetMask;
 
 public class DefaultKnowledgeHelper implements KnowledgeHelper, Externalizable {
 

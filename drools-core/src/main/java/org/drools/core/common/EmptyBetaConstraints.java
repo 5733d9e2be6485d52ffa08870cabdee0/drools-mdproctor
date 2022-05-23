@@ -31,7 +31,7 @@ import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.index.TupleList;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.getEmptyPropertyReactiveMask;
+import static org.drools.core.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
 
 public class EmptyBetaConstraints
     implements

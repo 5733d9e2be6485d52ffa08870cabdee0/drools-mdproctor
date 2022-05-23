@@ -31,8 +31,9 @@ import org.drools.core.common.ReteEvaluator;
 import org.drools.core.reteoo.ObjectTypeNode.ObjectTypeNodeMemory;
 import org.drools.core.reteoo.WindowNode.WindowMemory;
 import org.drools.core.reteoo.builder.BuildContext;
-import org.drools.core.rule.Behavior;
+import org.drools.core.rule.BehaviorRuntime;
 import org.drools.core.rule.BehaviorManager;
+import org.drools.core.rule.BehaviourContext;
 import org.drools.core.rule.EntryPointId;
 import org.drools.core.rule.SlidingTimeWindow;
 import org.drools.core.rule.constraint.AlphaNodeFieldConstraint;
@@ -77,7 +78,7 @@ public class WindowNode extends ObjectSource
      */
     public WindowNode(final int id,
                       final List<AlphaNodeFieldConstraint> constraints,
-                      final List<Behavior> behaviors,
+                      final List<BehaviorRuntime> behaviors,
                       final ObjectSource objectSource,
                       final BuildContext context) {
         super(id,
@@ -90,7 +91,7 @@ public class WindowNode extends ObjectSource
         this.constraints = new ArrayList<>(constraints);
         this.behavior = new BehaviorManager(behaviors);
         this.entryPoint = context.getCurrentEntryPoint();
-        for ( Behavior b :  behaviors ) {
+        for ( BehaviorRuntime b :  behaviors ) {
             if ( b instanceof SlidingTimeWindow ) {
                 ((SlidingTimeWindow)b).setWindowNode( this );
             }
@@ -115,7 +116,7 @@ public class WindowNode extends ObjectSource
     /**
      * Returns the list of behaviors for this window node
      */
-    public Behavior[] getBehaviors() {
+    public BehaviorRuntime[] getBehaviors() {
         return behavior.getBehaviors();
     }
 
@@ -314,7 +315,7 @@ public class WindowNode extends ObjectSource
     }
 
     public static class WindowMemory implements Memory {
-        public Behavior.Context[] behaviorContext;
+        public BehaviourContext[] behaviorContext;
 
         public short getNodeType() {
             return NodeTypeEnums.WindowNode;
@@ -352,8 +353,8 @@ public class WindowNode extends ObjectSource
         }
 
         public Collection<EventFactHandle> getFactHandles() {
-            List<EventFactHandle> eventFactHandles = new ArrayList<>(  );
-            for (Behavior.Context ctx : behaviorContext) {
+            List<EventFactHandle> eventFactHandles = new ArrayList<EventFactHandle>(  );
+            for (BehaviourContext ctx : behaviorContext) {
                 for (EventFactHandle efh : ctx.getFactHandles()) {
                     eventFactHandles.add(efh.getLinkedFactHandle());
                 }

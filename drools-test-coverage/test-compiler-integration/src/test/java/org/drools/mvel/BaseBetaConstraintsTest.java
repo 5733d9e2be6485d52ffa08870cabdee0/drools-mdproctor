@@ -32,11 +32,11 @@ import org.drools.core.rule.IndexableConstraint;
 import org.drools.core.rule.Pattern;
 import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
 import org.drools.core.rule.accessor.ReadAccessor;
-import org.drools.core.util.AbstractHashTable.FieldIndex;
+import org.drools.core.util.FieldIndex;
 import org.drools.core.util.AbstractHashTable.Index;
 import org.drools.core.util.LinkedList;
 import org.drools.core.util.LinkedListEntry;
-import org.drools.core.util.index.IndexUtil.ConstraintType;
+import org.drools.core.util.index.ConstraintOperatorType;
 import org.drools.core.util.index.TupleIndexHashTable;
 import org.drools.core.util.index.TupleList;
 import org.drools.model.functions.Predicate1;
@@ -147,7 +147,7 @@ public abstract class BaseBetaConstraintsTest {
         BetaMemory betaMemory = betaConstraints.createBetaMemory( config, NodeTypeEnums.JoinNode );
 
         if ( indexedPositions.length > 0 ) {
-            if (((IndexableConstraint)constraints[indexedPositions[0]]).getConstraintType() == ConstraintType.EQUAL) {
+            if (((IndexableConstraint)constraints[indexedPositions[0]]).getConstraintType() == ConstraintOperatorType.EQUAL) {
                 TupleIndexHashTable tupleHashTable = (TupleIndexHashTable) betaMemory.getLeftTupleMemory();
                 assertThat(tupleHashTable.isIndexed()).isTrue();
                 Index index = tupleHashTable.getIndex();

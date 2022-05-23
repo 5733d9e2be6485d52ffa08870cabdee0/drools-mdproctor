@@ -98,7 +98,7 @@ public class ReteComparator {
     public static final NetworkNodeComparator NODE_SORTER = new NetworkNodeComparator();
     public static class NetworkNodeComparator implements Comparator<NetworkNode> {
         @Override
-        public int compare( NetworkNode n1, NetworkNode n2 ) {
+        public int compare(NetworkNode n1, NetworkNode n2) {
             return n1.getId() - n2.getId();
         }
     }

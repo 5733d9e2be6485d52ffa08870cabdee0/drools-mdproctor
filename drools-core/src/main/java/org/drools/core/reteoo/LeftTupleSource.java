@@ -29,10 +29,10 @@ import org.drools.core.util.bitmask.AllSetBitMask;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.bitmask.EmptyBitMask;
 
-import static org.drools.core.reteoo.PropertySpecificUtil.calculateNegativeMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.calculatePositiveMask;
-import static org.drools.core.reteoo.PropertySpecificUtil.getAccessibleProperties;
-import static org.drools.core.reteoo.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.core.util.PropertySpecificUtil.calculateNegativeMask;
+import static org.drools.core.util.PropertySpecificUtil.calculatePositiveMask;
+import static org.drools.core.util.PropertySpecificUtil.getAccessibleProperties;
+import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
 
 /**
  * A source of <code>ReteTuple</code> s for a <code>TupleSink</code>.

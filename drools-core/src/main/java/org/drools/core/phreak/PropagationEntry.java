@@ -17,7 +17,7 @@ package org.drools.core.phreak;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.drools.core.base.DroolsQuery;
+import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.EventFactHandle;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
@@ -134,13 +134,13 @@ public interface PropagationEntry {
 
     class ExecuteQuery extends PropagationEntry.PropagationEntryWithResult<QueryTerminalNode[]> {
 
-        private final String queryName;
-        private final DroolsQuery queryObject;
+        private final String             queryName;
+        private final DroolsQueryImpl    queryObject;
         private final InternalFactHandle handle;
         private final PropagationContext pCtx;
         private final boolean calledFromRHS;
 
-        public ExecuteQuery( String queryName, DroolsQuery queryObject, InternalFactHandle handle, PropagationContext pCtx, boolean calledFromRHS ) {
+        public ExecuteQuery(String queryName, DroolsQueryImpl queryObject, InternalFactHandle handle, PropagationContext pCtx, boolean calledFromRHS) {
             this.queryName = queryName;
             this.queryObject = queryObject;
             this.handle = handle;

@@ -21,13 +21,15 @@ import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.Map;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.AgendaItem;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.reteoo.RuleTerminalNode;
+import org.drools.core.rule.SortDeclarations;
+import org.drools.core.reteoo.Tuple;
 import org.drools.core.rule.Declaration;
-import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.accessor.Salience;
 import org.drools.core.time.TimeUtils;
 import org.drools.mvel.MVELDialectRuntimeData;
@@ -81,17 +83,17 @@ public class MVELSalienceExpression
         evaluator = createMvelEvaluator( unit.getCompiledExpression( runtimeData, rule.toRuleNameAndPathString() ) );
     }
 
-    public int getValue(final Activation activation,
+    public int getValue(final BaseTuple tuple,
                         final Rule rule,
-                        final ReteEvaluator reteEvaluator) {
-        VariableResolverFactory factory = unit.getFactory( reteEvaluator,
-                                                           reteEvaluator != null ? (( AgendaItem ) activation).getTerminalNode().getSalienceDeclarations() : null,
+                        final ValueResolver valueResolver) {
+        VariableResolverFactory factory = unit.getFactory( valueResolver,
+                                                           valueResolver != null ? (( AgendaItem ) tuple).getTerminalNode().getSalienceDeclarations() : null,
                                                            rule, null,
-                                                           reteEvaluator != null ? activation.getTuple() : null,
-                                                           null, reteEvaluator, reteEvaluator.getGlobalResolver() );
+                                                           valueResolver != null ? (Tuple) tuple : null,
+                                                           null, (ReteEvaluator) valueResolver, valueResolver.getGlobalResolver() );
         
         // do we have any functions for this namespace?
-        InternalKnowledgePackage pkg = reteEvaluator.getKnowledgeBase().getPackage( "MAIN" );
+        InternalKnowledgePackage pkg = ((ReteEvaluator) valueResolver).getKnowledgeBase().getPackage( "MAIN" );
         if ( pkg != null ) {
             MVELDialectRuntimeData data = ( MVELDialectRuntimeData ) pkg.getDialectRuntimeRegistry().getDialectData( this.id );
             factory.setNextFactory( data.getFunctionFactory() );
@@ -113,7 +115,7 @@ public class MVELSalienceExpression
         for ( Declaration declr : declrs ) {
             salienceDeclarations[i++] = decls.get( declr.getIdentifier() );
         }
-        Arrays.sort( salienceDeclarations, RuleTerminalNode.SortDeclarations.instance );
+        Arrays.sort(salienceDeclarations, SortDeclarations.instance);
         return salienceDeclarations;
     }
 

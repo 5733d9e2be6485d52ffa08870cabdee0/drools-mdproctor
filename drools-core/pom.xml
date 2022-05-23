@@ -26,6 +26,12 @@
       core module.
     -->
     <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-base</artifactId>
+      <version>8.22.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-api</artifactId>
     </dependency>

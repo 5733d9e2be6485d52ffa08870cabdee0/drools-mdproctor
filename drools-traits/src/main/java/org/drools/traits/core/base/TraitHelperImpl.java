@@ -69,7 +69,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.drools.traits.core.base.TraitUtils.supersetOrEqualset;
-import static org.drools.core.reteoo.PropertySpecificUtil.onlyTraitBitSetMask;
+import static org.drools.core.util.PropertySpecificUtil.onlyTraitBitSetMask;
 
 public class TraitHelperImpl implements Externalizable,
                                         TraitHelper {

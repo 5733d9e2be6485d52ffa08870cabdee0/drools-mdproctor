@@ -31,6 +31,7 @@ import org.drools.core.base.ObjectType;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.index.IndexUtil;
+import org.drools.core.util.index.MemoryFactory;
 
 public class SingleBetaConstraints
     implements
@@ -156,7 +157,7 @@ public class SingleBetaConstraints
 
     public BetaMemory createBetaMemory(final RuleBaseConfiguration config,
                                        final short nodeType) {
-        return IndexUtil.Factory.createBetaMemory(config, nodeType, constraint);
+        return MemoryFactory.createBetaMemory(config, nodeType, constraint);
     }
 
     public int hashCode() {

@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.common.RuleBasePartitionId;
 import org.drools.core.common.PropagationContext;
+import org.drools.core.common.RuleBasePartitionId;
 import org.kie.api.definition.rule.Rule;
 
 public class MockRightTupleSink

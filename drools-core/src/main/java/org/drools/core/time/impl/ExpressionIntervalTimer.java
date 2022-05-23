@@ -31,8 +31,8 @@ import org.drools.core.time.TimerExpression;
 import org.drools.core.time.Trigger;
 import org.kie.api.runtime.Calendars;
 
-import static org.drools.core.time.TimeUtils.evalDateExpression;
-import static org.drools.core.time.TimeUtils.evalTimeExpression;
+import static org.drools.core.time.TimerExpressionUtils.evalDateExpression;
+import static org.drools.core.time.TimerExpressionUtils.evalTimeExpression;
 
 public class ExpressionIntervalTimer  extends BaseTimer
     implements
