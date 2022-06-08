@@ -48,6 +48,7 @@ import org.drools.core.reteoo.WindowNode;
 import org.drools.core.rule.Accumulate;
 import org.drools.core.rule.AsyncReceive;
 import org.drools.core.rule.AsyncSend;
+import org.drools.core.rule.Behavior;
 import org.drools.core.rule.BehaviorRuntime;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.EntryPointId;
@@ -179,7 +180,7 @@ public interface NodeFactory {
 
     WindowNode buildWindowNode(int id,
                                List<AlphaNodeFieldConstraint> constraints,
-                               List<BehaviorRuntime> behaviors,
+                               List<Behavior> behaviors,
                                ObjectSource objectSource,
                                BuildContext context);
 

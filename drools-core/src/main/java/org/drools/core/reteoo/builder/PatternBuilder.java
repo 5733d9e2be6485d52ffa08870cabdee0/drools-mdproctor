@@ -26,6 +26,7 @@ import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.WindowNode;
 import org.drools.core.rule.Accumulate;
+import org.drools.core.rule.Behavior;
 import org.drools.core.rule.BehaviorRuntime;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.EntryPointId;
@@ -124,7 +125,7 @@ public class PatternBuilder
     }
 
     private void buildBehaviors(BuildContext context, BuildUtils utils, Pattern pattern, Constraints constraints) {
-        final List<BehaviorRuntime> behaviors = pattern.getBehaviors();
+        final List<Behavior> behaviors = pattern.getBehaviors();
         if ( pattern.getSource() == null ||
                 ( !( pattern.getSource() instanceof WindowReference) &&
                   ( context.getCurrentEntryPoint() != EntryPointId.DEFAULT || ! behaviors.isEmpty() ) ) ){
@@ -134,10 +135,10 @@ public class PatternBuilder
         if( ! behaviors.isEmpty() ) {
             // build the window node:
             WindowNode wn = CoreComponentFactory.get().getNodeFactoryService().buildWindowNode( context.getNextNodeId(),
-                                                                                                   constraints.alphaConstraints,
-                                                                                                   behaviors,
-                                                                                                   context.getObjectSource(),
-                                                                                                   context );
+                                                                                                constraints.alphaConstraints,
+                                                                                                behaviors,
+                                                                                                context.getObjectSource(),
+                                                                                                context );
             context.setObjectSource( utils.attachNode( context, wn ) );
 
             // alpha constraints added to the window node already
@@ -353,7 +354,7 @@ public class PatternBuilder
             } else {
                 // otherwise calculate it based on behaviours and temporal constraints
                 long offset = NEVER_EXPIRES;
-                for ( BehaviorRuntime behavior : pattern.getBehaviors() ) {
+                for ( Behavior behavior : pattern.getBehaviors() ) {
                     if ( behavior.getExpirationOffset() != NEVER_EXPIRES ) {
                         offset = Math.max( behavior.getExpirationOffset(), offset );
                     }

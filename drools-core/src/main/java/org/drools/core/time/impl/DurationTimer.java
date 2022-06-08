@@ -25,13 +25,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.EventFactHandle;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.rule.ConditionalElement;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.reteoo.Tuple;
+import org.drools.core.time.JobHandle;
 import org.drools.core.time.Trigger;
 import org.drools.util.MathUtils;
 import org.kie.api.runtime.Calendars;
@@ -81,24 +85,24 @@ public class DurationTimer extends BaseTimer
         } else {
             timestamp = wm.getTimerService().getCurrentTime();
         }
-        String[] calendarNames = item.getRule().getCalendars();
+        String[] calendarNames = ((RuleImpl)item.getRule()).getCalendars();
         Calendars calendars = wm.getCalendars();
         return createTrigger(timestamp, calendarNames, calendars);
     }
 
     public Trigger createTrigger(long timestamp,
-                                 Tuple leftTuple,
-                                 DefaultJobHandle jh,
+                                 BaseTuple tuple,
+                                 JobHandle jh,
                                  String[] calendarNames,
                                  Calendars calendars,
                                  Declaration[][] declrs,
-                                 ReteEvaluator reteEvaluator) {
-        return createTrigger(getEventTimestamp(leftTuple, timestamp), calendarNames, calendars);
+                                 ValueResolver valueResolver) {
+        return createTrigger(getEventTimestamp(tuple, timestamp), calendarNames, calendars);
     }
 
-    long getEventTimestamp(Tuple leftTuple, long timestamp) {
+    long getEventTimestamp(BaseTuple tuple, long timestamp) {
         return eventFactHandle != null ?
-               ((EventFactHandle) leftTuple.get(eventFactHandle)).getStartTimestamp() :
+               ((EventFactHandle) tuple.get(eventFactHandle)).getStartTimestamp() :
                timestamp;
     }
 

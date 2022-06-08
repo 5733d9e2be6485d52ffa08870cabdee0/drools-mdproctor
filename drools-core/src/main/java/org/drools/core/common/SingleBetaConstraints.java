@@ -22,16 +22,18 @@ import java.io.ObjectOutput;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.ContextEntry;
 import org.drools.core.rule.MutableTypeConstraint;
 import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
 import org.drools.core.base.ObjectType;
-import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.index.IndexUtil;
 import org.drools.core.util.index.MemoryFactory;
+import org.kie.api.runtime.rule.FactHandle;
 
 public class SingleBetaConstraints
     implements
@@ -112,25 +114,25 @@ public class SingleBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#updateFromTuple(org.kie.reteoo.ReteTuple)
      */
     public void updateFromTuple(final ContextEntry[] context,
-                                final ReteEvaluator reteEvaluator,
-                                final Tuple tuple) {
-        context[0].updateFromTuple(reteEvaluator, tuple);
+                                final ValueResolver valueResolver,
+                                final BaseTuple tuple) {
+        context[0].updateFromTuple(valueResolver, tuple);
     }
 
     /* (non-Javadoc)
      * @see org.kie.common.BetaNodeConstraints#updateFromFactHandle(org.kie.common.InternalFactHandle)
      */
     public void updateFromFactHandle(final ContextEntry[] context,
-                                     final ReteEvaluator reteEvaluator,
-                                     final InternalFactHandle handle) {
-        context[0].updateFromFactHandle(reteEvaluator, handle);
+                                     final ValueResolver valueResolver,
+                                     final FactHandle handle) {
+        context[0].updateFromFactHandle(valueResolver, handle);
     }
 
     /* (non-Javadoc)
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedLeft(java.lang.Object)
      */
     public boolean isAllowedCachedLeft(final ContextEntry[] context,
-                                       final InternalFactHandle handle) {
+                                       final FactHandle handle) {
         return this.indexed || this.constraint.isAllowedCachedLeft(context[0],
                                                                    handle);
     }
@@ -139,7 +141,7 @@ public class SingleBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedRight(org.kie.reteoo.ReteTuple)
      */
     public boolean isAllowedCachedRight(final ContextEntry[] context,
-                                        final Tuple tuple) {
+                                        final BaseTuple tuple) {
         return this.constraint.isAllowedCachedRight(tuple, context[0]);
     }
 

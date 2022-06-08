@@ -20,12 +20,13 @@ import java.io.Externalizable;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.ContextEntry;
 import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
 import org.drools.core.base.ObjectType;
-import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.kie.api.runtime.rule.FactHandle;
 
@@ -36,18 +37,18 @@ public interface BetaConstraints
     ContextEntry[] createContext();
 
     void updateFromTuple(ContextEntry[] context,
-                         ReteEvaluator reteEvaluator,
-                         Tuple tuple);
+                         ValueResolver valueResolver,
+                         BaseTuple tuple);
 
     void updateFromFactHandle(ContextEntry[] context,
-                              ReteEvaluator reteEvaluator,
+                              ValueResolver valueResolver,
                               FactHandle handle);
 
     boolean isAllowedCachedLeft(ContextEntry[] context,
                                 FactHandle handle);
 
     boolean isAllowedCachedRight(ContextEntry[] context,
-                                 Tuple tuple);
+                                 BaseTuple tuple);
 
     BetaNodeFieldConstraint[] getConstraints();
 

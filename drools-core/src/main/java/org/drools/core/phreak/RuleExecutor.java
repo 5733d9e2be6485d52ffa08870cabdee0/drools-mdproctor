@@ -245,7 +245,7 @@ public class RuleExecutor {
                                       Tuple leftTuple,
                                       AgendaFilter filter) {
         // NB. stopped setting the LT.object to Boolean.TRUE, that Reteoo did.
-        if ( !rule.isEffective(leftTuple, rtn, reteEvaluator) ) {
+        if ( !rule.isEffective(leftTuple, rtn.getEnabledDeclarations(), reteEvaluator) ) {
             return true;
         }
 
@@ -425,7 +425,7 @@ public class RuleExecutor {
     }
 
     public void fireConsequenceEvent(ReteEvaluator reteEvaluator, ActivationsManager activationsManager, Activation activation, String consequenceName) {
-        Consequence consequence = activation.getRule().getNamedConsequence( consequenceName );
+        Consequence consequence = ((RuleImpl)activation.getRule()).getNamedConsequence( consequenceName );
         if (consequence != null) {
             fireActivationEvent(reteEvaluator, activationsManager, activation, consequence);
         }

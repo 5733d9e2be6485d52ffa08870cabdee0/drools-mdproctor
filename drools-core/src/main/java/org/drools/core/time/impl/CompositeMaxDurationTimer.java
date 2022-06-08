@@ -24,12 +24,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.rule.ConditionalElement;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.reteoo.Tuple;
+import org.drools.core.time.JobHandle;
 import org.drools.core.time.Trigger;
 import org.kie.api.runtime.Calendars;
 
@@ -70,19 +74,19 @@ public class CompositeMaxDurationTimer extends BaseTimer
 
     public Trigger createTrigger( Activation item, InternalWorkingMemory wm ) {
         long timestamp = wm.getTimerService().getCurrentTime();
-        String[] calendarNames = item.getRule().getCalendars();
+        String[] calendarNames = ((RuleImpl)item.getRule()).getCalendars();
         Calendars calendars = wm.getCalendars();
         return createTrigger( getMaxTimestamp(item.getTuple(), timestamp), calendarNames, calendars );
     }
 
     public Trigger createTrigger(long timestamp,
-                                 Tuple leftTuple,
-                                 DefaultJobHandle jh,
+                                 BaseTuple tuple,
+                                 JobHandle jh,
                                  String[] calendarNames,
                                  Calendars calendars,
                                  Declaration[][] declrs,
-                                 ReteEvaluator reteEvaluator) {
-        return createTrigger( getMaxTimestamp(leftTuple, timestamp), calendarNames, calendars );
+                                 ValueResolver valueResolver) {
+        return createTrigger( getMaxTimestamp(tuple, timestamp), calendarNames, calendars );
     }
 
     public Trigger createTrigger( long timestamp, // current time
@@ -100,14 +104,14 @@ public class CompositeMaxDurationTimer extends BaseTimer
                                                                                      calendars ) : null );
     }
 
-    private long getMaxTimestamp(Tuple leftTuple, long timestamp) {
+    private long getMaxTimestamp(BaseTuple tuple, long timestamp) {
         if (timer != null) {
             return timestamp;
         }
         long result = 0;
         for ( DurationTimer durationTimer : durations ) {
             result = Math.max( result,
-                               durationTimer.getDuration() + durationTimer.getEventTimestamp(leftTuple, timestamp) );
+                               durationTimer.getDuration() + durationTimer.getEventTimestamp(tuple, timestamp) );
         }
         return result;
     }

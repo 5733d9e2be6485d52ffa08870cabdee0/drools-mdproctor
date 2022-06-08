@@ -16,8 +16,10 @@
 
 package org.drools.core.conflict;
 
+import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.consequence.ConflictResolver;
+import org.kie.api.runtime.rule.Match;
 
 /**
  * <code>ConflictResolver</code> that uses the loadOrder of rules to resolve
@@ -65,10 +67,10 @@ public class SequentialConflictResolver extends AbstractConflictResolver {
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    public final int compare(final Activation existing,
-                             final Activation adding) {
-        final int s1 = existing.getSalience();
-        final int s2 = adding.getSalience();
+    public final int compare(final Match existing,
+                             final Match adding) {
+        final int s1 = ((Activation)existing).getSalience();
+        final int s2 = ((Activation)adding).getSalience();
 
         if ( s1 > s2 ) {
             return 1;
@@ -76,6 +78,6 @@ public class SequentialConflictResolver extends AbstractConflictResolver {
             return -1;
         }
 
-        return (int) (existing.getRule().getLoadOrder() - adding.getRule().getLoadOrder());
+        return ((RuleImpl)existing.getRule()).getLoadOrder() - ((RuleImpl)adding.getRule()).getLoadOrder(); // lowest order goes first;
     }
 }

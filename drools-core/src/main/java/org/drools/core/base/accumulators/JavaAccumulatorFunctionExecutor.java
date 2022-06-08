@@ -22,6 +22,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.rule.Declaration;
@@ -31,6 +33,7 @@ import org.drools.core.rule.accessor.ReturnValueExpression;
 import org.drools.core.rule.accessor.ReturnValueExpression.SafeReturnValueExpression;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.rule.accessor.Wireable;
+import org.kie.api.runtime.rule.FactHandle;
 import org.kie.internal.security.KiePolicyHelper;
 
 /**
@@ -82,10 +85,10 @@ public class JavaAccumulatorFunctionExecutor
      * @see org.kie.spi.Accumulator#init(java.lang.Object, org.kie.spi.Tuple, org.kie.rule.Declaration[], org.kie.WorkingMemory)
      */
     public Object init(Object workingMemoryContext,
-                     Object context,
-                     Tuple leftTuple,
-                     Declaration[] declarations,
-                     ReteEvaluator reteEvaluator) {
+                       Object context,
+                       BaseTuple leftTuple,
+                       Declaration[] declarations,
+                       ValueResolver valueResolver) {
         return this.function.initContext( (Serializable) context );
     }
 
@@ -93,18 +96,18 @@ public class JavaAccumulatorFunctionExecutor
      * @see org.kie.spi.Accumulator#accumulate(java.lang.Object, org.kie.spi.Tuple, org.kie.common.InternalFactHandle, org.kie.rule.Declaration[], org.kie.rule.Declaration[], org.kie.WorkingMemory)
      */
     public Object accumulate(Object workingMemoryContext,
-                           Object context,
-                           Tuple leftTuple,
-                           InternalFactHandle handle,
-                           Declaration[] declarations,
-                           Declaration[] innerDeclarations,
-                           ReteEvaluator reteEvaluator) {
+                             Object context,
+                             BaseTuple tuple,
+                             FactHandle handle,
+                             Declaration[] declarations,
+                             Declaration[] innerDeclarations,
+                             ValueResolver valueResolver) {
         try {
             Object value = this.expression.evaluate( handle,
-                                                     leftTuple,
+                                                     tuple,
                                                      declarations,
                                                      innerDeclarations,
-                                                     reteEvaluator,
+                                                     valueResolver,
                                                      workingMemoryContext ).getValue();
             return this.function.accumulateValue( (Serializable) context, value );
         } catch (Exception e) {
@@ -114,12 +117,12 @@ public class JavaAccumulatorFunctionExecutor
 
     public boolean tryReverse(Object workingMemoryContext,
                               Object context,
-                              Tuple leftTuple,
-                              InternalFactHandle handle,
+                              BaseTuple tuple,
+                              FactHandle handle,
                               Object value,
                               Declaration[] declarations,
                               Declaration[] innerDeclarations,
-                              ReteEvaluator reteEvaluator) {
+                              ValueResolver valueResolver) {
         return this.function.tryReverse( (Serializable) context, value );
     }
 
@@ -128,9 +131,9 @@ public class JavaAccumulatorFunctionExecutor
      */
     public Object getResult(Object workingMemoryContext,
                             Object context,
-                            Tuple leftTuple,
+                            BaseTuple tuple,
                             Declaration[] declarations,
-                            ReteEvaluator reteEvaluator) {
+                            ValueResolver valueResolver) {
         try {
             return this.function.getResult( (Serializable) context );
         } catch (Exception e) {

@@ -103,7 +103,7 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
         Pattern pattern = context.getLastBuiltPatterns()[0];
         ObjectType objectType = pattern.getObjectType();
 
-        if ( isPropertyReactive(context, objectType) ) {
+        if ( isPropertyReactive(context.getRuleBase(), objectType) ) {
             List<String> accessibleProperties = pattern.getAccessibleProperties( context.getRuleBase() );
             setDeclaredMask( pattern.getPositiveWatchMask(accessibleProperties) );
             setNegativeMask( pattern.getNegativeWatchMask(accessibleProperties) );

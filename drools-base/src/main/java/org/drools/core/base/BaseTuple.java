@@ -10,6 +10,8 @@ public interface BaseTuple {
 
     Object getObject(Declaration declaration);
 
+    Object getObject(int tupleIndex);
+
     Object getContextObject();
 
     int size();

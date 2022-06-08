@@ -16,8 +16,10 @@
 
 package org.drools.core.conflict;
 
+import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.consequence.ConflictResolver;
+import org.kie.api.runtime.rule.Match;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -40,22 +42,22 @@ public class PhreakConflictResolver
         return PhreakConflictResolver.INSTANCE;
     }
 
-    public final int compare(final Activation existing,
-                             final Activation adding) {
+    public final int compare(final Match existing,
+                             final Match adding) {
         return doCompare( existing, adding );
     }
 
-    public final static int doCompare(final Activation existing,
-                                      final Activation adding) {
+    public final static int doCompare(final Match existing,
+                                      final Match adding) {
         if (existing == adding) {
             return 0;
         }
 
-        final int s1 = existing.getSalience();
-        final int s2 = adding.getSalience();
+        final int s1 = ((Activation)existing).getSalience();
+        final int s2 = ((Activation)adding).getSalience();
 
         return s1 != s2 ?
                ( s1 > s2 ? 1 : -1 ) : // highest salience goes first (cannot do s1-s2 due to overflow)
-               adding.getRule().getLoadOrder() - existing.getRule().getLoadOrder(); // lowest order goes first
+               ((RuleImpl)adding.getRule()).getLoadOrder() - ((RuleImpl)existing.getRule()).getLoadOrder(); // lowest order goes first
     }
 }

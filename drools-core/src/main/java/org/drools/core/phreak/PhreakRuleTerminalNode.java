@@ -15,6 +15,7 @@
 
 package org.drools.core.phreak;
 
+import org.drools.core.base.BaseTuple;
 import org.drools.core.common.ActivationsManager;
 import org.drools.core.common.AgendaItem;
 import org.drools.core.common.InternalAgendaGroup;
@@ -130,10 +131,10 @@ public class PhreakRuleTerminalNode {
         activation.setActivationFactHandle( factHandle );
     }
 
-    private static int getSalienceValue( TerminalNode rtnNode, RuleAgendaItem ruleAgendaItem, AgendaItem leftTuple, ReteEvaluator reteEvaluator ) {
+    private static int getSalienceValue( TerminalNode rtnNode, RuleAgendaItem ruleAgendaItem, AgendaItem item, ReteEvaluator reteEvaluator ) {
         Salience salience = ruleAgendaItem.getRule().getSalience();
         return salience == null ? 0 : (salience.isDynamic() ?
-                    salience.getValue(leftTuple, rtnNode.getRule(), reteEvaluator) :
+                    salience.getValue(item.getTuple(), rtnNode.getRule(), reteEvaluator) :
                     salience.getValue() );
     }
 

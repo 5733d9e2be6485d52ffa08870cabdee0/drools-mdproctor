@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.ContextEntry;
@@ -33,6 +35,7 @@ import org.drools.core.base.ObjectType;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.index.MemoryFactory;
+import org.kie.api.runtime.rule.FactHandle;
 import org.kie.internal.conf.IndexPrecedenceOption;
 
 import static org.drools.core.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
@@ -143,10 +146,10 @@ public class DefaultBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#updateFromTuple(org.kie.reteoo.ReteTuple)
      */
     public void updateFromTuple(final ContextEntry[] context,
-                                final ReteEvaluator reteEvaluator,
-                                final Tuple tuple) {
+                                final ValueResolver valueResolver,
+                                final BaseTuple tuple) {
         for (ContextEntry aContext : context) {
-            aContext.updateFromTuple(reteEvaluator, tuple);
+            aContext.updateFromTuple(valueResolver, tuple);
         }
     }
 
@@ -154,10 +157,10 @@ public class DefaultBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#updateFromFactHandle(org.kie.common.InternalFactHandle)
      */
     public void updateFromFactHandle(final ContextEntry[] context,
-                                     final ReteEvaluator reteEvaluator,
-                                     final InternalFactHandle handle) {
+                                     final ValueResolver valueResolver,
+                                     final FactHandle handle) {
         for (ContextEntry aContext : context) {
-            aContext.updateFromFactHandle(reteEvaluator, handle);
+            aContext.updateFromFactHandle(valueResolver, handle);
         }
     }
 
@@ -177,7 +180,7 @@ public class DefaultBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedLeft(java.lang.Object)
      */
     public boolean isAllowedCachedLeft(final ContextEntry[] context,
-                                       final InternalFactHandle handle) {
+                                       final FactHandle handle) {
         for (int i = indexed; i < constraints.length; i++) {
             if ( !constraints[i].isAllowedCachedLeft(context[i], handle) ) {
                 return false;
@@ -190,7 +193,7 @@ public class DefaultBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedRight(org.kie.reteoo.ReteTuple)
      */
     public boolean isAllowedCachedRight(final ContextEntry[] context,
-                                        final Tuple tuple) {
+                                        final BaseTuple tuple) {
         for (int i = indexed; i < constraints.length; i++) {
             if ( !constraints[i].isAllowedCachedRight(tuple, context[i]) ) {
                 return false;

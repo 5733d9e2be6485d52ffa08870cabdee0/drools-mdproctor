@@ -23,10 +23,13 @@ import java.io.ObjectOutput;
 import java.util.Date;
 import java.util.Map;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.rule.ConditionalElement;
 import org.drools.core.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
+import org.drools.core.time.JobHandle;
 import org.drools.core.time.TimerExpression;
 import org.drools.core.time.Trigger;
 import org.kie.api.runtime.Calendars;
@@ -98,12 +101,12 @@ public class IntervalTimer extends BaseTimer
     }
 
     public Trigger createTrigger(long timestamp,
-                                 Tuple leftTuple,
-                                 DefaultJobHandle jh,
+                                 BaseTuple tuple,
+                                 JobHandle jh,
                                  String[] calendarNames,
                                  Calendars calendars,
                                  Declaration[][] declrs,
-                                 ReteEvaluator reteEvaluator) {
+                                 ValueResolver valueResolver) {
         Declaration[] startDeclarations = declrs[0];
 
         Date lastFireTime = null;
@@ -111,7 +114,7 @@ public class IntervalTimer extends BaseTimer
         long newDelay = delay;
 
         if ( jh != null ) {
-            IntervalTrigger preTrig = (IntervalTrigger) jh.getTimerJobInstance().getTrigger();
+            IntervalTrigger preTrig = (IntervalTrigger) ((DefaultJobHandle)jh).getTimerJobInstance().getTrigger();
             lastFireTime = preTrig.getLastFireTime();
             createdTime = preTrig.getCreatedTime();
             if (lastFireTime != null) {
@@ -127,8 +130,8 @@ public class IntervalTimer extends BaseTimer
         }
 
         return new IntervalTrigger( timestamp,
-                                    evalDateExpression( this.startTime, leftTuple, startDeclarations, reteEvaluator ),
-                                    evalDateExpression( this.endTime, leftTuple, startDeclarations, reteEvaluator ),
+                                    evalDateExpression( this.startTime, tuple, startDeclarations, valueResolver ),
+                                    evalDateExpression( this.endTime, tuple, startDeclarations, valueResolver ),
                                     this.repeatLimit,
                                     newDelay,
                                     this.period,

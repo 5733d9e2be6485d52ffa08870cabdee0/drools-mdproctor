@@ -117,7 +117,7 @@ public class LeftInputAdapterNode extends LeftTupleSource
             return AllSetBitMask.get();
         }
 
-        return isPropertyReactive( context, objectType ) ?
+        return isPropertyReactive( context.getRuleBase(), objectType ) ?
                pattern.getPositiveWatchMask( pattern.getAccessibleProperties( context.getRuleBase() ) ) :
                AllSetBitMask.get();
     }

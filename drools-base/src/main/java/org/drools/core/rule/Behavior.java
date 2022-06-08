@@ -7,6 +7,8 @@ public interface Behavior extends RuleComponent, Cloneable  {
      */
     Behavior.BehaviorType getType();
 
+    long getExpirationOffset();
+
     enum BehaviorType {
         TIME_WINDOW( "time" ),
         LENGTH_WINDOW( "length" );

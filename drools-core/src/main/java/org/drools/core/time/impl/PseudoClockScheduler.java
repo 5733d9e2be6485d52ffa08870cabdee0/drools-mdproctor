@@ -78,7 +78,9 @@ public class PseudoClockScheduler
         if ( tmp != null ) {
             queue = tmp;
         }
-        session = ((DroolsObjectInputStream) in).getWorkingMemory();
+        // @FIXME @TODO
+        throw new RuntimeException("Need to fix this, must be a better way to assign the wm instance.");
+        //session = ((DroolsObjectInputStream) in).getWorkingMemory();
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {

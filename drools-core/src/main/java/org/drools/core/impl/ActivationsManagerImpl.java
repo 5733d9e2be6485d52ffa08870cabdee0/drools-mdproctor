@@ -212,7 +212,7 @@ public class ActivationsManagerImpl implements ActivationsManager {
         if ( activation.isRuleAgendaItem() ) {
             throw new UnsupportedOperationException("defensive programming, making sure this isn't called, before removing");
         }
-        String group = activation.getRule().getActivationGroup();
+        String group = ((RuleImpl) activation.getRule()).getActivationGroup();
         if ( !StringUtils.isEmpty(group) ) {
             InternalActivationGroup actgroup = this.activationGroups.computeIfAbsent(group, k -> new ActivationGroupImpl( this, k ));
 
