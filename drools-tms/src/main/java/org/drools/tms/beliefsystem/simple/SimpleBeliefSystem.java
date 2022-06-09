@@ -73,7 +73,7 @@ public class SimpleBeliefSystem
         if ( empty && bfh.getEqualityKey().getStatus() == EqualityKey.JUSTIFIED ) {
             ep.insert( bfh,
                        bfh.getObject(),
-                       node.getJustifier().getRule(),
+                       (RuleImpl) node.getJustifier().getRule(),
                        node.getJustifier().getTuple().getTupleSink(),
                        typeConf );
         }
@@ -113,7 +113,7 @@ public class SimpleBeliefSystem
     public void delete(LogicalDependency<SimpleMode> node,
                        BeliefSet<SimpleMode> beliefSet,
                        PropagationContext context) {
-        delete( node.getMode(), node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context );
+        delete( node.getMode(), (RuleImpl) node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context );
     }
 
     @Override

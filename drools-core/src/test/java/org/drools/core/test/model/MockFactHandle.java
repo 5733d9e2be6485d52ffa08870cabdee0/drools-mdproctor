@@ -68,4 +68,16 @@ public class MockFactHandle
         // TODO Auto-generated method stub
         return 0;
     }
+
+    @Override public Object getObject() {
+        return null;
+    }
+
+    @Override public boolean isNegated() {
+        return false;
+    }
+
+    @Override public boolean isEvent() {
+        return false;
+    }
 }

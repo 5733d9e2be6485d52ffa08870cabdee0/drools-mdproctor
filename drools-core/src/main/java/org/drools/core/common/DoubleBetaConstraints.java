@@ -19,6 +19,8 @@ package org.drools.core.common;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.ContextEntry;
 import org.drools.core.rule.MutableTypeConstraint;
@@ -26,6 +28,7 @@ import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
 import org.drools.core.base.ObjectType;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
+import org.kie.api.runtime.rule.FactHandle;
 import org.kie.internal.conf.IndexPrecedenceOption;
 
 public class DoubleBetaConstraints extends MultipleBetaConstraint {
@@ -70,11 +73,11 @@ public class DoubleBetaConstraints extends MultipleBetaConstraint {
      * @see org.kie.common.BetaNodeConstraints#updateFromTuple(org.kie.reteoo.ReteTuple)
      */
     public void updateFromTuple(final ContextEntry[] context,
-                                final ReteEvaluator reteEvaluator,
-                                final Tuple tuple) {
-        context[0].updateFromTuple( reteEvaluator,
+                                final ValueResolver valueResolver,
+                                final BaseTuple tuple) {
+        context[0].updateFromTuple( valueResolver,
                                     tuple );
-        context[1].updateFromTuple( reteEvaluator,
+        context[1].updateFromTuple( valueResolver,
                                     tuple );
     }
 
@@ -82,11 +85,11 @@ public class DoubleBetaConstraints extends MultipleBetaConstraint {
      * @see org.kie.common.BetaNodeConstraints#updateFromFactHandle(org.kie.common.InternalFactHandle)
      */
     public void updateFromFactHandle(final ContextEntry[] context,
-                                     final ReteEvaluator reteEvaluator,
-                                     final InternalFactHandle handle) {
-        context[0].updateFromFactHandle( reteEvaluator,
+                                     final ValueResolver valueResolver,
+                                     final FactHandle handle) {
+        context[0].updateFromFactHandle( valueResolver,
                                          handle );
-        context[1].updateFromFactHandle( reteEvaluator,
+        context[1].updateFromFactHandle( valueResolver,
                                          handle );
     }
 
@@ -104,7 +107,7 @@ public class DoubleBetaConstraints extends MultipleBetaConstraint {
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedLeft(java.lang.Object)
      */
     public boolean isAllowedCachedLeft(final ContextEntry[] context,
-                                       final InternalFactHandle handle) {
+                                       final FactHandle handle) {
         return (indexed[0] || constraints[0].isAllowedCachedLeft( context[0], handle )) &&
                (indexed[1] || constraints[1].isAllowedCachedLeft( context[1], handle ));
     }
@@ -113,7 +116,7 @@ public class DoubleBetaConstraints extends MultipleBetaConstraint {
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedRight(org.kie.reteoo.ReteTuple)
      */
     public boolean isAllowedCachedRight(final ContextEntry[] context,
-                                        final Tuple tuple) {
+                                        final BaseTuple tuple) {
         return constraints[0].isAllowedCachedRight( tuple, context[0] ) &&
                constraints[1].isAllowedCachedRight( tuple, context[1] );
     }

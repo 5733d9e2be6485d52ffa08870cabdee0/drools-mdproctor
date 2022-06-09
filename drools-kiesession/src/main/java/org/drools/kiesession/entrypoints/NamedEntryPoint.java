@@ -353,7 +353,7 @@ public class NamedEntryPoint implements InternalWorkingMemoryEntryPoint, Propert
                 this.handleFactory.increaseFactHandleRecency(handle);
 
                 final PropagationContext propagationContext = pctxFactory.createPropagationContext(this.reteEvaluator.getNextPropagationIdCounter(), PropagationContext.Type.MODIFICATION,
-                        activation == null ? null : activation.getRule(),
+                        activation == null ? null : (RuleImpl) activation.getRule(),
                         activation == null ? null : activation.getTuple().getTupleSink(),
                         handle, entryPoint, mask, modifiedClass, null);
 

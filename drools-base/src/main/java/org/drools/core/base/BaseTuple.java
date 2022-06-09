@@ -6,11 +6,13 @@ import org.kie.api.runtime.rule.FactHandle;
 public interface BaseTuple {
     FactHandle get(Declaration declaration);
 
+    FactHandle get(int index);
+
     FactHandle getFactHandle();
 
     Object getObject(Declaration declaration);
 
-    Object getObject(int tupleIndex);
+    Object getObject(int index);
 
     Object getContextObject();
 

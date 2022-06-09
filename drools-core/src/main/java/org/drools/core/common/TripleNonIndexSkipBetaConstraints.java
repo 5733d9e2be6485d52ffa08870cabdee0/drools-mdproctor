@@ -22,6 +22,8 @@ import java.io.ObjectOutput;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.ContextEntry;
@@ -30,6 +32,7 @@ import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
 import org.drools.core.base.ObjectType;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
+import org.kie.api.runtime.rule.FactHandle;
 
 public class TripleNonIndexSkipBetaConstraints
     implements
@@ -85,15 +88,15 @@ public class TripleNonIndexSkipBetaConstraints
     }
 
     public void updateFromTuple(ContextEntry[] context,
-                                ReteEvaluator reteEvaluator,
-                                Tuple tuple) {
-        constraints.updateFromTuple(context, reteEvaluator, tuple);
+                                ValueResolver valueResolver,
+                                BaseTuple tuple) {
+        constraints.updateFromTuple(context, valueResolver, tuple);
     }
 
     public void updateFromFactHandle(ContextEntry[] context,
-                                     ReteEvaluator reteEvaluator,
-                                     InternalFactHandle handle) {
-        constraints.updateFromFactHandle( context, reteEvaluator, handle );
+                                     ValueResolver valueResolver,
+                                     FactHandle handle) {
+        constraints.updateFromFactHandle( context, valueResolver, handle );
     }
 
     public boolean isIndexed() {
@@ -139,7 +142,7 @@ public class TripleNonIndexSkipBetaConstraints
     }
 
     public boolean isAllowedCachedLeft(final ContextEntry[] context,
-                                       final InternalFactHandle handle) {
+                                       final FactHandle handle) {
         return this.constraint0.isAllowedCachedLeft( context[0],
                                                      handle ) && this.constraint1.isAllowedCachedLeft( context[1],
                                                                                                        handle ) && this.constraint2.isAllowedCachedLeft( context[2],
@@ -147,7 +150,7 @@ public class TripleNonIndexSkipBetaConstraints
     }
 
     public boolean isAllowedCachedRight(ContextEntry[] context,
-                                        Tuple tuple) {
+                                        BaseTuple tuple) {
         return this.constraints.isAllowedCachedRight( context, tuple );
     }
 

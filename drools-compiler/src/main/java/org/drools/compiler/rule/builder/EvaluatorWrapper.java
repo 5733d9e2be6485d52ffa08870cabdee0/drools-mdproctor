@@ -16,6 +16,7 @@
 
 package org.drools.compiler.rule.builder;
 
+import org.drools.core.base.ValueResolver;
 import org.drools.core.base.ValueType;
 import org.drools.core.base.extractors.ConstantValueReader;
 import org.drools.core.base.extractors.SelfReferenceClassFieldReader;
@@ -28,6 +29,7 @@ import org.drools.core.rule.accessor.Evaluator;
 import org.drools.core.rule.accessor.FieldValue;
 import org.drools.core.rule.accessor.ReadAccessor;
 import org.drools.core.time.Interval;
+import org.kie.api.runtime.rule.FactHandle;
 
 import static org.drools.core.common.InternalFactHandle.dummyFactHandleOf;
 
@@ -84,16 +86,16 @@ public class EvaluatorWrapper implements Evaluator {
      * 
      * @return
      */
-    public boolean evaluate(ReteEvaluator reteEvaluator, Object left, Object right) {
+    public boolean evaluate(ValueResolver valueResolver, Object left, Object right) {
         Object leftValue = leftTimestamp != null ? leftTimestamp : left;
         Object rightValue = rightTimestamp != null ? rightTimestamp : right;
 
         return rightLiteral ?
-                evaluator.evaluate( reteEvaluator,
+                evaluator.evaluate( valueResolver,
                                     new ConstantValueReader( leftValue ),
                                     dummyFactHandleOf( leftValue ),
                                     new ObjectFieldImpl( rightValue ) ) :
-                evaluator.evaluate( reteEvaluator,
+                evaluator.evaluate( valueResolver,
                                     new ConstantValueReader( leftValue ),
                                     dummyFactHandleOf( leftValue ),
                                     new ConstantValueReader( rightValue ),
@@ -124,22 +126,22 @@ public class EvaluatorWrapper implements Evaluator {
         return evaluator.getCoercedValueType();
     }
 
-    public boolean evaluate(ReteEvaluator reteEvaluator,
+    public boolean evaluate(ValueResolver valueResolver,
                             ReadAccessor extractor,
-                            InternalFactHandle factHandle,
+                            FactHandle factHandle,
                             FieldValue value) {
-        return evaluator.evaluate( reteEvaluator,
+        return evaluator.evaluate( valueResolver,
                                    extractor,
                                    factHandle,
                                    value );
     }
 
-    public boolean evaluate(ReteEvaluator reteEvaluator,
+    public boolean evaluate(ValueResolver valueResolver,
                             ReadAccessor leftExtractor,
-                            InternalFactHandle left,
+                            FactHandle left,
                             ReadAccessor rightExtractor,
-                            InternalFactHandle right) {
-        return evaluator.evaluate( reteEvaluator,
+                            FactHandle right) {
+        return evaluator.evaluate( valueResolver,
                                    leftExtractor,
                                    left,
                                    rightExtractor,
@@ -162,9 +164,9 @@ public class EvaluatorWrapper implements Evaluator {
         return evaluator.getInterval();
     }
 
-    public void loadHandles(InternalFactHandle[] handles, InternalFactHandle rightHandle) {
-        InternalFactHandle localLeftHandle = null;
-        InternalFactHandle localRightHandle = null;
+    public void loadHandles(FactHandle[] handles, FactHandle rightHandle) {
+        FactHandle localLeftHandle = null;
+        FactHandle localRightHandle = null;
 
         if ( !selfLeft && handles != null) {
             localLeftHandle = getFactHandle(leftBinding, handles);
@@ -172,7 +174,7 @@ public class EvaluatorWrapper implements Evaluator {
 
         if (selfRight) {
             localRightHandle = rightHandle;
-        } else if (handles != null){
+        } else if (handles != null) {
             localRightHandle = getFactHandle(rightBinding, handles);
         } // @FIXME else? what happens now (mdp) ? Maybe this can never happen?
 
@@ -206,8 +208,8 @@ public class EvaluatorWrapper implements Evaluator {
         this.bindingName = bindingName;
     }
 
-    private static InternalFactHandle getFactHandle( Declaration declaration,
-                                                    InternalFactHandle[] handles ) {
+    private static FactHandle getFactHandle(Declaration declaration,
+                                            FactHandle[] handles ) {
         return handles[declaration.getObjectIndex()];
     }
 }

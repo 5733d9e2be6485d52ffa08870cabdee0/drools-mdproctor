@@ -18,6 +18,7 @@ import org.drools.core.common.EqualityKey;
 import org.drools.core.common.InternalAgenda;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalRuleFlowGroup;
+import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.kiesession.entrypoints.NamedEntryPoint;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
@@ -153,7 +154,7 @@ public class TruthMaintenanceSystemKnowledgeHelper<T extends ModedAssertion<T>> 
         }
 
         return beliefSystem.insert( beliefSystem.asMode( value ),
-                                    activation.getRule(),
+                                    (RuleImpl) activation.getRule(),
                                     (TruthMaintenanceSystemActivation) activation,
                                     object,
                                     beliefSet,

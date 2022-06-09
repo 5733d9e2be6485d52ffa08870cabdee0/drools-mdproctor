@@ -25,6 +25,7 @@ import org.drools.core.common.NodeMemories;
 import org.drools.core.common.ObjectStore;
 import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.core.definitions.rule.RuleBase;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.event.AgendaEventSupport;
 import org.drools.core.event.RuleEventListenerSupport;
@@ -164,6 +165,16 @@ public class StatefulKnowledgeSessionForRHS
 
     public void signalEvent(String type, Object event, String processInstanceId) {
         delegate.signalEvent(type, event, processInstanceId);
+    }
+
+    @Override
+    public long getCurrentTime() {
+        return delegate.getCurrentTime();
+    }
+
+    @Override
+    public RuleBase getRuleBase() {
+        return delegate.getRuleBase();
     }
 
     public Globals getGlobals() {

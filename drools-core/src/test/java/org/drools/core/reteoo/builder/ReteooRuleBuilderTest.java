@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.drools.core.base.ClassObjectType;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.KnowledgeBaseImpl;
@@ -80,7 +81,11 @@ public class ReteooRuleBuilderTest {
             public void writeExternal(ObjectOutput out) throws IOException {
 
             }
-            
+
+            @Override public void evaluate(Object context, ValueResolver valueResolver) throws Exception {
+
+            }
+
             public String getName() {
                 return "default";
             }

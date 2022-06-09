@@ -118,7 +118,7 @@ public class DefaultKnowledgeHelper implements KnowledgeHelper, Externalizable {
 
     public InternalFactHandle insert(final Object object, final boolean dynamic) {
         return (InternalFactHandle) ((InternalWorkingMemoryEntryPoint) this.reteEvaluator.getDefaultEntryPoint())
-                .insert( object, dynamic, this.activation.getRule(), this.activation.getTuple().getTupleSink() );
+                .insert( object, dynamic, (RuleImpl) this.activation.getRule(), this.activation.getTuple().getTupleSink() );
     }
 
     @Override
@@ -244,13 +244,13 @@ public class DefaultKnowledgeHelper implements KnowledgeHelper, Externalizable {
         }
 
         ((InternalFactHandle) handle).getEntryPoint(reteEvaluator).delete(handle,
-                                                             this.activation.getRule(),
-                                                             this.activation.getTuple().getTupleSink(),
-                                                             fhState);
+                                                                          (RuleImpl) this.activation.getRule(),
+                                                                          this.activation.getTuple().getTupleSink(),
+                                                                          fhState);
     }
 
     public RuleImpl getRule() {
-        return this.activation.getRule();
+        return (RuleImpl) this.activation.getRule();
     }
 
     public Tuple getTuple() {
@@ -325,7 +325,7 @@ public class DefaultKnowledgeHelper implements KnowledgeHelper, Externalizable {
     @SuppressWarnings("unchecked")
     public <T> T getContext(Class<T> contextClass) {
         if (ProcessContext.class.equals(contextClass)) {
-            String ruleflowGroupName = getMatch().getRule().getRuleFlowGroup();
+            String ruleflowGroupName = ((RuleImpl)getMatch().getRule()).getRuleFlowGroup();
             if (ruleflowGroupName != null) {
                 Map<Object, String> nodeInstances = ((InternalRuleFlowGroup) toStatefulKnowledgeSession().getAgenda().getRuleFlowGroup(ruleflowGroupName)).getNodeInstances();
                 if (!nodeInstances.isEmpty()) {

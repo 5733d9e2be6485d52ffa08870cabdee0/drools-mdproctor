@@ -180,7 +180,7 @@ public interface NodeFactory {
 
     WindowNode buildWindowNode(int id,
                                List<AlphaNodeFieldConstraint> constraints,
-                               List<Behavior> behaviors,
+                               List<BehaviorRuntime> behaviors,
                                ObjectSource objectSource,
                                BuildContext context);
 

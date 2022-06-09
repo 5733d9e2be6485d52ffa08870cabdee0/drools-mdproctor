@@ -94,7 +94,7 @@ public class DefeasibleBeliefSet<M extends DefeasibleMode<M>> implements JTMSBel
     public void add( M newDep ) {
         newDep.setStatus( resolveStatus( newDep ) );
 
-        RuleImpl rule = newDep.getLogicalDependency().getJustifier().getRule();
+        RuleImpl rule = (RuleImpl) newDep.getLogicalDependency().getJustifier().getRule();
 
         // first iterate to see if this new dep is defeated. If it's defeated, it can no longer impacts any deps
         // if we checked what it defeats, and later this was defeated, we would have undo action. So we do the cheaper work first.
@@ -112,7 +112,7 @@ public class DefeasibleBeliefSet<M extends DefeasibleMode<M>> implements JTMSBel
             for ( M existingDep = rootUndefeated; existingDep != null;) {
                 M next = existingDep.getNext();
 
-                if ( checkIsDefeated( existingDep, existingDep.getLogicalDependency().getJustifier().getRule(), newDep ) ) {
+                if ( checkIsDefeated( existingDep, (RuleImpl) existingDep.getLogicalDependency().getJustifier().getRule(), newDep ) ) {
                     // fist remove it from the undefeated list
                     removeUndefeated( existingDep );
                     newDep.addDefeated( existingDep );

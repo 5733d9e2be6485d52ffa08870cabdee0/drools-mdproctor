@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.drools.compiler.builder.InternalKnowledgeBuilder;
+import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.core.definitions.impl.KnowledgePackageImpl;
 import org.kie.memorycompiler.resources.ResourceStore;
 import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.compiler.kproject.models.KieModuleModelImpl;
@@ -73,7 +75,7 @@ public class KieMetaInfoBuilder {
                 JavaDialectRuntimeData runtimeData = (JavaDialectRuntimeData) pkgRegistry.getDialectRuntimeRegistry().getDialectData( "java" );
 
                 List<String> types = new ArrayList<>();
-                for ( FactType factType : kPkg.getFactTypes() ) {
+                for ( FactType factType : ((KnowledgePackageImpl)kPkg).getFactTypes() ) {
                     Class< ? > typeClass = ((ClassDefinition) factType).getDefinedClass();
                     TypeDeclaration typeDeclaration = pkgRegistry.getPackage().getTypeDeclaration( typeClass );
                     if ( typeDeclaration != null ) {
@@ -95,7 +97,7 @@ public class KieMetaInfoBuilder {
                 if( rules == null ) {
                     rules = new HashSet<>();
                 }
-                for ( Rule rule : kPkg.getRules() ) {
+                for ( Rule rule : ((KnowledgePackageImpl)kPkg).getRules() ) {
                     rules.add(rule.getName());
                 }
                 if (!rules.isEmpty()) {

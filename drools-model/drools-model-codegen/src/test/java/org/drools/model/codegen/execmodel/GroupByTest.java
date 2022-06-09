@@ -27,6 +27,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.ToIntFunction;
 
 import org.apache.commons.math3.util.Pair;
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.base.accumulators.CollectListAccumulateFunction;
 import org.drools.core.base.accumulators.CountAccumulateFunction;
 import org.drools.core.base.accumulators.IntegerMaxAccumulateFunction;
@@ -149,12 +151,12 @@ public class GroupByTest {
             return new int[1];
         }
 
-        @Override public Object init(Object workingMemoryContext, Object context, Tuple leftTuple, Declaration[] declarations, ReteEvaluator reteEvaluator) {
+        @Override public Object init(Object workingMemoryContext, Object context, BaseTuple tuple, Declaration[] declarations, ValueResolver valueResolver) {
             ((int[])context)[0] = 0;
             return context;
         }
 
-        @Override public Object accumulate(Object workingMemoryContext, Object context, Tuple leftTuple, InternalFactHandle handle, Declaration[] declarations, Declaration[] innerDeclarations, ReteEvaluator reteEvaluator) {
+        @Override public Object accumulate(Object workingMemoryContext, Object context, BaseTuple tuple, FactHandle handle, Declaration[] declarations, Declaration[] innerDeclarations, ValueResolver valueResolver) {
             int[] ctx = (int[]) context;
 
             int v = func.applyAsInt(handle.getObject());
@@ -169,14 +171,14 @@ public class GroupByTest {
             return true;
         }
 
-        @Override public boolean tryReverse(Object workingMemoryContext, Object context, Tuple leftTuple, InternalFactHandle handle, Object value, Declaration[] declarations, Declaration[] innerDeclarations, ReteEvaluator reteEvaluator) {
+        @Override public boolean tryReverse(Object workingMemoryContext, Object context, BaseTuple tuple, FactHandle handle, Object value, Declaration[] declarations, Declaration[] innerDeclarations, ValueResolver valueResolver) {
             if (value!=null) {
                 ((Runnable) value).run();
             }
             return true;
         }
 
-        @Override public Object getResult(Object workingMemoryContext, Object context, Tuple leftTuple, Declaration[] declarations, ReteEvaluator reteEvaluator) {
+        @Override public Object getResult(Object workingMemoryContext, Object context, BaseTuple tuple, Declaration[] declarations, ValueResolver valueResolver) {
             int[] ctx = (int[]) context;
             return ctx[0];
         }

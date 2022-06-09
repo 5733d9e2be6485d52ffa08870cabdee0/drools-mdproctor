@@ -18,6 +18,7 @@ package org.drools.core.phreak;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.drools.core.base.BaseTuple;
 import org.drools.core.phreak.ReactiveObjectUtil.ModificationType;
 import org.drools.core.reteoo.Tuple;
 
@@ -65,7 +66,7 @@ public class ReactiveCollection<T, W extends Collection<T>> extends AbstractReac
         if (result) {
             ReactiveObjectUtil.notifyModification(t, getTuples(), ModificationType.ADD);
             if (t instanceof ReactiveObject) {
-                for (Tuple lts : getTuples()) {
+                for (BaseTuple lts : getTuples()) {
                     ((ReactiveObject) t).addTuple(lts);
                 }
             }
@@ -114,7 +115,7 @@ public class ReactiveCollection<T, W extends Collection<T>> extends AbstractReac
         boolean result = wrapped.remove(o);
         if (result) {
             if (o instanceof ReactiveObject) {
-                for (Tuple lts : getTuples()) {
+                for (BaseTuple lts : getTuples()) {
                     ((ReactiveObject) o).removeTuple(lts);
                 }
             }
@@ -153,7 +154,7 @@ public class ReactiveCollection<T, W extends Collection<T>> extends AbstractReac
             // the line above either throws UnsupportedOperationException or follows with:
             if (last != null) {
                 if (last instanceof ReactiveObject) {
-                    for (Tuple lts : getTuples()) {
+                    for (BaseTuple lts : getTuples()) {
                         ((ReactiveObject) last).removeTuple(lts);
                     }
                 }

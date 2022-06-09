@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.drools.core.base.ClassObjectType;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.core.definitions.rule.impl.RuleImpl;
@@ -76,6 +77,10 @@ public class CrossProductTest {
                 final String s1 = (String) knowledgeHelper.get( s1Declaration );
                 final String s2 = (String) knowledgeHelper.get( s2Declaration );
                 CrossProductTest.this.values.add( new String[]{s1, s2} );
+            }
+
+            @Override public void evaluate(Object context, ValueResolver valueResolver) throws Exception {
+
             }
 
             public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {

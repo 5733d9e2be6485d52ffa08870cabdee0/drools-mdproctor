@@ -34,7 +34,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.drools.compiler.rule.builder.EvaluatorWrapper;
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
 import org.drools.core.base.DroolsQueryImpl;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.DroolsObjectInputStream;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
@@ -226,12 +228,12 @@ public class MVELConstraint extends MutableTypeConstraint implements IndexableCo
         return fieldValue;
     }
 
-    public boolean isAllowed(FactHandle handle, ReteEvaluator reteEvaluator) {
+    public boolean isAllowed(FactHandle handle, ValueResolver valueResolver) {
         if (isUnification) {
             throw new UnsupportedOperationException("Should not be called");
         }
 
-        return evaluate(handle, reteEvaluator, null);
+        return evaluate(handle, valueResolver, null);
     }
 
     public boolean isAllowedCachedLeft(ContextEntry context, FactHandle handle) {
@@ -246,7 +248,7 @@ public class MVELConstraint extends MutableTypeConstraint implements IndexableCo
         return evaluate(handle, mvelContextEntry.reteEvaluator, mvelContextEntry.tuple);
     }
 
-    public boolean isAllowedCachedRight(Tuple tuple, ContextEntry context) {
+    public boolean isAllowedCachedRight(BaseTuple tuple, ContextEntry context) {
         if (isUnification) {
             DroolsQueryImpl query = (DroolsQueryImpl) tuple.get(0).getObject();
             Variable        v     = query.getVariables()[((UnificationContextEntry) context).getReader().getIndex()];
@@ -261,18 +263,18 @@ public class MVELConstraint extends MutableTypeConstraint implements IndexableCo
         return evaluate(mvelContextEntry.rightHandle, mvelContextEntry.reteEvaluator, tuple);
     }
 
-    protected boolean evaluate(InternalFactHandle handle, ReteEvaluator reteEvaluator, Tuple tuple) {
+    protected boolean evaluate(FactHandle handle, ValueResolver valueResolver, Tuple tuple) {
         if (!jitted) {
-            int jittingThreshold = TEST_JITTING ? 0 : reteEvaluator.getKnowledgeBase().getConfiguration().getJittingThreshold();
+            int jittingThreshold = TEST_JITTING ? 0 : valueResolver.getKnowledgeBase().getConfiguration().getJittingThreshold();
             if (conditionEvaluator == null) {
                 if (jittingThreshold == 0 && !isDynamic) { // Only for test purposes or when jitting is enforced at first evaluation
                     synchronized (this) {
                         if (conditionEvaluator == null) {
-                            conditionEvaluator = forceJitEvaluator(handle, reteEvaluator, tuple);
+                            conditionEvaluator = forceJitEvaluator(handle, valueResolver, tuple);
                         }
                     }
                 } else {
-                    conditionEvaluator = createMvelConditionEvaluator(reteEvaluator);
+                    conditionEvaluator = createMvelConditionEvaluator(valueResolver);
                 }
             }
 
@@ -300,15 +302,15 @@ public class MVELConstraint extends MutableTypeConstraint implements IndexableCo
         }
     }
 
-    protected ConditionEvaluator forceJitEvaluator(InternalFactHandle handle, ReteEvaluator reteEvaluator, Tuple tuple) {
-        ConditionEvaluator mvelEvaluator = createMvelConditionEvaluator(reteEvaluator);
+    protected ConditionEvaluator forceJitEvaluator(FactHandle handle, ValueResolver valueResolver, Tuple tuple) {
+        ConditionEvaluator mvelEvaluator = createMvelConditionEvaluator(valueResolver);
         try {
-            mvelEvaluator.evaluate(handle, reteEvaluator, tuple);
+            mvelEvaluator.evaluate(handle, valueResolver, tuple);
         } catch (ClassCastException cce) {
         } catch (Exception e) {
-            return createMvelConditionEvaluator(reteEvaluator);
+            return createMvelConditionEvaluator(valueResolver);
         }
-        return executeJitting(handle, reteEvaluator, tuple, mvelEvaluator);
+        return executeJitting(handle, valueResolver, tuple, mvelEvaluator);
     }
 
     protected void jitEvaluator(InternalFactHandle handle, ReteEvaluator reteEvaluator, Tuple tuple) {

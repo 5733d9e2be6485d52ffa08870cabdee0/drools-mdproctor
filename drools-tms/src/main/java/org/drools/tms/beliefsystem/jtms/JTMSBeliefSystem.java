@@ -41,10 +41,10 @@ public class JTMSBeliefSystem<M extends JTMSMode<M>>
         implements
         BeliefSystem<M> {
     protected static final Logger  log    = LoggerFactory.getLogger(JTMSBeliefSystem.class);
-    public static boolean STRICT = false;
+    public static boolean          STRICT = false;
 
-    private   TruthMaintenanceSystem tms;
-    protected JTMSBeliefSystem        ep;
+    private   TruthMaintenanceSystem          tms;
+    protected InternalWorkingMemoryEntryPoint ep;
 
     public JTMSBeliefSystem(InternalWorkingMemoryEntryPoint ep,
                             TruthMaintenanceSystem tms) {
@@ -97,7 +97,7 @@ public class JTMSBeliefSystem<M extends JTMSMode<M>>
                                BeliefSet<M> beliefSet,
                                PropagationContext context,
                                ObjectTypeConf typeConf) {
-        return insert( node.getMode(), node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context, typeConf );
+        return insert( node.getMode(), (RuleImpl) node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context, typeConf );
     }
 
     public void read(LogicalDependency<M> node,
@@ -111,7 +111,7 @@ public class JTMSBeliefSystem<M extends JTMSMode<M>>
     public void delete(LogicalDependency<M> node,
                        BeliefSet<M> beliefSet,
                        PropagationContext context) {
-        delete( node.getMode(), node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context );
+        delete( node.getMode(), (RuleImpl) node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context );
     }
 
     @Override

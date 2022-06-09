@@ -25,7 +25,7 @@ import java.util.HashSet;
 
 public class AbstractReactiveObject implements ReactiveObject {
 
-    private Collection<Tuple> lts;
+    private Collection<BaseTuple> lts;
 
     public void addTuple(BaseTuple tuple) {
         if (lts == null) {

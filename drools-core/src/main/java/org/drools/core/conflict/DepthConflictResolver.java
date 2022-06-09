@@ -18,6 +18,7 @@ package org.drools.core.conflict;
 
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.consequence.ConflictResolver;
+import org.kie.api.runtime.rule.Match;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -40,10 +41,10 @@ public class DepthConflictResolver
         return DepthConflictResolver.INSTANCE;
     }
 
-    public final int compare(final Activation existing,
-                             final Activation adding) {
-        final int s1 = existing.getSalience();
-        final int s2 = adding.getSalience();
+    public final int compare(final Match existing,
+                             final Match adding) {
+        final int s1 = ((Activation)existing).getSalience();
+        final int s2 = ((Activation)adding).getSalience();
 
         if ( s1 > s2 ) {
             return 1;
@@ -52,7 +53,7 @@ public class DepthConflictResolver
         }
 
         // we know that no two activations will have the same number
-        return (int) ( existing.getActivationNumber() - adding.getActivationNumber() );
+        return (int) ( ((Activation)existing).getActivationNumber() - ((Activation)adding).getActivationNumber() );
     }
 
 }

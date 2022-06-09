@@ -63,6 +63,7 @@ import org.drools.core.common.ObjectStoreWrapper;
 import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.PropagationContextFactory;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.core.definitions.rule.RuleBase;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.event.AgendaEventSupport;
 import org.drools.core.event.RuleEventListenerSupport;
@@ -370,6 +371,14 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
             this.mbeanRegisteredCBSKey = new DroolsManagementAgent.CBSKey( containerId, kbaseName, ksessionName );
             DroolsManagementAgent.getInstance().registerKnowledgeSessionUnderName( mbeanRegisteredCBSKey, this );
         }
+    }
+
+    @Override public long getCurrentTime() {
+        return getTimerService().getCurrentTime();
+    }
+
+    @Override public RuleBase getRuleBase() {
+        return this.kBase;
     }
 
     @Override

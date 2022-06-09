@@ -18,6 +18,7 @@ package org.drools.core.reteoo.builder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.drools.core.base.ClassObjectType;
 import org.drools.core.base.DroolsQueryImpl;
@@ -125,7 +126,8 @@ public class PatternBuilder
     }
 
     private void buildBehaviors(BuildContext context, BuildUtils utils, Pattern pattern, Constraints constraints) {
-        final List<Behavior> behaviors = pattern.getBehaviors();
+        final List<BehaviorRuntime> behaviors = pattern.getBehaviors().stream()
+                                                       .map(b -> (BehaviorRuntime) b).collect(Collectors.toList());
         if ( pattern.getSource() == null ||
                 ( !( pattern.getSource() instanceof WindowReference) &&
                   ( context.getCurrentEntryPoint() != EntryPointId.DEFAULT || ! behaviors.isEmpty() ) ) ){

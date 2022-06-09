@@ -16,6 +16,7 @@
 
 package org.drools.kiesession;
 
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.core.definitions.rule.impl.RuleImpl;
@@ -61,7 +62,11 @@ public class ReteooRuleBaseMultiThreadedTest extends DroolsTestCase {
             public void evaluate(KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator) throws Exception {
 
             }
-            
+
+            @Override public void evaluate(Object context, ValueResolver valueResolver) throws Exception {
+
+            }
+
             public String getName() {
                 return "default";
             }

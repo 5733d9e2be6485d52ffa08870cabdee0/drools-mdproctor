@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.drools.core.rule.consequence.Activation;
+import org.kie.api.runtime.rule.Match;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public class BinaryHeapQueue
     private static final int DEFAULT_CAPACITY = 13;
 
     /** The comparator used to order the elements */
-    private Comparator<Activation> comparator;
+    private Comparator<Match> comparator;
 
     /** The number of elements currently in this heap. */
     private volatile int size;
@@ -60,7 +61,7 @@ public class BinaryHeapQueue
      * @param comparator the comparator used to order the elements, null
      *                   means use natural order
      */
-    public BinaryHeapQueue(final Comparator<Activation> comparator) {
+    public BinaryHeapQueue(final Comparator<Match> comparator) {
         this(comparator,
              BinaryHeapQueue.DEFAULT_CAPACITY);
     }
@@ -73,7 +74,7 @@ public class BinaryHeapQueue
      * @param capacity   the initial capacity for the heap
      * @throws IllegalArgumentException if <code>capacity</code> is &lt;= <code>0</code>
      */
-    public BinaryHeapQueue(final Comparator<Activation> comparator,
+    public BinaryHeapQueue(final Comparator<Match> comparator,
                            final int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("invalid capacity");

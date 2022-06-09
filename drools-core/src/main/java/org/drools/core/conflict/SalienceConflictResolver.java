@@ -18,6 +18,7 @@ package org.drools.core.conflict;
 
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.consequence.ConflictResolver;
+import org.kie.api.runtime.rule.Match;
 
 /**
  * <code>ConflictResolver</code> that uses the salience of rules to resolve
@@ -68,10 +69,10 @@ public class SalienceConflictResolver extends AbstractConflictResolver {
     /**
      * @see ConflictResolver
      */
-    public int compare(final Activation lhs,
-                       final Activation rhs) {
-        final int s1 = lhs.getSalience();
-        final int s2 = rhs.getSalience();
+    public int compare(final Match lhs,
+                       final Match rhs) {
+        final int s1 = ((Activation)lhs).getSalience();
+        final int s2 = ((Activation)rhs).getSalience();
 
         if ( s1 < s2 ) {
             return -1;

@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.rule.consequence.Consequence;
 import org.drools.core.rule.consequence.KnowledgeHelper;
@@ -212,6 +213,11 @@ class NilConsequence implements Consequence {
 
     public void evaluate(KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator) throws Exception {
     }
+
+    @Override public void evaluate(Object context, ValueResolver valueResolver) throws Exception {
+
+    }
+
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
     }

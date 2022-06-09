@@ -22,6 +22,8 @@ import java.io.ObjectOutput;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.ContextEntry;
@@ -30,6 +32,7 @@ import org.drools.core.base.ObjectType;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.index.TupleList;
+import org.kie.api.runtime.rule.FactHandle;
 
 import static org.drools.core.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
 
@@ -62,16 +65,16 @@ public class EmptyBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#updateFromTuple(org.kie.reteoo.ReteTuple)
      */
     public void updateFromTuple(final ContextEntry[] context,
-                                final ReteEvaluator reteEvaluator,
-                                final Tuple tuple) {
+                                final ValueResolver valueResolver,
+                                final BaseTuple tuple) {
     }
 
     /* (non-Javadoc)
      * @see org.kie.common.BetaNodeConstraints#updateFromFactHandle(org.kie.common.InternalFactHandle)
      */
     public void updateFromFactHandle(final ContextEntry[] context,
-                                     final ReteEvaluator reteEvaluator,
-                                     final InternalFactHandle handle) {
+                                     final ValueResolver valueResolver,
+                                     final FactHandle handle) {
     }
 
     public void resetTuple(final ContextEntry[] context) {
@@ -84,7 +87,7 @@ public class EmptyBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedLeft(java.lang.Object)
      */
     public boolean isAllowedCachedLeft(final ContextEntry[] context,
-                                       final InternalFactHandle handle) {
+                                       final FactHandle handle) {
         return true;
     }
 
@@ -92,7 +95,7 @@ public class EmptyBetaConstraints
      * @see org.kie.common.BetaNodeConstraints#isAllowedCachedRight(org.kie.reteoo.ReteTuple)
      */
     public boolean isAllowedCachedRight(final ContextEntry[] context,
-                                        final Tuple tuple) {
+                                        final BaseTuple tuple) {
         return true;
     }
 

@@ -162,7 +162,7 @@ public class FromNode<T extends FromNode.FromMemory> extends LeftTupleSource
         ObjectType objectType = pattern.getObjectType();
 
         // if pattern is null (e.g. for eval or query nodes) we cannot calculate the mask, so we set it all
-        if ( isPropertyReactive( context, objectType ) ) {
+        if ( isPropertyReactive( context.getRuleBase(), objectType ) ) {
             Collection<String> leftListenedProperties = pattern.getListenedProperties();
             List<String> accessibleProperties = getAccessibleProperties( context.getRuleBase(), objectType );
             leftDeclaredMask = leftDeclaredMask.setAll( calculatePositiveMask( objectType, leftListenedProperties, accessibleProperties ) );

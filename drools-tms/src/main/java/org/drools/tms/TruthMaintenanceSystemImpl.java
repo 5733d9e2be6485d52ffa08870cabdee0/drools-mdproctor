@@ -27,6 +27,7 @@ import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemoryEntryPoint;
 import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.TruthMaintenanceSystem;
+import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.common.PropagationContext;
@@ -197,7 +198,7 @@ public class TruthMaintenanceSystemImpl implements TruthMaintenanceSystem {
         }
 
         final LogicalDependency node = beliefSystem.newLogicalDependency( activation, beliefSet, object, value );
-        activation.getRule().setHasLogicalDependency( true );
+        ((RuleImpl)activation.getRule()).setHasLogicalDependency(true);
 
         activation.addLogicalDependency( node );
 

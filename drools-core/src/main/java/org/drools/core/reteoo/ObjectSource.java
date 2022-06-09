@@ -126,7 +126,7 @@ public abstract class ObjectSource extends BaseNode {
         Pattern pattern = context.getLastBuiltPatterns()[0];
         ObjectType objectType = pattern.getObjectType();
         
-        if ( isPropertyReactive(context, objectType) ) {
+        if ( isPropertyReactive(context.getRuleBase(), objectType) ) {
             List<String> settableProperties = getAccessibleProperties( context.getRuleBase(), objectType );
             declaredMask = calculateDeclaredMask(objectType, settableProperties);
         } else {

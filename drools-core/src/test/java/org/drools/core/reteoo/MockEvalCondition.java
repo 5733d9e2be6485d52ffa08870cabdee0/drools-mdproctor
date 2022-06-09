@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import org.drools.core.base.BaseTuple;
+import org.drools.core.base.ValueResolver;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.rule.Declaration;
 import org.drools.core.rule.EvalCondition;
@@ -57,10 +59,17 @@ public class MockEvalCondition extends EvalCondition {
         public void replaceDeclaration(Declaration declaration,
                                        Declaration resolved) {
         }
+
+        @Override public boolean evaluate(BaseTuple tuple, Declaration[] requiredDeclarations, ValueResolver valueResolver, Object context) throws Exception {
+            return false;
+        }
+
         public EvalExpression clone() {
             return this;
         }
-                                                  };
+
+
+    };
 
     public MockEvalCondition(final boolean isAllowed) {
         this( isAllowed,

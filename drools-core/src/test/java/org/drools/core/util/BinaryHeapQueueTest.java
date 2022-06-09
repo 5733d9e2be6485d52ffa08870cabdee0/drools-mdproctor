@@ -33,6 +33,7 @@ import org.drools.core.common.PropagationContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.kie.api.runtime.rule.FactHandle;
+import org.kie.api.runtime.rule.Match;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -344,17 +345,17 @@ public class BinaryHeapQueueTest {
             return ItemConflictResolver.INSTANCE;
         }
 
-        public final int compare(final Activation existing,
-                                 final Activation adding) {
-            final int s1 = existing.getSalience();
-            final int s2 = adding.getSalience();
+        public final int compare(final Match existing,
+                                 final Match adding) {
+            final int s1 = ((Activation)existing).getSalience();
+            final int s2 = ((Activation)adding).getSalience();
 
             if (s1 != s2) {
                 return s1 - s2;
             }
 
             // we know that no two activations will have the same number
-            return (int) (existing.getActivationNumber() - adding.getActivationNumber());
+            return (int) (((Activation)existing).getActivationNumber() - ((Activation)adding).getActivationNumber());
         }
 
     }
