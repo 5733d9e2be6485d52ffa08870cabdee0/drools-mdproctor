@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.DoubleNonIndexSkipBetaConstraints;
 import org.drools.core.common.EmptyBetaConstraints;
@@ -40,7 +40,7 @@ import org.drools.core.reteoo.NotNode;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ReteDumper;
 import org.drools.core.reteoo.RightTuple;
-import org.drools.core.util.FastIterator;
+import org.drools.base.util.FastIterator;
 import org.drools.core.util.index.TupleIndexHashTable;
 import org.drools.core.util.index.TupleList;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;

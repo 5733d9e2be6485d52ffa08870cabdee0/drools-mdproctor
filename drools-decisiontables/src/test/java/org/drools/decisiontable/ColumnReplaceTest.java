@@ -20,7 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import org.drools.drl.extensions.DecisionTableFactory;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.junit.Test;

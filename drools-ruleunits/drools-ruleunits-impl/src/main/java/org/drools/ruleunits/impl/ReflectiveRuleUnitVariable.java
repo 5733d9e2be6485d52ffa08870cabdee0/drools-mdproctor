@@ -20,7 +20,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import org.kie.internal.ruleunit.RuleUnitVariable;
+import org.drools.base.ruleunit.RuleUnitVariable;
 
 import static org.drools.util.StringUtils.ucFirst;
 import static org.drools.wiring.api.util.ClassUtils.convertFromPrimitiveType;

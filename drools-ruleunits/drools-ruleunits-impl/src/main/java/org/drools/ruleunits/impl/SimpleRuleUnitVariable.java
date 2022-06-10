@@ -16,7 +16,7 @@
 package org.drools.ruleunits.impl;
 
 import org.drools.ruleunits.api.DataSource;
-import org.kie.internal.ruleunit.RuleUnitVariable;
+import org.drools.base.ruleunit.RuleUnitVariable;
 
 import static org.drools.util.StringUtils.ucFirst;
 import static org.drools.wiring.api.util.ClassUtils.convertFromPrimitiveType;

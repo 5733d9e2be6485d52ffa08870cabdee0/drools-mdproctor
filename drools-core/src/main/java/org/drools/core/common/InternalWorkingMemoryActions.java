@@ -19,9 +19,9 @@ package org.drools.core.common;
 import java.util.Collection;
 
 import org.drools.core.WorkingMemoryEntryPoint;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.factmodel.traits.Thing;
-import org.drools.core.factmodel.traits.TraitableBean;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.factmodel.traits.Thing;
+import org.drools.base.factmodel.traits.TraitableBean;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.util.bitmask.BitMask;

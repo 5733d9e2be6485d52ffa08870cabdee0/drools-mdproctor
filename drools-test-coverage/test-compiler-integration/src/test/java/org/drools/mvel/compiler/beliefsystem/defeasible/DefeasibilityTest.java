@@ -28,7 +28,7 @@ import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TruthMaintenanceSystem;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
 import org.drools.core.impl.RuleBaseFactory;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.Iterator;
 import org.drools.core.util.ObjectHashMap;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;

@@ -26,12 +26,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.drools.core.ClockType;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.base.accumulators.CollectSetAccumulateFunction;
-import org.drools.core.definitions.rule.impl.QueryImpl;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.Accumulate;
-import org.drools.core.rule.Pattern;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.rule.Accumulate;
+import org.drools.base.rule.Pattern;
+import org.drools.base.definitions.rule.impl.QueryImpl;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.model.DSL;
 import org.drools.model.Global;
@@ -1009,7 +1010,7 @@ public class PatternDSLTest {
 
         Model      model    = new ModelImpl().addRule(rule1).addGlobal(var_results);
         KieBase    kbase    = KieBaseBuilder.createKieBaseFromModel(model);
-        RuleImpl rule     = ( RuleImpl) kbase.getKiePackage("defaultpkg").getRules().toArray()[0];
+        RuleImpl rule     = ( RuleImpl) ((InternalKnowledgePackage) kbase.getKiePackage("defaultpkg")).getRules().toArray()[0];
 
         // Ensure there is only a single root child
         assertThat(rule.getLhs().getChildren().size()).isEqualTo(1);
@@ -1065,7 +1066,7 @@ public class PatternDSLTest {
 
         Model model = new ModelImpl().addRule( rule1 ).addGlobal( var_results );
         KieBase    kbase    = KieBaseBuilder.createKieBaseFromModel(model);
-        RuleImpl   rule     = ( RuleImpl) kbase.getKiePackage("defaultpkg").getRules().toArray()[0];
+        RuleImpl   rule     = ( RuleImpl) ((InternalKnowledgePackage) kbase.getKiePackage("defaultpkg")).getRules().toArray()[0];
         // Should only be a single child
         assertThat(rule.getLhs().getChildren().size()).isEqualTo(1);
 

@@ -16,14 +16,15 @@ package org.drools.mvel.asm;
 
 import java.util.List;
 
+import org.drools.base.base.BaseTuple;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.reteoo.LeftTuple;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.CompiledInvoker;
-import org.drools.core.rule.accessor.FieldValue;
-import org.drools.core.rule.accessor.ReturnValueExpression;
 import org.drools.core.reteoo.Tuple;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.CompiledInvoker;
+import org.drools.base.rule.accessor.FieldValue;
+import org.drools.base.rule.accessor.ReturnValueExpression;
 import org.drools.mvel.asm.GeneratorHelper.DeclarationMatcher;
 import org.mvel2.asm.MethodVisitor;
 
@@ -69,7 +70,7 @@ public class ReturnValueGenerator {
                 cast(LeftTuple.class);
                 mv.visitVarInsn(ASTORE, 7); // LeftTuple
 
-                Tuple currentTuple = tuple;
+                BaseTuple currentTuple = tuple;
                 for (DeclarationMatcher matcher : declarationMatchers) {
                     int i = matcher.getMatcherIndex();
                     previousDeclarationsParamsPos[i] = objAstorePos;

@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.BetaMemory;

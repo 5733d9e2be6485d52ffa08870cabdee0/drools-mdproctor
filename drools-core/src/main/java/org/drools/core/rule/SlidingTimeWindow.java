@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.PriorityQueue;
 
+import org.drools.base.rule.Behavior;
 import org.drools.core.common.EventFactHandle;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
@@ -35,7 +36,7 @@ import org.drools.core.reteoo.WindowNode.WindowMemory;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.time.Job;
 import org.drools.core.time.JobContext;
-import org.drools.core.time.JobHandle;
+import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerService;
 import org.drools.core.time.impl.PointInTimeTrigger;
 

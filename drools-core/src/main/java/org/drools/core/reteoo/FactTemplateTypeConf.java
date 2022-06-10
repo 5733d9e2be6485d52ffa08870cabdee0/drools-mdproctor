@@ -21,12 +21,12 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.drools.core.facttemplates.FactTemplate;
-import org.drools.core.facttemplates.FactTemplateObjectType;
+import org.drools.base.facttemplates.FactTemplate;
+import org.drools.base.facttemplates.FactTemplateObjectType;
 import org.drools.core.impl.RuleBase;
-import org.drools.core.rule.EntryPointId;
-import org.drools.core.rule.TypeDeclaration;
-import org.drools.core.base.ObjectType;
+import org.drools.base.rule.EntryPointId;
+import org.drools.base.rule.TypeDeclaration;
+import org.drools.base.base.ObjectType;
 
 public class FactTemplateTypeConf
     implements

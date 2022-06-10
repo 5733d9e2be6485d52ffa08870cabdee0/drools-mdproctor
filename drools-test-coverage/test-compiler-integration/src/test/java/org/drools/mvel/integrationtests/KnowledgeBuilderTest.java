@@ -20,9 +20,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.drools.core.definitions.impl.KnowledgePackageImpl;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.impl.KnowledgePackageImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.rule.TypeDeclaration;
 import org.drools.core.util.FileManager;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
@@ -363,7 +364,7 @@ public class KnowledgeBuilderTest {
 
         Collection<KiePackage> kpkgs = kbuilder.getKnowledgePackages();
         assertThat(kpkgs.size()).isEqualTo(2);
-        KiePackage kpkg = kpkgs.iterator().next();
+        InternalKnowledgePackage kpkg = (InternalKnowledgePackage) kpkgs.iterator().next();
         assertThat(kpkg.getRules().size()).isEqualTo(1);
     }
 
@@ -401,7 +402,7 @@ public class KnowledgeBuilderTest {
         kbuilder.add( res1, ResourceType.DRL );
         assertThat(kbuilder.hasErrors()).as(kbuilder.getErrors().toString()).isFalse();
 
-        KiePackage kp1 = kbuilder.getKnowledgePackages().iterator().next();
+        InternalKnowledgePackage kp1 = (InternalKnowledgePackage) kbuilder.getKnowledgePackages().iterator().next();
         assertThat(kp1.getRules().size()).isEqualTo(1);
         Rule r = kp1.getRules().iterator().next();
         assertThat(((RuleImpl) r).getResource()).isEqualTo(res1);
@@ -414,11 +415,10 @@ public class KnowledgeBuilderTest {
         kbuilder2.add( res2, ResourceType.PMML );
         assertThat(kbuilder2.hasErrors()).as(kbuilder2.getErrors().toString()).isFalse();
 
-        KiePackage kp2 = kbuilder2.getKnowledgePackages().iterator().next();
-        assertThat(kp2.getRules().size()).isEqualTo(1);
+        InternalKnowledgePackage kp2 = (InternalKnowledgePackage) kbuilder2.getKnowledgePackages().iterator().next();
+        assertEquals( 1, kp2.getRules().size() );
         Rule r2 = kp2.getRules().iterator().next();
         assertThat(((RuleImpl) r2).getResource()).isEqualTo(res2);
-
     }
 
     @Test

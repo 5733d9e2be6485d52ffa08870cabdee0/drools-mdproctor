@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.drools.compiler.kie.builder.impl.DrlProject;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.kie.api.KieBase;

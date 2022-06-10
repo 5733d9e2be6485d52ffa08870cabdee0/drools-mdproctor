@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.model.Model;
 import org.drools.modelcompiler.KieBaseBuilder;
 import org.kie.api.definition.KiePackage;

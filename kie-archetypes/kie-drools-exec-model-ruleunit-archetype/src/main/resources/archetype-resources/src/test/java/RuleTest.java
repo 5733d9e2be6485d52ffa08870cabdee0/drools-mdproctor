@@ -40,6 +40,7 @@ public class RuleTest {
         MeasurementUnit measurementUnit = new MeasurementUnit();
 
         RuleUnitInstance<MeasurementUnit> instance = RuleUnitInstanceFactory.instance(measurementUnit);
+
         try {
             LOG.info("Insert data");
             measurementUnit.getMeasurements().add(new Measurement("color", "red"));

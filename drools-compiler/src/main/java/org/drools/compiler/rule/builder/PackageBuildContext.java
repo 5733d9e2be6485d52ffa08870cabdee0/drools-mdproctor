@@ -31,8 +31,8 @@ import org.drools.compiler.compiler.DialectCompiletimeRegistry;
 import org.drools.drl.parser.DroolsError;
 import org.drools.compiler.compiler.DroolsWarning;
 import org.drools.drl.ast.descr.BaseDescr;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.rule.Dialectable;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.rule.Dialectable;
 
 /**
  * A context for the current build

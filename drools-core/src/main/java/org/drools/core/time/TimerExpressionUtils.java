@@ -2,11 +2,10 @@ package org.drools.core.time;
 
 import java.util.Date;
 
-import org.drools.core.base.BaseTuple;
-import org.drools.core.base.ValueResolver;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.reteoo.Tuple;
-import org.drools.core.rule.Declaration;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.time.TimeUtils;
+import org.drools.base.rule.Declaration;
 import org.drools.util.DateUtils;
 
 public class TimerExpressionUtils {

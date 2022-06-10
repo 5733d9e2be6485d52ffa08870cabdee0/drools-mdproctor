@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.drools.core.InitialFact;
+import org.drools.base.InitialFact;
 import org.drools.core.phreak.RuleAgendaItem;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.TerminalNode;

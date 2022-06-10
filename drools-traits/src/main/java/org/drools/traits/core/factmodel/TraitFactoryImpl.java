@@ -20,17 +20,17 @@ import java.io.Externalizable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.drools.mvel.accessors.ClassFieldAccessorStore;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.factmodel.traits.Thing;
-import org.drools.core.factmodel.traits.TraitFactory;
-import org.drools.core.factmodel.traits.TraitableBean;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.factmodel.traits.Thing;
+import org.drools.base.factmodel.traits.TraitFactory;
+import org.drools.base.factmodel.traits.TraitableBean;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.core.reteoo.RuntimeComponentFactory;
-import org.drools.util.ClassUtils;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.mvel.MVELKnowledgePackageImpl;
+import org.drools.mvel.accessors.ClassFieldAccessorStore;
+import org.drools.util.ClassUtils;
 import org.kie.api.KieBase;
 import org.mvel2.asm.Opcodes;
 

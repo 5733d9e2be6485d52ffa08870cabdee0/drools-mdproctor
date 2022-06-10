@@ -49,7 +49,7 @@ import org.drools.core.common.QueryElementFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TruthMaintenanceSystem;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.core.marshalling.MarshallerReaderContext;
 import org.drools.core.marshalling.TupleKey;
@@ -62,10 +62,10 @@ import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.accessor.FactHandleFactory;
-import org.drools.core.rule.accessor.GlobalResolver;
+import org.drools.base.rule.accessor.GlobalResolver;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.time.Trigger;
+import org.drools.base.time.Trigger;
 import org.drools.core.time.impl.CompositeMaxDurationTrigger;
 import org.drools.core.time.impl.CronTrigger;
 import org.drools.core.time.impl.IntervalTrigger;
@@ -814,7 +814,7 @@ public class ProtobufInputMarshaller {
                 return true;
             } else {
 
-                RuleImpl rule = activation.getRule();
+                RuleImpl rule = (RuleImpl) activation.getRule();
                 ActivationKey activationKey = PersisterHelper.hasNodeMemory( rtn ) && !serializedNodeMemories ?
                         PersisterHelper.createActivationKey( rule.getPackageName(), rule.getName(), activation.getTuple().toObjects(true)) :
                         PersisterHelper.createActivationKey( rule.getPackageName(), rule.getName(), activation.getTuple() );

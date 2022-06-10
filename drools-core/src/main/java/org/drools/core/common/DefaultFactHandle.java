@@ -25,15 +25,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.drools.base.common.RuleBasePartitionId;
 import org.drools.core.WorkingMemoryEntryPoint;
-import org.drools.core.factmodel.traits.TraitTypeEnum;
+import org.drools.base.factmodel.traits.TraitTypeEnum;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.RightTuple;
-import org.drools.core.rule.EntryPointId;
+import org.drools.base.rule.EntryPointId;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.AbstractBaseLinkedListNode;
+import org.drools.base.util.AbstractBaseLinkedListNode;
 import org.drools.util.StringUtils;
 import org.kie.api.runtime.rule.FactHandle;
 

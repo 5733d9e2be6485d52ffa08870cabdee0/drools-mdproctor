@@ -42,16 +42,16 @@ import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.PropagationContextFactory;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.facttemplates.Fact;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.facttemplates.Fact;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.TerminalNode;
-import org.drools.core.rule.EntryPointId;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.rule.EntryPointId;
+import org.drools.base.rule.TypeDeclaration;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.core.common.PropagationContext;
@@ -62,8 +62,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Arrays.asList;
-import static org.drools.core.util.PropertySpecificUtil.allSetBitMask;
-import static org.drools.core.util.PropertySpecificUtil.calculatePositiveMask;
+import static org.drools.base.util.PropertySpecificUtil.allSetBitMask;
+import static org.drools.base.util.PropertySpecificUtil.calculatePositiveMask;
 
 public class NamedEntryPoint implements InternalWorkingMemoryEntryPoint, PropertyChangeListener  {
 

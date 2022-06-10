@@ -18,6 +18,7 @@ package org.drools.core.reteoo;
 
 import java.io.Serializable;
 
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.phreak.SegmentUtilities;
 
 import static org.drools.core.phreak.SegmentUtilities.nextNodePosMask;

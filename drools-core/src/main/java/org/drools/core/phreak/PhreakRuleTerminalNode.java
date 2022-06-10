@@ -15,20 +15,19 @@
 
 package org.drools.core.phreak;
 
-import org.drools.core.base.BaseTuple;
 import org.drools.core.common.ActivationsManager;
 import org.drools.core.common.AgendaItem;
 import org.drools.core.common.InternalAgendaGroup;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TupleSets;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.reteoo.RuleTerminalNodeLeftTuple;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.rule.accessor.Salience;
+import org.drools.base.rule.accessor.Salience;
 import org.drools.core.reteoo.Tuple;
 import org.kie.api.event.rule.MatchCancelledCause;
 

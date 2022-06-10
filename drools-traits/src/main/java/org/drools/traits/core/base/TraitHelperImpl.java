@@ -37,26 +37,26 @@ import org.drools.kiesession.entrypoints.NamedEntryPoint;
 import org.drools.core.common.ObjectStore;
 import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.factmodel.ClassDefinition;
-import org.drools.core.factmodel.traits.CoreWrapper;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.factmodel.ClassDefinition;
+import org.drools.base.factmodel.traits.CoreWrapper;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.traits.core.factmodel.LogicalTypeInconsistencyException;
-import org.drools.core.factmodel.traits.Thing;
+import org.drools.base.factmodel.traits.Thing;
 import org.drools.traits.core.factmodel.TraitFactoryImpl;
-import org.drools.core.factmodel.traits.TraitFieldTMS;
+import org.drools.base.factmodel.traits.TraitFieldTMS;
 import org.drools.traits.core.factmodel.TraitProxyImpl;
 import org.drools.traits.core.factmodel.TraitRegistryImpl;
-import org.drools.core.factmodel.traits.TraitType;
+import org.drools.base.factmodel.traits.TraitType;
 import org.drools.traits.core.factmodel.TraitTypeMapImpl;
-import org.drools.core.factmodel.traits.TraitableBean;
+import org.drools.base.factmodel.traits.TraitableBean;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.drools.traits.core.metadata.Metadatable;
 import org.drools.traits.core.metadata.Modify;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.reteoo.TerminalNode;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.rule.TypeDeclaration;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.common.PropagationContext;
 import org.drools.traits.core.factmodel.HierarchyEncoder;
@@ -69,7 +69,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.drools.traits.core.base.TraitUtils.supersetOrEqualset;
-import static org.drools.core.util.PropertySpecificUtil.onlyTraitBitSetMask;
+import static org.drools.base.util.PropertySpecificUtil.onlyTraitBitSetMask;
 
 public class TraitHelperImpl implements Externalizable,
                                         TraitHelper {

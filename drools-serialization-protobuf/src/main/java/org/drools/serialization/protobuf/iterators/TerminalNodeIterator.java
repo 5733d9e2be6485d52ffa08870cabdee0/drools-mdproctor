@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.TerminalNode;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.Iterator;
 import org.kie.api.KieBase;
 
 public class TerminalNodeIterator implements Iterator {

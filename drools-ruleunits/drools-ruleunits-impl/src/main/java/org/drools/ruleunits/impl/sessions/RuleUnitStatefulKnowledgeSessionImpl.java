@@ -19,7 +19,8 @@ import org.drools.core.SessionConfiguration;
 import org.drools.core.common.InternalAgenda;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemoryEntryPoint;
-import org.drools.core.factmodel.traits.Thing;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.factmodel.traits.Thing;
 import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.time.TimerService;
@@ -115,7 +116,7 @@ public class RuleUnitStatefulKnowledgeSessionImpl extends StatefulKnowledgeSessi
             if (h instanceof RuleUnitDefaultFactHandle && ((RuleUnitDefaultFactHandle) h).getDataStore() != null) {
                 // This handle has been insert from a datasource, so remove from it
                 ((RuleUnitDefaultFactHandle) h).getDataStore().delete((RuleUnitDefaultFactHandle) h,
-                        this.activation.getRule(),
+                        (RuleImpl) this.activation.getRule(),
                         this.activation.getTuple().getTupleSink(),
                         fhState);
                 return;
@@ -127,7 +128,7 @@ public class RuleUnitStatefulKnowledgeSessionImpl extends StatefulKnowledgeSessi
             }
 
             h.getEntryPoint(kogitoSession).delete(handle,
-                    this.activation.getRule(),
+                    (RuleImpl) this.activation.getRule(),
                     this.activation.getTuple().getTupleSink(),
                     fhState);
         }

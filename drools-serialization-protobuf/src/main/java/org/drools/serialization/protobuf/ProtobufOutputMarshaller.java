@@ -29,7 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.protobuf.ByteString;
-import org.drools.core.InitialFact;
+import org.drools.base.util.LinkedList;
+import org.drools.base.InitialFact;
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.core.common.AgendaGroupQueueImpl;
 import org.drools.core.common.AgendaItem;
@@ -46,16 +47,17 @@ import org.drools.core.common.NodeMemories;
 import org.drools.core.common.ObjectStore;
 import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.QueryElementFactHandle;
+import org.drools.core.common.RuleFlowGroup;
 import org.drools.core.common.TruthMaintenanceSystem;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.marshalling.MarshallerWriteContext;
 import org.drools.core.phreak.PropagationEntry;
 import org.drools.core.phreak.RuleAgendaItem;
 import org.drools.core.process.WorkItem;
 import org.drools.core.reteoo.BaseTupleImpl;
 import org.drools.core.reteoo.LeftTuple;
-import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ObjectTypeNode.ObjectTypeNodeMemory;
@@ -64,18 +66,17 @@ import org.drools.core.reteoo.RightTuple;
 import org.drools.core.reteoo.Sink;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.rule.consequence.Activation;
-import org.drools.core.common.RuleFlowGroup;
 import org.drools.core.time.JobContext;
 import org.drools.core.time.SelfRemovalJobContext;
-import org.drools.core.time.Trigger;
+import org.drools.base.time.Trigger;
 import org.drools.core.time.impl.CompositeMaxDurationTrigger;
 import org.drools.core.time.impl.CronTrigger;
 import org.drools.core.time.impl.IntervalTrigger;
 import org.drools.core.time.impl.PointInTimeTrigger;
 import org.drools.core.time.impl.PseudoClockScheduler;
 import org.drools.core.time.impl.TimerJobInstance;
-import org.drools.core.util.FastIterator;
-import org.drools.core.util.LinkedListEntry;
+import org.drools.base.util.FastIterator;
+import org.drools.base.util.LinkedListEntry;
 import org.drools.core.util.ObjectHashMap;
 import org.drools.kiesession.entrypoints.NamedEntryPoint;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
@@ -320,8 +321,8 @@ public class ProtobufOutputMarshaller {
         _ab.setFocusStack( _fsb.build() );
 
         // serialize all dormant activations
-        org.drools.core.util.Iterator it = ActivationIterator.iterator( wm );
-        List<Activation> dormant = new ArrayList<>();
+        org.drools.base.util.Iterator it = ActivationIterator.iterator( wm );
+        List<Activation> dormant = new ArrayList<Activation>();
         for (Activation item = (Activation) it.next(); item != null; item = (Activation) it.next() ) {
             if ( !item.isQueued() ) {
                 dormant.add( item );
@@ -381,7 +382,7 @@ public class ProtobufOutputMarshaller {
     private static ProtobufMessages.NodeMemory writeQueryElementNodeMemory(final int nodeId,
                                                                            final Memory memory,
                                                                            final InternalWorkingMemory wm) {
-        org.drools.core.util.Iterator<LeftTuple> it = LeftTupleIterator.iterator( wm, ((QueryElementNodeMemory) memory).getNode() );
+        org.drools.base.util.Iterator<LeftTuple> it = LeftTupleIterator.iterator( wm, ((QueryElementNodeMemory) memory).getNode() );
 
         ProtobufMessages.NodeMemory.QueryElementNodeMemory.Builder _query = ProtobufMessages.NodeMemory.QueryElementNodeMemory.newBuilder();
         for ( LeftTuple leftTuple = it.next(); leftTuple != null; leftTuple = it.next() ) {
@@ -467,7 +468,7 @@ public class ProtobufOutputMarshaller {
 
         if ( !justifiedMap.isEmpty() ) {
             EqualityKey[] keys = new EqualityKey[justifiedMap.size()];
-            org.drools.core.util.Iterator it = justifiedMap.iterator();
+            org.drools.base.util.Iterator it = justifiedMap.iterator();
             int i = 0;
             for ( org.drools.core.util.ObjectHashMap.ObjectEntry entry = (org.drools.core.util.ObjectHashMap.ObjectEntry) it.next(); entry != null; entry = (org.drools.core.util.ObjectHashMap.ObjectEntry) it.next() ) {
                 EqualityKey key = (EqualityKey) entry.getKey();
@@ -523,7 +524,7 @@ public class ProtobufOutputMarshaller {
             LogicalDependency dependency = (LogicalDependency) node.getObject();
             Activation activation = dependency.getJustifier();
             ProtobufMessages.Activation _activation = ProtobufMessages.Activation.newBuilder()
-                    .setPackageName( activation.getRule().getPackage() )
+                    .setPackageName(((RuleImpl) activation.getRule()).getPackage() )
                     .setRuleName( activation.getRule().getName() )
                     .setTuple( writeTuple( context, activation, true ) )
                     .build();
@@ -696,7 +697,7 @@ public class ProtobufOutputMarshaller {
                                                                                              boolean isDormient) {
         ProtobufMessages.Activation.Builder _activation = ProtobufMessages.Activation.newBuilder();
 
-        RuleImpl rule = agendaItem.getRule();
+        RuleImpl rule = (RuleImpl) agendaItem.getRule();
         _activation.setPackageName( rule.getPackage() );
         _activation.setRuleName( rule.getName() );
         _activation.setTuple( writeTuple( context, agendaItem, isDormient ) );
@@ -713,7 +714,7 @@ public class ProtobufOutputMarshaller {
         }
 
         if (agendaItem instanceof TruthMaintenanceSystemAgendaItem) {
-            org.drools.core.util.LinkedList<LogicalDependency<M>> list = ((TruthMaintenanceSystemAgendaItem)agendaItem).getLogicalDependencies();
+            LinkedList<LogicalDependency<M>> list = ((TruthMaintenanceSystemAgendaItem)agendaItem).getLogicalDependencies();
             if (list != null && !list.isEmpty()) {
                 for (LogicalDependency<?> node = list.getFirst(); node != null; node = node.getNext()) {
                     _activation.addLogicalDependency(((BeliefSet) node.getJustified()).getFactHandle().getId());

@@ -21,23 +21,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.RuleBaseConfiguration;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.Memory;
 import org.drools.core.common.MemoryFactory;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.common.RuleBasePartitionId;
+import org.drools.base.common.RuleBasePartitionId;
 import org.drools.core.common.TupleSets;
 import org.drools.core.common.UpdateContext;
 import org.drools.core.phreak.SegmentUtilities;
 import org.drools.core.reteoo.ObjectTypeNode.Id;
 import org.drools.core.reteoo.builder.BuildContext;
-import org.drools.core.rule.Pattern;
+import org.drools.base.rule.Pattern;
 import org.drools.core.rule.consequence.Activation;
-import org.drools.core.base.ObjectType;
+import org.drools.base.base.ObjectType;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.util.AbstractBaseLinkedListNode;
+import org.drools.base.util.AbstractBaseLinkedListNode;
 import org.drools.core.util.bitmask.AllSetBitMask;
 import org.drools.core.util.bitmask.BitMask;
 import org.kie.api.definition.rule.Rule;
@@ -50,7 +51,7 @@ import static org.drools.core.phreak.AddRemoveRule.findPathsToFlushFromRia;
 import static org.drools.core.phreak.AddRemoveRule.flushLeftTupleIfNecessary;
 import static org.drools.core.phreak.AddRemoveRule.forceFlushLeftTuple;
 import static org.drools.core.phreak.AddRemoveRule.forceFlushPath;
-import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.base.util.PropertySpecificUtil.isPropertyReactive;
 
 /**
  * All asserting Facts must propagated into the right <code>ObjectSink</code> side of a BetaNode, if this is the first Pattern

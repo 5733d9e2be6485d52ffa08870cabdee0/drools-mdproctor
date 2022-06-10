@@ -15,7 +15,7 @@
 package org.drools.mvel.expr;
 
 import org.drools.core.common.AgendaItem;
-import org.drools.core.rule.Declaration;
+import org.drools.base.rule.Declaration;
 import org.mvel2.integration.PropertyHandler;
 import org.mvel2.integration.VariableResolver;
 import org.mvel2.integration.VariableResolverFactory;
@@ -52,7 +52,7 @@ public class ActivationPropertyHandler implements PropertyHandler {
         if ( declr != null ) {
             return declr.getValue( null, item.getTuple().get( declr ).getObject() );
         } else {
-            return item.getRule().getMetaData( name );
+            return item.getRule().getMetaData( ).get( name );
         }
     }
 

@@ -29,22 +29,22 @@ import java.util.function.Function;
 import org.drools.compiler.compiler.DroolsWarning;
 import org.drools.compiler.compiler.RuleBuildError;
 import org.drools.compiler.compiler.RuleBuildWarning;
-import org.drools.core.base.CoreComponentsBuilder;
-import org.drools.core.base.EnabledBoolean;
-import org.drools.core.base.SalienceInteger;
+import org.drools.base.base.EnabledBoolean;
+import org.drools.base.base.SalienceInteger;
 import org.drools.core.common.InternalAgendaGroup;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.factmodel.AnnotationDefinition;
-import org.drools.core.rule.GroupElement;
-import org.drools.core.definitions.rule.impl.QueryImpl;
-import org.drools.core.rule.accessor.Salience;
-import org.drools.core.time.TimeUtils;
+import org.drools.base.definitions.rule.impl.QueryImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.factmodel.AnnotationDefinition;
+import org.drools.base.rule.GroupElement;
+import org.drools.base.rule.accessor.Salience;
+import org.drools.base.time.TimeUtils;
 import org.drools.core.time.TimerExpression;
 import org.drools.core.time.impl.CronExpression;
 import org.drools.core.time.impl.CronTimer;
 import org.drools.core.time.impl.ExpressionIntervalTimer;
 import org.drools.core.time.impl.IntervalTimer;
-import org.drools.core.time.impl.Timer;
+import org.drools.base.time.impl.Timer;
+import org.drools.base.util.MVELExecutor;
 import org.drools.drl.ast.descr.AnnotationDescr;
 import org.drools.drl.ast.descr.AttributeDescr;
 import org.drools.drl.ast.descr.QueryDescr;
@@ -165,7 +165,7 @@ public class RuleBuilder {
         Object result = value;
         // try to resolve as an expression:
         try {
-            result = CoreComponentsBuilder.get().getMVELExecutor().eval( value );
+            result = MVELExecutor.get().eval( value );
         } catch ( Exception e ) {
             // do nothing
         }
@@ -268,7 +268,7 @@ public class RuleBuilder {
         try {
             ActivationListener activationListener = getTypedAnnotation(ruleDescr, ActivationListener.class);
             if (activationListener != null) {
-                rule.setActivationListener(CoreComponentsBuilder.get().getMVELExecutor().evalToString(activationListener.value()));
+                rule.setActivationListener(MVELExecutor.get().evalToString(activationListener.value()));
             }
 
             if (enforceEager) {
@@ -334,7 +334,7 @@ public class RuleBuilder {
     private static void buildCalendars(RuleImpl rule, String calendarsString, RuleBuildContext context) {
         Object val = null;
         try {
-            val = CoreComponentsBuilder.get().getMVELExecutor().eval( calendarsString );
+            val = MVELExecutor.get().eval( calendarsString );
             String[] calNames = null;
             if ( val instanceof List ) {
                 calNames = ( String[] ) ((List)val).toArray( new String[ ((List)val).size() ] );

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.EntryPointNode;
@@ -29,7 +29,7 @@ import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ReactiveFromNode;
 import org.drools.core.reteoo.TupleMemory;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.Iterator;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.mvel.compiler.oopath.model.Adult;
 import org.drools.mvel.compiler.oopath.model.Child;

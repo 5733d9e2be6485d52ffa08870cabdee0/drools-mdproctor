@@ -24,7 +24,7 @@ import org.drools.core.common.AgendaItem;
 import org.drools.core.common.InternalAgenda;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.impl.RuleBaseFactory;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.Iterator;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;
 import org.drools.testcoverage.common.util.KieBaseUtil;
 import org.drools.testcoverage.common.util.TestParametersUtil;

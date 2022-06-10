@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.drools.traits.compiler.CommonTraitTest;
 import org.drools.traits.compiler.ReviseTraitTestWithPRAlwaysCategory;
-import org.drools.core.factmodel.FieldDefinition;
+import org.drools.base.factmodel.FieldDefinition;
 import org.drools.traits.core.factmodel.TraitFactoryImpl;
 import org.drools.traits.core.factmodel.VirtualPropertyMode;
 import org.junit.Ignore;

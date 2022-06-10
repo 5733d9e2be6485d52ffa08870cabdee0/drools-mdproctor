@@ -24,14 +24,14 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Map;
 
-import org.drools.core.base.BaseClassFieldReader;
+import org.drools.base.base.BaseClassFieldReader;
 import org.drools.core.base.BaseClassFieldWriter;
 import org.drools.core.base.ClassFieldAccessorCache.CacheEntry;
 import org.drools.core.base.ClassFieldInspector;
 import org.drools.core.base.FieldAccessorFactory;
-import org.drools.core.base.ValueType;
-import org.drools.core.base.extractors.BaseObjectClassFieldReader;
-import org.drools.core.base.extractors.SelfReferenceClassFieldReader;
+import org.drools.base.base.ValueType;
+import org.drools.base.base.extractors.BaseObjectClassFieldReader;
+import org.drools.base.base.extractors.SelfReferenceClassFieldReader;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.util.Drools;

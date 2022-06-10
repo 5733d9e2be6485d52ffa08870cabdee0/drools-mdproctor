@@ -20,7 +20,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.ruleunits.api.DataSource;
 import org.drools.ruleunits.api.RuleUnit;
 import org.drools.ruleunits.api.RuleUnitConfig;

@@ -19,7 +19,8 @@ package org.drools.mvel.compiler.definitions;
 
 import java.util.Collection;
 
-import org.drools.core.definitions.rule.impl.GlobalImpl;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.GlobalImpl;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;
 import org.drools.testcoverage.common.util.KieBaseUtil;
 import org.drools.testcoverage.common.util.TestParametersUtil;
@@ -27,7 +28,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.kie.api.KieBase;
-import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.rule.Query;
 import org.kie.api.definition.type.FactField;
 import org.kie.api.definition.type.FactType;
@@ -90,7 +90,7 @@ public class KnowledgePackageMetaDataTest {
     @Test
     public void testMetaData() {
         KieBase kBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("test", kieBaseTestConfiguration, drl);
-        KiePackage pack = kBase.getKiePackage( "org.drools.mvel.compiler.test.definitions" );
+        InternalKnowledgePackage pack = (InternalKnowledgePackage) kBase.getKiePackage( "org.drools.mvel.compiler.test.definitions" );
 
         assertThat(pack).isNotNull();
 

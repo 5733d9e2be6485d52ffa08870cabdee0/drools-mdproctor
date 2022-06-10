@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.internal.ruleunit.RuleUnitVariable;
+import org.drools.base.ruleunit.RuleUnitVariable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

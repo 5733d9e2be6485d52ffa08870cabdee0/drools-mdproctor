@@ -29,8 +29,8 @@ import java.util.stream.Stream;
 
 import org.drools.compiler.kie.builder.impl.KieContainerImpl;
 import org.drools.compiler.kproject.models.KieBaseModelImpl;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.ResourceTypePackageRegistry;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.ResourceTypePackageRegistry;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.kie.api.KieBase;
 import org.kie.api.io.ResourceType;

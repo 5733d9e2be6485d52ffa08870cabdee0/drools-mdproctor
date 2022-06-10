@@ -15,7 +15,7 @@
 
 package org.drools.tms;
 
-import org.drools.core.util.LinkedListNode;
+import org.drools.base.util.LinkedListNode;
 import org.drools.tms.agenda.TruthMaintenanceSystemActivation;
 import org.drools.tms.beliefsystem.ModedAssertion;
 

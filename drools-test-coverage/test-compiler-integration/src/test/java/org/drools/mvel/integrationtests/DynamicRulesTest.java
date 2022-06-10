@@ -25,6 +25,7 @@ import java.util.List;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.common.InternalAgenda;
 import org.drools.core.common.InternalFactHandle;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.core.impl.RuleBaseFactory;
@@ -240,10 +241,10 @@ public class DynamicRulesTest {
 
         assertThat(kbase.getKiePackages().size()).isEqualTo(2);
 
-        KiePackage knowledgePackage = null;
+        InternalKnowledgePackage knowledgePackage = null;
         for (KiePackage pkg : kbase.getKiePackages()) {
             if ( pkg.getName().equals( "org.drools.mvel.compiler.test" ) ) {
-                knowledgePackage = pkg;
+                knowledgePackage = (InternalKnowledgePackage) pkg;
                 break;
             }
         }

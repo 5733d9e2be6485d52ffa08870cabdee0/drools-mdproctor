@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.kie.api.KieBase;
 import org.kie.api.io.ResourceType;
 import org.kie.pmml.commons.model.KiePMMLModel;

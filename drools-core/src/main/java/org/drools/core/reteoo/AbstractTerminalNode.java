@@ -20,17 +20,17 @@ import java.util.List;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.common.BaseNode;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.common.RuleBasePartitionId;
+import org.drools.base.common.RuleBasePartitionId;
 import org.drools.core.common.UpdateContext;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.builder.BuildContext;
-import org.drools.core.rule.Pattern;
-import org.drools.core.base.ObjectType;
+import org.drools.base.rule.Pattern;
+import org.drools.base.base.ObjectType;
 import org.drools.core.util.bitmask.AllSetBitMask;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.bitmask.EmptyBitMask;
 
-import static org.drools.core.util.PropertySpecificUtil.isPropertyReactive;
+import static org.drools.base.util.PropertySpecificUtil.isPropertyReactive;
 
 public abstract class AbstractTerminalNode extends BaseNode implements TerminalNode {
 

@@ -17,7 +17,7 @@ package org.drools.core.phreak;
 
 import org.drools.core.common.Memory;
 import org.drools.core.common.MemoryFactory;
-import org.drools.core.common.NetworkNode;
+import org.drools.base.common.NetworkNode;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AlphaNode;
@@ -39,7 +39,7 @@ import org.drools.core.reteoo.LeftTupleSink;
 import org.drools.core.reteoo.LeftTupleSinkNode;
 import org.drools.core.reteoo.LeftTupleSinkPropagator;
 import org.drools.core.reteoo.LeftTupleSource;
-import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.NotNode;
 import org.drools.core.reteoo.ObjectSink;
 import org.drools.core.reteoo.ObjectSource;
@@ -53,7 +53,7 @@ import org.drools.core.reteoo.SegmentMemory;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.reteoo.TimerNode;
 import org.drools.core.reteoo.TimerNode.TimerNodeMemory;
-import org.drools.core.rule.constraint.QueryNameConstraint;
+import org.drools.base.rule.constraint.QueryNameConstraint;
 
 public class SegmentUtilities {
 

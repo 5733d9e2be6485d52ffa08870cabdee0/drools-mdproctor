@@ -23,7 +23,7 @@ import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemoryEntryPoint;
 import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.TruthMaintenanceSystem;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.common.PropagationContext;
@@ -35,7 +35,7 @@ import org.drools.tms.beliefsystem.simple.SimpleLogicalDependency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.base.util.PropertySpecificUtil.allSetButTraitBitMask;
 
 public class JTMSBeliefSystem<M extends JTMSMode<M>>
         implements

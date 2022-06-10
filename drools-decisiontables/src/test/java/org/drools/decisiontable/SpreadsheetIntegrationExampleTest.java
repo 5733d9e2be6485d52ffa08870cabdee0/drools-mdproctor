@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.acme.insurance.launcher.PricingRuleLauncher;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.junit.Test;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
@@ -169,6 +170,6 @@ public class SpreadsheetIntegrationExampleTest {
                 .addResource( ks.getResources().newClassPathResource("/data/CanNotDrink2.drl.xls", getClass() ), ResourceType.DTABLE )
                 .build();
 
-        assertThat(kbase.getKiePackage("org.drools.simple.candrink").getRules().size()).isEqualTo(2);
+        assertThat(((InternalKnowledgePackage) kbase.getKiePackage("org.drools.simple.candrink")).getRules().size()).isEqualTo(2);
     }
 }

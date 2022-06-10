@@ -32,7 +32,7 @@ import org.drools.compiler.kie.builder.impl.InternalKieModule.CompilationCache;
 import org.drools.compiler.rule.builder.ConstraintBuilder;
 import org.drools.compiler.rule.builder.EvaluatorDefinition;
 import org.drools.compiler.rule.builder.util.AccumulateUtil;
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.drl.parser.DrlParser;
 import org.drools.util.StringUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;

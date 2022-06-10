@@ -22,10 +22,9 @@ import java.util.Map;
 
 import org.drools.core.WorkingMemory;
 import org.drools.core.common.InternalFactHandle;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.factmodel.traits.Thing;
-import org.drools.core.factmodel.traits.TraitableBean;
-import org.drools.core.rule.Declaration;
+import org.drools.base.factmodel.traits.Thing;
+import org.drools.base.factmodel.traits.TraitableBean;
+import org.drools.base.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.beliefsystem.Mode;

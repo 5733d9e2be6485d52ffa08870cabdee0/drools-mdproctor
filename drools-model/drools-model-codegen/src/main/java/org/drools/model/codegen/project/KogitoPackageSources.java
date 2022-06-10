@@ -21,7 +21,7 @@ import org.drools.model.codegen.execmodel.PackageModel;
 import org.drools.model.codegen.execmodel.PackageModelWriter;
 import org.drools.model.codegen.execmodel.PackageSources;
 import org.drools.model.codegen.execmodel.QueryModel;
-import org.kie.internal.ruleunit.RuleUnitDescription;
+import org.drools.base.ruleunit.RuleUnitDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

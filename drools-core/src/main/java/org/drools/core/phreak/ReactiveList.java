@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.drools.core.base.BaseTuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.phreak.ReactiveObject;
 import org.drools.core.phreak.ReactiveObjectUtil.ModificationType;
-import org.drools.core.reteoo.Tuple;
 
 public class ReactiveList<T> extends ReactiveCollection<T, List<T>> implements List<T>{
 
@@ -40,7 +40,7 @@ public class ReactiveList<T> extends ReactiveCollection<T, List<T>> implements L
         if (result) {
             for ( T element : c ) {
                 ReactiveObjectUtil.notifyModification(element, getTuples(), ModificationType.ADD);
-                if ( element instanceof ReactiveObject ) {
+                if ( element instanceof ReactiveObject) {
                     for (BaseTuple lts : getTuples()) {
                         ((ReactiveObject) element).addTuple(lts);
                     }

@@ -27,7 +27,7 @@ import org.drools.core.common.PhreakPropagationContextFactory;
 import org.drools.core.common.PriorityQueueAgendaGroupFactory;
 import org.drools.core.common.PropagationContextFactory;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.factmodel.traits.TraitFactory;
+import org.drools.base.factmodel.traits.TraitFactory;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.management.DroolsManagementAgent;
 import org.drools.core.reteoo.ReteooFactHandleFactory;

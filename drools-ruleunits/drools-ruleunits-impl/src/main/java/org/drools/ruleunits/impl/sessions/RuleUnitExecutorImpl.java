@@ -48,9 +48,9 @@ import org.drools.core.phreak.PropagationEntry;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.TerminalNode;
-import org.drools.core.rule.Declaration;
+import org.drools.base.rule.Declaration;
 import org.drools.core.rule.accessor.FactHandleFactory;
-import org.drools.core.rule.accessor.GlobalResolver;
+import org.drools.base.rule.accessor.GlobalResolver;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.time.TimerService;
 import org.drools.core.time.TimerServiceFactory;
@@ -61,7 +61,7 @@ import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.time.SessionClock;
 
-import static org.drools.core.base.ClassObjectType.InitialFact_ObjectType;
+import static org.drools.base.base.ClassObjectType.InitialFact_ObjectType;
 
 public class RuleUnitExecutorImpl implements ReteEvaluator {
 
@@ -159,6 +159,16 @@ public class RuleUnitExecutorImpl implements ReteEvaluator {
     @Override
     public TimerService getTimerService() {
         return timerService;
+    }
+
+    @Override
+    public long getCurrentTime() {
+        return getTimerService().getCurrentTime();
+    }
+
+    @Override
+    public org.drools.base.definitions.rule.RuleBase getRuleBase() {
+        return this.ruleBase;
     }
 
     @Override

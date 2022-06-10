@@ -29,12 +29,14 @@ import org.drools.compiler.kie.builder.impl.KieBaseUpdaterImpl;
 import org.drools.compiler.kie.builder.impl.KieBaseUpdaterImplContext;
 import org.drools.compiler.kproject.models.KieBaseModelImpl;
 import org.drools.core.common.InternalWorkingMemory;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.KieBaseUpdate;
 import org.drools.core.reteoo.CoreComponentFactory;
-import org.drools.core.rule.Function;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.rule.Function;
+import org.drools.base.rule.TypeDeclaration;
+import org.drools.modelcompiler.CanonicalKieModule;
+import org.drools.modelcompiler.CanonicalKiePackages;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.rule.Rule;
 import org.kie.internal.builder.ChangeType;
@@ -198,7 +200,7 @@ public class CanonicalKieBaseUpdater extends KieBaseUpdaterImpl {
             if (!isPackageInKieBase( ctx.currentKieBaseModel, oldPkg.getName() )) {
                 continue;
             }
-            for (Rule oldRule : oldPkg.getRules()) {
+            for (Rule oldRule : ((InternalKnowledgePackage) oldPkg).getRules()) {
                 rules.add( (( RuleImpl ) oldRule) );
             }
         }

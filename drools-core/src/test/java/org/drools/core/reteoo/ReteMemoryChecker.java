@@ -16,6 +16,7 @@
 
 package org.drools.core.reteoo;
 
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.common.BaseNode;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.Memory;

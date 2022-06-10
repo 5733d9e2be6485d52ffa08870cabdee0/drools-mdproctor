@@ -14,11 +14,9 @@
 
 package org.drools.core.time;
 
-import org.drools.core.base.BaseTuple;
-import org.drools.core.base.ValueResolver;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.Declaration;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.Declaration;
 
 public interface TimerExpression {
 

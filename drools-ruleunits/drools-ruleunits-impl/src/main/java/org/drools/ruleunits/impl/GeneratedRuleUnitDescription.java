@@ -18,7 +18,7 @@ package org.drools.ruleunits.impl;
 import java.util.function.Function;
 
 import org.drools.util.TypeResolver;
-import org.kie.internal.ruleunit.RuleUnitVariable;
+import org.drools.base.ruleunit.RuleUnitVariable;
 import org.drools.ruleunits.api.RuleUnitConfig;
 
 public class GeneratedRuleUnitDescription extends AbstractRuleUnitDescription {

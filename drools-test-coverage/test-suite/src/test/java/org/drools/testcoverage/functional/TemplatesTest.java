@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.decisiontable.ExternalSpreadsheetCompiler;
 import org.drools.template.DataProviderCompiler;
 import org.drools.template.ObjectDataCompiler;
@@ -270,7 +271,7 @@ public class TemplatesTest {
 
         final Collection<KiePackage> pkgs = kbase.getKiePackages();
         assertThat(pkgs.size()).isEqualTo(1);
-        final KiePackage pkg = pkgs.iterator().next();
+        final InternalKnowledgePackage pkg = (InternalKnowledgePackage) pkgs.iterator().next();
 
         // check of generated rules size from template
         assertThat(pkg.getRules().size()).isEqualTo(3);
@@ -301,7 +302,7 @@ public class TemplatesTest {
 
         final Collection<KiePackage> pkgs = kbase.getKiePackages();
         assertThat(pkgs.size()).isEqualTo(1);
-        final KiePackage pkg = pkgs.iterator().next();
+        final InternalKnowledgePackage pkg = (InternalKnowledgePackage) pkgs.iterator().next();
 
         // check of generated rules size from template
         assertThat(pkg.getRules().size()).isEqualTo(expectedRulesCount);
@@ -314,7 +315,7 @@ public class TemplatesTest {
 
         Collection<KiePackage> pkgs = kbase.getKiePackages();
         assertThat(pkgs.size()).isEqualTo(1);
-        KiePackage pkg = pkgs.iterator().next();
+        InternalKnowledgePackage pkg = (InternalKnowledgePackage) pkgs.iterator().next();
 
         // check of generated rules size from template
         assertThat(pkg.getRules().size()).isEqualTo(expectedRulesCount);

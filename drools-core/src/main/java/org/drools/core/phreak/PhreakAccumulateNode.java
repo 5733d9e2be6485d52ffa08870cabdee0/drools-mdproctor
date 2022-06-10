@@ -15,8 +15,8 @@
 
 package org.drools.core.phreak;
 
-import org.drools.core.base.BaseTuple;
-import org.drools.core.base.ValueResolver;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.BetaConstraints;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
@@ -24,7 +24,7 @@ import org.drools.core.common.TupleSets;
 import org.drools.core.common.TupleSetsImpl;
 import org.drools.core.reteoo.AccumulateNode;
 import org.drools.core.reteoo.AccumulateContext;
-import org.drools.core.rule.AccumulateContextEntry;
+import org.drools.base.rule.AccumulateContextEntry;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AccumulateNode.BaseAccumulation;
 import org.drools.core.reteoo.BetaMemory;
@@ -32,12 +32,12 @@ import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.LeftTupleSink;
 import org.drools.core.reteoo.RightTuple;
 import org.drools.core.reteoo.TupleMemory;
-import org.drools.core.rule.Accumulate;
-import org.drools.core.rule.ContextEntry;
-import org.drools.core.rule.constraint.AlphaNodeFieldConstraint;
+import org.drools.base.rule.Accumulate;
+import org.drools.base.rule.ContextEntry;
+import org.drools.base.rule.constraint.AlphaNodeFieldConstraint;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.util.AbstractHashTable;
-import org.drools.core.util.FastIterator;
+import org.drools.base.util.FastIterator;
 
 import static org.drools.core.phreak.RuleNetworkEvaluator.normalizeStagedTuples;
 

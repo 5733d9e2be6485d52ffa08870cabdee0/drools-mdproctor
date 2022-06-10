@@ -22,8 +22,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
+import org.drools.base.definitions.rule.impl.QueryImpl;
 import org.drools.core.QueryResultsImpl;
-import org.drools.core.definitions.rule.impl.QueryImpl;
 import org.drools.model.codegen.execmodel.domain.Person;
 import org.drools.model.codegen.execmodel.domain.Relationship;
 import org.drools.model.codegen.execmodel.domain.Result;
@@ -278,9 +279,15 @@ public class QueryTest extends BaseModelTest {
 
         QueryResults results = ksession.getQueryResults( "isRelatedTo", "A", "B" );
 
+<<<<<<< HEAD
         assertThat(results.size()).isEqualTo(1);
         String paramName = ((QueryImpl) ksession.getKieBase().getQuery("defaultpkg", "isRelatedTo" )).getParameters()[1].getIdentifier();
         assertThat(results.iterator().next().get(paramName)).isEqualTo("B");
+=======
+        assertEquals( 1, results.size() );
+        String paramName = ((QueryImpl) ksession.getKieBase().getQuery("defaultpkg", "isRelatedTo")).getParameters()[1].getIdentifier();
+        assertEquals("B", results.iterator().next().get(paramName));
+>>>>>>> Mark refactor (#17)
 
     }
 

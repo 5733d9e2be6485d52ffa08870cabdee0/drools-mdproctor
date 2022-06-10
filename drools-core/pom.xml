@@ -28,7 +28,6 @@
     <dependency>
       <groupId>org.drools</groupId>
       <artifactId>drools-base</artifactId>
-      <version>8.22.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>

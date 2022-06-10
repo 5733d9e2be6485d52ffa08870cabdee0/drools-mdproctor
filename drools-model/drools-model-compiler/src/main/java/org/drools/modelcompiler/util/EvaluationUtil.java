@@ -29,8 +29,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-import org.drools.core.base.CoercionUtil;
-import org.drools.core.time.TimeUtils;
+import org.drools.base.base.CoercionUtil;
+import org.drools.base.time.TimeUtils;
 import org.drools.util.DateUtils;
 import org.drools.model.BitMask;
 import org.drools.model.bitmask.AllSetBitMask;

@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.common.RuleBasePartitionId;
-import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.base.common.RuleBasePartitionId;
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.RightTuple;
 import org.drools.core.reteoo.RightTupleSink;

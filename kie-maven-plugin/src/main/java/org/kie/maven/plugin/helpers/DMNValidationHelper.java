@@ -38,7 +38,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
 import org.drools.compiler.kproject.models.KieModuleModelImpl;
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.kie.api.builder.Message.Level;
 import org.kie.api.builder.model.KieModuleModel;
 import org.kie.api.definition.KiePackage;

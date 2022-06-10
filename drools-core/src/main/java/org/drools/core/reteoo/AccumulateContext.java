@@ -1,7 +1,7 @@
 package org.drools.core.reteoo;
 
 import org.drools.core.common.PropagationContext;
-import org.drools.core.rule.AccumulateContextEntry;
+import org.drools.base.rule.AccumulateContextEntry;
 
 public class AccumulateContext extends AccumulateContextEntry implements AccumulateNode.BaseAccumulation {
 

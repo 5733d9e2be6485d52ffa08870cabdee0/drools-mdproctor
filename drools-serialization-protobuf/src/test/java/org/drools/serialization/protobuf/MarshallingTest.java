@@ -33,16 +33,16 @@ import java.util.jar.JarInputStream;
 
 import org.drools.core.ClockType;
 import org.drools.core.SessionConfiguration;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.BaseNode;
-import org.drools.core.common.DroolsObjectInputStream;
-import org.drools.core.common.DroolsObjectOutputStream;
+import org.drools.base.common.DroolsObjectInputStream;
+import org.drools.base.common.DroolsObjectOutputStream;
 import org.drools.core.common.InternalAgenda;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemory;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.marshalling.ClassObjectMarshallingStrategyAcceptor;
@@ -51,8 +51,8 @@ import org.drools.core.reteoo.MockTupleSource;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.builder.BuildContext;
-import org.drools.core.rule.MapBackedClassLoader;
-import org.drools.core.rule.consequence.Consequence;
+import org.drools.base.rule.MapBackedClassLoader;
+import org.drools.base.rule.consequence.Consequence;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.time.impl.DurationTimer;
 import org.drools.core.time.impl.PseudoClockScheduler;
@@ -119,7 +119,7 @@ public class MarshallingTest extends CommonTestMethodBase {
         InternalKnowledgeBase kbase = (InternalKnowledgeBase) loadKnowledgeBase();
         kbase.addPackages( Collections.singleton( kpkg ) );
 
-        final org.kie.api.definition.rule.Rule[] rules = kbase.getKiePackages().iterator().next().getRules().toArray( new org.kie.api.definition.rule.Rule[0] );
+        final org.kie.api.definition.rule.Rule[] rules = ((InternalKnowledgePackage) kbase.getKiePackages().iterator().next()).getRules().toArray( new org.kie.api.definition.rule.Rule[0] );
         assertThat(rules.length).isEqualTo(4);
 
         assertThat(rules[0].getName()).isEqualTo("match Person 1");
@@ -136,7 +136,7 @@ public class MarshallingTest extends CommonTestMethodBase {
         ksession.insert( bob );
 
         ksession = getSerialisedStatefulKnowledgeSession( ksession,
-                                                                              true );
+                                                          true );
 
         assertThat(ksession.getFactCount()).isEqualTo(1);
         assertThat(ksession.getObjects().iterator().next()).isEqualTo(bob);
@@ -2051,9 +2051,9 @@ public class MarshallingTest extends CommonTestMethodBase {
 
         final List<String> fired = new ArrayList<String>();
 
-        rule.setConsequence( new Consequence() {
+        rule.setConsequence( new Consequence<KnowledgeHelper>() {
             public void evaluate(KnowledgeHelper knowledgeHelper,
-                                 ReteEvaluator reteEvaluator) throws Exception {
+                                 ValueResolver valueResolver) throws Exception {
                 fired.add( "a" );
             }
 

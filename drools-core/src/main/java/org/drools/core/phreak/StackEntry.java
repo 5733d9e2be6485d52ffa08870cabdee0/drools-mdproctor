@@ -16,13 +16,13 @@
 package org.drools.core.phreak;
 
 import org.drools.core.common.Memory;
-import org.drools.core.common.NetworkNode;
+import org.drools.base.common.NetworkNode;
 import org.drools.core.common.TupleSets;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.LeftTupleSinkNode;
 import org.drools.core.reteoo.PathMemory;
 import org.drools.core.reteoo.SegmentMemory;
-import org.drools.core.util.AbstractBaseLinkedListNode;
+import org.drools.base.util.AbstractBaseLinkedListNode;
 
 /**
 * Created with IntelliJ IDEA.

@@ -22,19 +22,18 @@ import java.io.ObjectOutput;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
-import org.drools.core.base.BaseTuple;
-import org.drools.core.base.ValueResolver;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.builder.BuildContext;
-import org.drools.core.rule.ContextEntry;
-import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
-import org.drools.core.base.ObjectType;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.rule.ContextEntry;
+import org.drools.base.rule.constraint.BetaNodeFieldConstraint;
+import org.drools.base.base.ObjectType;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.index.TupleList;
 import org.kie.api.runtime.rule.FactHandle;
 
-import static org.drools.core.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
+import static org.drools.base.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
 
 public class EmptyBetaConstraints
     implements

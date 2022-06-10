@@ -20,7 +20,7 @@ import org.drools.tms.beliefsystem.ModedAssertion;
 import org.drools.tms.SimpleMode;
 import org.drools.tms.LogicalDependency;
 import org.drools.core.rule.consequence.Activation;
-import org.drools.core.util.LinkedList;
+import org.drools.base.util.LinkedList;
 
 public interface TruthMaintenanceSystemActivation<T extends ModedAssertion<T>> extends Activation {
 

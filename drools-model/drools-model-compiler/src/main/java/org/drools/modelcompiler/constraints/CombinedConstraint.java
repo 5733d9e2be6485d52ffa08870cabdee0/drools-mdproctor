@@ -19,22 +19,21 @@ package org.drools.modelcompiler.constraints;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.drools.core.RuleBaseConfiguration;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.ContextEntry;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.FieldValue;
-import org.drools.core.rule.accessor.ReadAccessor;
-import org.drools.core.reteoo.Tuple;
-import org.drools.core.time.Interval;
-import org.drools.core.util.FieldIndex;
-import org.drools.core.util.index.ConstraintOperatorType;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.ContextEntry;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.FieldValue;
+import org.drools.base.rule.accessor.ReadAccessor;
+import org.drools.base.time.Interval;
+import org.drools.base.util.FieldIndex;
+import org.drools.base.util.index.ConstraintOperatorType;
+import org.drools.base.util.index.IndexConfiguration;
 import org.drools.model.Constraint;
 import org.drools.modelcompiler.constraints.LambdaConstraint.LambdaContextEntry;
+import org.kie.api.runtime.rule.FactHandle;
 
 import static java.util.stream.Collectors.toList;
-
 import static org.drools.model.Constraint.Type.OR;
 
 public class CombinedConstraint extends AbstractConstraint {
@@ -53,7 +52,7 @@ public class CombinedConstraint extends AbstractConstraint {
     }
 
     @Override
-    public boolean isIndexable( short nodeType, RuleBaseConfiguration config ) {
+    public boolean isIndexable(short nodeType, IndexConfiguration config) {
         return false;
     }
 
@@ -146,21 +145,21 @@ public class CombinedConstraint extends AbstractConstraint {
     }
 
     @Override
-    public boolean isAllowed(InternalFactHandle handle, ReteEvaluator reteEvaluator) {
+    public boolean isAllowed(FactHandle handle, ValueResolver valueResolver) {
         return type == OR ?
-                constraints.stream().anyMatch( c -> c.isAllowed(handle, reteEvaluator) ) :
-                constraints.stream().allMatch( c -> c.isAllowed(handle, reteEvaluator) );
+                constraints.stream().anyMatch( c -> c.isAllowed(handle, valueResolver) ) :
+                constraints.stream().allMatch( c -> c.isAllowed(handle, valueResolver) );
     }
 
     @Override
-    public boolean isAllowedCachedLeft(ContextEntry context, InternalFactHandle handle) {
+    public boolean isAllowedCachedLeft(ContextEntry context, FactHandle handle) {
         return type == OR ?
                 constraints.stream().anyMatch( c -> c.isAllowedCachedLeft(context, handle) ) :
                 constraints.stream().allMatch( c -> c.isAllowedCachedLeft(context, handle) );
     }
 
     @Override
-    public boolean isAllowedCachedRight(Tuple tuple, ContextEntry context) {
+    public boolean isAllowedCachedRight(BaseTuple tuple, ContextEntry context) {
         return type == OR ?
                 constraints.stream().anyMatch( c -> c.isAllowedCachedRight(tuple, context) ) :
                 constraints.stream().allMatch( c -> c.isAllowedCachedRight(tuple, context) );

@@ -22,15 +22,15 @@ import java.util.List;
 
 import org.drools.core.common.Memory;
 import org.drools.core.common.MemoryFactory;
-import org.drools.core.common.NetworkNode;
+import org.drools.base.common.NetworkNode;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TupleSets;
 import org.drools.core.common.TupleSetsImpl;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.QueryElementNode.QueryElementNodeMemory;
 import org.drools.core.reteoo.TimerNode.TimerNodeMemory;
-import org.drools.core.util.LinkedList;
-import org.drools.core.util.LinkedListNode;
+import org.drools.base.util.LinkedList;
+import org.drools.base.util.LinkedListNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -19,7 +19,7 @@ import org.drools.tms.beliefsystem.BeliefSet;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.kiesession.entrypoints.NamedEntryPoint;
 import org.drools.core.common.TruthMaintenanceSystem;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.common.PropagationContext;
@@ -42,7 +42,7 @@ public class BayesBeliefSystem<M extends BayesHardEvidence<M>> implements Belief
     @Override
     public BeliefSet<M> insert(LogicalDependency<M> node, BeliefSet<M> beliefSet, PropagationContext context, ObjectTypeConf typeConf) {
         return insert( node.getMode(),
-                       node.getJustifier().getRule(),
+                       (RuleImpl)  node.getJustifier().getRule(),
                        node.getJustifier(),
                        node.getObject(),
                        beliefSet,
@@ -82,7 +82,7 @@ public class BayesBeliefSystem<M extends BayesHardEvidence<M>> implements Belief
     public void delete(LogicalDependency<M> node,
                        BeliefSet<M> beliefSet,
                        PropagationContext context) {
-        delete( node.getMode(), node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context );
+        delete( node.getMode(), (RuleImpl) node.getJustifier().getRule(), node.getJustifier(), node.getObject(), beliefSet, context );
     }
 
     @Override

@@ -16,6 +16,8 @@
 
 package org.drools.core.util;
 
+import org.drools.base.util.Entry;
+import org.drools.base.util.FastIterator;
 import org.drools.core.util.index.TupleList;
 
 public class TupleRBTree<K extends Comparable< ? super K>> {

@@ -20,15 +20,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.drools.util.ClassTypeResolver;
-import org.drools.util.TypeResolver;
+import org.drools.base.base.BaseTuple;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.Pattern;
-import org.drools.core.rule.accessor.CompiledInvoker;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.core.reteoo.Tuple;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.Pattern;
+import org.drools.base.rule.accessor.CompiledInvoker;
+import org.drools.util.ClassTypeResolver;
+import org.drools.util.TypeResolver;
 import org.mvel2.asm.Label;
 import org.mvel2.asm.MethodVisitor;
 
@@ -224,7 +225,7 @@ public final class GeneratorHelper {
             return store(registry, declarationType);
         }
 
-        protected Tuple traverseTuplesUntilDeclaration(Tuple currentTuple, int tupleIndex, int tupleReg) {
+        protected BaseTuple traverseTuplesUntilDeclaration(BaseTuple currentTuple, int tupleIndex, int tupleReg) {
             // do not use currentTuple.skipEmptyHandles(), as we use else where, because we need the getParent as part of the generated code.
             while (currentTuple.getIndex() != tupleIndex) {
                 // FactHandle is null for eval, not and join nodes as it has no right input

@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.template.parser.DecisionTableParseException;
 import org.drools.testcoverage.common.listener.OrderListener;
 import org.drools.testcoverage.common.listener.TrackingAgendaEventListener;
@@ -573,7 +574,7 @@ public class DecisionTableTest {
         assertThat(names.contains(TestConstants.PACKAGE_FUNCTIONAL)).isTrue();
         assertThat(names.contains(TestConstants.PACKAGE_TESTCOVERAGE_MODEL)).isTrue();
 
-        final KiePackage kiePackage = (KiePackage) pkgs.toArray()[names.indexOf(TestConstants.PACKAGE_FUNCTIONAL)];
+        final InternalKnowledgePackage kiePackage = (InternalKnowledgePackage) pkgs.toArray()[names.indexOf(TestConstants.PACKAGE_FUNCTIONAL)];
 
         assertThat(kiePackage.getRules().size()).isEqualTo(3);
     }

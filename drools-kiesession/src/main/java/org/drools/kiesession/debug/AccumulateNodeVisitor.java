@@ -18,13 +18,13 @@ package org.drools.kiesession.debug;
 
 import java.util.Collection;
 
-import org.drools.core.common.NetworkNode;
+import org.drools.base.common.NetworkNode;
 import org.drools.core.reteoo.AccumulateNode;
 import org.drools.core.reteoo.AccumulateContext;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.BetaNode;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.FastIterator;
+import org.drools.base.util.FastIterator;
 
 public class AccumulateNodeVisitor extends AbstractNetworkNodeVisitor {
     

@@ -18,6 +18,7 @@ package org.drools.mvel.integrationtests;
 
 import java.util.Collection;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;
 import org.drools.testcoverage.common.util.KieUtil;
 import org.drools.testcoverage.common.util.TestParametersUtil;
@@ -235,7 +236,7 @@ public class KieBaseIncludesTest {
 
         Collection<KiePackage> kiePackages = kieBase.getKiePackages();
         for (KiePackage nextKiePackage : kiePackages) {
-            Collection<Rule> rules = nextKiePackage.getRules();
+            Collection<Rule> rules = ((InternalKnowledgePackage) nextKiePackage).getRules();
             System.out.println(rules);
             nrOfRules += rules.size();
         }

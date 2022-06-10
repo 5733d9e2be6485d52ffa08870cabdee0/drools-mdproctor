@@ -22,7 +22,7 @@ import org.drools.core.common.BaseNode;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.common.RuleBasePartitionId;
+import org.drools.base.common.RuleBasePartitionId;
 
 public interface ObjectSinkPropagator
     extends

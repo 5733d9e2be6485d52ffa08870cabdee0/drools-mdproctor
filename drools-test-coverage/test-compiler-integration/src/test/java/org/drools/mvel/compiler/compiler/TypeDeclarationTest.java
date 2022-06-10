@@ -29,8 +29,9 @@ import java.util.List;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
 import org.drools.core.common.EventFactHandle;
-import org.drools.core.definitions.impl.KnowledgePackageImpl;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.impl.KnowledgePackageImpl;
+import org.drools.base.rule.TypeDeclaration;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;
 import org.drools.testcoverage.common.util.KieBaseUtil;
 import org.drools.testcoverage.common.util.KieUtil;
@@ -639,7 +640,7 @@ public class TypeDeclarationTest {
 
         for( KiePackage kp : kbuilder.getKnowledgePackages() ) {
             if ( kp.getName().equals( "org.drools" ) ) {
-                Collection<FactType> types = kp.getFactTypes();
+                Collection<FactType> types = ((InternalKnowledgePackage) kp).getFactTypes();
                 for ( FactType type : types ) {
                     if ( "org.drools.Pet".equals( type.getName() ) ) {
                         assertThat(type.getFields().size()).isEqualTo(4);

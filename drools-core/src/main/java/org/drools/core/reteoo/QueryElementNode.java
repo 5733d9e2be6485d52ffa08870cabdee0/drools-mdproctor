@@ -18,8 +18,9 @@ package org.drools.core.reteoo;
 
 import java.util.List;
 
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.RuleBaseConfiguration;
-import org.drools.core.base.DroolsQuery;
+import org.drools.base.base.DroolsQuery;
 import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.base.InternalViewChangedEventListener;
 import org.drools.core.common.InternalFactHandle;
@@ -30,17 +31,17 @@ import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TupleSets;
 import org.drools.core.common.TupleSetsImpl;
 import org.drools.core.common.UpdateContext;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.phreak.SegmentUtilities;
 import org.drools.core.phreak.StackEntry;
 import org.drools.core.reteoo.builder.BuildContext;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.QueryArgument;
-import org.drools.core.rule.QueryElement;
-import org.drools.core.definitions.rule.impl.QueryImpl;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.QueryArgument;
+import org.drools.base.rule.QueryElement;
+import org.drools.base.definitions.rule.impl.QueryImpl;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.util.AbstractBaseLinkedListNode;
+import org.drools.base.util.AbstractBaseLinkedListNode;
 
 public class QueryElementNode extends LeftTupleSource implements LeftTupleSinkNode, MemoryFactory<QueryElementNode.QueryElementNodeMemory> {
 

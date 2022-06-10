@@ -18,9 +18,10 @@ package org.drools.core.reteoo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.common.ActivationsManager;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 
 public class RiaPathMemory extends PathMemory {
 

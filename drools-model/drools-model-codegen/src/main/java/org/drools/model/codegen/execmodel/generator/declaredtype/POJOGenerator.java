@@ -28,6 +28,9 @@ import java.util.Set;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.factmodel.AccessibleFact;
+import org.drools.base.factmodel.GeneratedFact;
 import org.drools.compiler.builder.impl.BuildResultCollector;
 import org.drools.compiler.builder.impl.BuildResultCollectorImpl;
 import org.drools.compiler.builder.impl.processors.CompilationPhase;
@@ -37,9 +40,6 @@ import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.drl.ast.descr.TypeDeclarationDescr;
 import org.drools.compiler.rule.builder.ConstraintBuilder;
 import org.drools.util.TypeResolver;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.factmodel.AccessibleFact;
-import org.drools.core.factmodel.GeneratedFact;
 import org.drools.model.codegen.execmodel.GeneratedClassWithPackage;
 import org.drools.model.codegen.execmodel.PackageModel;
 import org.drools.model.codegen.execmodel.errors.DuplicatedDeclarationError;
@@ -59,9 +59,9 @@ public class POJOGenerator implements CompilationPhase {
 
     private final static List<Class<?>> MARKER_INTERFACES = Arrays.asList(GeneratedFact.class, AccessibleFact.class);
 
-    private BuildResultCollector builder;
+    private BuildResultCollector     builder;
     private InternalKnowledgePackage pkg;
-    private PackageDescr packageDescr;
+    private PackageDescr             packageDescr;
     private PackageModel packageModel;
 
     private static final List<String> exprAnnotations = Arrays.asList("duration", "timestamp");

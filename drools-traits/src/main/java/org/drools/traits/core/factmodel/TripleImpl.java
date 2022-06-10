@@ -15,7 +15,7 @@
 
 package org.drools.traits.core.factmodel;
 
-import org.drools.core.util.Entry;
+import org.drools.base.util.Entry;
 
 public class TripleImpl implements Triple {
     private Entry next;

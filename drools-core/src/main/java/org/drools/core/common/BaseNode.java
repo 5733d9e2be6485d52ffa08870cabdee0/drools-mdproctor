@@ -18,6 +18,8 @@ package org.drools.core.common;
 
 import java.util.Collection;
 
+import org.drools.base.common.NetworkNode;
+import org.drools.base.common.RuleBasePartitionId;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.LeftTupleSource;
 import org.drools.core.reteoo.ObjectSource;
@@ -34,7 +36,7 @@ import org.kie.api.definition.rule.Rule;
  */
 public abstract class BaseNode
     implements
-    NetworkNode {
+        NetworkNode {
 
     protected int                 id;
     protected int                 memoryId = -1;

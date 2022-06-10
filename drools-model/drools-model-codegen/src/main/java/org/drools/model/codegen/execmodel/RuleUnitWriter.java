@@ -34,8 +34,8 @@ import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.kie.internal.ruleunit.RuleUnitDescription;
-import org.kie.internal.ruleunit.RuleUnitVariable;
+import org.drools.base.ruleunit.RuleUnitDescription;
+import org.drools.base.ruleunit.RuleUnitVariable;
 
 import static org.drools.model.codegen.execmodel.JavaParserCompiler.getPrettyPrinter;
 

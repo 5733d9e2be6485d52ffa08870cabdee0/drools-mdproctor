@@ -25,8 +25,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.drools.core.util.AbstractHashTable;
-import org.drools.core.util.Entry;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.Entry;
+import org.drools.base.util.Iterator;
 import org.kie.api.runtime.rule.Variable;
 
 public class TripleStore extends AbstractHashTable implements Externalizable {

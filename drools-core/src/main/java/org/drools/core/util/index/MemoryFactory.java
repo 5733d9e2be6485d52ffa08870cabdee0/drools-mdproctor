@@ -3,13 +3,14 @@ package org.drools.core.util.index;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.drools.base.util.index.ConstraintOperatorType;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.TupleMemory;
-import org.drools.core.rule.ContextEntry;
-import org.drools.core.rule.IndexableConstraint;
-import org.drools.core.rule.constraint.BetaNodeFieldConstraint;
-import org.drools.core.util.FieldIndex;
+import org.drools.base.rule.ContextEntry;
+import org.drools.base.rule.IndexableConstraint;
+import org.drools.base.rule.constraint.BetaNodeFieldConstraint;
+import org.drools.base.util.FieldIndex;
 import org.kie.internal.conf.IndexPrecedenceOption;
 
 public class MemoryFactory {

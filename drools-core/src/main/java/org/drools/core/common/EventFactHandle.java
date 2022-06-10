@@ -18,11 +18,12 @@ package org.drools.core.common;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.drools.base.common.RuleBasePartitionId;
 import org.drools.core.WorkingMemoryEntryPoint;
-import org.drools.core.rule.EntryPointId;
-import org.drools.core.time.JobHandle;
+import org.drools.base.rule.EntryPointId;
+import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerService;
-import org.drools.core.util.LinkedList;
+import org.drools.base.util.LinkedList;
 
 public class EventFactHandle extends DefaultFactHandle implements Comparable<EventFactHandle> {
 

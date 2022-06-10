@@ -15,6 +15,7 @@
 
 package org.drools.core.util;
 
+import org.drools.base.util.FastIterator;
 import org.drools.core.util.TupleRBTree.Node;
 import org.junit.Test;
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.LeftTupleNode;
 import org.drools.core.reteoo.QueryTerminalNode;

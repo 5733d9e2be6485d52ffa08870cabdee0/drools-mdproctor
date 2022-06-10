@@ -18,12 +18,12 @@ package org.drools.ruleunits.impl.factory;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.ruleunits.impl.GeneratedRuleUnitDescription;
 import org.drools.ruleunits.impl.ReflectiveRuleUnitDescription;
 import org.kie.api.definition.KiePackage;
-import org.kie.internal.ruleunit.RuleUnitComponentFactory;
-import org.kie.internal.ruleunit.RuleUnitDescription;
+import org.drools.base.ruleunit.RuleUnitComponentFactory;
+import org.drools.base.ruleunit.RuleUnitDescription;
 import org.drools.ruleunits.api.DataSource;
 import org.drools.ruleunits.api.RuleUnitData;
 

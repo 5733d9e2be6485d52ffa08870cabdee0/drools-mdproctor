@@ -28,14 +28,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.drools.core.WorkingMemory;
-import org.drools.core.factmodel.traits.TraitFieldTMS;
-import org.drools.core.factmodel.traits.TraitType;
-import org.drools.core.util.PropertyReactivityUtil;
+import org.drools.base.factmodel.traits.TraitFieldTMS;
+import org.drools.base.factmodel.traits.TraitType;
+import org.drools.base.util.PropertyReactivityUtil;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.mvel.MVELSafeHelper;
 
-import static org.drools.core.util.PropertySpecificUtil.onlyTraitBitSetMask;
-import static org.drools.core.util.PropertySpecificUtil.setPropertyOnMask;
+import static org.drools.base.util.PropertySpecificUtil.onlyTraitBitSetMask;
+import static org.drools.base.util.PropertySpecificUtil.setPropertyOnMask;
 
 public class TraitFieldTMSImpl implements TraitFieldTMS, Externalizable {
 

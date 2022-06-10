@@ -23,7 +23,7 @@ import org.drools.core.marshalling.MarshallerReaderContext;
 import org.drools.core.reteoo.ObjectTypeNode.ExpireJob;
 import org.drools.core.reteoo.ObjectTypeNode.ExpireJobContext;
 import org.drools.core.time.JobContext;
-import org.drools.core.time.JobHandle;
+import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerService;
 import org.drools.core.time.impl.PointInTimeTrigger;
 import org.drools.serialization.protobuf.ProtobufMarshallerReaderContext;

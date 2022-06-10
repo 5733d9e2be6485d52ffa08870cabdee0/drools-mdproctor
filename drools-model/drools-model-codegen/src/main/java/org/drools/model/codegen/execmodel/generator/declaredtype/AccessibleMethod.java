@@ -27,9 +27,9 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
-import org.drools.core.factmodel.AccessibleFact;
-import org.drools.model.codegen.execmodel.generator.declaredtype.api.MethodDefinition;
-import org.drools.model.codegen.execmodel.generator.declaredtype.api.MethodWithStringBody;
+import org.drools.base.factmodel.AccessibleFact;
+import org.drools.modelcompiler.builder.generator.declaredtype.api.MethodDefinition;
+import org.drools.modelcompiler.builder.generator.declaredtype.api.MethodWithStringBody;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.NodeList.nodeList;

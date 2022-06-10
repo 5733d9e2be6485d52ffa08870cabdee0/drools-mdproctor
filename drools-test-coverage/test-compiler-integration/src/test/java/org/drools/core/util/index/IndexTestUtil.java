@@ -16,6 +16,8 @@
 
 package org.drools.core.util.index;
 
+import org.drools.base.util.index.IndexUtil;
+
 public class IndexTestUtil {
 
     public static void enableRangeIndexForJoin() {

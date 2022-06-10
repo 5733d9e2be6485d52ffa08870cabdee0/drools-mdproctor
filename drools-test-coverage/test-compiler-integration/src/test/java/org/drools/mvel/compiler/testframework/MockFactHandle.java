@@ -46,6 +46,21 @@ public class MockFactHandle
     }
 
 
+    @Override
+    public Object getObject() {
+        return null;
+    }
+
+    @Override
+    public boolean isNegated() {
+        return false;
+    }
+
+    @Override
+    public boolean isEvent() {
+        return false;
+    }
+
     public String toExternalForm() {
         return "[fact:" + this.id + "]";
     }

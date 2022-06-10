@@ -17,17 +17,18 @@ package org.drools.mvel.asm;
 import java.util.List;
 
 import org.drools.core.WorkingMemory;
+import org.drools.base.base.BaseTuple;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.Sink;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.consequence.Activation;
-import org.drools.core.rule.accessor.CompiledInvoker;
-import org.drools.core.rule.consequence.Consequence;
-import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.reteoo.Tuple;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.CompiledInvoker;
+import org.drools.core.rule.consequence.Activation;
+import org.drools.base.rule.consequence.Consequence;
+import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.mvel.asm.GeneratorHelper.DeclarationMatcher;
 import org.kie.api.runtime.rule.FactHandle;
 import org.mvel2.asm.MethodVisitor;
@@ -78,7 +79,7 @@ public class ConsequenceGenerator {
                 mv.visitVarInsn(ASTORE, 4);
 
                 
-                Tuple currentTuple = tuple;
+                BaseTuple currentTuple = tuple;
                 objAstorePos = 6; // astore start position for objects to store in loop
                 int[] paramsPos = new int[declarations.length];
                 // declarationMatchers is already sorted by offset with tip declarations now first

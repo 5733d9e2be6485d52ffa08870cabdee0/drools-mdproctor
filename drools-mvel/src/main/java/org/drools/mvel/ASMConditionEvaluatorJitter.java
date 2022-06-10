@@ -30,10 +30,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.drools.compiler.rule.builder.EvaluatorWrapper;
+import org.drools.base.base.BaseTuple;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
+import org.drools.base.rule.Declaration;
 import org.drools.mvel.ConditionAnalyzer.AritmeticExpression;
 import org.drools.mvel.ConditionAnalyzer.AritmeticOperator;
 import org.drools.mvel.ConditionAnalyzer.ArrayAccessInvocation;
@@ -62,11 +63,11 @@ import org.mvel2.asm.MethodVisitor;
 import org.mvel2.util.NullType;
 
 import static org.drools.compiler.lang.DescrDumper.WM_ARGUMENT;
+import static org.drools.mvel.ConditionAnalyzer.isFixed;
+import static org.drools.mvel.asm.GeneratorHelper.matchDeclarationsToTuple;
 import static org.drools.util.ClassUtils.convertFromPrimitiveType;
 import static org.drools.util.ClassUtils.convertToPrimitiveType;
 import static org.drools.util.StringUtils.generateUUID;
-import static org.drools.mvel.ConditionAnalyzer.isFixed;
-import static org.drools.mvel.asm.GeneratorHelper.matchDeclarationsToTuple;
 import static org.mvel2.asm.Opcodes.AALOAD;
 import static org.mvel2.asm.Opcodes.ACC_FINAL;
 import static org.mvel2.asm.Opcodes.ACC_PRIVATE;
@@ -114,7 +115,7 @@ public class ASMConditionEvaluatorJitter {
                                                    Declaration[] declarations,
                                                    EvaluatorWrapper[] operators,
                                                    ClassLoader classLoader,
-                                                   Tuple tuple) {
+                                                   BaseTuple tuple) {
         ClassGenerator generator = new ClassGenerator(getUniqueClassName(), classLoader)
                 .setInterfaces(ConditionEvaluator.class)
                 .addStaticField(ACC_PRIVATE | ACC_FINAL, "EXPRESSION", String.class, expression)
@@ -165,12 +166,12 @@ public class ASMConditionEvaluatorJitter {
 
         private final Condition condition;
         private final Declaration[] declarations;
-        private final Tuple tuple;
+        private final BaseTuple tuple;
         private final EvaluatorWrapper[] operators;
 
         private int[] declPositions;
 
-        public EvaluateMethodGenerator(Condition condition, Declaration[] declarations, EvaluatorWrapper[] operators, Tuple leftTuple) {
+        public EvaluateMethodGenerator(Condition condition, Declaration[] declarations, EvaluatorWrapper[] operators, BaseTuple leftTuple) {
             this.condition = condition;
             this.declarations = declarations;
             this.operators = operators;
@@ -192,7 +193,7 @@ public class ASMConditionEvaluatorJitter {
             declPositions = new int[declarations.length];
             List<GeneratorHelper.DeclarationMatcher> declarationMatchers = matchDeclarationsToTuple(declarations);
 
-            Tuple currentTuple = tuple;
+            BaseTuple currentTuple = tuple;
             mv.visitVarInsn(ALOAD, 3);
             store(4, Tuple.class);
 

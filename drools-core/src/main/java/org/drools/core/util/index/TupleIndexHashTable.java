@@ -23,11 +23,11 @@ import java.io.ObjectOutput;
 import org.drools.core.reteoo.TupleMemory;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.AbstractHashTable;
-import org.drools.core.util.Entry;
-import org.drools.core.util.FastIterator;
-import org.drools.core.util.FieldIndex;
-import org.drools.core.util.Iterator;
-import org.drools.core.util.LinkedList;
+import org.drools.base.util.Entry;
+import org.drools.base.util.FastIterator;
+import org.drools.base.util.FieldIndex;
+import org.drools.base.util.Iterator;
+import org.drools.base.util.LinkedList;
 
 public class TupleIndexHashTable extends AbstractHashTable implements TupleMemory {
 

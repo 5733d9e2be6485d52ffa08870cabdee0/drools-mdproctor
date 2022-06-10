@@ -33,7 +33,8 @@ import org.drools.core.reteoo.RightTuple;
 import org.drools.core.reteoo.SegmentMemory;
 import org.drools.core.reteoo.TupleMemory;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.FastIterator;
+import org.drools.base.util.FastIterator;
+import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.List;

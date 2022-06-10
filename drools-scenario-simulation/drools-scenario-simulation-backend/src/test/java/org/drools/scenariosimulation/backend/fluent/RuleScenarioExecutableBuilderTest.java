@@ -23,8 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.definitions.rule.impl.QueryImpl;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.QueryImpl;
 import org.junit.Test;
 import org.kie.api.KieBase;
 import org.kie.api.definition.KiePackage;
@@ -87,7 +88,7 @@ public class RuleScenarioExecutableBuilderTest {
     }
 
     private KiePackage createKiePackageMock(String packageName, List<String> ruleNames, Map<String, String> ruleToAgendaGroup, List<String> queries) {
-        KiePackage kiePackageMock = mock(KiePackage.class);
+        InternalKnowledgePackage kiePackageMock = mock(InternalKnowledgePackage.class);
         when(kiePackageMock.getName()).thenReturn(packageName);
         List<Rule> ruleListMock = new ArrayList<>();
         when(kiePackageMock.getRules()).thenReturn(ruleListMock);

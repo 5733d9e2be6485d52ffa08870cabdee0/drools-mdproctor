@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.core.reteoo.ObjectTypeConf;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.rule.TypeDeclaration;
 import org.drools.core.rule.accessor.FactHandleFactory;
 
 import static java.util.stream.Collectors.toCollection;

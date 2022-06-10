@@ -22,13 +22,12 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.reflect.Method;
 
-import org.drools.core.base.AccessorKey;
-import org.drools.core.base.AccessorKeySupplier;
+import org.drools.base.base.AccessorKey;
+import org.drools.base.base.AccessorKeySupplier;
 import org.drools.core.base.FieldNameSupplier;
-import org.drools.core.base.ValueResolver;
-import org.drools.core.base.ValueType;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.accessor.ReadAccessor;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.base.ValueType;
+import org.drools.base.rule.accessor.ReadAccessor;
 import org.drools.util.ClassUtils;
 
 import static org.drools.util.StringUtils.lcFirstForBean;

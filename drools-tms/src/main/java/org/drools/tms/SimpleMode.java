@@ -21,7 +21,7 @@ import java.io.ObjectOutput;
 
 import org.drools.tms.beliefsystem.BeliefSystem;
 import org.drools.core.beliefsystem.Mode;
-import org.drools.core.util.LinkedListEntry;
+import org.drools.base.util.LinkedListEntry;
 import org.drools.tms.beliefsystem.ModedAssertion;
 
 public class SimpleMode extends LinkedListEntry<SimpleMode, LogicalDependency<SimpleMode>>

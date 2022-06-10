@@ -18,9 +18,9 @@ package org.drools.mvel.accessors;
 
 import java.lang.reflect.Method;
 
-import org.drools.core.base.BaseClassFieldReader;
-import org.drools.core.base.ValueType;
-import org.drools.core.common.ReteEvaluator;
+import org.drools.base.base.BaseClassFieldReader;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.base.ValueType;
 
 public abstract class BaseNumberClassFieldReader extends BaseClassFieldReader {
 
@@ -38,75 +38,75 @@ public abstract class BaseNumberClassFieldReader extends BaseClassFieldReader {
                valueType );
     }
 
-    public abstract Object getValue(ReteEvaluator reteEvaluator,
+    public abstract Object getValue(ValueResolver valueResolver,
                                     Object object);
 
-    public boolean getBooleanValue(ReteEvaluator reteEvaluator,
+    public boolean getBooleanValue(ValueResolver valueResolver,
                                    final Object object) {
         throw new RuntimeException( "Conversion to boolean not supported from Number" );
     }
 
-    public byte getByteValue(ReteEvaluator reteEvaluator,
+    public byte getByteValue(ValueResolver valueResolver,
                              final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         
         return ((Number) value).byteValue();
     }
 
-    public char getCharValue(ReteEvaluator reteEvaluator,
+    public char getCharValue(ValueResolver valueResolver,
                              final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         
         return ((Character) value).charValue();
     }
 
-    public double getDoubleValue(ReteEvaluator reteEvaluator,
+    public double getDoubleValue(ValueResolver valueResolver,
                                  final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         
         return ((Number) value).doubleValue();
     }
 
-    public float getFloatValue(ReteEvaluator reteEvaluator,
+    public float getFloatValue(ValueResolver valueResolver,
                                final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         
         return ((Number) value).floatValue();
     }
 
-    public int getIntValue(ReteEvaluator reteEvaluator,
+    public int getIntValue(ValueResolver valueResolver,
                            final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         
         return ((Number) value).intValue();
     }
 
-    public long getLongValue(ReteEvaluator reteEvaluator,
+    public long getLongValue(ValueResolver valueResolver,
                              final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         
         return ((Number) value).longValue();
     }
 
-    public short getShortValue(ReteEvaluator reteEvaluator,
+    public short getShortValue(ValueResolver valueResolver,
                                final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         return ((Number) value).shortValue();
     }
 
-    public boolean isNullValue(ReteEvaluator reteEvaluator,
+    public boolean isNullValue(ValueResolver valueResolver,
                                final Object object) {
         if ( object == null ) {
             return true;
         } else {
-            return getValue( reteEvaluator,
+            return getValue( valueResolver,
                              object ) == null;
         }
     }
@@ -114,7 +114,7 @@ public abstract class BaseNumberClassFieldReader extends BaseClassFieldReader {
     public Method getNativeReadMethod() {
         try {
             return this.getClass().getMethod( getNativeReadMethodName(),
-                                              new Class[]{ReteEvaluator.class, Object.class} );
+                                              new Class[]{ValueResolver.class, Object.class} );
         } catch ( final Exception e ) {
             throw new RuntimeException( "This is a bug. Please report to development team: " + e.getMessage(),
                                         e );
@@ -129,9 +129,9 @@ public abstract class BaseNumberClassFieldReader extends BaseClassFieldReader {
         return "get" + type.getName().substring(0, 1).toUpperCase() + type.getName().substring(1) + "Value";
     }
 
-    public int getHashCode(ReteEvaluator reteEvaluator,
+    public int getHashCode(ValueResolver valueResolver,
                            final Object object) {
-        final Object value = getValue( reteEvaluator,
+        final Object value = getValue( valueResolver,
                                        object );
         return (value != null) ? value.hashCode() : 0;
     }

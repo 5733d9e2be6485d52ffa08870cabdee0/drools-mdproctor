@@ -44,21 +44,21 @@ import java.util.regex.Pattern;
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.core.ClassObjectFilter;
-import org.drools.core.InitialFact;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.InitialFact;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ClassObjectType;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.DefaultFactHandle;
 import org.drools.core.common.InternalAgenda;
-import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.Memory;
 import org.drools.core.common.NodeMemories;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.facttemplates.FactTemplate;
-import org.drools.core.facttemplates.FactTemplateImpl;
-import org.drools.core.facttemplates.FieldTemplate;
-import org.drools.core.facttemplates.FieldTemplateImpl;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.facttemplates.FactTemplate;
+import org.drools.base.facttemplates.FactTemplateImpl;
+import org.drools.base.facttemplates.FieldTemplate;
+import org.drools.base.facttemplates.FieldTemplateImpl;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.core.reteoo.LeftInputAdapterNode;
@@ -66,8 +66,7 @@ import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.Rete;
 import org.drools.core.reteoo.SegmentMemory;
-import org.drools.core.rule.consequence.Activation;
-import org.drools.core.rule.accessor.Salience;
+import org.drools.base.rule.accessor.Salience;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.drl.ast.descr.PatternDescr;
 import org.drools.drl.ast.descr.RuleDescr;
@@ -6342,14 +6341,14 @@ public class Misc2Test {
         List<Integer> list = new ArrayList<>();
         session.setGlobal( "list", list );
 
-        for ( Rule r : session.getKieBase().getKiePackage( "org.drools.test" ).getRules() ) {
+        for ( Rule r : ((InternalKnowledgePackage) session.getKieBase().getKiePackage("org.drools.test")).getRules() ) {
             ( (RuleImpl) r ).setSalience( new Salience() {
                 @Override
-                public int getValue(Activation activation, Rule rule, ReteEvaluator reteEvaluator) {
-                    if ( activation == null ) {
+                public int getValue(BaseTuple tuple, Rule rule, ValueResolver valueResolver) {
+                    if ( tuple == null ) {
                         return 0;
                     }
-                    InternalFactHandle h = (InternalFactHandle) activation.getFactHandles().get( 0 );
+                    FactHandle h = tuple.toFactHandles()[0];
                     return ( (Person) h.getObject() ).getAge();
                 }
 

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.mvel.compiler.Cheese;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;
@@ -53,7 +54,7 @@ public class MergePackageTest {
         // using different builders
         try {
             Collection<KiePackage> kpkgs1 = KieBaseUtil.getKieBaseFromClasspathResources("tmp", getClass(), kieBaseTestConfiguration, "test_RuleNameClashes1.drl").getKiePackages();
-            KiePackage kpkg1 = kpkgs1.stream().filter( pkg -> pkg.getName().equals( "org.drools.package1" ) ).findFirst().get();
+            InternalKnowledgePackage kpkg1 = (InternalKnowledgePackage)kpkgs1.stream().filter(pkg -> pkg.getName().equals( "org.drools.package1" ) ).findFirst().get();
             assertThat(kpkg1.getRules().size()).isEqualTo(1);
 
             Collection<KiePackage> kpkgs2 = KieBaseUtil.getKieBaseFromClasspathResources("tmp", getClass(), kieBaseTestConfiguration, "test_RuleNameClashes2.drl").getKiePackages();
@@ -107,7 +108,7 @@ public class MergePackageTest {
             assertThat(kpkgs.size()).isEqualTo(3);
             for (final KiePackage kpkg : kpkgs) {
                 if (kpkg.getName().equals("org.drools.package1")) {
-                    assertThat(kpkg.getRules().iterator().next().getName()).isEqualTo("rule 1");
+                    assertThat(((InternalKnowledgePackage)kpkg).getRules().iterator().next().getName()).isEqualTo("rule 1");
                 }
             }
         } catch (final RuntimeException e) {

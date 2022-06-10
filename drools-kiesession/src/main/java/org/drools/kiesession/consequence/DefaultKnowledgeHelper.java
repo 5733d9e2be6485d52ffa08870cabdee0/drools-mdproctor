@@ -33,13 +33,13 @@ import org.drools.core.common.InternalRuleFlowGroup;
 import org.drools.core.common.InternalWorkingMemoryEntryPoint;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.factmodel.traits.CoreWrapper;
-import org.drools.core.factmodel.traits.Thing;
-import org.drools.core.factmodel.traits.TraitableBean;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.factmodel.traits.CoreWrapper;
+import org.drools.base.factmodel.traits.Thing;
+import org.drools.base.factmodel.traits.TraitableBean;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.RuleTerminalNode;
-import org.drools.core.rule.Declaration;
+import org.drools.base.rule.Declaration;
 import org.drools.core.process.AbstractProcessContext;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.consequence.KnowledgeHelper;
@@ -58,8 +58,8 @@ import org.kie.api.runtime.rule.EntryPoint;
 import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.runtime.rule.Match;
 
-import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
-import static org.drools.core.util.PropertySpecificUtil.onlyTraitBitSetMask;
+import static org.drools.base.util.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.base.util.PropertySpecificUtil.onlyTraitBitSetMask;
 
 public class DefaultKnowledgeHelper implements KnowledgeHelper, Externalizable {
 

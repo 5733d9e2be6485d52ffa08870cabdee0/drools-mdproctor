@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import org.drools.core.base.ValueType;
+import org.drools.base.base.ValueType;
 import org.drools.core.common.ReteEvaluator;
 
 public class BaseLocalDateTimeClassFieldReader extends BaseDateClassFieldReader {

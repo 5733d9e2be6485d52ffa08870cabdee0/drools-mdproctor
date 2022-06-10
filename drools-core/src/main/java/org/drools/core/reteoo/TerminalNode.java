@@ -17,10 +17,10 @@
 package org.drools.core.reteoo;
 
 import org.drools.core.common.MemoryFactory;
-import org.drools.core.common.NetworkNode;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.GroupElement;
+import org.drools.base.common.NetworkNode;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.GroupElement;
 import org.drools.core.util.bitmask.BitMask;
 
 /**

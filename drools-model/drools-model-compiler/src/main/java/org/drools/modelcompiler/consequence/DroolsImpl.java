@@ -16,18 +16,18 @@
 
 package org.drools.modelcompiler.consequence;
 
-import org.drools.core.base.ValueResolver;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.AgendaItem;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemoryEntryPoint;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.model.BitMask;
 import org.drools.model.Channel;
 import org.drools.model.Drools;
 import org.drools.model.DroolsEntryPoint;
-import org.kie.api.definition.rule.Rule;
 import org.kie.api.runtime.KieRuntime;
 import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.runtime.rule.Match;

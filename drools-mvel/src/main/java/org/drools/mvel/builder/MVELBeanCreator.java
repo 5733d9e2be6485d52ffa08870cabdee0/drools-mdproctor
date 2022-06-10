@@ -17,7 +17,7 @@ package org.drools.mvel.builder;
 import java.util.Map;
 
 import org.drools.compiler.kie.util.BeanCreator;
-import org.drools.core.base.CoreComponentsBuilder;
+import org.drools.base.util.MVELExecutor;
 import org.kie.api.builder.model.QualifierModel;
 import org.mvel2.MVEL;
 import org.mvel2.ParserConfiguration;
@@ -47,6 +47,6 @@ public class MVELBeanCreator implements BeanCreator {
         }
 
         Object compiledExpression = MVEL.compileExpression( type, ctx );
-        return (T) CoreComponentsBuilder.get().getMVELExecutor().executeExpression( compiledExpression, parameters );
+        return (T) MVELExecutor.get().executeExpression( compiledExpression, parameters );
     }
 }

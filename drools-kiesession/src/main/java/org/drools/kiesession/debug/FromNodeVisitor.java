@@ -16,9 +16,8 @@
 
 package org.drools.kiesession.debug;
 
-import java.util.Collection;
-
-import org.drools.core.common.NetworkNode;
+import org.drools.base.common.NetworkNode;
+import org.drools.base.util.Iterator;
 import org.drools.core.reteoo.FromNode;
 import org.drools.core.reteoo.FromNode.FromMemory;
 import org.drools.core.reteoo.LeftTuple;
@@ -44,7 +43,7 @@ public class FromNodeVisitor extends AbstractNetworkNodeVisitor {
             ni.setTupleMemorySize( memory.getBetaMemory().getLeftTupleMemory().size() );
 
             long handles = 0;
-            org.drools.core.util.Iterator it = memory.getBetaMemory().getLeftTupleMemory().iterator();
+            Iterator it = memory.getBetaMemory().getLeftTupleMemory().iterator();
             for ( LeftTuple leftTuple = (LeftTuple) it.next(); leftTuple != null; leftTuple = (LeftTuple) it.next() ) {
                 LeftTuple child = leftTuple.getFirstChild();
                 while( child != null ) {

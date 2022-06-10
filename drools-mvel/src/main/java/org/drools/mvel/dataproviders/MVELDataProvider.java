@@ -23,12 +23,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.DataProvider;
-import org.drools.core.common.PropagationContext;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.DataProvider;
 import org.drools.mvel.MVELDialectRuntimeData;
 import org.drools.mvel.expr.MVELCompilationUnit;
 import org.drools.mvel.expr.MVELCompileable;
@@ -76,20 +75,21 @@ public class MVELDataProvider implements DataProvider, MVELCompileable, External
         return unit.hashCode();
     }
 
-    public void readExternal( ObjectInput in ) throws IOException,
-                                                      ClassNotFoundException {
+    @Override
+    public void readExternal( ObjectInput in ) throws IOException, ClassNotFoundException {
         id = in.readUTF();
         unit = (MVELCompilationUnit) in.readObject();
         clones = (List<MVELDataProvider>) in.readObject();
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF( id );
         out.writeObject(unit);
         out.writeObject( clones );
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public void compile( MVELDialectRuntimeData runtimeData) {
         evaluator = createMvelEvaluator( unit.getCompiledExpression( runtimeData ) );
         if (clones != null) {
@@ -99,33 +99,35 @@ public class MVELDataProvider implements DataProvider, MVELCompileable, External
         }
     }
 
+    @Override
     public void compile( MVELDialectRuntimeData runtimeData, RuleImpl rule) {
         evaluator = createMvelEvaluator( unit.getCompiledExpression( runtimeData, rule.toRuleNameAndPathString() ) );
     }
 
+    @Override
     public Declaration[] getRequiredDeclarations() {
         return this.unit.getPreviousDeclarations();
     }
 
-    public void replaceDeclaration(Declaration declaration,
-                                   Declaration resolved) {
-        this.unit.replaceDeclaration( declaration,
-                                      resolved );
+    @Override
+    public void replaceDeclaration(Declaration declaration, Declaration resolved) {
+        this.unit.replaceDeclaration( declaration, resolved );
     }
 
+    @Override
     public Object createContext() {
         return null;
     }
 
-    public Iterator getResults(final Tuple tuple,
-                               final ReteEvaluator reteEvaluator,
-                               final PropagationContext ctx,
+    @Override
+    public Iterator getResults(final BaseTuple tuple,
+                               final ValueResolver valueResolver,
                                final Object executionContext) {
-        return asIterator( evaluate( tuple, reteEvaluator ) );
+        return asIterator( evaluate( tuple, valueResolver ) );
     }
 
-    protected Object evaluate( Tuple tuple, ReteEvaluator reteEvaluator ) {
-        VariableResolverFactory factory = unit.getFactory( null, null, null, null, tuple, null, reteEvaluator, reteEvaluator.getGlobalResolver() );
+    protected Object evaluate( BaseTuple tuple, ValueResolver valueResolver ) {
+        VariableResolverFactory factory = unit.getFactory( null, null, null, null, tuple, null, valueResolver, valueResolver.getGlobalResolver() );
         return evaluator.evaluate( factory );
     }
 

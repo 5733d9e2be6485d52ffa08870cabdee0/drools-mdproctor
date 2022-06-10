@@ -16,6 +16,7 @@
 
 package org.drools.core.rule;
 
+import org.drools.base.rule.Behavior;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
 

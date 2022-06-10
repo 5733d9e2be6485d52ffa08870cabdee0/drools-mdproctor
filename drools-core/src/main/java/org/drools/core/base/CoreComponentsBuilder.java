@@ -16,11 +16,10 @@ package org.drools.core.base;
 
 import java.io.IOException;
 
-import org.drools.core.common.MissingDependencyException;
-import org.drools.core.rule.DialectRuntimeData;
-import org.drools.core.rule.accessor.ReadAccessor;
+import org.drools.base.common.MissingDependencyException;
+import org.drools.base.rule.DialectRuntimeData;
+import org.drools.base.rule.accessor.ReadAccessor;
 import org.drools.core.util.Drools;
-import org.drools.core.util.MVELExecutor;
 import org.kie.api.internal.utils.KieService;
 
 public interface CoreComponentsBuilder extends KieService {
@@ -55,6 +54,4 @@ public interface CoreComponentsBuilder extends KieService {
     }
 
     ClassFieldInspector createClassFieldInspector( Class<?> classUnderInspection, boolean includeFinalMethods ) throws IOException;
-
-    MVELExecutor getMVELExecutor();
 }

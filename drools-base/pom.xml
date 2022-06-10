@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.kie</groupId>
     <artifactId>drools-build-parent</artifactId>
-    <version>8.22.0-SNAPSHOT</version>
+    <version>8.24.0-SNAPSHOT</version>
     <relativePath>../build-parent/pom.xml</relativePath>
   </parent>
 
@@ -16,51 +16,28 @@
   <name>Drools :: base</name>
 
   <properties>
-    <java.module.name>org.drools.core</java.module.name>
+    <java.module.name>org.drools.base</java.module.name>
     <surefire.forkCount>2</surefire.forkCount>
   </properties>
 
   <dependencies>
     <!--
-      following are required for parser (lang). May be refactored out of
+      following are requiredRawMVELEvaluator for parser (lang). May be refactored out of
       core module.
     -->
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-apiv2</artifactId>
-      <version>8.22.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-apiv2-flow</artifactId>
-      <version>8.22.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-apiv2-rules</artifactId>
-      <version>8.22.0-SNAPSHOT</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.mvel</groupId>
-      <artifactId>mvel2</artifactId>
-    </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.kie</groupId>-->
-<!--      <artifactId>kie-internal</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.kie</groupId>-->
-<!--      <artifactId>kie-util-xml</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.drools</groupId>-->
-<!--      <artifactId>drools-wiring-api</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.drools</groupId>-->
-<!--      <artifactId>drools-wiring-static</artifactId>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>org.drools</groupId>
       <artifactId>drools-util</artifactId>

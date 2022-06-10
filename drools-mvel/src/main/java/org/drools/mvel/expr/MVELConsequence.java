@@ -20,22 +20,20 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
 
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.AgendaItem;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.consequence.Consequence;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.core.impl.RuleBase;
+import org.drools.base.rule.consequence.Consequence;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.mvel.MVELDialectRuntimeData;
 import org.mvel2.integration.VariableResolverFactory;
 
 import static org.drools.mvel.expr.MvelEvaluator.createMvelEvaluator;
 
-public class MVELConsequence
-    implements
-    Consequence,
-    MVELCompileable,
-        Externalizable {
+public class MVELConsequence implements Consequence<KnowledgeHelper>, MVELCompileable, Externalizable {
+
     private static final long   serialVersionUID = 510l;
 
     private MVELCompilationUnit unit;
@@ -78,13 +76,13 @@ public class MVELConsequence
     }
 
     public void evaluate(final KnowledgeHelper knowledgeHelper,
-                         final ReteEvaluator reteEvaluator) throws Exception {
+                         final ValueResolver valueResolver) throws Exception {
 
         VariableResolverFactory factory = unit.getFactory(knowledgeHelper, ((AgendaItem) knowledgeHelper.getMatch()).getTerminalNode().getRequiredDeclarations(),
-                knowledgeHelper.getRule(), knowledgeHelper.getTuple(), null, reteEvaluator, reteEvaluator.getGlobalResolver());
+                knowledgeHelper.getRule(), knowledgeHelper.getTuple(), null, valueResolver, valueResolver.getGlobalResolver());
 
         // do we have any functions for this namespace?
-        InternalKnowledgePackage pkg = reteEvaluator.getKnowledgeBase().getPackage("MAIN");
+        InternalKnowledgePackage pkg = ((RuleBase) valueResolver.getRuleBase()).getPackage("MAIN");
         if (pkg != null) {
             MVELDialectRuntimeData data = (MVELDialectRuntimeData) pkg.getDialectRuntimeRegistry().getDialectData(this.id);
             factory.setNextFactory(data.getFunctionFactory());

@@ -19,7 +19,7 @@ package org.drools.core.common;
 import java.util.Iterator;
 
 import org.drools.core.rule.consequence.Activation;
-import org.drools.core.util.LinkedList;
+import org.drools.base.util.LinkedList;
 import org.kie.api.runtime.rule.ActivationGroup;
 
 public interface InternalActivationGroup extends ActivationGroup {

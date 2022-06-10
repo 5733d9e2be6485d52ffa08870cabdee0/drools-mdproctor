@@ -28,7 +28,7 @@ import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.LeftTupleSource;
 import org.drools.core.reteoo.ModifyPreviousTuples;
-import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.ObjectTypeConf;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.PathMemory;
@@ -36,11 +36,11 @@ import org.drools.core.reteoo.QueryTerminalNode;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.time.JobContext;
-import org.drools.core.time.JobHandle;
+import org.drools.base.time.JobHandle;
 import org.drools.core.time.impl.PointInTimeTrigger;
 
 import static org.drools.core.reteoo.EntryPointNode.removeRightTuplesMatchingOTN;
-import static org.drools.core.rule.TypeDeclaration.NEVER_EXPIRES;
+import static org.drools.base.rule.TypeDeclaration.NEVER_EXPIRES;
 
 public interface PropagationEntry {
 

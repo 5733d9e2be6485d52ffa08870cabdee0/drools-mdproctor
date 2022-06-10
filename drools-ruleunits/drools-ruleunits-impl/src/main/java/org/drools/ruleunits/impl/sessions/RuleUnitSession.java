@@ -18,7 +18,8 @@ package org.drools.ruleunits.impl.sessions;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemoryEntryPoint;
-import org.drools.core.factmodel.traits.Thing;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.factmodel.traits.Thing;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.util.bitmask.BitMask;
@@ -95,7 +96,7 @@ public class RuleUnitSession extends RuleUnitExecutorImpl {
             if (h instanceof RuleUnitDefaultFactHandle && ((RuleUnitDefaultFactHandle) h).getDataStore() != null) {
                 // This handle has been insert from a datasource, so remove from it
                 ((RuleUnitDefaultFactHandle) h).getDataStore().delete((RuleUnitDefaultFactHandle) h,
-                        this.activation.getRule(),
+                        (RuleImpl) this.activation.getRule(),
                         this.activation.getTuple().getTupleSink(),
                         fhState);
                 return;
@@ -107,7 +108,7 @@ public class RuleUnitSession extends RuleUnitExecutorImpl {
             }
 
             h.getEntryPoint(executor).delete(handle,
-                    this.activation.getRule(),
+                    (RuleImpl) this.activation.getRule(),
                     this.activation.getTuple().getTupleSink(),
                     fhState);
         }

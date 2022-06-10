@@ -31,7 +31,7 @@ import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import org.drools.compiler.compiler.DescrBuildError;
-import org.drools.core.util.PropertyReactivityUtil;
+import org.drools.base.util.PropertyReactivityUtil;
 import org.drools.drl.ast.descr.AccumulateDescr;
 import org.drools.drl.ast.descr.BaseDescr;
 import org.drools.drl.ast.descr.ExprConstraintDescr;

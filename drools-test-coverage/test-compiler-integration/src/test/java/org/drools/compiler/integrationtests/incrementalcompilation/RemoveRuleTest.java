@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.drools.core.common.DefaultFactHandle;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.ObjectSink;
@@ -183,10 +184,10 @@ public class RemoveRuleTest {
         KieUtil.getKieModuleFromDrls(releaseId, kieBaseTestConfiguration, str);
         final KieContainer kieContainer = kieServices.newKieContainer(releaseId);
         final KieBase kbase = kieContainer.getKieBase();
-        assertThat(kbase.getKiePackage("org.drools.compiler").getRules().size()).isEqualTo(2);
+        assertThat(((InternalKnowledgePackage) kbase.getKiePackage("org.drools.compiler")).getRules().size()).isEqualTo(2);
         kbase.removeRule( "org.drools.compiler", "R2" );
 
-        assertThat(kbase.getKiePackage("org.drools.compiler").getRules().size()).isEqualTo(1);
+        assertThat(((InternalKnowledgePackage) kbase.getKiePackage("org.drools.compiler")).getRules().size()).isEqualTo(1);
     }
 
     @Test

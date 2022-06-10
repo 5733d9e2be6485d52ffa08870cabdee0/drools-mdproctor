@@ -37,7 +37,7 @@ import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.LeftTupleSink;
 import org.drools.core.reteoo.LeftTupleSource;
-import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.ObjectSource;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ObjectTypeNode.ObjectTypeNodeMemory;
@@ -46,8 +46,8 @@ import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.reteoo.TupleMemory;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.FastIterator;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.FastIterator;
+import org.drools.base.util.Iterator;
 
 public class PhreakActivationIterator
     implements

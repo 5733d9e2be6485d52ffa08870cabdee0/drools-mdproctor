@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.drools.core.base.CoreComponentsBuilder;
 import org.drools.core.process.WorkItemManagerFactory;
 import org.drools.core.util.ConfFileUtils;
+import org.drools.base.util.MVELExecutor;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.KieBase;
 import org.kie.api.runtime.Environment;
@@ -348,7 +348,7 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         String content = ConfFileUtils.URLContentsToString( ConfFileUtils.getURL( location,
                                                                                   null,
                                                                                   RuleBaseConfiguration.class ) );
-        Map<String, WorkItemHandler> workItemHandlers = (Map<String, WorkItemHandler>) CoreComponentsBuilder.get().getMVELExecutor().eval( content, params );
+        Map<String, WorkItemHandler> workItemHandlers = (Map<String, WorkItemHandler>) MVELExecutor.get().eval( content, params );
         this.workItemHandlers.putAll( workItemHandlers );
     }
 

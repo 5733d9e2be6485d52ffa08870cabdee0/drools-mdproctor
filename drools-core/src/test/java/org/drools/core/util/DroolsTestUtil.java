@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.core.impl.RuleBase;
 import org.kie.api.KieBase;
 import org.kie.api.definition.KiePackage;

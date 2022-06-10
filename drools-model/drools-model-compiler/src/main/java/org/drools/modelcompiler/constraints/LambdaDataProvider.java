@@ -21,12 +21,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.phreak.ReactiveObject;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.DataProvider;
-import org.drools.core.common.PropagationContext;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.phreak.ReactiveObject;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.DataProvider;
 import org.drools.model.functions.FunctionN;
 
 public class LambdaDataProvider implements DataProvider {
@@ -52,8 +51,8 @@ public class LambdaDataProvider implements DataProvider {
     }
 
     @Override
-    public Iterator getResults(Tuple tuple, ReteEvaluator reteEvaluator, PropagationContext ctx, Object providerContext ) {
-        Object result = getResult( tuple, reteEvaluator );
+    public Iterator getResults(BaseTuple tuple, ValueResolver valueResolver, Object providerContext ) {
+        Object result = getResult( tuple, valueResolver );
 
         if (isReactive()) {
             if ( result instanceof ReactiveObject ) {
@@ -80,29 +79,29 @@ public class LambdaDataProvider implements DataProvider {
         return Collections.singletonList( result ).iterator();
     }
 
-    private Object getResult( Tuple tuple, ReteEvaluator reteEvaluator ) {
+    private Object getResult( BaseTuple tuple, ValueResolver valueResolver ) {
         Object result;
         if (declarations.length == 0) {
             result = providerFunction.apply();
         } else if (declarations.length == 1) {
-            result = getValueForDeclaration( tuple, reteEvaluator, declarations[0] );
+            result = getValueForDeclaration( tuple, valueResolver, declarations[0] );
             if ( providerFunction != null ) {
                 result = providerFunction.apply( result );
             }
         } else {
             Object[] args = new Object[declarations.length];
             for (int i = 0; i < declarations.length; i++) {
-                args[i] = getValueForDeclaration( tuple, reteEvaluator, declarations[i] );
+                args[i] = getValueForDeclaration( tuple, valueResolver, declarations[i] );
             }
             result = providerFunction.apply( args );
         }
         return result;
     }
 
-    private Object getValueForDeclaration( Tuple tuple, ReteEvaluator reteEvaluator, Declaration declaration ) {
+    private Object getValueForDeclaration( BaseTuple tuple, ValueResolver valueResolver, Declaration declaration ) {
         return declaration.getExtractor().isGlobal() ?
-                declaration.getExtractor().getValue( reteEvaluator, declaration.getIdentifier() ) :
-                declaration.getValue( reteEvaluator, tuple );
+                declaration.getExtractor().getValue( valueResolver, declaration.getIdentifier() ) :
+                declaration.getValue( valueResolver, tuple );
     }
 
     @Override

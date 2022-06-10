@@ -27,11 +27,11 @@ import org.drools.core.common.ActivationsManager;
 import org.drools.core.common.AgendaItem;
 import org.drools.core.common.InternalAgendaGroup;
 import org.drools.core.common.InternalFactHandle;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.phreak.RuleAgendaItem;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.GroupElement;
-import org.drools.core.rule.consequence.Consequence;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.GroupElement;
+import org.drools.base.rule.consequence.Consequence;
 import org.drools.core.common.PropagationContext;
 import org.kie.api.runtime.rule.FactHandle;
 

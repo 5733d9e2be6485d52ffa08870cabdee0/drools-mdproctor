@@ -16,6 +16,9 @@
 
 package org.drools.core.util;
 
+import org.drools.base.util.AbstractBaseLinkedListNode;
+import org.drools.base.util.LinkedList;
+import org.drools.base.util.LinkedListNode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +27,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 public class LinkedListTest {
 
-    LinkedList     list  = null;
+    LinkedList list  = null;
     LinkedListNode node1 = null;
     LinkedListNode node2 = null;
     LinkedListNode node3 = null;

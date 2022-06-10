@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.drools.base.util.LinkedList;
 import org.drools.core.common.ActivationGroupImpl;
 import org.drools.core.common.ActivationGroupNode;
 import org.drools.core.common.ActivationsFilter;
@@ -35,7 +36,7 @@ import org.drools.core.common.InternalWorkingMemoryEntryPoint;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.concurrent.RuleEvaluator;
 import org.drools.core.concurrent.SequentialRuleEvaluator;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.event.AgendaEventSupport;
 import org.drools.core.phreak.ExecutableEntry;
 import org.drools.core.phreak.PropagationEntry;
@@ -49,7 +50,7 @@ import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.PathMemory;
 import org.drools.core.reteoo.RuleTerminalNodeLeftTuple;
 import org.drools.core.reteoo.TerminalNode;
-import org.drools.core.definitions.rule.impl.QueryImpl;
+import org.drools.base.definitions.rule.impl.QueryImpl;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.common.InternalActivationGroup;
 import org.drools.core.rule.consequence.KnowledgeHelper;
@@ -77,7 +78,7 @@ public class ActivationsManagerImpl implements ActivationsManager {
 
     private boolean firing = false;
 
-    private final org.drools.core.util.LinkedList<RuleAgendaItem> eager = new org.drools.core.util.LinkedList<>();
+    private final LinkedList<RuleAgendaItem> eager = new LinkedList<>();
 
     private final Map<QueryImpl, RuleAgendaItem> queries = new ConcurrentHashMap<>();
 

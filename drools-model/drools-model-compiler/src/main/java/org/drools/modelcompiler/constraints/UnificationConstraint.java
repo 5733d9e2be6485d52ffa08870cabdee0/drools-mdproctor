@@ -16,21 +16,21 @@
 
 package org.drools.modelcompiler.constraints;
 
-import org.drools.core.RuleBaseConfiguration;
+import org.drools.base.base.BaseTuple;
 import org.drools.core.base.DroolsQueryImpl;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.ContextEntry;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.IndexableConstraint;
-import org.drools.core.rule.MutableTypeConstraint;
-import org.drools.core.rule.accessor.FieldValue;
-import org.drools.core.rule.accessor.ReadAccessor;
-import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.FieldIndex;
-import org.drools.core.util.index.ConstraintOperatorType;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.ContextEntry;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.IndexableConstraint;
+import org.drools.base.rule.MutableTypeConstraint;
+import org.drools.base.rule.accessor.FieldValue;
+import org.drools.base.rule.accessor.ReadAccessor;
+import org.drools.base.util.FieldIndex;
+import org.drools.base.util.index.ConstraintOperatorType;
+import org.drools.base.util.index.IndexConfiguration;
 import org.drools.model.Index;
 import org.drools.modelcompiler.constraints.LambdaConstraint.LambdaContextEntry;
+import org.kie.api.runtime.rule.FactHandle;
 
 public class UnificationConstraint extends MutableTypeConstraint implements IndexableConstraint {
 
@@ -66,7 +66,7 @@ public class UnificationConstraint extends MutableTypeConstraint implements Inde
     }
 
     @Override
-    public boolean isIndexable( short nodeType, RuleBaseConfiguration config ) {
+    public boolean isIndexable(short nodeType, IndexConfiguration config) {
         return true;
     }
 
@@ -121,30 +121,30 @@ public class UnificationConstraint extends MutableTypeConstraint implements Inde
     }
 
     @Override
-    public boolean isAllowed( InternalFactHandle handle, ReteEvaluator reteEvaluator ) {
+    public boolean isAllowed(FactHandle handle, ValueResolver valueResolver ) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isAllowedCachedLeft( ContextEntry context, InternalFactHandle handle ) {
-        return evaluateUnification( handle, ((LambdaContextEntry) context).getTuple(), ((LambdaContextEntry) context).getReteEvaluator() );
+    public boolean isAllowedCachedLeft( ContextEntry context, FactHandle handle ) {
+        return evaluateUnification( handle, ((LambdaContextEntry) context).getTuple(), ((LambdaContextEntry) context).getvalueResolver() );
     }
 
     @Override
-    public boolean isAllowedCachedRight( Tuple tuple, ContextEntry context ) {
-        return evaluateUnification( ((LambdaContextEntry) context).getHandle(), tuple, ((LambdaContextEntry) context).getReteEvaluator() );
+    public boolean isAllowedCachedRight(BaseTuple tuple, ContextEntry context ) {
+        return evaluateUnification( ((LambdaContextEntry) context).getHandle(), tuple, ((LambdaContextEntry) context).getvalueResolver() );
     }
 
-    private boolean evaluateUnification( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) {
+    private boolean evaluateUnification( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) {
         if (!unification) {
-            return evaluator.evaluate(handle, tuple, reteEvaluator);
+            return evaluator.evaluate(handle, tuple, valueResolver);
         }
         DroolsQueryImpl query = (DroolsQueryImpl) tuple.getObject(0);
         if (query.getVariables()[indexingDeclaration.getExtractor().getIndex()] != null) {
             return true;
         }
         if (evaluator != null) {
-            return evaluator.evaluate(handle, tuple, reteEvaluator);
+            return evaluator.evaluate(handle, tuple, valueResolver);
         }
         Object argument = indexingDeclaration.getValue( null, query );
         return handle.getObject().equals( argument );

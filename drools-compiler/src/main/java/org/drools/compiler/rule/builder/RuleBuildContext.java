@@ -26,16 +26,16 @@ import org.drools.compiler.compiler.Dialect;
 import org.drools.compiler.compiler.DialectCompiletimeRegistry;
 import org.drools.compiler.compiler.RuleBuildError;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.EntryPointId;
-import org.drools.core.rule.Pattern;
-import org.drools.core.rule.accessor.DeclarationScopeResolver;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.rule.EntryPointId;
+import org.drools.base.rule.Pattern;
+import org.drools.base.rule.accessor.DeclarationScopeResolver;
 import org.drools.drl.ast.descr.QueryDescr;
 import org.drools.drl.ast.descr.RuleDescr;
 import org.drools.util.TypeResolver;
-import org.kie.internal.ruleunit.RuleUnitComponentFactory;
-import org.kie.internal.ruleunit.RuleUnitDescription;
+import org.drools.base.ruleunit.RuleUnitComponentFactory;
+import org.drools.base.ruleunit.RuleUnitDescription;
 
 /**
  * A context for the current build

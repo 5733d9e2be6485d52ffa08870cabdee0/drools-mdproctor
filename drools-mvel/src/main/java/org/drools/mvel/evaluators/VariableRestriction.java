@@ -20,20 +20,18 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.drools.core.base.BaseTuple;
-import org.drools.core.base.ValueResolver;
-import org.drools.core.base.ValueType;
-import org.drools.core.rule.ContextEntry;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.ReadAccessor;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.base.ValueType;
+import org.drools.base.rule.ContextEntry;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.ReadAccessor;
 import org.drools.mvel.evaluators.AfterEvaluatorDefinition.AfterEvaluator;
 import org.drools.mvel.evaluators.BeforeEvaluatorDefinition.BeforeEvaluator;
 import org.drools.mvel.evaluators.MeetsEvaluatorDefinition.MeetsEvaluator;
 import org.drools.mvel.evaluators.MetByEvaluatorDefinition.MetByEvaluator;
 import org.drools.core.common.EventFactHandle;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.accessor.Evaluator;
+import org.drools.base.rule.accessor.Evaluator;
 import org.drools.core.reteoo.Tuple;
 import org.kie.api.runtime.rule.FactHandle;
 

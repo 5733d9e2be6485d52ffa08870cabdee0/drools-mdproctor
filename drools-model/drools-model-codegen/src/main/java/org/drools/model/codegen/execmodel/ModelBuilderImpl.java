@@ -22,7 +22,7 @@ import org.drools.compiler.builder.impl.processors.CompilationPhase;
 import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.compiler.kie.builder.impl.BuildContext;
 import org.drools.compiler.lang.descr.CompositePackageDescr;
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.drl.ast.descr.GlobalDescr;
 import org.drools.drl.ast.descr.ImportDescr;
 import org.drools.drl.ast.descr.PackageDescr;

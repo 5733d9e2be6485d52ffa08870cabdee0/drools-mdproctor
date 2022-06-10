@@ -23,9 +23,8 @@ import org.drools.core.reteoo.BetaNode;
 import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.WindowNode;
-import org.drools.core.rule.IndexableConstraint;
+import org.drools.base.rule.IndexableConstraint;
 import org.drools.core.util.index.AlphaRangeIndex;
-
 
 /**
  * An abstract adapter class for receiving network node events from the {@link org.kie.reteoo.compiled.ObjectTypeNodeParser}.

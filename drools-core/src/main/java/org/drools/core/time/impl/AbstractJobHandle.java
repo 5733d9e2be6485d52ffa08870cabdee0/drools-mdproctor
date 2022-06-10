@@ -15,7 +15,7 @@
 
 package org.drools.core.time.impl;
 
-import org.drools.core.time.JobHandle;
+import org.drools.base.time.JobHandle;
 
 public abstract class AbstractJobHandle implements JobHandle {
 

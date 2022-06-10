@@ -24,9 +24,9 @@ import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.LeftTupleSink;
 import org.drools.core.reteoo.RightTuple;
 import org.drools.core.reteoo.TupleMemory;
-import org.drools.core.rule.ContextEntry;
+import org.drools.base.rule.ContextEntry;
 import org.drools.core.util.AbstractHashTable;
-import org.drools.core.util.FastIterator;
+import org.drools.base.util.FastIterator;
 
 public class PhreakJoinNode {
     public void doNode(JoinNode joinNode,

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.Memory;
@@ -28,7 +29,7 @@ import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.UpdateContext;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.util.AbstractBaseLinkedListNode;
+import org.drools.base.util.AbstractBaseLinkedListNode;
 
 /**
  * Node which allows to follow different paths in the Rete-OO network,

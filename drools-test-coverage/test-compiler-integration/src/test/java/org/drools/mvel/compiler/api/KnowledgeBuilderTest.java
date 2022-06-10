@@ -17,6 +17,7 @@ package org.drools.mvel.compiler.api;
 
 import java.util.Collection;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.junit.Test;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieFileSystem;
@@ -70,7 +71,7 @@ public class KnowledgeBuilderTest {
         assertThat(pkgs).isNotNull();
         assertThat(pkgs.size()).isEqualTo(2);
 
-        KiePackage test1 = getKnowledgePackage(pkgs, "org.drools.mvel.compiler.test1" );
+        InternalKnowledgePackage test1 = (InternalKnowledgePackage) getKnowledgePackage(pkgs, "org.drools.mvel.compiler.test1" );
         Collection<Rule> rules = test1.getRules();
         assertThat(rules.size()).isEqualTo(2);
         Rule rule = getRule( rules, "rule1" );
@@ -78,7 +79,7 @@ public class KnowledgeBuilderTest {
         rule = getRule( rules, "rule2" );
         assertThat(rule.getName()).isEqualTo("rule2");
 
-        KiePackage test2 = getKnowledgePackage(pkgs, "org.drools.mvel.compiler.test2" );
+        InternalKnowledgePackage test2 = (InternalKnowledgePackage) getKnowledgePackage(pkgs, "org.drools.mvel.compiler.test2" );
         rules = test2.getRules();
         assertThat(rules.size()).isEqualTo(2);
         rule = getRule( rules, "rule3" );

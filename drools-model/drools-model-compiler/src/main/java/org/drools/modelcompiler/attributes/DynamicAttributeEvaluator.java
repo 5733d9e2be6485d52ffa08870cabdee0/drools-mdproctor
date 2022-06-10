@@ -16,9 +16,9 @@
 
 package org.drools.modelcompiler.attributes;
 
-import org.drools.core.base.BaseTuple;
+import org.drools.base.base.BaseTuple;
 import org.drools.core.reteoo.RuleTerminalNode;
-import org.drools.core.rule.Declaration;
+import org.drools.base.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
 import org.drools.model.DynamicValueSupplier;
 

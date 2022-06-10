@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.drools.core.util.PropertyReactivityUtil;
+import org.drools.base.util.PropertyReactivityUtil;
 import org.drools.util.MethodUtils;
 
 public class ClassUtil {

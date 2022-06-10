@@ -18,7 +18,8 @@ package org.drools.core.phreak;
 
 import java.util.Collection;
 
-import org.drools.core.base.BaseTuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.phreak.ReactiveObject;
 import org.drools.core.common.BetaConstraints;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
@@ -27,7 +28,7 @@ import org.drools.core.reteoo.LeftTupleSinkNode;
 import org.drools.core.reteoo.ReactiveFromNode;
 import org.drools.core.reteoo.ReactiveFromNodeLeftTuple;
 import org.drools.core.reteoo.RightTupleImpl;
-import org.drools.core.rule.ContextEntry;
+import org.drools.base.rule.ContextEntry;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.reteoo.Tuple;
 

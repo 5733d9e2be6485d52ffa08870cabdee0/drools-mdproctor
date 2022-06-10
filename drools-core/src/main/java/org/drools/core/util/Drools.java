@@ -22,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.drools.core.base.CoreComponentsBuilder;
-import org.drools.core.base.XMLSupport;
+import org.drools.base.base.XMLSupport;
 
 public class Drools {
 

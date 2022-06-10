@@ -37,13 +37,13 @@ import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.SessionConfigurationImpl;
 import org.drools.core.base.ClassFieldAccessorCache;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.common.RuleBasePartitionId;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.factmodel.ClassDefinition;
+import org.drools.base.common.RuleBasePartitionId;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.factmodel.ClassDefinition;
 import org.drools.core.management.DroolsManagementAgent;
 import org.drools.core.reteoo.AsyncReceiveNode;
 import org.drools.core.reteoo.CompositePartitionAwareObjectSinkAdapter;
@@ -59,15 +59,15 @@ import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.SegmentMemory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.reteoo.builder.NodeFactory;
-import org.drools.core.rule.DialectRuntimeRegistry;
-import org.drools.core.rule.EntryPointId;
-import org.drools.core.rule.Function;
-import org.drools.core.rule.ImportDeclaration;
-import org.drools.core.rule.InvalidPatternException;
+import org.drools.base.rule.DialectRuntimeRegistry;
+import org.drools.base.rule.EntryPointId;
+import org.drools.base.rule.Function;
+import org.drools.base.rule.ImportDeclaration;
+import org.drools.base.rule.InvalidPatternException;
 import org.drools.core.rule.JavaDialectRuntimeData;
-import org.drools.core.rule.TypeDeclaration;
-import org.drools.core.rule.WindowDeclaration;
-import org.drools.core.ruleunit.RuleUnitDescriptionRegistry;
+import org.drools.base.rule.TypeDeclaration;
+import org.drools.base.rule.WindowDeclaration;
+import org.drools.base.ruleunit.RuleUnitDescriptionRegistry;
 import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.builder.ReleaseId;
@@ -89,7 +89,7 @@ import org.slf4j.LoggerFactory;
 import static org.drools.util.ClassUtils.convertClassToResourcePath;
 import static org.drools.util.BitMaskUtil.isSet;
 
-public class KnowledgeBaseImpl implements RuleBase, org.drools.core.definitions.rule.RuleBase {
+public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.rule.RuleBase {
 
     protected static final transient Logger logger = LoggerFactory.getLogger(KnowledgeBaseImpl.class);
 

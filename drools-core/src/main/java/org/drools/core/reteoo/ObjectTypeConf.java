@@ -16,8 +16,8 @@
 
 package org.drools.core.reteoo;
 
-import org.drools.core.rule.EntryPointId;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.rule.EntryPointId;
+import org.drools.base.rule.TypeDeclaration;
 
 public interface ObjectTypeConf {
 	String getTypeName();

@@ -26,8 +26,8 @@ import org.drools.core.reteoo.PathMemory;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.LinkedList;
-import org.drools.core.util.LinkedListEntry;
+import org.drools.base.util.LinkedList;
+import org.drools.base.util.LinkedListEntry;
 
 public class TruthMaintenanceSystemAgendaItemImpl<T extends ModedAssertion<T>> extends RuleAgendaItem implements TruthMaintenanceSystemAgendaItem<T> {
     private LinkedList<LogicalDependency<T>> justified;

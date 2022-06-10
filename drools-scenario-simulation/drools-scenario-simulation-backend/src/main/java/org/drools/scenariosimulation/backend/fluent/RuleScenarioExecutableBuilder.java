@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.scenariosimulation.backend.runner.model.ScenarioResult;
 import org.drools.scenariosimulation.backend.runner.model.ValueWrapper;
 import org.kie.api.KieBase;
@@ -69,7 +70,7 @@ public interface RuleScenarioExecutableBuilder {
     default Set<String> getAvailableRules(KieBase kieBase, String activeAgendaGroup) {
         Set<String> toReturn = new HashSet<>();
         for (KiePackage kiePackage : kieBase.getKiePackages()) {
-            kiePackage.getRules().stream()
+            ((InternalKnowledgePackage) kiePackage).getRules().stream()
                     .filter(rule -> KieDefinition.KnowledgeType.RULE.equals(rule.getKnowledgeType()))
                     .map(rule -> (InternalRule) rule)
                     .forEach(internalRule -> {

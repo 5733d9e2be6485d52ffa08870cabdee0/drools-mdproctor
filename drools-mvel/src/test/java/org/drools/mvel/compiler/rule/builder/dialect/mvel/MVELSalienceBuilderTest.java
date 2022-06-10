@@ -24,22 +24,22 @@ import org.drools.compiler.compiler.DialectCompiletimeRegistry;
 import org.drools.compiler.rule.builder.RuleBuildContext;
 import org.drools.compiler.rule.builder.SalienceBuilder;
 import org.drools.core.WorkingMemory;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.common.AgendaItem;
 import org.drools.core.common.AgendaItemImpl;
 import org.drools.core.common.InternalFactHandle;
-import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.core.reteoo.LeftTupleImpl;
 import org.drools.core.reteoo.MockLeftTupleSink;
 import org.drools.core.reteoo.MockTupleSource;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.builder.BuildContext;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.Pattern;
-import org.drools.core.base.ObjectType;
-import org.drools.core.rule.accessor.PatternExtractor;
-import org.drools.core.rule.accessor.Salience;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.Pattern;
+import org.drools.base.base.ObjectType;
+import org.drools.base.rule.accessor.PatternExtractor;
+import org.drools.base.rule.accessor.Salience;
 import org.drools.drl.ast.descr.AttributeDescr;
 import org.drools.drl.ast.descr.RuleDescr;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
@@ -130,9 +130,7 @@ public class MVELSalienceBuilderTest {
         rtn.setSalienceDeclarations( context.getDeclarationResolver().getDeclarations( context.getRule() ).values().toArray( new Declaration[1] ) );
         AgendaItem item = new AgendaItemImpl(0, tuple, 0, null, rtn, null);
 
-
-        assertThat(context.getRule().getSalience().getValue(item, context.getRule(), ksession)).isEqualTo(25);
-
+        assertThat(context.getRule().getSalience().getValue(item.getTuple(), context.getRule(), ksession)).isEqualTo(25);
     }
 
     @Test
@@ -219,7 +217,7 @@ public class MVELSalienceBuilderTest {
             try {
                 Thread.sleep( 1000 );
                 for ( int i = 0; i < iterations && !halt; i++ ) {
-                    assertThat(salience.getValue(item, rule, wm)).isEqualTo(result);
+                    assertThat(salience.getValue(item.getTuple(), rule, wm)).isEqualTo(result);
                     Thread.currentThread().yield();
                 }
             } catch ( Throwable e ) {

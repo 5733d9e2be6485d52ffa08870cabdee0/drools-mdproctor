@@ -3,8 +3,7 @@ package org.drools.core.rule;
 import java.util.Collection;
 
 import org.drools.core.common.EventFactHandle;
-import org.drools.core.time.JobHandle;
-import org.kie.api.runtime.rule.FactHandle;
+import org.drools.base.time.JobHandle;
 
 public interface BehaviourContext {
 

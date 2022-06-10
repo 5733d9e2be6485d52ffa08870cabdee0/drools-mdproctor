@@ -20,14 +20,15 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+import org.drools.base.rule.consequence.Consequence;
 import org.drools.core.common.ActivationGroupNode;
 import org.drools.core.common.ActivationNode;
 import org.drools.core.common.InternalAgendaGroup;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.PropagationContext;
-import org.drools.core.rule.GroupElement;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.Tuple;
-import org.kie.api.definition.rule.Rule;
+import org.drools.base.rule.GroupElement;
 import org.kie.api.runtime.rule.Match;
 
 /**
@@ -43,7 +44,7 @@ public interface Activation extends Serializable, Match {
      * @return
      *     The rule that was activated.
      */
-    Rule getRule();
+    RuleImpl getRule();
 
     Consequence getConsequence();
     

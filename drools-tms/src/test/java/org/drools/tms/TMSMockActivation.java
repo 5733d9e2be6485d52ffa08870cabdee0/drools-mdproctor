@@ -16,7 +16,7 @@
 
 package org.drools.tms;
 
-import org.drools.core.util.LinkedList;
+import org.drools.base.util.LinkedList;
 import org.drools.kiesession.MockActivation;
 import org.drools.tms.agenda.TruthMaintenanceSystemActivation;
 

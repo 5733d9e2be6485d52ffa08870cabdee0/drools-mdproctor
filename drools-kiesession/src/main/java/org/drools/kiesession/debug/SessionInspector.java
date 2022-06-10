@@ -23,12 +23,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.drools.core.WorkingMemory;
-import org.drools.core.common.NetworkNode;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.common.NetworkNode;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.LeftTupleSink;
 import org.drools.core.reteoo.LeftTupleSource;
-import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.base.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.ObjectSink;
 import org.drools.core.reteoo.ObjectSource;
 import org.drools.core.reteoo.ObjectTypeNode;

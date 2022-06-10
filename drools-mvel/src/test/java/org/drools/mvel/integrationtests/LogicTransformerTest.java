@@ -22,16 +22,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 
-import org.drools.core.base.ClassObjectType;
-import org.drools.core.base.ObjectType;
-import org.drools.core.rule.GroupElement;
-import org.drools.core.rule.GroupElementFactory;
-import org.drools.core.rule.InvalidPatternException;
-import org.drools.core.rule.InvalidRuleException;
-import org.drools.core.rule.LogicTransformer;
-import org.drools.core.rule.Pattern;
+import org.drools.base.base.ClassObjectType;
+import org.drools.base.rule.GroupElement;
+import org.drools.base.rule.GroupElementFactory;
+import org.drools.base.rule.InvalidPatternException;
+import org.drools.base.rule.InvalidRuleException;
+import org.drools.base.rule.LogicTransformer;
+import org.drools.base.rule.Pattern;
 import org.drools.core.test.model.DroolsTestCase;
 import org.drools.core.util.DroolsStreamUtils;
+import org.drools.base.base.ObjectType;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

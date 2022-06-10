@@ -122,7 +122,7 @@ import static org.drools.modelcompiler.util.ClassUtil.getTypeArgument;
 import static org.drools.modelcompiler.util.ClassUtil.toRawClass;
 import static org.drools.mvel.parser.MvelParser.parseType;
 import static org.drools.mvel.parser.printer.PrintUtil.printNode;
-import static org.kie.internal.ruleunit.RuleUnitUtil.isDataSource;
+import static org.drools.base.ruleunit.RuleUnitUtil.isDataSource;
 
 public class ExpressionTyper {
 

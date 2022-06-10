@@ -32,7 +32,7 @@ import java.util.stream.StreamSupport;
 import javax.xml.bind.JAXBContext;
 
 import org.drools.core.QueryResultsImpl;
-import org.drools.core.base.ClassObjectType;
+import org.drools.base.base.ClassObjectType;
 import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.reteoo.EntryPointNode;
@@ -40,7 +40,7 @@ import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ObjectTypeNode.ObjectTypeNodeMemory;
 import org.drools.core.reteoo.ReteDumper;
 import org.drools.commands.runtime.FlatQueryResults;
-import org.drools.core.base.ObjectType;
+import org.drools.base.base.ObjectType;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.drools.mvel.compiler.Address;
 import org.drools.mvel.compiler.Cheese;

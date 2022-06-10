@@ -18,4 +18,9 @@ package org.kie.api.definition.type;
 
 public interface Annotation {
 
+    String getName();
+
+    Object getPropertyValue( String key );
+
+    Class getPropertyType( String key );
 }

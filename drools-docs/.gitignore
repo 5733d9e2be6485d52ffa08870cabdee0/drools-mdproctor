@@ -4,6 +4,10 @@
 /build
 /node
 /node_modules
+<<<<<<< HEAD
+=======
+.index.adoc
+>>>>>>> Mark refactor (#17)
 
 # Eclipse, Netbeans and IntelliJ files
 /.*

@@ -19,28 +19,29 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.drools.core.base.CoreComponentsBuilder;
 import org.drools.compiler.rule.builder.EvaluatorWrapper;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
+import org.drools.base.rule.Declaration;
+import org.drools.base.util.MVELExecutor;
 
 public class EvaluatorHelper {
 
     private EvaluatorHelper() { }
 
-    public static Map<String, Object> valuesAsMap(Object object, ReteEvaluator reteEvaluator, Tuple tuple, Declaration[] declarations) {
+    public static Map<String, Object> valuesAsMap(Object object, ValueResolver valueResolver, BaseTuple tuple, Declaration[] declarations) {
         if (declarations.length == 0) {
             return null;
         }
         Map<String, Object> map = new HashMap<>();
         for (Declaration declaration : declarations) {
             if (tuple == null) {
-                map.put(declaration.getBindingName(), declaration.getExtractor().getValue(reteEvaluator, object));
+                map.put(declaration.getBindingName(), declaration.getExtractor().getValue(valueResolver, object));
             } else {
                 Object fact = tuple.getObject(declaration);
-                map.put(declaration.getBindingName(), declaration.getExtractor().getValue(reteEvaluator, fact != null ? fact : object));
+                map.put(declaration.getBindingName(), declaration.getExtractor().getValue(valueResolver, fact != null ? fact : object));
             }
         }
         return map;
@@ -80,8 +81,8 @@ public class EvaluatorHelper {
         if (value1 == null || value2 == null) {
             return false;
         }
-        String soundex1 = CoreComponentsBuilder.get().getMVELExecutor().soundex(value1);
-        return soundex1 != null && soundex1.equals(CoreComponentsBuilder.get().getMVELExecutor().soundex(value2));
+        String soundex1 = MVELExecutor.get().soundex(value1);
+        return soundex1 != null && soundex1.equals(MVELExecutor.get().soundex(value2));
     }
 
     public static boolean contains(Object list, Object item) {

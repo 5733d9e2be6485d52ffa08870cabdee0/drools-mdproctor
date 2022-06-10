@@ -20,12 +20,11 @@ package org.drools.modelcompiler.constraints;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.Pattern;
-import org.drools.core.reteoo.Tuple;
-import org.drools.core.time.Interval;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.Pattern;
+import org.drools.base.time.Interval;
 import org.drools.model.BitMask;
 import org.drools.model.Index;
 import org.drools.model.SingleConstraint;
@@ -35,6 +34,7 @@ import org.drools.model.functions.Predicate3;
 import org.drools.model.functions.Predicate4;
 import org.drools.model.functions.Predicate5;
 import org.drools.model.functions.PredicateN;
+import org.kie.api.runtime.rule.FactHandle;
 
 public class ConstraintEvaluator {
 
@@ -123,17 +123,17 @@ public class ConstraintEvaluator {
         return patternDeclaration;
     }
 
-    public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) {
+    public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) {
         try {
-            return innerEvaluator.evaluate( handle, reteEvaluator );
+            return innerEvaluator.evaluate( handle, valueResolver );
         } catch (Exception e) {
             throw new RuntimeException( e );
         }
     }
 
-    public boolean evaluate(InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator) {
+    public boolean evaluate(FactHandle handle, BaseTuple tuple, ValueResolver valueResolver) {
         try {
-            return innerEvaluator.evaluate( handle, tuple, reteEvaluator );
+            return innerEvaluator.evaluate( handle, tuple, valueResolver );
         } catch (Exception e) {
             throw new RuntimeException( e );
         }
@@ -284,11 +284,11 @@ public class ConstraintEvaluator {
             this.patternDeclaration = patternDeclaration;
         }
 
-        public abstract boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception;
-        public abstract boolean evaluate(InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator) throws Exception;
+        public abstract boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception;
+        public abstract boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception;
 
-        protected Object getArgument( InternalFactHandle handle, ReteEvaluator reteEvaluator, Declaration declaration, Tuple tuple ) {
-            return declaration == patternDeclaration ? handle.getObject() : BindingEvaluator.getArgument( handle, reteEvaluator, declaration, tuple );
+        protected Object getArgument( FactHandle handle, ValueResolver valueResolver, Declaration declaration, BaseTuple tuple ) {
+            return declaration == patternDeclaration ? handle.getObject() : BindingEvaluator.getArgument( handle, valueResolver, declaration, tuple );
         }
 
         static class _1 extends InnerEvaluator {
@@ -303,13 +303,13 @@ public class ConstraintEvaluator {
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( declaration.getValue( reteEvaluator, handle ) );
+            public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( declaration.getValue( valueResolver, handle ) );
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration, tuple ) );
+            public boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration, tuple ) );
             }
         }
 
@@ -325,13 +325,13 @@ public class ConstraintEvaluator {
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception {
+            public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception {
                 return predicate.test( handle.getObject() );
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration, tuple ) );
+            public boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration, tuple ) );
             }
         }
 
@@ -349,13 +349,13 @@ public class ConstraintEvaluator {
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, null ), getArgument( handle, reteEvaluator, declaration2, null ) );
+            public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, null ), getArgument( handle, valueResolver, declaration2, null ) );
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, tuple ), getArgument( handle, reteEvaluator, declaration2, tuple ) );
+            public boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, tuple ), getArgument( handle, valueResolver, declaration2, tuple ) );
             }
         }
 
@@ -376,17 +376,17 @@ public class ConstraintEvaluator {
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, null ),
-                        getArgument( handle, reteEvaluator, declaration2, null ),
-                        getArgument( handle, reteEvaluator, declaration3, null ));
+            public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, null ),
+                        getArgument( handle, valueResolver, declaration2, null ),
+                        getArgument( handle, valueResolver, declaration3, null ));
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, tuple ),
-                        getArgument( handle, reteEvaluator, declaration2, tuple ),
-                        getArgument( handle, reteEvaluator, declaration3, tuple ));
+            public boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, tuple ),
+                        getArgument( handle, valueResolver, declaration2, tuple ),
+                        getArgument( handle, valueResolver, declaration3, tuple ));
             }
         }
 
@@ -409,19 +409,19 @@ public class ConstraintEvaluator {
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, null ),
-                        getArgument( handle, reteEvaluator, declaration2, null ),
-                        getArgument( handle, reteEvaluator, declaration3, null ),
-                        getArgument( handle, reteEvaluator, declaration4, null ));
+            public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, null ),
+                        getArgument( handle, valueResolver, declaration2, null ),
+                        getArgument( handle, valueResolver, declaration3, null ),
+                        getArgument( handle, valueResolver, declaration4, null ));
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, tuple ),
-                        getArgument( handle, reteEvaluator, declaration2, tuple ),
-                        getArgument( handle, reteEvaluator, declaration3, tuple ),
-                        getArgument( handle, reteEvaluator, declaration4, tuple ));
+            public boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, tuple ),
+                        getArgument( handle, valueResolver, declaration2, tuple ),
+                        getArgument( handle, valueResolver, declaration3, tuple ),
+                        getArgument( handle, valueResolver, declaration4, tuple ));
             }
         }
 
@@ -447,21 +447,21 @@ public class ConstraintEvaluator {
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, null ),
-                        getArgument( handle, reteEvaluator, declaration2, null ),
-                        getArgument( handle, reteEvaluator, declaration3, null ),
-                        getArgument( handle, reteEvaluator, declaration4, null ),
-                        getArgument( handle, reteEvaluator, declaration5, null ));
+            public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, null ),
+                        getArgument( handle, valueResolver, declaration2, null ),
+                        getArgument( handle, valueResolver, declaration3, null ),
+                        getArgument( handle, valueResolver, declaration4, null ),
+                        getArgument( handle, valueResolver, declaration5, null ));
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getArgument( handle, reteEvaluator, declaration1, tuple ),
-                        getArgument( handle, reteEvaluator, declaration2, tuple ),
-                        getArgument( handle, reteEvaluator, declaration3, tuple ),
-                        getArgument( handle, reteEvaluator, declaration4, tuple ),
-                        getArgument( handle, reteEvaluator, declaration5, tuple ));
+            public boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getArgument( handle, valueResolver, declaration1, tuple ),
+                        getArgument( handle, valueResolver, declaration2, tuple ),
+                        getArgument( handle, valueResolver, declaration3, tuple ),
+                        getArgument( handle, valueResolver, declaration4, tuple ),
+                        getArgument( handle, valueResolver, declaration5, tuple ));
             }
         }
 
@@ -477,19 +477,19 @@ public class ConstraintEvaluator {
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getInvocationArgs( handle, null, reteEvaluator ) );
+            public boolean evaluate( FactHandle handle, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getInvocationArgs( handle, null, valueResolver ) );
             }
 
             @Override
-            public boolean evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) throws Exception {
-                return predicate.test( getInvocationArgs( handle, tuple, reteEvaluator ) );
+            public boolean evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) throws Exception {
+                return predicate.test( getInvocationArgs( handle, tuple, valueResolver ) );
             }
 
-            private Object[] getInvocationArgs( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator ) {
+            private Object[] getInvocationArgs( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver ) {
                 Object[] params = new Object[declarations.length];
                 for (int i = 0; i < declarations.length; i++) {
-                    params[i] = getArgument( handle, reteEvaluator, declarations[i], tuple );
+                    params[i] = getArgument( handle, valueResolver, declarations[i], tuple );
                 }
                 return params;
             }

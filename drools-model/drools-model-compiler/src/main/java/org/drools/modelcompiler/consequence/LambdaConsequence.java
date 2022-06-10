@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.drools.core.base.ValueResolver;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.EventFactHandle;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.reteoo.RuleTerminalNode;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.consequence.Consequence;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.consequence.Consequence;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.reteoo.Tuple;
 import org.drools.model.Variable;

@@ -19,25 +19,23 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.FieldValue;
-import org.drools.core.rule.accessor.ReturnValueExpression;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.core.impl.RuleBase;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.FieldValue;
+import org.drools.base.rule.accessor.ReturnValueExpression;
 import org.drools.mvel.MVELDialectRuntimeData;
 import org.drools.mvel.field.FieldFactory;
+import org.kie.api.runtime.rule.FactHandle;
 import org.mvel2.integration.VariableResolverFactory;
 
 import static org.drools.mvel.expr.MvelEvaluator.createMvelEvaluator;
 
-public class MVELReturnValueExpression
-    implements
-    ReturnValueExpression,
-    MVELCompileable,
-    Externalizable {
+public class MVELReturnValueExpression implements ReturnValueExpression, MVELCompileable, Externalizable {
+
     private static final long   serialVersionUID = 510l;
 
     private MVELCompilationUnit unit;
@@ -54,42 +52,48 @@ public class MVELReturnValueExpression
         this.id = id;
     }
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException,
                                             ClassNotFoundException {
         id = in.readUTF();
         unit = (MVELCompilationUnit) in.readObject();
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF( id );
         out.writeObject( unit );
     }
 
+    @Override
     public void compile( MVELDialectRuntimeData runtimeData) {
         evaluator = createMvelEvaluator( unit.getCompiledExpression( runtimeData ) );
     }
 
+    @Override
     public void compile( MVELDialectRuntimeData runtimeData, RuleImpl rule ) {
         evaluator = createMvelEvaluator( unit.getCompiledExpression( runtimeData, rule.toRuleNameAndPathString() ) );
     }
 
+    @Override
     public Object createContext() {
         return this.unit.createFactory();
     }    
 
-    public FieldValue evaluate(final InternalFactHandle handle,
-                               final Tuple tuple,
+    @Override
+    public FieldValue evaluate(final FactHandle handle,
+                               final BaseTuple tuple,
                                final Declaration[] previousDeclarations,
                                final Declaration[] requiredDeclarations,
-                               final ReteEvaluator reteEvaluator,
+                               final ValueResolver valueResolver,
                                final Object ctx) throws Exception {
         VariableResolverFactory factory = ( VariableResolverFactory )ctx;
         
-        unit.updateFactory( handle, tuple, null, reteEvaluator, reteEvaluator.getGlobalResolver(), factory );
+        unit.updateFactory( handle, tuple, null, valueResolver, valueResolver.getGlobalResolver(), factory );
 
         
         // do we have any functions for this namespace?
-        InternalKnowledgePackage pkg = reteEvaluator.getKnowledgeBase().getPackage( "MAIN" );
+        InternalKnowledgePackage pkg = ((RuleBase) valueResolver.getRuleBase()).getPackage( "MAIN" );
         if ( pkg != null ) {
             MVELDialectRuntimeData data = ( MVELDialectRuntimeData ) pkg.getDialectRuntimeRegistry().getDialectData( this.id );
             factory.setNextFactory( data.getFunctionFactory() );

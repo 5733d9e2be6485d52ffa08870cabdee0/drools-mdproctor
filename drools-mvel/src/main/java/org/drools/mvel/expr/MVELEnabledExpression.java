@@ -21,13 +21,14 @@ import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.rule.SortDeclarations;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.Enabled;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.core.impl.RuleBase;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.SortDeclarations;
+import org.drools.base.rule.accessor.Enabled;
 import org.drools.mvel.MVELDialectRuntimeData;
 import org.mvel2.integration.VariableResolverFactory;
 
@@ -55,38 +56,43 @@ public class MVELEnabledExpression
         this.id = id;
     }
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException,
                                             ClassNotFoundException {
         unit = (MVELCompilationUnit) in.readObject();
         id = in.readUTF();
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject( unit );
         out.writeUTF( id );
     }
-    
+
     public MVELCompilationUnit getMVELCompilationUnit() {
         return this.unit;
-    }    
+    }
 
+    @Override
     public void compile( MVELDialectRuntimeData runtimeData) {
         evaluator = createMvelEvaluator( unit.getCompiledExpression( runtimeData ) );
     }
 
+    @Override
     public void compile( MVELDialectRuntimeData runtimeData, RuleImpl rule ) {
         evaluator = createMvelEvaluator( unit.getCompiledExpression( runtimeData, rule.toRuleNameAndPathString() ) );
     }
 
-    public boolean getValue(final Tuple tuple,
+    @Override
+    public boolean getValue(final BaseTuple tuple,
                             final Declaration[] declarations,
                             final RuleImpl rule,
-                            final ReteEvaluator reteEvaluator) {
+                            final ValueResolver valueResolver) {
         VariableResolverFactory factory = unit.getFactory( null, declarations,
-                                                           rule, null, tuple, null, reteEvaluator, reteEvaluator.getGlobalResolver()  );
+                                                           rule, null, tuple, null, valueResolver, valueResolver.getGlobalResolver()  );
 
         // do we have any functions for this namespace?
-        InternalKnowledgePackage pkg = reteEvaluator.getKnowledgeBase().getPackage( "MAIN" );
+        InternalKnowledgePackage pkg = ((RuleBase) valueResolver.getRuleBase()).getPackage( "MAIN" );
         if ( pkg != null ) {
             MVELDialectRuntimeData data = ( MVELDialectRuntimeData ) pkg.getDialectRuntimeRegistry().getDialectData( this.id );
             factory.setNextFactory( data.getFunctionFactory() );
@@ -94,7 +100,8 @@ public class MVELEnabledExpression
 
         return evaluator.evaluate( factory );
     }
-    
+
+    @Override
     public String toString() {
         return this.unit.getExpression();
     }

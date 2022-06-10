@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import org.drools.base.util.Entry;
+
 public class ObjectHashMap extends AbstractHashTable implements Externalizable {
 
     private static final long serialVersionUID = 510l;

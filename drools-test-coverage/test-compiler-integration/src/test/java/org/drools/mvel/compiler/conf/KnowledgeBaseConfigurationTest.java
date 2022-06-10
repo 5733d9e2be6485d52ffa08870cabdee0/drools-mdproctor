@@ -16,8 +16,6 @@
 package org.drools.mvel.compiler.conf;
 
 import org.drools.core.runtime.rule.impl.DefaultConsequenceExceptionHandler;
-import org.drools.core.util.MemoryUtil;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.kie.api.KieBaseConfiguration;
@@ -37,7 +35,6 @@ import org.kie.internal.conf.IndexPrecedenceOption;
 import org.kie.internal.conf.IndexRightBetaMemoryOption;
 import org.kie.internal.conf.MaxThreadsOption;
 import org.kie.internal.conf.MultithreadEvaluationOption;
-import org.kie.internal.conf.PermGenThresholdOption;
 import org.kie.internal.conf.SequentialAgendaOption;
 import org.kie.internal.conf.ShareAlphaNodesOption;
 import org.kie.internal.conf.ShareBetaNodesOption;

@@ -26,13 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.drools.core.base.CoreComponentsBuilder;
 import org.drools.core.common.AgendaGroupFactory;
 import org.drools.core.reteoo.RuntimeComponentFactory;
+import org.drools.base.rule.consequence.ConflictResolver;
 import org.drools.core.runtime.rule.impl.DefaultConsequenceExceptionHandler;
-import org.drools.core.rule.consequence.ConflictResolver;
 import org.drools.core.util.ConfFileUtils;
-import org.drools.core.util.index.IndexConfiguration;
+import org.drools.base.util.MVELExecutor;
+import org.drools.base.util.index.IndexConfiguration;
 import org.drools.util.StringUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.KieBaseConfiguration;
@@ -59,16 +59,12 @@ import org.kie.internal.conf.IndexPrecedenceOption;
 import org.kie.internal.conf.IndexRightBetaMemoryOption;
 import org.kie.internal.conf.MaxThreadsOption;
 import org.kie.internal.conf.MultithreadEvaluationOption;
-import org.kie.internal.conf.PermGenThresholdOption;
 import org.kie.internal.conf.SequentialAgendaOption;
 import org.kie.internal.conf.ShareAlphaNodesOption;
 import org.kie.internal.conf.ShareBetaNodesOption;
 import org.kie.internal.utils.ChainedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.drools.core.util.Drools.isJmxAvailable;
-import static org.drools.core.util.MemoryUtil.hasPermGen;
 
 /**
  * RuleBaseConfiguration
@@ -305,8 +301,6 @@ public class RuleBaseConfiguration
             setShareAlphaNodes(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
         } else if ( name.equals( ShareBetaNodesOption.PROPERTY_NAME ) ) {
             setShareBetaNodes(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
-        } else if ( name.equals( PermGenThresholdOption.PROPERTY_NAME ) ) {
-            setPermGenThreshold(StringUtils.isEmpty(value) ? PermGenThresholdOption.DEFAULT_VALUE : Integer.parseInt(value));
         } else if ( name.equals( ConstraintJittingThresholdOption.PROPERTY_NAME ) ) {
             setJittingThreshold( StringUtils.isEmpty( value ) ? ConstraintJittingThresholdOption.DEFAULT_VALUE : Integer.parseInt( value ) );
         } else if ( name.equals( AlphaThresholdOption.PROPERTY_NAME ) ) {
@@ -362,8 +356,6 @@ public class RuleBaseConfiguration
             return Boolean.toString( isShareAlphaNodes() );
         } else if ( name.equals( ShareBetaNodesOption.PROPERTY_NAME ) ) {
             return Boolean.toString( isShareBetaNodes() );
-        } else if ( name.equals( PermGenThresholdOption.PROPERTY_NAME ) ) {
-            return Integer.toString( getPermGenThreshold() );
         } else if ( name.equals( ConstraintJittingThresholdOption.PROPERTY_NAME ) ) {
             return Integer.toString( getJittingThreshold() );
         } else if ( name.equals( AlphaThresholdOption.PROPERTY_NAME ) ) {
@@ -441,8 +433,6 @@ public class RuleBaseConfiguration
         setShareAlphaNodes(Boolean.valueOf(this.chainedProperties.getProperty(ShareAlphaNodesOption.PROPERTY_NAME, "true")).booleanValue());
 
         setShareBetaNodes(Boolean.valueOf(this.chainedProperties.getProperty(ShareBetaNodesOption.PROPERTY_NAME, "true")).booleanValue());
-
-        setPermGenThreshold(Integer.parseInt(this.chainedProperties.getProperty(PermGenThresholdOption.PROPERTY_NAME, "" + PermGenThresholdOption.DEFAULT_VALUE)));
 
         setJittingThreshold( Integer.parseInt( this.chainedProperties.getProperty( ConstraintJittingThresholdOption.PROPERTY_NAME, "" + ConstraintJittingThresholdOption.DEFAULT_VALUE)));
 
@@ -559,26 +549,6 @@ public class RuleBaseConfiguration
     public void setShareBetaNodes(final boolean shareBetaNodes) {
         checkCanChange(); // throws an exception if a change isn't possible;
         this.shareBetaNodes = shareBetaNodes;
-    }
-
-    public int getPermGenThreshold() {
-        return this.permGenThreshold;
-    }
-
-    public void setPermGenThreshold(final int permGenThreshold) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        if (permGenThreshold < 0 || permGenThreshold > 100) {
-            throw new UnsupportedOperationException( "The PermGen threshold should be a number between 0 and 100" );
-        }
-        if (isJmxAvailable() && !hasPermGen()) {
-            if (permGenThreshold != PermGenThresholdOption.DEFAULT_VALUE) {
-                logger.warn( "JVM version " + System.getProperty("java.version") + " has no PermGen space. " +
-                             "Attempt to set the permgenThreshold to " + permGenThreshold + " will be ignored");
-            }
-            this.permGenThreshold = 100;
-            return;
-        }
-        this.permGenThreshold = permGenThreshold;
     }
 
     public int getJittingThreshold() {
@@ -819,7 +789,7 @@ public class RuleBaseConfiguration
                                                                                   RuleBaseConfiguration.class ) );
         try {
             this.workDefinitions.addAll(
-                (List<Map<String, Object>>) CoreComponentsBuilder.get().getMVELExecutor().eval( content, new HashMap() ) );
+                (List<Map<String, Object>>) MVELExecutor.get().eval( content, new HashMap() ) );
         } catch ( Throwable t ) {
             logger.error("Error occurred while loading work definitions " + location
                     + "\nContinuing without reading these work definitions", t);
@@ -1041,8 +1011,6 @@ public class RuleBaseConfiguration
             return (T) ((this.assertBehaviour == AssertBehaviour.IDENTITY) ? EqualityBehaviorOption.IDENTITY : EqualityBehaviorOption.EQUALITY);
         } else if (SequentialAgendaOption.class.equals(option)) {
             return (T) ((this.sequentialAgenda == SequentialAgenda.SEQUENTIAL) ? SequentialAgendaOption.SEQUENTIAL : SequentialAgendaOption.DYNAMIC);
-        } else if (PermGenThresholdOption.class.equals(option)) {
-            return (T) PermGenThresholdOption.get(permGenThreshold);
         } else if (ConstraintJittingThresholdOption.class.equals(option)) {
             return (T) ConstraintJittingThresholdOption.get(jittingThreshold);
         } else if (AlphaThresholdOption.class.equals(option)) {
@@ -1100,8 +1068,6 @@ public class RuleBaseConfiguration
             setAssertBehaviour((option == EqualityBehaviorOption.IDENTITY) ? AssertBehaviour.IDENTITY : AssertBehaviour.EQUALITY);
         } else if (option instanceof SequentialAgendaOption) {
             setSequentialAgenda((option == SequentialAgendaOption.SEQUENTIAL) ? SequentialAgenda.SEQUENTIAL : SequentialAgenda.DYNAMIC);
-        } else if (option instanceof PermGenThresholdOption) {
-            setPermGenThreshold(((PermGenThresholdOption) option).getThreshold());
         } else if (option instanceof ConstraintJittingThresholdOption) {
             setJittingThreshold( ( (ConstraintJittingThresholdOption) option ).getThreshold());
         } else if (option instanceof AlphaThresholdOption) {

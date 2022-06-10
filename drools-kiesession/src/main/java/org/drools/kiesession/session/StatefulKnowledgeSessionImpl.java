@@ -63,13 +63,13 @@ import org.drools.core.common.ObjectStoreWrapper;
 import org.drools.core.common.ObjectTypeConfigurationRegistry;
 import org.drools.core.common.PropagationContextFactory;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.rule.RuleBase;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.rule.RuleBase;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.event.AgendaEventSupport;
 import org.drools.core.event.RuleEventListenerSupport;
 import org.drools.core.event.RuleRuntimeEventSupport;
-import org.drools.core.factmodel.traits.Thing;
-import org.drools.core.factmodel.traits.TraitableBean;
+import org.drools.base.factmodel.traits.Thing;
+import org.drools.base.factmodel.traits.TraitableBean;
 import org.drools.core.impl.AbstractRuntime;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.core.management.DroolsManagementAgent;
@@ -86,14 +86,14 @@ import org.drools.core.reteoo.QueryTerminalNode;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.SegmentMemory;
 import org.drools.core.reteoo.TerminalNode;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.EntryPointId;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.EntryPointId;
 import org.drools.core.runtime.process.InternalProcessRuntime;
 import org.drools.core.runtime.rule.impl.LiveQueryImpl;
 import org.drools.core.runtime.rule.impl.OpenQueryViewChangedEventListenerAdapter;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.accessor.FactHandleFactory;
-import org.drools.core.rule.accessor.GlobalResolver;
+import org.drools.base.rule.accessor.GlobalResolver;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.time.TimerService;
 import org.drools.core.time.TimerServiceFactory;
@@ -136,8 +136,8 @@ import org.kie.internal.process.CorrelationKey;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
 
 import static java.util.stream.Collectors.toList;
-import static org.drools.core.base.ClassObjectType.InitialFact_ObjectType;
-import static org.drools.core.util.PropertySpecificUtil.allSetButTraitBitMask;
+import static org.drools.base.base.ClassObjectType.InitialFact_ObjectType;
+import static org.drools.base.util.PropertySpecificUtil.allSetButTraitBitMask;
 
 public class StatefulKnowledgeSessionImpl extends AbstractRuntime
         implements
@@ -373,11 +373,13 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
         }
     }
 
-    @Override public long getCurrentTime() {
+    @Override
+    public long getCurrentTime() {
         return getTimerService().getCurrentTime();
     }
 
-    @Override public RuleBase getRuleBase() {
+    @Override
+    public RuleBase getRuleBase() {
         return this.kBase;
     }
 

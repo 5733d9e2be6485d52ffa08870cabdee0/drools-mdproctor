@@ -23,15 +23,14 @@ import java.io.ObjectOutput;
 import java.util.Date;
 import java.util.Map;
 
-import org.drools.core.base.BaseTuple;
-import org.drools.core.base.ValueResolver;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.ConditionalElement;
-import org.drools.core.rule.Declaration;
-import org.drools.core.reteoo.Tuple;
-import org.drools.core.time.JobHandle;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.time.impl.Timer;
+import org.drools.base.rule.ConditionalElement;
+import org.drools.base.rule.Declaration;
+import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerExpression;
-import org.drools.core.time.Trigger;
+import org.drools.base.time.Trigger;
 import org.kie.api.runtime.Calendars;
 
 import static org.drools.core.time.TimerExpressionUtils.evalDateExpression;
@@ -39,7 +38,7 @@ import static org.drools.core.time.TimerExpressionUtils.evalTimeExpression;
 
 public class ExpressionIntervalTimer  extends BaseTimer
     implements
-    Timer,
+        Timer,
     Externalizable {
 
     private TimerExpression startTime;

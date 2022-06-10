@@ -20,17 +20,17 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.drools.core.base.CoreComponentsBuilder;
-import org.drools.core.base.ValueType;
 import org.drools.compiler.rule.builder.EvaluatorDefinition;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.base.ValueType;
+import org.drools.base.rule.accessor.Evaluator;
+import org.drools.base.rule.accessor.FieldValue;
+import org.drools.base.rule.accessor.ReadAccessor;
+import org.drools.base.util.MVELExecutor;
 import org.drools.drl.parser.impl.Operator;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.mvel.evaluators.VariableRestriction.ObjectVariableContextEntry;
 import org.drools.mvel.evaluators.VariableRestriction.VariableContextEntry;
-import org.drools.core.rule.accessor.Evaluator;
-import org.drools.core.rule.accessor.FieldValue;
-import org.drools.core.rule.accessor.ReadAccessor;
+import org.kie.api.runtime.rule.FactHandle;
 
 /**
  * This class defines the soundslike evaluator
@@ -133,8 +133,8 @@ public class SoundslikeEvaluatorsDefinition implements EvaluatorDefinition {
             return false;
         }
         
-        soundex1 = CoreComponentsBuilder.get().getMVELExecutor().soundex(value1);
-        soundex2 = CoreComponentsBuilder.get().getMVELExecutor().soundex(value2);
+        soundex1 = MVELExecutor.get().soundex(value1);
+        soundex2 = MVELExecutor.get().soundex(value2);
 
         if (soundex1 == null) {
             return false;
@@ -157,35 +157,32 @@ public class SoundslikeEvaluatorsDefinition implements EvaluatorDefinition {
                    SOUNDSLIKE );
         }
 
-        public boolean evaluate(ReteEvaluator reteEvaluator,
-                                final ReadAccessor extractor,
-                                final InternalFactHandle handle1, final FieldValue handle2) {
-            final String value1 = (String) extractor.getValue( reteEvaluator, handle1.getObject() );
-            final String value2 = (String) handle2.getValue();
+        @Override
+        public boolean evaluate(ValueResolver valueResolver, ReadAccessor extractor, FactHandle handle1, FieldValue object2) {
+            final String value1 = (String) extractor.getValue( valueResolver, handle1.getObject() );
+            final String value2 = (String) object2.getValue();
 
             return soundslike(value1,value2);
         }
 
-        public boolean evaluateCachedRight(ReteEvaluator reteEvaluator,
-                                           final VariableContextEntry context, final InternalFactHandle left) {
+        @Override
+        public boolean evaluateCachedRight(ValueResolver valueResolver, VariableContextEntry context, FactHandle left) {
             final String value = (String) ((ObjectVariableContextEntry) context).right;
 
-            return soundslike( value, (String) context.declaration.getExtractor().getValue( reteEvaluator, left.getObject() ) );
+            return soundslike( value, (String) context.declaration.getExtractor().getValue( valueResolver, left.getObject() ) );
         }
 
-        public boolean evaluateCachedLeft(ReteEvaluator reteEvaluator,
-                                          final VariableContextEntry context, final InternalFactHandle rightHandle) {
-            final String value = (String) context.extractor.getValue( reteEvaluator, rightHandle.getObject() );
+        @Override
+        public boolean evaluateCachedLeft(ValueResolver valueResolver, VariableContextEntry context, FactHandle rightHandle) {
+            final String value = (String) context.extractor.getValue( valueResolver, rightHandle.getObject() );
 
             return soundslike(value, (String) ((ObjectVariableContextEntry) context).left );
         }
 
-        public boolean evaluate(ReteEvaluator reteEvaluator,
-                                final ReadAccessor extractor1,
-                                final InternalFactHandle handle1,
-                                final ReadAccessor extractor2, final InternalFactHandle handle2) {
-            final Object value1 = extractor1.getValue( reteEvaluator, handle1.getObject() );
-            final Object value2 = extractor2.getValue( reteEvaluator, handle2.getObject() );
+        @Override
+        public boolean evaluate(ValueResolver valueResolver, ReadAccessor extractor1, FactHandle handle1, ReadAccessor extractor2, FactHandle handle2) {
+            final Object value1 = extractor1.getValue( valueResolver, handle1.getObject() );
+            final Object value2 = extractor2.getValue( valueResolver, handle2.getObject() );
 
             return soundslike( (String) value1, (String) value2 );
         }
@@ -205,35 +202,32 @@ public class SoundslikeEvaluatorsDefinition implements EvaluatorDefinition {
                    NOT_SOUNDSLIKE );
         }
 
-        public boolean evaluate(ReteEvaluator reteEvaluator,
-                                final ReadAccessor extractor,
-                                final InternalFactHandle handle1, final FieldValue object2) {
-            final String value1 = (String) extractor.getValue( reteEvaluator, handle1.getObject() );
+        @Override
+        public boolean evaluate(ValueResolver valueResolver, ReadAccessor extractor, FactHandle handle1, FieldValue object2) {
+            final String value1 = (String) extractor.getValue( valueResolver, handle1.getObject() );
             final String value2 = (String) object2.getValue();
 
             return ! soundslike( value1,  value2 );
         }
 
-        public boolean evaluateCachedRight(ReteEvaluator reteEvaluator,
-                                           final VariableContextEntry context, final InternalFactHandle left) {
+        @Override
+        public boolean evaluateCachedRight(ValueResolver valueResolver, VariableContextEntry context, FactHandle left) {
             final String value = (String) ((ObjectVariableContextEntry) context).right;
 
-            return ! soundslike( value, (String) context.declaration.getExtractor().getValue( reteEvaluator, left.getObject() ) );
+            return ! soundslike( value, (String) context.declaration.getExtractor().getValue( valueResolver, left.getObject() ) );
         }
 
-        public boolean evaluateCachedLeft(ReteEvaluator reteEvaluator,
-                                          final VariableContextEntry context, final InternalFactHandle right) {
-            final String value = (String) context.extractor.getValue( reteEvaluator, right.getObject() );
+        @Override
+        public boolean evaluateCachedLeft(ValueResolver valueResolver, VariableContextEntry context, FactHandle rightHandle) {
+            final String value = (String) context.extractor.getValue( valueResolver, rightHandle.getObject() );
 
             return ! soundslike( value, (String) ((ObjectVariableContextEntry) context).left );
         }
 
-        public boolean evaluate(ReteEvaluator reteEvaluator,
-                                final ReadAccessor extractor1,
-                                final InternalFactHandle handl1,
-                                final ReadAccessor extractor2, final InternalFactHandle handl2) {
-            final Object value1 = extractor1.getValue( reteEvaluator, handl1.getObject() );
-            final Object value2 = extractor2.getValue( reteEvaluator, handl2.getObject() );
+        @Override
+        public boolean evaluate(ValueResolver valueResolver, ReadAccessor extractor1, FactHandle handle1, ReadAccessor extractor2, FactHandle handle2) {
+            final Object value1 = extractor1.getValue( valueResolver, handle1.getObject() );
+            final Object value2 = extractor2.getValue( valueResolver, handle2.getObject() );
 
             return ! soundslike( (String) value1,  (String) value2 );
         }

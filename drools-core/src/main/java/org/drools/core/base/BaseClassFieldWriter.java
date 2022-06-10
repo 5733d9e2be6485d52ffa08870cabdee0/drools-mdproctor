@@ -20,7 +20,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.drools.core.rule.accessor.WriteAccessor;
+import org.drools.base.base.ValueType;
+import org.drools.base.rule.accessor.WriteAccessor;
 
 /**
  * This is the supertype for the ASM generated classes for writing values into fields.
@@ -30,7 +31,7 @@ abstract public class BaseClassFieldWriter implements WriteAccessor {
 
     private Class< ? > fieldType;
 
-    private ValueType  valueType;
+    private ValueType valueType;
 
     public BaseClassFieldWriter() {
     }

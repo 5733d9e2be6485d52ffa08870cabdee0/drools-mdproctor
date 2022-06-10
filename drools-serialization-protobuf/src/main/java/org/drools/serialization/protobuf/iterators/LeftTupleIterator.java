@@ -38,8 +38,8 @@ import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.QueryElementNode;
 import org.drools.core.reteoo.RightTuple;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.FastIterator;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.FastIterator;
+import org.drools.base.util.Iterator;
 
 public class LeftTupleIterator
     implements

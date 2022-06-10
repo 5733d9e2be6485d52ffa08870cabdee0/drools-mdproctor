@@ -19,9 +19,9 @@ package org.drools.ancompiler;
 import java.util.NoSuchElementException;
 
 import org.drools.core.reteoo.AlphaNode;
-import org.drools.core.common.NetworkNode;
+import org.drools.base.common.NetworkNode;
 import org.drools.core.reteoo.Sink;
-import org.drools.core.rule.ContextEntry;
+import org.drools.base.rule.ContextEntry;
 import org.drools.core.util.index.AlphaRangeIndex;
 
 /**

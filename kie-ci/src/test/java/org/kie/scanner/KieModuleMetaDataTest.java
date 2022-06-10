@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
-import org.drools.core.rule.TypeMetaInfo;
+import org.drools.base.rule.TypeMetaInfo;
 import org.junit.Test;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;

@@ -35,7 +35,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.drools.commands.runtime.rule.FireAllRulesCommand;
 import org.drools.compiler.kie.builder.impl.DrlProject;
 import org.drools.core.ClassObjectFilter;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.event.DefaultAgendaEventListener;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.EntryPointNode;
@@ -69,7 +70,6 @@ import org.kie.api.builder.model.KieModuleModel;
 import org.kie.api.command.BatchExecutionCommand;
 import org.kie.api.command.Command;
 import org.kie.api.command.KieCommands;
-import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.rule.Rule;
 import org.kie.api.definition.type.FactType;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
@@ -165,7 +165,7 @@ public class IncrementalCompilationTest {
         KieUtil.getKieModuleFromDrls(releaseId1, kieBaseTestConfiguration, header + drls);
         kc.updateToVersion(releaseId1);
 
-        final KiePackage kpkg = kc.getKieBase().getKiePackage("org.drools.compiler");
+        final InternalKnowledgePackage kpkg = (InternalKnowledgePackage) kc.getKieBase().getKiePackage("org.drools.compiler");
         assertThat(kpkg.getRules().size()).isEqualTo(ruleNames.length);
         final Map<String, Rule> rules = rulestoMap(kpkg.getRules());
 
@@ -671,8 +671,10 @@ public class IncrementalCompilationTest {
 
         // Create a session and fire rules
         final KieContainer kc = ks.newKieContainer(releaseId1);
-        KiePackage kpkg = kc.getKieBase().getKiePackage("org.drools.compiler");
+
+        InternalKnowledgePackage kpkg = (InternalKnowledgePackage) kc.getKieBase().getKiePackage("org.drools.compiler");
         assertThat(kpkg.getRules().size()).isEqualTo(3);
+
         Map<String, Rule> rules = rulestoMap(kpkg.getRules());
 
         assertThat(rules.get("R1")).isNotNull();
@@ -697,8 +699,9 @@ public class IncrementalCompilationTest {
         assertThat(rtn3_2).isSameAs(rtn3_1);
         assertThat(rtn1_2).isSameAs(rtn1_1);
 
-        kpkg = kc.getKieBase().getKiePackage("org.drools.compiler");
+        kpkg = (InternalKnowledgePackage) kc.getKieBase().getKiePackage("org.drools.compiler");
         assertThat(kpkg.getRules().size()).isEqualTo(2);
+
         rules = rulestoMap(kpkg.getRules());
 
         assertThat(rules.get("R1")).isNotNull();

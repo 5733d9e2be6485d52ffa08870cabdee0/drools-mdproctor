@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.drools.core.common.DefaultFactHandle;
 import org.drools.core.impl.RuleBaseFactory;
-import org.drools.core.util.Iterator;
+import org.drools.base.util.Iterator;
 import org.drools.core.util.ObjectHashMap;
 import org.drools.core.util.ObjectHashMap.ObjectEntry;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
@@ -279,7 +279,7 @@ public class ObjectHashMapTest {
                      strval );
         }
         final long start = System.currentTimeMillis();
-        final org.drools.core.util.Iterator itr = map.iterator();
+        final Iterator itr = map.iterator();
         Object val = null;
         while ( (val = itr.next()) != null ) {
             val.hashCode();

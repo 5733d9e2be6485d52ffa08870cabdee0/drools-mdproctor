@@ -17,9 +17,9 @@ package org.drools.modelcompiler.constraints;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.drools.core.base.CoreComponentsBuilder;
-import org.drools.util.ClassUtils;
+import org.drools.base.util.MVELExecutor;
 import org.drools.model.functions.Function1;
+import org.drools.util.ClassUtils;
 
 import static org.drools.core.util.Drools.hasMvel;
 
@@ -45,6 +45,6 @@ public class LambdaFieldReader implements Function1 {
         if (!hasMvel()) {
             throw new RuntimeException("Complex timestamp expressions can be used only with drools-mvel on classpath");
         }
-        return CoreComponentsBuilder.get().getMVELExecutor().eval( field, o );
+        return MVELExecutor.get().eval( field, o );
     }
 }

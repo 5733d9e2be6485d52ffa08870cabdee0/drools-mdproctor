@@ -19,6 +19,7 @@ package org.drools.compiler.integrationtests.incrementalcompilation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.kie.api.KieBase;
@@ -140,7 +141,7 @@ public final class TestUtil {
     public static int getRulesCount(final KieBase kBase) {
         int result = 0;
         for (final KiePackage kiePackage : kBase.getKiePackages()) {
-            result += kiePackage.getRules().size();
+            result += ((InternalKnowledgePackage) kiePackage).getRules().size();
         }
         return result;
     }

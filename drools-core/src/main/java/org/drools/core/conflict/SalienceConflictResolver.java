@@ -17,7 +17,7 @@
 package org.drools.core.conflict;
 
 import org.drools.core.rule.consequence.Activation;
-import org.drools.core.rule.consequence.ConflictResolver;
+import org.drools.base.rule.consequence.ConflictResolver;
 import org.kie.api.runtime.rule.Match;
 
 /**

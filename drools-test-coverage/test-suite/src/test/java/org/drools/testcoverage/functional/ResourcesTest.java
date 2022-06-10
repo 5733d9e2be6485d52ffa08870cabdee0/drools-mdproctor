@@ -19,6 +19,7 @@ package org.drools.testcoverage.functional;
 import java.io.StringReader;
 import java.util.Collection;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.decisiontable.ExternalSpreadsheetCompiler;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;
 import org.drools.testcoverage.common.util.KieBaseUtil;
@@ -30,7 +31,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
-import org.kie.api.definition.KiePackage;
 import org.kie.api.io.Resource;
 import org.kie.api.io.ResourceType;
 import org.kie.internal.builder.DecisionTableInputType;
@@ -141,7 +141,7 @@ public class ResourcesTest {
 
     private void verifyPackageWithRules(final KieBase kbase, final String packageName, final int expectedRules) {
 
-        final KiePackage pack = kbase.getKiePackage(packageName);
+        final InternalKnowledgePackage pack = (InternalKnowledgePackage) kbase.getKiePackage(packageName);
 
         assertThat(pack).as("KiePackage with given name not found in KieBase").isNotNull();
         assertThat(pack.getName()).as("Unexpected package name").isEqualTo(packageName);
@@ -150,7 +150,7 @@ public class ResourcesTest {
 
     private void verifyPackageWithImports(final KieBase kbase, final String packageName) {
 
-        final KiePackage pack = kbase.getKiePackage(packageName);
+        final InternalKnowledgePackage pack = (InternalKnowledgePackage) kbase.getKiePackage(packageName);
 
         assertThat(pack).as("KiePackage with given name not found in KieBase").isNotNull();
         assertThat(pack.getName()).as("Unexpected package name").isEqualTo(packageName);

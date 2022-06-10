@@ -21,17 +21,17 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.reflect.Method;
 
-import org.drools.mvel.field.FieldFactory;
-import org.drools.core.base.ValueType;
-import org.drools.compiler.rule.builder.EvaluatorDefinition;
 import org.drools.compiler.builder.impl.EvaluatorRegistry;
-import org.drools.kiesession.entrypoints.DisconnectedWorkingMemoryEntryPoint;
+import org.drools.compiler.rule.builder.EvaluatorDefinition;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.base.ValueType;
 import org.drools.core.common.EventFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.accessor.Evaluator;
-import org.drools.core.rule.accessor.FieldValue;
-import org.drools.core.rule.accessor.ReadAccessor;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.Evaluator;
+import org.drools.base.rule.accessor.FieldValue;
+import org.drools.base.rule.accessor.ReadAccessor;
+import org.drools.kiesession.entrypoints.DisconnectedWorkingMemoryEntryPoint;
+import org.drools.mvel.field.FieldFactory;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -1166,22 +1166,22 @@ public class TemporalEvaluatorFactoryTest {
             return true;
         }
 
-        public boolean getBooleanValue(ReteEvaluator reteEvaluator,
+        public boolean getBooleanValue(ValueResolver valueResolver,
                                        final Object object) {
             return object != null ? ((Boolean) object).booleanValue() : false;
         }
 
-        public byte getByteValue(ReteEvaluator reteEvaluator,
+        public byte getByteValue(ValueResolver valueResolver,
                                  final Object object) {
             return object != null ? ((Number) object).byteValue() : (byte) 0;
         }
 
-        public char getCharValue(ReteEvaluator reteEvaluator,
+        public char getCharValue(ValueResolver valueResolver,
                                  final Object object) {
             return object != null ? ((Character) object).charValue() : '\0';
         }
 
-        public double getDoubleValue(ReteEvaluator reteEvaluator,
+        public double getDoubleValue(ValueResolver valueResolver,
                                      final Object object) {
             return object != null ? ((Number) object).doubleValue() : 0.0;
         }
@@ -1194,22 +1194,22 @@ public class TemporalEvaluatorFactoryTest {
             return null;
         }
 
-        public float getFloatValue(ReteEvaluator reteEvaluator,
+        public float getFloatValue(ValueResolver valueResolver,
                                    final Object object) {
             return object != null ? ((Number) object).floatValue() : (float) 0.0;
         }
 
-        public int getHashCode(ReteEvaluator reteEvaluator,
+        public int getHashCode(ValueResolver valueResolver,
                                final Object object) {
             return 0;
         }
 
-        public int getIntValue(ReteEvaluator reteEvaluator,
+        public int getIntValue(ValueResolver valueResolver,
                                final Object object) {
             return object != null ? ((Number) object).intValue() : 0;
         }
 
-        public long getLongValue(ReteEvaluator reteEvaluator,
+        public long getLongValue(ValueResolver valueResolver,
                                  final Object object) {
             return object != null ? ((Number) object).longValue() : 0;
         }
@@ -1222,17 +1222,17 @@ public class TemporalEvaluatorFactoryTest {
             return null;
         }
 
-        public short getShortValue(ReteEvaluator reteEvaluator,
+        public short getShortValue(ValueResolver valueResolver,
                                    final Object object) {
             return object != null ? ((Number) object).shortValue() : (short) 0;
         }
 
-        public Object getValue(ReteEvaluator reteEvaluator,
+        public Object getValue(ValueResolver valueResolver,
                                final Object object) {
             return object;
         }
 
-        public boolean isNullValue(ReteEvaluator reteEvaluator,
+        public boolean isNullValue(ValueResolver valueResolver,
                                    final Object object) {
             return object == null;
         }

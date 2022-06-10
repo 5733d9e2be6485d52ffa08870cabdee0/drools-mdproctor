@@ -19,13 +19,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.rule.Pattern;
 import org.drools.core.impl.RuleBase;
-import org.drools.core.rule.GroupElement;
-import org.drools.core.rule.IndexableConstraint;
-import org.drools.core.rule.constraint.Constraint;
+import org.drools.base.rule.GroupElement;
+import org.drools.base.rule.IndexableConstraint;
+import org.drools.base.rule.constraint.Constraint;
 import org.junit.Test;
+import org.kie.api.definition.rule.Rule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,10 +70,10 @@ public class DefaultTemplateRuleBaseTest {
         InternalKnowledgePackage[] packages = ((RuleBase)ruleBase.newStatefulSession().getKieBase()).getPackages();
         assertThat(packages.length).isEqualTo(1);
         Map<String, Class<?>> globals = packages[0].getGlobals();
-        assertThat(globals.get("generator")).isEqualTo(DefaultGenerator.class);
-        Collection<org.kie.api.definition.rule.Rule> rules = packages[0].getRules();
-        assertThat(rules.size()).isEqualTo(1);
-        assertThat(rules.iterator().next().getName()).isEqualTo("template1");
+        assertEquals(DefaultGenerator.class, globals.get("generator"));
+        Collection<Rule> rules = packages[0].getRules();
+        assertEquals(1, rules.size());
+        assertEquals("template1", rules.iterator().next().getName());
         GroupElement lhs = ((RuleImpl)rules.iterator().next()).getLhs();
         //when
         //  r : Row()

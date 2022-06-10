@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 
-import org.drools.core.factmodel.traits.CoreWrapper;
+import org.drools.base.factmodel.traits.CoreWrapper;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.ObjectFilter;
 

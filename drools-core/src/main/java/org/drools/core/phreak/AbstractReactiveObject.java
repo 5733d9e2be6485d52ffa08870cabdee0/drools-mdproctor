@@ -16,8 +16,8 @@
 
 package org.drools.core.phreak;
 
-import org.drools.core.base.BaseTuple;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.phreak.ReactiveObject;
 
 import java.util.Collection;
 import java.util.Collections;

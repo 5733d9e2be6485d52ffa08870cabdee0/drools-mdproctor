@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.decisiontable.ExternalSpreadsheetCompiler;
 import org.drools.testcoverage.common.model.Cheese;
 import org.drools.testcoverage.common.model.Person;
@@ -94,7 +95,7 @@ public class RuleTemplateTest {
         assertThat(names.contains(TestConstants.PACKAGE_FUNCTIONAL)).isTrue();
         assertThat(names.contains(TestConstants.PACKAGE_TESTCOVERAGE_MODEL)).isTrue();
 
-        final KiePackage kiePackage = (KiePackage) pkgs.toArray()[names.indexOf(TestConstants.PACKAGE_FUNCTIONAL)];
+        final InternalKnowledgePackage kiePackage = (InternalKnowledgePackage) pkgs.toArray()[names.indexOf(TestConstants.PACKAGE_FUNCTIONAL)];
 
         assertThat(kiePackage.getRules().size()).isEqualTo(2);
 

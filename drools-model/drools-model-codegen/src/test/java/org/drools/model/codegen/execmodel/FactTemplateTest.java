@@ -17,8 +17,8 @@ package org.drools.model.codegen.execmodel;
 
 import java.util.Collection;
 
-import org.drools.core.facttemplates.Fact;
-import org.drools.core.facttemplates.FactTemplateObjectType;
+import org.drools.base.facttemplates.Fact;
+import org.drools.base.facttemplates.FactTemplateObjectType;
 import org.drools.core.reteoo.CompositeObjectSinkAdapter;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ObjectTypeNode;

@@ -16,11 +16,14 @@
 
 package org.drools.modelcompiler.constraints;
 
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.rule.Declaration;
 import org.drools.core.reteoo.Tuple;
+import org.drools.base.rule.Declaration;
 import org.drools.model.Binding;
+import org.kie.api.runtime.rule.FactHandle;
 
 public class BindingEvaluator {
     private final Declaration[] declarations;
@@ -54,8 +57,8 @@ public class BindingEvaluator {
         return params;
     }
 
-    public static Object getArgument(InternalFactHandle handle, ReteEvaluator reteEvaluator, Declaration declaration, Tuple tuple ) {
+    public static Object getArgument(FactHandle handle, ValueResolver valueResolver, Declaration declaration, BaseTuple tuple ) {
         int tupleIndex = declaration.getTupleIndex();
-        return declaration.getValue(reteEvaluator, tuple != null && tupleIndex < tuple.size() ? tuple.get(tupleIndex) : handle);
+        return declaration.getValue(valueResolver, tuple != null && tupleIndex < tuple.size() ? tuple.get(tupleIndex) : handle);
     }
 }

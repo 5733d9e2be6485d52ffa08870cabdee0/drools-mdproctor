@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import org.drools.base.util.Entry;
+import org.drools.base.util.Iterator;
+
 public class ObjectHashSet extends AbstractHashTable {
 
     private static final long serialVersionUID = 510l;

@@ -30,13 +30,13 @@ import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.LeftTupleSink;
 import org.drools.core.reteoo.RightTuple;
 import org.drools.core.reteoo.TupleMemory;
-import org.drools.core.rule.ContextEntry;
-import org.drools.core.rule.constraint.AlphaNodeFieldConstraint;
-import org.drools.core.rule.accessor.DataProvider;
+import org.drools.base.rule.ContextEntry;
+import org.drools.base.rule.constraint.AlphaNodeFieldConstraint;
+import org.drools.base.rule.accessor.DataProvider;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.reteoo.Tuple;
-import org.drools.core.util.FastIterator;
-import org.drools.core.util.LinkedList;
+import org.drools.base.util.FastIterator;
+import org.drools.base.util.LinkedList;
 
 import static org.drools.core.phreak.PhreakJoinNode.updateChildLeftTuple;
 
