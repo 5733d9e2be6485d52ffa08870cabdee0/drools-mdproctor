@@ -879,9 +879,10 @@ public class RuleImpl implements Externalizable,
 
         @Override
         public int getValue(final BaseTuple tuple,
+                            final Declaration[] declarations,
                             final Rule rule,
                             final ValueResolver valueResolver) {
-            return AccessController.doPrivileged((PrivilegedAction<Integer>) () -> delegate.getValue(tuple, rule, valueResolver), KiePolicyHelper.getAccessContext());
+            return AccessController.doPrivileged((PrivilegedAction<Integer>) () -> delegate.getValue(tuple, declarations, rule, valueResolver), KiePolicyHelper.getAccessContext());
         }
 
         @Override

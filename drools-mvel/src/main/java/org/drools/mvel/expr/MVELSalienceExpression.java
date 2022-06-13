@@ -84,12 +84,13 @@ public class MVELSalienceExpression
     }
 
     public int getValue(final BaseTuple tuple,
+                        final Declaration[] declarations,
                         final Rule rule,
                         final ValueResolver valueResolver) {
         VariableResolverFactory factory = unit.getFactory( valueResolver,
-                                                           valueResolver != null ? (( AgendaItem ) tuple).getTerminalNode().getSalienceDeclarations() : null,
+                                                           declarations,
                                                            rule, null,
-                                                           valueResolver != null ? (Tuple) tuple : null,
+                                                           tuple,
                                                            null, (ReteEvaluator) valueResolver, valueResolver.getGlobalResolver() );
         
         // do we have any functions for this namespace?

@@ -29,6 +29,7 @@ public interface Salience extends Serializable {
     int DEFAULT_SALIENCE_VALUE = 0;
 
     int getValue(final BaseTuple tuple,
+                 final Declaration[] declarations,
                  final Rule rule,
                  final ValueResolver valueResolver);
 

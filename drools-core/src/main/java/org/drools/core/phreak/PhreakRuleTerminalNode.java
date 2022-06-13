@@ -133,7 +133,7 @@ public class PhreakRuleTerminalNode {
     private static int getSalienceValue( TerminalNode rtnNode, RuleAgendaItem ruleAgendaItem, AgendaItem item, ReteEvaluator reteEvaluator ) {
         Salience salience = ruleAgendaItem.getRule().getSalience();
         return salience == null ? 0 : (salience.isDynamic() ?
-                    salience.getValue(item.getTuple(), rtnNode.getRule(), reteEvaluator) :
+                    salience.getValue(item.getTuple(), rtnNode.getSalienceDeclarations(), rtnNode.getRule(), reteEvaluator) :
                     salience.getValue() );
     }
 

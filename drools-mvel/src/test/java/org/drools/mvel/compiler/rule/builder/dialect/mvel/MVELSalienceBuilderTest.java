@@ -128,9 +128,16 @@ public class MVELSalienceBuilderTest {
 
         RuleTerminalNode rtn = new RuleTerminalNode();
         rtn.setSalienceDeclarations( context.getDeclarationResolver().getDeclarations( context.getRule() ).values().toArray( new Declaration[1] ) );
+<<<<<<< HEAD
         AgendaItem item = new AgendaItemImpl(0, tuple, 0, null, rtn, null);
 
         assertThat(context.getRule().getSalience().getValue(item.getTuple(), context.getRule(), ksession)).isEqualTo(25);
+=======
+
+        assertEquals( 25,
+                      context.getRule().getSalience().getValue( tuple, rtn.getSalienceDeclarations(), context.getRule(), ksession ) );
+
+>>>>>>> fixed salience based tests, by passing Declarations directly
     }
 
     @Test
@@ -208,7 +215,7 @@ public class MVELSalienceBuilderTest {
             this.error = false;
             this.result = (person.getAge() + 20) / 2;
             
-            RuleTerminalNode rtn = new RuleTerminalNode();
+            final RuleTerminalNode rtn = new RuleTerminalNode();
             rtn.setSalienceDeclarations( context.getDeclarationResolver().getDeclarations( context.getRule() ).values().toArray( new Declaration[1] ) );
             item = new AgendaItemImpl(0, tuple, 0, null, rtn, null);
         }
@@ -217,7 +224,7 @@ public class MVELSalienceBuilderTest {
             try {
                 Thread.sleep( 1000 );
                 for ( int i = 0; i < iterations && !halt; i++ ) {
-                    assertThat(salience.getValue(item.getTuple(), rule, wm)).isEqualTo(result);
+                    assertThat(salience.getValue(item.getTuple(), item.getTerminalNode().getSalienceDeclarations(), rule, wm )).isEqualTo(result);
                     Thread.currentThread().yield();
                 }
             } catch ( Throwable e ) {

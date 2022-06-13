@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.Salience;
 import org.kie.api.definition.rule.Rule;
 
@@ -50,6 +51,7 @@ public class SalienceInteger
     }
 
     public int getValue(final BaseTuple tuple,
+                        final Declaration[] declarations,
                         final Rule rule,
                         final ValueResolver valueResolver) {
         return this.value;
