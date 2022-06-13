@@ -30,6 +30,7 @@ import org.drools.base.rule.Declaration;
 import org.drools.base.rule.GroupElement;
 import org.drools.base.rule.consequence.Consequence;
 import org.drools.core.reteoo.Tuple;
+import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.kie.api.runtime.rule.FactHandle;
 
 /**
@@ -123,7 +124,7 @@ public class AgendaItemImpl implements AgendaItem {
     }
 
     @Override
-    public Consequence getConsequence() {
+    public Consequence<KnowledgeHelper> getConsequence() {
         String consequenceName = ((RuleTerminalNode) rtn).getConsequenceName();
         return consequenceName.equals(RuleImpl.DEFAULT_CONSEQUENCE_NAME) ? rtn.getRule().getConsequence() : rtn.getRule().getNamedConsequence(consequenceName);
     }

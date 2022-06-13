@@ -440,7 +440,7 @@ public class RuleExecutor {
         }
     }
 
-    private void innerFireActivation( ReteEvaluator reteEvaluator, ActivationsManager activationsManager, Activation activation, Consequence consequence ) {
+    private void innerFireActivation( ReteEvaluator reteEvaluator, ActivationsManager activationsManager, Activation activation, Consequence<KnowledgeHelper> consequence ) {
         try {
             KnowledgeHelper knowledgeHelper = activationsManager.getKnowledgeHelper();
             knowledgeHelper.setActivation( activation );

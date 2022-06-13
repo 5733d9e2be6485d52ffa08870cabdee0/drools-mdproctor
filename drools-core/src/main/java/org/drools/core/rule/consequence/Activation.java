@@ -46,7 +46,7 @@ public interface Activation extends Serializable, Match {
      */
     RuleImpl getRule();
 
-    Consequence getConsequence();
+    Consequence<KnowledgeHelper> getConsequence();
     
     int getSalience();
 
