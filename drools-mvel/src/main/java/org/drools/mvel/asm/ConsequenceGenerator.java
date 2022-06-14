@@ -16,18 +16,18 @@ package org.drools.mvel.asm;
 
 import java.util.List;
 
-import org.drools.core.WorkingMemory;
 import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.CompiledInvoker;
+import org.drools.base.rule.consequence.Consequence;
+import org.drools.core.WorkingMemory;
 import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.core.reteoo.LeftTuple;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.Sink;
 import org.drools.core.reteoo.Tuple;
-import org.drools.base.rule.Declaration;
-import org.drools.base.rule.accessor.CompiledInvoker;
 import org.drools.core.rule.consequence.Activation;
-import org.drools.base.rule.consequence.Consequence;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.mvel.asm.GeneratorHelper.DeclarationMatcher;
 import org.kie.api.runtime.rule.FactHandle;
@@ -46,7 +46,7 @@ import static org.mvel2.asm.Opcodes.RETURN;
 
 public class ConsequenceGenerator {
 
-    public static void generate( final ConsequenceStub stub, KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator) {
+    public static void generate( final ConsequenceStub stub, KnowledgeHelper knowledgeHelper, ValueResolver valueResolver) {
         RuleTerminalNode rtn = knowledgeHelper.getMatch().getTuple().getTupleSink();
         final Declaration[] declarations = rtn.getRequiredDeclarations();
         final Tuple tuple = knowledgeHelper.getTuple();
@@ -54,14 +54,14 @@ public class ConsequenceGenerator {
         // Sort declarations based on their offset, so it can ascend the tuple's parents stack only once
         final List<DeclarationMatcher> declarationMatchers = matchDeclarationsToTuple(declarations);
 
-        final ClassGenerator generator = createInvokerClassGenerator(stub, reteEvaluator).setInterfaces(Consequence.class, CompiledInvoker.class);
+        final ClassGenerator generator = createInvokerClassGenerator(stub, valueResolver).setInterfaces(Consequence.class, CompiledInvoker.class);
 
         generator.addMethod(ACC_PUBLIC, "getName", generator.methodDescr(String.class), new ClassGenerator.MethodBody() {
             public void body(MethodVisitor mv) {
                 push(stub.getGeneratedInvokerClassName());
                 mv.visitInsn(ARETURN);
             }
-        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, KnowledgeHelper.class, ReteEvaluator.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
+        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, KnowledgeHelper.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
             public void body(MethodVisitor mv) {
                 // Tuple tuple = knowledgeHelper.getTuple();
                 mv.visitVarInsn(ALOAD, 1);

@@ -17,14 +17,14 @@ package org.drools.mvel.asm;
 import java.util.List;
 
 import org.drools.base.base.BaseTuple;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.reteoo.LeftTuple;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.CompiledInvoker;
 import org.drools.base.rule.accessor.PredicateExpression;
+import org.drools.core.common.InternalFactHandle;
+import org.drools.core.reteoo.LeftTuple;
 import org.drools.mvel.asm.GeneratorHelper.DeclarationMatcher;
+import org.kie.api.runtime.rule.FactHandle;
 import org.mvel2.asm.MethodVisitor;
 
 import static org.drools.mvel.asm.GeneratorHelper.createInvokerClassGenerator;
@@ -40,10 +40,10 @@ import static org.mvel2.asm.Opcodes.IRETURN;
 
 public class PredicateGenerator {
     public static void generate(final PredicateStub stub,
-                                final Tuple tuple,
+                                final BaseTuple tuple,
                                 final Declaration[] previousDeclarations,
                                 final Declaration[] localDeclarations,
-                                final ReteEvaluator reteEvaluator) {
+                                final ValueResolver valueResolver) {
 
         final String[] globals = stub.getGlobals();
         final String[] globalTypes = stub.getGlobalTypes();
@@ -51,7 +51,7 @@ public class PredicateGenerator {
         // Sort declarations based on their offset, so it can ascend the tuple's parents stack only once
         final List<DeclarationMatcher> declarationMatchers = matchDeclarationsToTuple(previousDeclarations);
 
-        final ClassGenerator generator = createInvokerClassGenerator(stub, reteEvaluator)
+        final ClassGenerator generator = createInvokerClassGenerator(stub, valueResolver)
                 .setInterfaces(PredicateExpression.class, CompiledInvoker.class);
 
         generator.addMethod(ACC_PUBLIC, "createContext", generator.methodDescr(Object.class), new ClassGenerator.MethodBody() {
@@ -59,7 +59,7 @@ public class PredicateGenerator {
                 mv.visitInsn(ACONST_NULL);
                 mv.visitInsn(ARETURN);
             }
-        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(Boolean.TYPE, InternalFactHandle.class, Tuple.class, Declaration[].class, Declaration[].class, ReteEvaluator.class, Object.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
+        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(Boolean.TYPE, FactHandle.class, BaseTuple.class, Declaration[].class, Declaration[].class, ValueResolver.class, Object.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
             public void body(MethodVisitor mv) {
                 objAstorePos = 9;
 
@@ -87,7 +87,7 @@ public class PredicateGenerator {
                     mv.visitVarInsn(ALOAD, 5); // reteEvaluator
 
                     mv.visitVarInsn(ALOAD, 7);
-                    invokeInterface(LeftTuple.class, "getFactHandle", InternalFactHandle.class);
+                    invokeInterface(LeftTuple.class, "getFactHandle", FactHandle.class);
                     invokeInterface(InternalFactHandle.class, "getObject", Object.class); // tuple.getFactHandle().getObject()
 
                     storeObjectFromDeclaration(previousDeclarations[i], previousDeclarations[i].getTypeName());

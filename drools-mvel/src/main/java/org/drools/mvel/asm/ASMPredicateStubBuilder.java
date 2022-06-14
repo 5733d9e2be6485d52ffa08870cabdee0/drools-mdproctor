@@ -16,13 +16,13 @@ package org.drools.mvel.asm;
 
 import java.util.Map;
 
-import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.CompiledInvoker;
 import org.drools.base.rule.accessor.PredicateExpression;
-import org.drools.core.reteoo.Tuple;
+import org.drools.compiler.rule.builder.RuleBuildContext;
+import org.kie.api.runtime.rule.FactHandle;
 import org.mvel2.asm.Label;
 import org.mvel2.asm.MethodVisitor;
 
@@ -60,7 +60,7 @@ public class ASMPredicateStubBuilder extends AbstractASMPredicateBuilder {
                 mv.visitInsn(ACONST_NULL);
                 mv.visitInsn(ARETURN);
             }
-        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(Boolean.TYPE, InternalFactHandle.class, Tuple.class, Declaration[].class, Declaration[].class, ReteEvaluator.class, Object.class), new String[]{"java/lang/Exception"}, new ClassGenerator.MethodBody() {
+        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(Boolean.TYPE, FactHandle.class, BaseTuple.class, Declaration[].class, Declaration[].class, ValueResolver.class, Object.class), new String[]{"java/lang/Exception"}, new ClassGenerator.MethodBody() {
             public void body(MethodVisitor mv) {
                 Label syncStart = new Label();
                 Label syncEnd = new Label();
@@ -87,7 +87,7 @@ public class ASMPredicateStubBuilder extends AbstractASMPredicateBuilder {
                 mv.visitVarInsn(ALOAD, 4);
                 mv.visitVarInsn(ALOAD, 5);
                 // ... PredicateGenerator.generate(this, tuple, declarations, declarations, workingMemory)
-                invokeStatic(PredicateGenerator.class, "generate", null, PredicateStub.class, Tuple.class, Declaration[].class, Declaration[].class, ReteEvaluator.class);
+                invokeStatic(PredicateGenerator.class, "generate", null, PredicateStub.class, BaseTuple.class, Declaration[].class, Declaration[].class, ValueResolver.class);
                 mv.visitLabel(ifNotInitialized);
                 mv.visitVarInsn(ALOAD, 7);
                 mv.visitInsn(MONITOREXIT);
@@ -109,7 +109,7 @@ public class ASMPredicateStubBuilder extends AbstractASMPredicateBuilder {
                 mv.visitVarInsn(ALOAD, 4);
                 mv.visitVarInsn(ALOAD, 5);
                 mv.visitVarInsn(ALOAD, 6);
-                invokeInterface(PredicateExpression.class, "evaluate", Boolean.TYPE, InternalFactHandle.class, Tuple.class, Declaration[].class, Declaration[].class, ReteEvaluator.class, Object.class);
+                invokeInterface(PredicateExpression.class, "evaluate", Boolean.TYPE, FactHandle.class, BaseTuple.class, Declaration[].class, Declaration[].class, ValueResolver.class, Object.class);
                 mv.visitInsn(IRETURN);
             }
         }).addMethod(ACC_PUBLIC, "setPredicate", generator.methodDescr(null, PredicateExpression.class), new ClassGenerator.MethodBody() {

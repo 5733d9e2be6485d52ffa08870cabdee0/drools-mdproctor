@@ -64,8 +64,9 @@ public class MVELKnowledgePackageImpl extends KnowledgePackageImpl {
         return classFieldAccessorStore;
     }
 
-    public void setClassFieldAccessorCache(ClassFieldAccessorCache classFieldAccessorCache) {
-        this.classFieldAccessorStore.setClassFieldAccessorCache(classFieldAccessorCache);
+    @Override
+    public void setClassFieldAccessorCache(Object cache) {
+        this.classFieldAccessorStore.setClassFieldAccessorCache((ClassFieldAccessorCache) cache);
     }
 
     @Override

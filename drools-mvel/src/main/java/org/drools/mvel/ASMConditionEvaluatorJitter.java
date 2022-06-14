@@ -29,12 +29,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.drools.compiler.rule.builder.EvaluatorWrapper;
 import org.drools.base.base.BaseTuple;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.Declaration;
+import org.drools.compiler.rule.builder.EvaluatorWrapper;
+import org.drools.core.common.InternalFactHandle;
+import org.drools.core.reteoo.Tuple;
 import org.drools.mvel.ConditionAnalyzer.AritmeticExpression;
 import org.drools.mvel.ConditionAnalyzer.AritmeticOperator;
 import org.drools.mvel.ConditionAnalyzer.ArrayAccessInvocation;
@@ -58,6 +58,7 @@ import org.drools.mvel.ConditionAnalyzer.SingleCondition;
 import org.drools.mvel.ConditionAnalyzer.VariableExpression;
 import org.drools.mvel.asm.ClassGenerator;
 import org.drools.mvel.asm.GeneratorHelper;
+import org.kie.api.runtime.rule.FactHandle;
 import org.mvel2.asm.Label;
 import org.mvel2.asm.MethodVisitor;
 import org.mvel2.util.NullType;
@@ -123,7 +124,7 @@ public class ASMConditionEvaluatorJitter {
 
         generator.addMethod(ACC_PUBLIC,
                             "evaluate",
-                            generator.methodDescr(boolean.class, InternalFactHandle.class, ReteEvaluator.class, Tuple.class),
+                            generator.methodDescr(boolean.class, FactHandle.class, ValueResolver.class, BaseTuple.class),
                             new EvaluateMethodGenerator(condition, declarations, operators, tuple));
 
         if (operators.length == 0) {

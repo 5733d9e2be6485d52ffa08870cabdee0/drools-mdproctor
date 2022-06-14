@@ -81,7 +81,8 @@ public class MVELAccumulateBuilderTest {
         final Accumulate acc = (Accumulate) builder.build( context,
                                                            accDescr );
 
-        (( MVELCompileable ) acc.getAccumulators()[0]).compile( ( MVELDialectRuntimeData ) pkgBuilder.getPackageRegistry( pkg.getName() ).getDialectRuntimeRegistry().getDialectData( "mvel" ) );
+        MVELDialectRuntimeData runtimeData = ( MVELDialectRuntimeData ) pkgBuilder.getPackageRegistry( pkg.getName() ).getDialectRuntimeRegistry().getDialectData( "mvel" );
+        (( MVELCompileable ) acc.getAccumulators()[0]).compile(runtimeData);
 
         InternalKnowledgeBase kBase = KnowledgeBaseFactory.newKnowledgeBase();
         StatefulKnowledgeSessionImpl ksession = (StatefulKnowledgeSessionImpl)kBase.newKieSession();

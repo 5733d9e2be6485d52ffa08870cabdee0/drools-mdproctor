@@ -25,15 +25,15 @@ import java.util.Date;
 import java.util.Map;
 
 import org.drools.base.base.BaseClassFieldReader;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.base.ValueType;
+import org.drools.base.base.extractors.BaseObjectClassFieldReader;
+import org.drools.base.base.extractors.SelfReferenceClassFieldReader;
 import org.drools.core.base.BaseClassFieldWriter;
 import org.drools.core.base.ClassFieldAccessorCache.CacheEntry;
 import org.drools.core.base.ClassFieldInspector;
 import org.drools.core.base.FieldAccessorFactory;
-import org.drools.base.base.ValueType;
-import org.drools.base.base.extractors.BaseObjectClassFieldReader;
-import org.drools.base.base.extractors.SelfReferenceClassFieldReader;
 import org.drools.core.common.InternalWorkingMemory;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.core.util.Drools;
 import org.drools.mvel.accessors.BaseBooleanClassFieldReader;
 import org.drools.mvel.accessors.BaseBooleanClassFieldWriter;
@@ -337,8 +337,7 @@ public class ClassFieldAccessorFactory implements FieldAccessorFactory {
         final Class< ? > fieldType = getterMethod.getReturnType();
         Method overridingMethod;
         try {
-            overridingMethod = superClass.getMethod( getOverridingGetMethodName( fieldType ),
-                                                     ReteEvaluator.class, Object.class );
+            overridingMethod = superClass.getMethod( getOverridingGetMethodName( fieldType ), ValueResolver.class, Object.class );
         } catch ( final Exception e ) {
             throw new RuntimeException( "This is a bug. Please report back to JBoss Rules team.",
                                         e );

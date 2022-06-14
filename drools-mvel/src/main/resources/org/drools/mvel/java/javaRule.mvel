@@ -40,8 +40,8 @@ public static class @{className} implements java.io.Serializable {
         @{initCode}
     }
     
-    public Object accumulate(org.drools.core.common.ReteEvaluator reteEvaluator,
-                           org.drools.core.common.InternalFactHandle handle,
+    public Object accumulate(org.drools.base.base.ValueResolver valueResolver,
+                           org.kie.api.runtime.rule.FactHandle handle,
                            org.drools.core.rule.Declaration[] innerDeclarations@if{declarations != empty}, @end{}
                            @foreach{declr : declarations} @{declr.typeName} @{declr.identifier}@end{","}@if{globals != empty},@end{}
                            @foreach{type : globalTypes, identifier : globals} @{type} @{identifier} @end{","}@if{innerDeclarations != empty},@end{}
@@ -60,7 +60,7 @@ public static class @{className} implements java.io.Serializable {
         return value;
     }
     
-    public void reverse(org.drools.core.common.ReteEvaluator reteEvaluator,
+    public void reverse(org.drools.base.base.ValueResolver valueResolver,
                            org.drools.core.common.InternalFactHandle handle,
                            Object value@if{globals != empty},@end{}
                            @foreach{type : globalTypes, identifier : globals} @{type} @{identifier} @end{","}

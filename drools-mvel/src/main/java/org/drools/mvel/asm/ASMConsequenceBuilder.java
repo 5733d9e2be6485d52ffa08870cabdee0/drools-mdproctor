@@ -16,18 +16,18 @@ package org.drools.mvel.asm;
 
 import java.util.Map;
 
+import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.accessor.CompiledInvoker;
+import org.drools.base.rule.consequence.Consequence;
 import org.drools.compiler.rule.builder.RuleBuildContext;
 import org.drools.core.WorkingMemory;
 import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.Sink;
-import org.drools.base.rule.Declaration;
-import org.drools.core.rule.consequence.Activation;
-import org.drools.base.rule.accessor.CompiledInvoker;
-import org.drools.base.rule.consequence.Consequence;
-import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.reteoo.Tuple;
+import org.drools.core.rule.consequence.Activation;
+import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.kie.api.runtime.rule.FactHandle;
 import org.mvel2.asm.MethodVisitor;
 
@@ -56,7 +56,7 @@ public class ASMConsequenceBuilder extends AbstractASMConsequenceBuilder {
                 push(name);
                 mv.visitInsn(ARETURN);
             }
-        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, KnowledgeHelper.class, ReteEvaluator.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
+        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, KnowledgeHelper.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
             public void body(MethodVisitor mv) {
                 // Tuple tuple = knowledgeHelper.getTuple();
                 mv.visitVarInsn(ALOAD, 1);
@@ -102,7 +102,7 @@ public class ASMConsequenceBuilder extends AbstractASMConsequenceBuilder {
                     boolean isObject = readMethod.equals("getValue");
                     String returnedType = isObject ? "Ljava/lang/Object;" : typeDescr(declarations[i].getTypeName());
                     mv.visitMethodInsn(INVOKEVIRTUAL, Declaration.class.getName().replace('.', '/'), readMethod,
-                                       "(L" + ReteEvaluator.class.getName().replace('.', '/')+";Ljava/lang/Object;)" + returnedType);
+                                       "(L" + ValueResolver.class.getName().replace('.', '/')+";Ljava/lang/Object;)" + returnedType);
                     if (isObject) mv.visitTypeInsn(CHECKCAST, internalName(declarations[i].getTypeName()));
                     offset += store(objPos, declarations[i].getTypeName()); // obj[i]
 

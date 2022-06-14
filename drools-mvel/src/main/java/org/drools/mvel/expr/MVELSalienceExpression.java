@@ -23,15 +23,13 @@ import java.util.Map;
 
 import org.drools.base.base.BaseTuple;
 import org.drools.base.base.ValueResolver;
-import org.drools.core.common.AgendaItem;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.base.definitions.rule.impl.RuleImpl;
-import org.drools.base.rule.SortDeclarations;
-import org.drools.core.reteoo.Tuple;
 import org.drools.base.rule.Declaration;
+import org.drools.base.rule.SortDeclarations;
 import org.drools.base.rule.accessor.Salience;
 import org.drools.base.time.TimeUtils;
+import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.mvel.MVELDialectRuntimeData;
 import org.kie.api.definition.rule.Rule;
 import org.mvel2.integration.VariableResolverFactory;
@@ -91,10 +89,10 @@ public class MVELSalienceExpression
                                                            declarations,
                                                            rule, null,
                                                            tuple,
-                                                           null, (ReteEvaluator) valueResolver, valueResolver.getGlobalResolver() );
+                                                           null, valueResolver, valueResolver.getGlobalResolver() );
         
         // do we have any functions for this namespace?
-        InternalKnowledgePackage pkg = ((ReteEvaluator) valueResolver).getKnowledgeBase().getPackage( "MAIN" );
+        InternalKnowledgePackage pkg = ((InternalKnowledgeBase) valueResolver.getRuleBase()).getPackage( "MAIN" );
         if ( pkg != null ) {
             MVELDialectRuntimeData data = ( MVELDialectRuntimeData ) pkg.getDialectRuntimeRegistry().getDialectData( this.id );
             factory.setNextFactory( data.getFunctionFactory() );

@@ -18,13 +18,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.drools.base.base.BaseTuple;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.reteoo.LeftTuple;
-import org.drools.core.reteoo.Tuple;
+import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.CompiledInvoker;
 import org.drools.base.rule.accessor.EvalExpression;
+import org.drools.core.common.InternalFactHandle;
+import org.drools.core.reteoo.LeftTuple;
 import org.drools.mvel.asm.GeneratorHelper.DeclarationMatcher;
 import org.mvel2.asm.MethodVisitor;
 
@@ -44,9 +43,9 @@ public class EvalGenerator {
     private static final AtomicInteger evalId = new AtomicInteger();
 
     public static void generate(final EvalStub stub ,
-                                final Tuple tuple,
+                                final BaseTuple tuple,
                                 final Declaration[] declarations,
-                                final ReteEvaluator reteEvaluator) {
+                                final ValueResolver valueResolver) {
 
         final String[] globals = stub.getGlobals();
         final String[] globalTypes = stub.getGlobalTypes();
@@ -54,7 +53,7 @@ public class EvalGenerator {
         // Sort declarations based on their offset, so it can ascend the tuple's parents stack only once
         final List<DeclarationMatcher> declarationMatchers = matchDeclarationsToTuple(declarations);
 
-        final ClassGenerator generator = createInvokerClassGenerator(stub, "_" + evalId.getAndIncrement(), reteEvaluator)
+        final ClassGenerator generator = createInvokerClassGenerator(stub, "_" + evalId.getAndIncrement(), valueResolver)
                 .setInterfaces(EvalExpression.class, CompiledInvoker.class);
 
         generator.addMethod(ACC_PUBLIC, "createContext", generator.methodDescr(Object.class), new ClassGenerator.MethodBody() {
@@ -68,7 +67,7 @@ public class EvalGenerator {
                 mv.visitInsn(ARETURN);
             }
         }).addMethod(ACC_PUBLIC, "replaceDeclaration", generator.methodDescr(null, Declaration.class, Declaration.class)
-        ).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(Boolean.TYPE, Tuple.class, Declaration[].class, ReteEvaluator.class, Object.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
+        ).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(Boolean.TYPE, BaseTuple.class, Declaration[].class, ValueResolver.class, Object.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
             public void body(MethodVisitor mv) {
                 objAstorePos = 7;
 
