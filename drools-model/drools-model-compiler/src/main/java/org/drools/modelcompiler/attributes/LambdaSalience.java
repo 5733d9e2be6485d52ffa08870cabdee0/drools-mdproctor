@@ -18,6 +18,7 @@ package org.drools.modelcompiler.attributes;
 
 import org.drools.base.base.BaseTuple;
 import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.Salience;
 import org.drools.core.reteoo.Tuple;
 import org.drools.model.DynamicValueSupplier;
@@ -32,8 +33,8 @@ public class LambdaSalience extends DynamicAttributeEvaluator<Integer> implement
     }
 
     @Override
-    public int getValue(BaseTuple tuple, Rule rule, ValueResolver valueResolver) {
-        Object[] facts = declarationsToFacts( valueResolver, (Tuple) tuple, getDeclarations(tuple), supplier.getVariables() );
+    public int getValue(BaseTuple tuple, Declaration[] declarations, Rule rule, ValueResolver valueResolver) {
+        Object[] facts = declarationsToFacts( valueResolver, (Tuple) tuple, declarations, supplier.getVariables() );
         return supplier.supply( facts );
     }
 
