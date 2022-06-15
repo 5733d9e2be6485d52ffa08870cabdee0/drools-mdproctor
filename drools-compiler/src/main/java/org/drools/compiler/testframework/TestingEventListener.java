@@ -25,9 +25,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.drools.base.base.ValueResolver;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.base.rule.consequence.Consequence;
-import org.drools.core.rule.consequence.KnowledgeHelper;
+import org.drools.base.rule.consequence.ConsequenceContext;
 import org.kie.api.definition.rule.Rule;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.kie.api.event.rule.AgendaEventListener;
@@ -211,10 +210,8 @@ public class TestingEventListener implements AgendaEventListener {
 
 class NilConsequence implements Consequence {
 
-    public void evaluate(KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator) throws Exception {
-    }
-
-    @Override public void evaluate(Object context, ValueResolver valueResolver) throws Exception {
+    @Override
+    public void evaluate(ConsequenceContext context, ValueResolver valueResolver) throws Exception {
 
     }
 

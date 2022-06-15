@@ -18,9 +18,6 @@ package org.drools.modelcompiler.constraints;
 
 import org.drools.base.base.BaseTuple;
 import org.drools.base.base.ValueResolver;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.ReteEvaluator;
-import org.drools.core.reteoo.Tuple;
 import org.drools.base.rule.Declaration;
 import org.drools.model.Binding;
 import org.kie.api.runtime.rule.FactHandle;
@@ -34,8 +31,8 @@ public class BindingEvaluator {
         this.binding = binding;
     }
 
-    public Object evaluate( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator, Declaration[] declarations, Declaration[] innerDeclarations ) {
-        return evaluate( getArguments( handle, tuple, reteEvaluator, declarations, innerDeclarations ) );
+    public Object evaluate( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver, Declaration[] declarations, Declaration[] innerDeclarations ) {
+        return evaluate( getArguments( handle, tuple, valueResolver, declarations, innerDeclarations ) );
     }
 
     public Object evaluate( Object... args ) {
@@ -46,13 +43,13 @@ public class BindingEvaluator {
         return declarations;
     }
 
-    private Object[] getArguments( InternalFactHandle handle, Tuple tuple, ReteEvaluator reteEvaluator, Declaration[] declarations, Declaration[] innerDeclarations ) {
+    private Object[] getArguments( FactHandle handle, BaseTuple tuple, ValueResolver valueResolver, Declaration[] declarations, Declaration[] innerDeclarations ) {
         Object[] params = new Object[declarations.length + innerDeclarations.length];
         for (int i = 0; i < innerDeclarations.length; i++) {
-            params[i] = getArgument( handle, reteEvaluator, innerDeclarations[i], tuple );
+            params[i] = getArgument( handle, valueResolver, innerDeclarations[i], tuple );
         }
         for (int i = 0; i < declarations.length; i++) {
-            params[i+innerDeclarations.length] = getArgument( handle, reteEvaluator, declarations[i], tuple );
+            params[i+innerDeclarations.length] = getArgument( handle, valueResolver, declarations[i], tuple );
         }
         return params;
     }

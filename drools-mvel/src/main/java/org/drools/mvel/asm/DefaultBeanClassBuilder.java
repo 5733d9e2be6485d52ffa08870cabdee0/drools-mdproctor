@@ -329,7 +329,7 @@ public class DefaultBeanClassBuilder implements Opcodes, BeanClassBuilder, Seria
             }
          */
         {
-            mv = cw.visitMethod( ACC_PUBLIC, "addLeftTuple", "(Lorg/drools/core/reteoo/Tuple;)V", null, null );
+            mv = cw.visitMethod( ACC_PUBLIC, "addTuple", "(Lorg/drools/base/base/BaseTuple;)V", null, null );
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel( l0 );
@@ -371,7 +371,7 @@ public class DefaultBeanClassBuilder implements Opcodes, BeanClassBuilder, Seria
             }
          */
         {
-            mv = cw.visitMethod( ACC_PUBLIC, "getLeftTuples", "()Ljava/util/Collection;", "()Ljava/util/Collection<Lorg/drools/core/reteoo/Tuple;>;", null );
+            mv = cw.visitMethod( ACC_PUBLIC, "getTuples", "()Ljava/util/Collection;", "()Ljava/util/Collection<Lorg/drools/base/base/BaseTuple;>;", null );
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel( l0 );
@@ -408,7 +408,7 @@ public class DefaultBeanClassBuilder implements Opcodes, BeanClassBuilder, Seria
             mv.visitLabel( l0 );
             mv.visitLineNumber( 41, l0 );
             mv.visitVarInsn( ALOAD, 0 );
-            mv.visitMethodInsn( INVOKESTATIC, "org/drools/core/phreak/ReactiveObjectUtil", "notifyModification", "(Lorg/drools/core/phreak/ReactiveObject;)V", false );
+            mv.visitMethodInsn( INVOKESTATIC, "org/drools/core/phreak/ReactiveObjectUtil", "notifyModification", "(Lorg/drools/base/phreak/ReactiveObject;)V", false );
             Label l1 = new Label();
             mv.visitLabel( l1 );
             mv.visitLineNumber( 42, l1 );
@@ -425,7 +425,7 @@ public class DefaultBeanClassBuilder implements Opcodes, BeanClassBuilder, Seria
             }
          */
         {
-            mv = cw.visitMethod( ACC_PUBLIC, "removeLeftTuple", "(Lorg/drools/core/reteoo/Tuple;)V", null, null );
+            mv = cw.visitMethod( ACC_PUBLIC, "removeTuple", "(Lorg/drools/base/base/BaseTuple;)V", null, null );
             mv.visitCode();
             Label l0 = new Label();
             mv.visitLabel( l0 );

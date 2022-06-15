@@ -24,14 +24,13 @@ import java.util.List;
 
 import org.drools.base.base.ClassObjectType;
 import org.drools.base.base.ValueResolver;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.base.definitions.rule.impl.RuleImpl;
-import org.drools.core.impl.KnowledgeBaseImpl;
-import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.base.rule.GroupElement;
 import org.drools.base.rule.GroupElementFactory;
 import org.drools.base.rule.Pattern;
 import org.drools.base.rule.consequence.Consequence;
+import org.drools.core.impl.KnowledgeBaseImpl;
+import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,9 +67,10 @@ public class ReteooRuleBuilderTest {
 
         rule.setLhs( lhsroot );
 
-        final Consequence consequence = new Consequence() {
+        final Consequence<KnowledgeHelper> consequence = new Consequence<KnowledgeHelper>() {
+            @Override
             public void evaluate(KnowledgeHelper knowledgeHelper,
-                                 ReteEvaluator reteEvaluator) throws Exception {
+                                 ValueResolver valueResolver) throws Exception {
                 System.out.println( "Consequence!" );
             }
 
@@ -79,10 +79,6 @@ public class ReteooRuleBuilderTest {
             }
 
             public void writeExternal(ObjectOutput out) throws IOException {
-
-            }
-
-            @Override public void evaluate(Object context, ValueResolver valueResolver) throws Exception {
 
             }
 

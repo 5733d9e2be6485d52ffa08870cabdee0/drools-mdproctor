@@ -29,6 +29,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.drools.base.base.BaseTuple;
+import org.drools.base.base.ClassObjectType;
+import org.drools.base.base.DroolsQuery;
+import org.drools.base.base.ObjectType;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.base.ValueType;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.Pattern;
+import org.drools.base.rule.QueryArgument;
+import org.drools.base.rule.SortDeclarations;
+import org.drools.base.rule.accessor.DeclarationScopeResolver;
+import org.drools.base.rule.accessor.Evaluator;
+import org.drools.base.rule.accessor.FieldValue;
+import org.drools.base.rule.accessor.ReadAccessor;
+import org.drools.base.rule.constraint.Constraint;
+import org.drools.base.util.index.ConstraintOperatorType;
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.compiler.compiler.AnalysisResult;
 import org.drools.compiler.compiler.BoundIdentifiers;
@@ -37,15 +53,25 @@ import org.drools.compiler.compiler.Dialect;
 import org.drools.compiler.compiler.DialectConfiguration;
 import org.drools.compiler.kie.util.BeanCreator;
 import org.drools.compiler.rule.builder.ConstraintBuilder;
+import org.drools.compiler.rule.builder.EvaluatorDefinition;
+import org.drools.compiler.rule.builder.EvaluatorWrapper;
 import org.drools.compiler.rule.builder.PatternBuilder;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.base.base.BaseTuple;
-import org.drools.base.base.ClassObjectType;
-import org.drools.compiler.rule.builder.EvaluatorWrapper;
-import org.drools.core.base.DroolsQueryImpl;
-import org.drools.base.base.ValueResolver;
-import org.drools.base.rule.SortDeclarations;
-import org.drools.base.util.index.ConstraintOperatorType;
+import org.drools.core.common.InternalWorkingMemory;
+import org.drools.core.rule.consequence.KnowledgeHelper;
+import org.drools.core.time.TimerExpression;
+import org.drools.drl.ast.descr.BaseDescr;
+import org.drools.drl.ast.descr.BindingDescr;
+import org.drools.drl.ast.descr.LiteralRestrictionDescr;
+import org.drools.drl.ast.descr.OperatorDescr;
+import org.drools.drl.ast.descr.PredicateDescr;
+import org.drools.drl.ast.descr.RelationalExprDescr;
+import org.drools.drl.parser.impl.Operator;
+import org.drools.mvel.asm.AsmUtil;
+import org.drools.mvel.builder.MVELAnalysisResult;
+import org.drools.mvel.builder.MVELBeanCreator;
+import org.drools.mvel.builder.MVELDialect;
+import org.drools.mvel.builder.MVELDialectConfiguration;
 import org.drools.mvel.evaluators.AfterEvaluatorDefinition;
 import org.drools.mvel.evaluators.BeforeEvaluatorDefinition;
 import org.drools.mvel.evaluators.CoincidesEvaluatorDefinition;
@@ -60,37 +86,11 @@ import org.drools.mvel.evaluators.OverlapsEvaluatorDefinition;
 import org.drools.mvel.evaluators.StartedByEvaluatorDefinition;
 import org.drools.mvel.evaluators.StartsEvaluatorDefinition;
 import org.drools.mvel.evaluators.StrEvaluatorDefinition;
-import org.drools.mvel.field.FieldFactory;
-import org.drools.base.base.ValueType;
-import org.drools.compiler.rule.builder.EvaluatorDefinition;
-import org.drools.drl.parser.impl.Operator;
-import org.drools.core.common.InternalWorkingMemory;
-import org.drools.base.rule.Declaration;
-import org.drools.base.rule.Pattern;
-import org.drools.base.rule.QueryArgument;
-import org.drools.base.rule.constraint.Constraint;
-import org.drools.base.rule.accessor.DeclarationScopeResolver;
-import org.drools.base.rule.accessor.Evaluator;
-import org.drools.base.rule.accessor.FieldValue;
-import org.drools.base.rule.accessor.ReadAccessor;
-import org.drools.core.rule.consequence.KnowledgeHelper;
-import org.drools.base.base.ObjectType;
-import org.drools.core.time.TimerExpression;
-import org.drools.drl.ast.descr.BaseDescr;
-import org.drools.drl.ast.descr.BindingDescr;
-import org.drools.drl.ast.descr.LiteralRestrictionDescr;
-import org.drools.drl.ast.descr.OperatorDescr;
-import org.drools.drl.ast.descr.PredicateDescr;
-import org.drools.drl.ast.descr.RelationalExprDescr;
-import org.drools.mvel.asm.AsmUtil;
-import org.drools.mvel.builder.MVELAnalysisResult;
-import org.drools.mvel.builder.MVELBeanCreator;
-import org.drools.mvel.builder.MVELDialect;
-import org.drools.mvel.builder.MVELDialectConfiguration;
 import org.drools.mvel.expr.MVELCompilationUnit;
 import org.drools.mvel.expr.MVELCompileable;
 import org.drools.mvel.expr.MVELObjectExpression;
 import org.drools.mvel.expr.MvelEvaluator;
+import org.drools.mvel.field.FieldFactory;
 import org.drools.mvel.java.JavaForMvelDialectConfiguration;
 import org.kie.api.definition.rule.Rule;
 import org.mvel2.ConversionHandler;
@@ -111,10 +111,10 @@ import static org.drools.compiler.rule.builder.PatternBuilder.registerDescrBuild
 import static org.drools.compiler.rule.builder.util.PatternBuilderUtil.getNormalizeDate;
 import static org.drools.compiler.rule.builder.util.PatternBuilderUtil.normalizeEmptyKeyword;
 import static org.drools.compiler.rule.builder.util.PatternBuilderUtil.normalizeStringOperator;
-import static org.drools.util.ClassUtils.convertFromPrimitiveType;
 import static org.drools.mvel.asm.AsmUtil.copyErrorLocation;
 import static org.drools.mvel.builder.MVELExprAnalyzer.analyze;
 import static org.drools.mvel.expr.MvelEvaluator.createMvelEvaluator;
+import static org.drools.util.ClassUtils.convertFromPrimitiveType;
 
 public class MVELConstraintBuilder implements ConstraintBuilder {
 
@@ -196,7 +196,7 @@ public class MVELConstraintBuilder implements ConstraintBuilder {
         }
 
         boolean isUnification = requiredDeclaration != null &&
-                                requiredDeclaration.getPattern().getObjectType().equals( new ClassObjectType( DroolsQueryImpl.class )) &&
+                                requiredDeclaration.getPattern().getObjectType().isAssignableTo(DroolsQuery.class) &&
                                 Operator.BuiltInOperator.EQUAL.getSymbol().equals( operatorDescr.getOperator() );
         if (isUnification && leftValue.equals(rightValue)) {
             expression = resolveUnificationAmbiguity(expression, declarations, leftValue, rightValue);

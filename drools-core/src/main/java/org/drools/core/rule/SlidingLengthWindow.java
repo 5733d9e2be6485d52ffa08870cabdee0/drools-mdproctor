@@ -33,21 +33,21 @@ import org.drools.core.reteoo.ObjectTypeNode;
 /**
  * A length window behavior implementation
  */
-public class SlidingLengthWindowRuntime
+public class SlidingLengthWindow
     implements
     Externalizable,
     BehaviorRuntime {
 
     protected int size;
 
-    public SlidingLengthWindowRuntime() {
+    public SlidingLengthWindow() {
         this( 0 );
     }
 
     /**
      * @param size
      */
-    public SlidingLengthWindowRuntime(final int size) {
+    public SlidingLengthWindow(final int size) {
         super();
         this.size = size;
     }

@@ -16,10 +16,12 @@ package org.drools.mvel.asm;
 
 import java.util.Map;
 
+import org.drools.base.base.BaseTuple;
 import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.CompiledInvoker;
 import org.drools.base.rule.consequence.Consequence;
+import org.drools.base.rule.consequence.ConsequenceContext;
 import org.drools.compiler.rule.builder.RuleBuildContext;
 import org.drools.core.WorkingMemory;
 import org.drools.core.common.InternalFactHandle;
@@ -29,6 +31,7 @@ import org.drools.core.reteoo.Tuple;
 import org.drools.core.rule.consequence.Activation;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.kie.api.runtime.rule.FactHandle;
+import org.kie.api.runtime.rule.Match;
 import org.mvel2.asm.MethodVisitor;
 
 import static org.mvel2.asm.Opcodes.AALOAD;
@@ -56,16 +59,17 @@ public class ASMConsequenceBuilder extends AbstractASMConsequenceBuilder {
                 push(name);
                 mv.visitInsn(ARETURN);
             }
-        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, KnowledgeHelper.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
+        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, ConsequenceContext.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
             public void body(MethodVisitor mv) {
-                // Tuple tuple = knowledgeHelper.getTuple();
+                // BaseTuple tuple = ConsequenceContext.getTuple();
                 mv.visitVarInsn(ALOAD, 1);
-                invokeInterface(KnowledgeHelper.class, "getTuple", Tuple.class);
+                invokeInterface(ConsequenceContext.class, "getTuple", BaseTuple.class);
                 mv.visitVarInsn(ASTORE, 3);
 
-                // Declaration[] declarations = ((RuleTerminalNode)knowledgeHelper.getMatch().getTuple().getTupleSink()).getDeclarations();
+                // Declaration[] declarations = ((RuleTerminalNode)((Activation)ConsequenceContext.getMatch()).getTuple().getTupleSink()).getDeclarations();
                 mv.visitVarInsn(ALOAD, 1);
-                invokeInterface(KnowledgeHelper.class, "getMatch", Activation.class);
+                invokeInterface(ConsequenceContext.class, "getMatch", Match.class);
+                cast(Activation.class);
                 invokeInterface(Activation.class, "getTuple", Tuple.class);
                 invokeInterface(Tuple.class, "getTupleSink", Sink.class);
                 cast(RuleTerminalNode.class);
@@ -108,6 +112,7 @@ public class ASMConsequenceBuilder extends AbstractASMConsequenceBuilder {
 
                     if (notPatterns[i]) {
                         mv.visitVarInsn(ALOAD, 1);
+                        cast(KnowledgeHelper.class);
                         invokeInterface(KnowledgeHelper.class, "getWorkingMemory", WorkingMemory.class);
                         loadAsObject(objPos);
                         invokeInterface(WorkingMemory.class, "getFactHandle", FactHandle.class, Object.class);
@@ -116,9 +121,9 @@ public class ASMConsequenceBuilder extends AbstractASMConsequenceBuilder {
                     }
                 }
 
-                // @{ruleClassName}.@{methodName}(KnowledgeHelper, @foreach{declr : declarations} Object, FactHandle @end)
-                StringBuilder consequenceMethodDescr = new StringBuilder("(L" + KnowledgeHelper.class.getName().replace('.', '/')+ ";");
-                mv.visitVarInsn(ALOAD, 1); // KnowledgeHelper
+                // @{ruleClassName}.@{methodName}(ConsequenceContext, @foreach{declr : declarations} Object, FactHandle @end)
+                StringBuilder consequenceMethodDescr = new StringBuilder("(L" + ConsequenceContext.class.getName().replace('.', '/')+ ";");
+                mv.visitVarInsn(ALOAD, 1); // ConsequenceContext
                 for (int i = 0; i < declarations.length; i++) {
                     load(paramsPos[i] + 1); // obj[i]
                     mv.visitVarInsn(ALOAD, paramsPos[i]); // fact[i]

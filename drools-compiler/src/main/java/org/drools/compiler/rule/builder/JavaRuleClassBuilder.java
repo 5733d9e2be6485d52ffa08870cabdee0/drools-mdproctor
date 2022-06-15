@@ -15,7 +15,6 @@
 package org.drools.compiler.rule.builder;
 
 import org.drools.drl.ast.descr.RuleDescr;
-import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.util.StringUtils;
 
 public class JavaRuleClassBuilder implements RuleClassBuilder {
@@ -37,7 +36,6 @@ public class JavaRuleClassBuilder implements RuleClassBuilder {
         for (String s : context.getPkg().getImports().keySet()) {
             buffer.append("import ").append(s).append(";");
         }
-        buffer.append("import ").append(KnowledgeHelper.class.getName()).append(";");
 
         for (String s : context.getPkg().getStaticImports()) {
             buffer.append("import static ").append(s).append(";");

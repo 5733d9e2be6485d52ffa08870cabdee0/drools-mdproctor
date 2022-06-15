@@ -65,6 +65,7 @@ public class MultiModuleTestIT {
                     .hasSameElementsAs(asList("org.kie.modC", "org.kie.modB", "org.kie.modA"));
 
             List<FactType> factTypes = kiePackages.stream()
+                    .map(org.drools.base.definitions.InternalKnowledgePackage.class::cast)
                     .flatMap(kb -> kb.getFactTypes().stream())
                     .collect(toList());
 

@@ -21,6 +21,7 @@ import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.CompiledInvoker;
 import org.drools.base.rule.consequence.Consequence;
+import org.drools.base.rule.consequence.ConsequenceContext;
 import org.drools.core.WorkingMemory;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.reteoo.LeftTuple;
@@ -28,9 +29,9 @@ import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.Sink;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.rule.consequence.Activation;
-import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.mvel.asm.GeneratorHelper.DeclarationMatcher;
 import org.kie.api.runtime.rule.FactHandle;
+import org.kie.api.runtime.rule.Match;
 import org.mvel2.asm.MethodVisitor;
 
 import static org.drools.mvel.asm.GeneratorHelper.createInvokerClassGenerator;
@@ -46,10 +47,10 @@ import static org.mvel2.asm.Opcodes.RETURN;
 
 public class ConsequenceGenerator {
 
-    public static void generate( final ConsequenceStub stub, KnowledgeHelper knowledgeHelper, ValueResolver valueResolver) {
-        RuleTerminalNode rtn = knowledgeHelper.getMatch().getTuple().getTupleSink();
+    public static void generate(final ConsequenceStub stub, ConsequenceContext consequenceContext, ValueResolver valueResolver) {
+        RuleTerminalNode rtn = ((Activation)consequenceContext.getMatch()).getTuple().getTupleSink();
         final Declaration[] declarations = rtn.getRequiredDeclarations();
-        final Tuple tuple = knowledgeHelper.getTuple();
+        final BaseTuple tuple = consequenceContext.getTuple();
 
         // Sort declarations based on their offset, so it can ascend the tuple's parents stack only once
         final List<DeclarationMatcher> declarationMatchers = matchDeclarationsToTuple(declarations);
@@ -61,17 +62,18 @@ public class ConsequenceGenerator {
                 push(stub.getGeneratedInvokerClassName());
                 mv.visitInsn(ARETURN);
             }
-        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, KnowledgeHelper.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
+        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, ConsequenceContext.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new GeneratorHelper.EvaluateMethod() {
             public void body(MethodVisitor mv) {
-                // Tuple tuple = knowledgeHelper.getTuple();
+                // BaseTuple tuple = ConsequenceContext.getTuple();
                 mv.visitVarInsn(ALOAD, 1);
-                invokeInterface(KnowledgeHelper.class, "getTuple", Tuple.class);
+                invokeInterface(ConsequenceContext.class, "getTuple", BaseTuple.class);
                 cast(LeftTuple.class);
                 mv.visitVarInsn(ASTORE, 3); // LeftTuple
 
-                // Declaration[] declarations = ((RuleTerminalNode)knowledgeHelper.getMatch().getTuple().getTupleSink()).getDeclarations();
+                // Declaration[] declarations = ((RuleTerminalNode)((Activation)ConsequenceContext.getMatch()).getTuple().getTupleSink()).getDeclarations();
                 mv.visitVarInsn(ALOAD, 1);
-                invokeInterface(KnowledgeHelper.class, "getMatch", Activation.class);
+                invokeInterface(ConsequenceContext.class, "getMatch", Match.class);
+                cast(Activation.class);
                 invokeInterface(Activation.class, "getTuple", Tuple.class);
                 invokeInterface(Tuple.class, "getTupleSink", Sink.class);
                 cast(RuleTerminalNode.class);
@@ -125,9 +127,9 @@ public class ConsequenceGenerator {
                     }
                 }
 
-                // @{ruleClassName}.@{methodName}(KnowledgeHelper, @foreach{declr : declarations} Object, FactHandle @end)
-                StringBuilder consequenceMethodDescr = new StringBuilder("(L" + KnowledgeHelper.class.getName().replace('.', '/') +";");
-                mv.visitVarInsn(ALOAD, 1); // KnowledgeHelper
+                // @{ruleClassName}.@{methodName}(ConsequenceContext, @foreach{declr : declarations} Object, FactHandle @end)
+                StringBuilder consequenceMethodDescr = new StringBuilder("(L" + ConsequenceContext.class.getName().replace('.', '/') +";");
+                mv.visitVarInsn(ALOAD, 1); // ConsequenceContext
                 for (int i = 0; i < declarations.length; i++) {
                     load(paramsPos[i] + 1); // obj[i]
                     mv.visitVarInsn(ALOAD, paramsPos[i]); // handle[i]

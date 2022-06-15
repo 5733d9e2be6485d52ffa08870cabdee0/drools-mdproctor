@@ -17,13 +17,12 @@
 package org.drools.kiesession;
 
 import org.drools.base.base.ValueResolver;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.base.rule.consequence.Consequence;
+import org.drools.base.rule.consequence.ConsequenceContext;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.core.rule.JavaDialectRuntimeData;
-import org.drools.base.rule.consequence.Consequence;
-import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.drools.core.test.model.DroolsTestCase;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
@@ -59,11 +58,8 @@ public class ReteooRuleBaseMultiThreadedTest extends DroolsTestCase {
         rule = new RuleImpl("Test");
         rule.setDialect("java");
         rule.setConsequence(new Consequence() {
-            public void evaluate(KnowledgeHelper knowledgeHelper, ReteEvaluator reteEvaluator) throws Exception {
-
-            }
-
-            @Override public void evaluate(Object context, ValueResolver valueResolver) throws Exception {
+            @Override
+            public void evaluate(ConsequenceContext context, ValueResolver valueResolver) throws Exception {
 
             }
 

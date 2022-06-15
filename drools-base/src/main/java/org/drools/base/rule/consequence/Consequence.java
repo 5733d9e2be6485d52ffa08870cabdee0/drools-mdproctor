@@ -28,7 +28,7 @@ import org.kie.internal.security.KiePolicyHelper;
 /**
  * Consequence to be fired upon successful match of a <code>Rule</code>.
  */
-public interface Consequence<T> extends Invoker {
+public interface Consequence<T extends ConsequenceContext> extends Invoker {
     
     String getName();
     
@@ -45,7 +45,7 @@ public interface Consequence<T> extends Invoker {
     void evaluate(T context,
                   ValueResolver valueResolver) throws Exception;
 
-    class SafeConsequence<T> implements Consequence<T>, Serializable {
+    class SafeConsequence<T extends ConsequenceContext> implements Consequence<T>, Serializable {
         private static final long serialVersionUID = -8109957972163261899L;
         private final Consequence<T> delegate;
         public SafeConsequence( Consequence delegate ) {

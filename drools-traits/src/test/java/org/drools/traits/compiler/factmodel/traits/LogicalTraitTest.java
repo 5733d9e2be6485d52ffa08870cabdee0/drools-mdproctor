@@ -119,8 +119,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testShadowAliasTraitOnClass() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -184,8 +184,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testShadowAliasClassOnTrait() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -265,8 +265,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testShadowAliasTraitOnTrait() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -742,8 +742,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void shadowAliasSelf() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -806,8 +806,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void traitOnSet() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -913,8 +913,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testShadowAliasTraitOnClassLogicalRetract() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -1051,8 +1051,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testShadowAliasClassOnTraitLogicalRetract() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -1168,8 +1168,8 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testSerial() {
 
         String drl = "package org.drools.test; \n" +
-                     "import org.drools.core.factmodel.traits.*; \n" +
-                     "import org.drools.core.factmodel.traits.Trait; \n" +
+                     "import org.drools.base.factmodel.traits.*; \n" +
+                     "import org.drools.base.factmodel.traits.Trait; \n" +
                      "" +
                      "global java.util.List list; \n" +
                      "" +
@@ -1229,12 +1229,12 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testTraitMismatchTypes()
     {
         String drl = "" +
-                     "package org.drools.core.factmodel.traits.test;\n" +
+                     "package org.drools.base.factmodel.traits.test;\n" +
                      "\n" +
-                     "import org.drools.core.factmodel.traits.Thing;\n" +
-                     "import org.drools.core.factmodel.traits.Traitable;\n" +
-                     "import org.drools.core.factmodel.traits.Trait;\n" +
-                     "import org.drools.core.factmodel.traits.Alias;\n" +
+                     "import org.drools.base.factmodel.traits.Thing;\n" +
+                     "import org.drools.base.factmodel.traits.Traitable;\n" +
+                     "import org.drools.base.factmodel.traits.Trait;\n" +
+                     "import org.drools.base.factmodel.traits.Alias;\n" +
                      "\n" +
                      "global java.util.List list;\n" +
                      "\n" +
@@ -1281,12 +1281,12 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testTraitMismatchTypes2()
     {
         String drl = "" +
-                     "package org.drools.core.factmodel.traits.test;\n" +
+                     "package org.drools.base.factmodel.traits.test;\n" +
                      "\n" +
-                     "import org.drools.core.factmodel.traits.Thing;\n" +
-                     "import org.drools.core.factmodel.traits.Traitable;\n" +
-                     "import org.drools.core.factmodel.traits.Trait;\n" +
-                     "import org.drools.core.factmodel.traits.Alias;\n" +
+                     "import org.drools.base.factmodel.traits.Thing;\n" +
+                     "import org.drools.base.factmodel.traits.Traitable;\n" +
+                     "import org.drools.base.factmodel.traits.Trait;\n" +
+                     "import org.drools.base.factmodel.traits.Alias;\n" +
                      "\n" +
                      "global java.util.List list;\n" +
                      "\n" +
@@ -1335,11 +1335,11 @@ public class LogicalTraitTest extends CommonTraitTest {
     public void testTraitMismatchTypes3()
     {
         String drl = "" +
-                     "package org.drools.core.factmodel.traits.test;\n" +
+                     "package org.drools.base.factmodel.traits.test;\n" +
                      "\n" +
-                     "import org.drools.core.factmodel.traits.Traitable;\n" +
-                     "import org.drools.core.factmodel.traits.Trait;\n" +
-                     "import org.drools.core.factmodel.traits.Alias;\n" +
+                     "import org.drools.base.factmodel.traits.Traitable;\n" +
+                     "import org.drools.base.factmodel.traits.Trait;\n" +
+                     "import org.drools.base.factmodel.traits.Alias;\n" +
                      "\n" +
                      "global java.util.List list;\n" +
                      "\n" +

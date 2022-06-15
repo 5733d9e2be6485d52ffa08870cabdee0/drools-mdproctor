@@ -36,10 +36,14 @@ import com.thoughtworks.xstream.converters.collections.AbstractCollectionConvert
 import com.thoughtworks.xstream.io.ExtendedHierarchicalStreamWriterHelper;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import org.drools.core.QueryResultsImpl;
 import org.drools.base.base.ClassObjectType;
+import org.drools.base.base.DroolsQuery;
+import org.drools.base.base.ObjectType;
+import org.drools.base.rule.Declaration;
 import org.drools.commands.runtime.AdvanceSessionTimeCommand;
 import org.drools.commands.runtime.BatchExecutionCommandImpl;
+import org.drools.commands.runtime.ExecutionResultImpl;
+import org.drools.commands.runtime.FlatQueryResults;
 import org.drools.commands.runtime.GetGlobalCommand;
 import org.drools.commands.runtime.GetSessionTimeCommand;
 import org.drools.commands.runtime.SetGlobalCommand;
@@ -63,13 +67,10 @@ import org.drools.commands.runtime.rule.InsertObjectCommand;
 import org.drools.commands.runtime.rule.ModifyCommand;
 import org.drools.commands.runtime.rule.QueryCommand;
 import org.drools.commands.runtime.rule.UpdateCommand;
+import org.drools.core.QueryResultsImpl;
 import org.drools.core.base.DroolsQueryImpl;
 import org.drools.core.common.DefaultFactHandle;
 import org.drools.core.common.DisconnectedFactHandle;
-import org.drools.base.rule.Declaration;
-import org.drools.commands.runtime.ExecutionResultImpl;
-import org.drools.commands.runtime.FlatQueryResults;
-import org.drools.base.base.ObjectType;
 import org.kie.api.command.Command;
 import org.kie.api.command.Setter;
 import org.kie.api.runtime.ExecutionResults;
@@ -1107,7 +1108,7 @@ public class XStreamXML {
                     Declaration declr = ((QueryResultsImpl) results).getDeclarations(0).get( identifier );
                     ObjectType objectType = declr.getPattern().getObjectType();
                     if ( objectType instanceof ClassObjectType ) {
-                        if ( ((ClassObjectType) objectType).getClassType() == DroolsQueryImpl.class ) {
+                        if ( DroolsQuery.class.isAssignableFrom( ((ClassObjectType) objectType).getClassType() ) ) {
                             continue;
                         }
                     }

@@ -20,8 +20,8 @@ import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.GroupElement;
 import org.drools.base.rule.accessor.CompiledInvoker;
 import org.drools.base.rule.consequence.Consequence;
+import org.drools.base.rule.consequence.ConsequenceContext;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.mvel2.asm.Label;
 import org.mvel2.asm.MethodVisitor;
 
@@ -74,7 +74,7 @@ public class ASMConsequenceStubBuilder extends ASMConsequenceBuilder {
             public void body(MethodVisitor mv) {
                 returnAsArray((Boolean[]) vars.get("notPatterns"));
             }
-        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, KnowledgeHelper.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new ClassGenerator.MethodBody() {
+        }).addMethod(ACC_PUBLIC, "evaluate", generator.methodDescr(null, ConsequenceContext.class, ValueResolver.class), new String[]{"java/lang/Exception"}, new ClassGenerator.MethodBody() {
             public void body(MethodVisitor mv) {
                 Label syncStart = new Label();
                 Label syncEnd = new Label();
@@ -98,8 +98,8 @@ public class ASMConsequenceStubBuilder extends ASMConsequenceBuilder {
                 mv.visitVarInsn(ALOAD, 0);
                 mv.visitVarInsn(ALOAD, 1);
                 mv.visitVarInsn(ALOAD, 2);
-                // ... ConsequenceGenerator.generate(this, knowledgeHelper, workingMemory)
-                invokeStatic(ConsequenceGenerator.class, "generate", null, ConsequenceStub.class, KnowledgeHelper.class, ValueResolver.class);
+                // ... ConsequenceGenerator.generate(this, ConsequenceContext, workingMemory)
+                invokeStatic(ConsequenceGenerator.class, "generate", null, ConsequenceStub.class, ConsequenceContext.class, ValueResolver.class);
                 mv.visitLabel(ifNotInitialized);
                 mv.visitVarInsn(ALOAD, 3);
                 mv.visitInsn(MONITOREXIT);
@@ -117,7 +117,7 @@ public class ASMConsequenceStubBuilder extends ASMConsequenceBuilder {
                 getFieldFromThis("consequence", Consequence.class);
                 mv.visitVarInsn(ALOAD, 1);
                 mv.visitVarInsn(ALOAD, 2);
-                invokeInterface(Consequence.class, "evaluate", null, KnowledgeHelper.class, ValueResolver.class);
+                invokeInterface(Consequence.class, "evaluate", null, ConsequenceContext.class, ValueResolver.class);
                 mv.visitInsn(RETURN);
             }
         }).addMethod(ACC_PUBLIC, "setConsequence", generator.methodDescr(null, Consequence.class), new ClassGenerator.MethodBody() {

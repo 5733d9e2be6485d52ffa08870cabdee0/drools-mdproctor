@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.drools.base.rule.Declaration;
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.core.ClassObjectFilter;
@@ -6344,7 +6345,7 @@ public class Misc2Test {
         for ( Rule r : ((InternalKnowledgePackage) session.getKieBase().getKiePackage("org.drools.test")).getRules() ) {
             ( (RuleImpl) r ).setSalience( new Salience() {
                 @Override
-                public int getValue(BaseTuple tuple, Rule rule, ValueResolver valueResolver) {
+                public int getValue(BaseTuple tuple, Declaration[] declarations, Rule rule, ValueResolver valueResolver) {
                     if ( tuple == null ) {
                         return 0;
                     }

@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.drools.base.base.ClassObjectType;
-import org.drools.core.base.DroolsQueryImpl;
+import org.drools.base.base.DroolsQuery;
+import org.drools.base.util.FastIterator;
 import org.drools.core.common.DoubleNonIndexSkipBetaConstraints;
 import org.drools.core.common.EmptyBetaConstraints;
 import org.drools.core.common.InternalFactHandle;
@@ -40,7 +40,6 @@ import org.drools.core.reteoo.NotNode;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ReteDumper;
 import org.drools.core.reteoo.RightTuple;
-import org.drools.base.util.FastIterator;
 import org.drools.core.util.index.TupleIndexHashTable;
 import org.drools.core.util.index.TupleList;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
@@ -257,7 +256,7 @@ public class IndexingTest {
             final List<ObjectTypeNode> nodes = ((RuleBase) kbase).getRete().getObjectTypeNodes();
             ObjectTypeNode node = null;
             for (final ObjectTypeNode n : nodes) {
-                if (((ClassObjectType) n.getObjectType()).getClassType() == DroolsQueryImpl.class) {
+                if (n.getObjectType().isAssignableTo( DroolsQuery.class ) ) {
                     node = n;
                     break;
                 }
@@ -294,7 +293,7 @@ public class IndexingTest {
             final List<ObjectTypeNode> nodes = ((RuleBase) kbase).getRete().getObjectTypeNodes();
             ObjectTypeNode node = null;
             for (final ObjectTypeNode n : nodes) {
-                if (((ClassObjectType) n.getObjectType()).getClassType() == DroolsQueryImpl.class) {
+                if (n.getObjectType().isAssignableTo( DroolsQuery.class ) ) {
                     node = n;
                     break;
                 }
@@ -427,7 +426,7 @@ public class IndexingTest {
             final List<ObjectTypeNode> nodes = ((RuleBase) kbase).getRete().getObjectTypeNodes();
             ObjectTypeNode node = null;
             for (final ObjectTypeNode n : nodes) {
-                if (((ClassObjectType) n.getObjectType()).getClassType() == DroolsQueryImpl.class) {
+                if (n.getObjectType().isAssignableTo( DroolsQuery.class ) ) {
                     node = n;
                     break;
                 }

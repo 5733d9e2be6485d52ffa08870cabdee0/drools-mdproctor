@@ -486,7 +486,6 @@ public class JavaDialect implements Dialect {
 
         // The compilation result is for the entire rule, so difficult to associate with any descr
         addClassCompileTask(this.pkg.getName() + "." + ruleDescr.getClassName(),
-                            ruleDescr,
                             ruleClass,
                             this.src,
                             new RuleErrorHandler(ruleDescr,
@@ -508,7 +507,6 @@ public class JavaDialect implements Dialect {
 
             final BaseDescr descr = context.getDescrLookup(className);
             addClassCompileTask(className,
-                                descr,
                                 text,
                                 this.src,
                                 new RuleInvokerErrorHandler(descr,
@@ -548,7 +546,6 @@ public class JavaDialect implements Dialect {
                                                               this.results);
 
         addClassCompileTask(functionClassName,
-                            functionDescr,
                             functionSrc,
                             this.src,
                             new FunctionErrorHandler(functionDescr,
@@ -595,7 +592,6 @@ public class JavaDialect implements Dialect {
      * element that caused it.
      */
     public void addClassCompileTask(final String className,
-                                    final BaseDescr descr,
                                     final String text,
                                     final MemoryResourceReader src,
                                     final ErrorHandler handler) {

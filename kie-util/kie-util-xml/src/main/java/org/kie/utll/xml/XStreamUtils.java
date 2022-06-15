@@ -43,8 +43,8 @@ public class XStreamUtils {
         "org.drools.traits.core.factmodel.Field",
         "org.drools.core.common.DefaultFactHandle",
         "org.drools.core.common.EventFactHandle",
-        "org.drools.core.rule.KieModuleMetaInfo",
-        "org.drools.core.rule.TypeMetaInfo",
+        "org.drools.base.rule.KieModuleMetaInfo",
+        "org.drools.base.rule.TypeMetaInfo",
         "org.drools.core.runtime.help.impl.XStreamXMLTest$Message"
     };
 

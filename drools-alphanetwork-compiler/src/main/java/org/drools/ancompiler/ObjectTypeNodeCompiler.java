@@ -191,7 +191,7 @@ public class ObjectTypeNodeCompiler {
 
     private void addEmptySetNetworkReference(StringBuilder builder) {
         builder.append("   @Override\n" +
-                               "    protected void setNetworkNodeReference(org.drools.core.common.NetworkNode networkNode) {\n" +
+                               "    protected void setNetworkNodeReference(org.drools.base.common.NetworkNode networkNode) {\n" +
                                "        \n" +
                                "    }");
     }

@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.drools.base.definitions.rule.RuleBase;
+import org.drools.base.definitions.rule.RuleEvaluationContext;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.RuleComponent;
 import org.drools.base.base.ObjectType;
@@ -84,7 +85,7 @@ public interface Constraint
         return this.equals( object );
     }
 
-    default void registerEvaluationContext(Object buildContext) { }
+    default void registerEvaluationContext(RuleEvaluationContext ruleEvaluationContext) { }
 
     default void mergeEvaluationContext(Constraint other) { }
 

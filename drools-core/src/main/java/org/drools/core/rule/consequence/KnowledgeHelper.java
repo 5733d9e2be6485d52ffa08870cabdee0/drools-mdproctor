@@ -20,14 +20,15 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
-import org.drools.core.WorkingMemory;
-import org.drools.core.common.InternalFactHandle;
 import org.drools.base.factmodel.traits.Thing;
 import org.drools.base.factmodel.traits.TraitableBean;
 import org.drools.base.rule.Declaration;
+import org.drools.base.rule.consequence.ConsequenceContext;
+import org.drools.core.WorkingMemory;
+import org.drools.core.beliefsystem.Mode;
+import org.drools.core.common.InternalFactHandle;
 import org.drools.core.reteoo.Tuple;
 import org.drools.core.util.bitmask.BitMask;
-import org.drools.core.beliefsystem.Mode;
 import org.kie.api.definition.rule.Rule;
 import org.kie.api.runtime.Channel;
 import org.kie.api.runtime.rule.EntryPoint;
@@ -44,10 +45,7 @@ import org.kie.api.runtime.rule.RuleContext;
  * passed to the consequence at runtime. To achieve this the implementation will
  * need to lookup the fact handle of the object form the WorkingMemory.
  */
-public interface KnowledgeHelper
-    extends
-    RuleContext,
-    Serializable {
+public interface KnowledgeHelper extends ConsequenceContext, RuleContext, Serializable {
     
     void setActivation(final Activation agendaItem);
     

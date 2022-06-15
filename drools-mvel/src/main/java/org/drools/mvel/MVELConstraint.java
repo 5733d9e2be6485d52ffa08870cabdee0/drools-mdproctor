@@ -32,17 +32,14 @@ import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.drools.compiler.rule.builder.EvaluatorWrapper;
 import org.drools.base.base.BaseTuple;
-import org.drools.core.base.DroolsQueryImpl;
 import org.drools.base.base.ObjectType;
 import org.drools.base.base.ValueResolver;
 import org.drools.base.common.DroolsObjectInputStream;
 import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.base.definitions.rule.RuleBase;
+import org.drools.base.definitions.rule.RuleEvaluationContext;
 import org.drools.base.definitions.rule.impl.RuleImpl;
-import org.drools.core.reteoo.Tuple;
-import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.base.rule.ContextEntry;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.IndexableConstraint;
@@ -54,9 +51,12 @@ import org.drools.base.rule.accessor.TupleValueExtractor;
 import org.drools.base.rule.constraint.Constraint;
 import org.drools.base.util.FieldIndex;
 import org.drools.base.util.PropertySpecificUtil;
-import org.drools.core.util.bitmask.BitMask;
 import org.drools.base.util.index.ConstraintOperatorType;
 import org.drools.base.util.index.IndexConfiguration;
+import org.drools.compiler.rule.builder.EvaluatorWrapper;
+import org.drools.core.base.DroolsQueryImpl;
+import org.drools.core.reteoo.Tuple;
+import org.drools.core.util.bitmask.BitMask;
 import org.drools.mvel.ConditionAnalyzer.CombinedCondition;
 import org.drools.mvel.ConditionAnalyzer.Condition;
 import org.drools.mvel.ConditionAnalyzer.EvaluatedExpression;
@@ -78,11 +78,11 @@ import org.mvel2.compiler.ExecutableStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.drools.core.util.MessageUtils.defaultToEmptyString;
 import static org.drools.base.util.PropertySpecificUtil.allSetBitMask;
 import static org.drools.base.util.PropertySpecificUtil.allSetButTraitBitMask;
 import static org.drools.base.util.PropertySpecificUtil.getEmptyPropertyReactiveMask;
 import static org.drools.base.util.PropertySpecificUtil.setPropertyOnMask;
+import static org.drools.core.util.MessageUtils.defaultToEmptyString;
 import static org.drools.util.ClassUtils.getter2property;
 import static org.drools.util.StringUtils.codeAwareIndexOf;
 import static org.drools.util.StringUtils.equalsIgnoreSpaces;
@@ -970,8 +970,9 @@ public class MVELConstraint extends MutableTypeConstraint implements IndexableCo
 
     }
 
-    public void registerEvaluationContext(BuildContext buildContext) {
-        evaluationContext.addContext(buildContext);
+    @Override
+    public void registerEvaluationContext(RuleEvaluationContext ruleEvaluationContext) {
+        evaluationContext.addContext(ruleEvaluationContext);
     }
 
     @Override
@@ -992,12 +993,12 @@ public class MVELConstraint extends MutableTypeConstraint implements IndexableCo
         public static final int MAX_RULE_DEFS = Integer.getInteger("drools.evaluationContext.maxRuleDefs", 10);
         private boolean moreThanMaxRuleDefs = false;
 
-        public void addContext(BuildContext buildContext) {
+        public void addContext(RuleEvaluationContext ruleEvaluationContext) {
             if (moreThanMaxRuleDefs || ruleNameMap.values().stream().flatMap(Collection::stream).count() >= MAX_RULE_DEFS) {
                 moreThanMaxRuleDefs = true;
                 return;
             }
-            RuleImpl rule = buildContext.getRule();
+            RuleImpl rule = ruleEvaluationContext.getRule();
             String ruleName = defaultToEmptyString(rule.getName());
             String ruleFileName = defaultToEmptyString(rule.getResource() != null ? rule.getResource().getSourcePath() : null);
             ruleNameMap.computeIfAbsent(ruleFileName, k -> new HashSet<>()).add(ruleName);

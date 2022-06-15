@@ -31,16 +31,16 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import javax.xml.bind.JAXBContext;
 
-import org.drools.core.QueryResultsImpl;
 import org.drools.base.base.ClassObjectType;
-import org.drools.core.base.DroolsQueryImpl;
+import org.drools.base.base.DroolsQuery;
+import org.drools.base.base.ObjectType;
+import org.drools.commands.runtime.FlatQueryResults;
+import org.drools.core.QueryResultsImpl;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ObjectTypeNode.ObjectTypeNodeMemory;
 import org.drools.core.reteoo.ReteDumper;
-import org.drools.commands.runtime.FlatQueryResults;
-import org.drools.base.base.ObjectType;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.drools.mvel.compiler.Address;
 import org.drools.mvel.compiler.Cheese;
@@ -435,7 +435,7 @@ public class QueryTest {
 
         Map<ObjectType, ObjectTypeNode> obnodes = defaultEntryPointNode.getObjectTypeNodes();
 
-        ObjectType key = new ClassObjectType( DroolsQueryImpl.class );
+        ObjectType key = new ClassObjectType( DroolsQuery.class );
         ObjectTypeNode droolsQueryNode = obnodes.get( key );
         Iterator<InternalFactHandle> it = ((ObjectTypeNodeMemory) sessionImpl.getNodeMemory( droolsQueryNode )).iterator();
         assertThat(it.hasNext()).isFalse();

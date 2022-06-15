@@ -16,12 +16,17 @@
 
 package org.drools.modelcompiler.attributes;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.drools.base.base.BaseTuple;
 import org.drools.base.base.ValueResolver;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.accessor.Salience;
 import org.drools.core.reteoo.Tuple;
 import org.drools.model.DynamicValueSupplier;
+import org.drools.model.Variable;
 import org.kie.api.definition.rule.Rule;
 
 import static org.drools.modelcompiler.consequence.LambdaConsequence.declarationsToFacts;
@@ -36,6 +41,15 @@ public class LambdaSalience extends DynamicAttributeEvaluator<Integer> implement
     public int getValue(BaseTuple tuple, Declaration[] declarations, Rule rule, ValueResolver valueResolver) {
         Object[] facts = declarationsToFacts( valueResolver, (Tuple) tuple, declarations, supplier.getVariables() );
         return supplier.supply( facts );
+    }
+
+    @Override
+    public Declaration[] findDeclarations( Map<String, Declaration> decls) {
+        List<Declaration> salienceDeclarations = new ArrayList<>();
+        for (Variable salienceVar : supplier.getVariables()) {
+            salienceDeclarations.add( decls.get( salienceVar.getName() ) );
+        }
+        return salienceDeclarations.toArray(new Declaration[salienceDeclarations.size()]);
     }
 
     @Override
