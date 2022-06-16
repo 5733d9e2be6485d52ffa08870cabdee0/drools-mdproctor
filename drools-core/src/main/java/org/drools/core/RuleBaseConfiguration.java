@@ -291,6 +291,12 @@ public class RuleBaseConfiguration
             return;
         }
 
+//        switch(name) {
+//            case: SequentialAgendaOption.PROPERTY_NAME: {
+//
+//            }
+//        }
+
         if (name.equals(SequentialAgendaOption.PROPERTY_NAME)) {
             setSequentialAgenda(SequentialAgenda.determineSequentialAgenda(StringUtils.isEmpty(value) ? "sequential" : value));
         } else if (name.equals(SequentialOption.PROPERTY_NAME)) {
@@ -1049,7 +1055,7 @@ public class RuleBaseConfiguration
 
     }
 
-    public <T extends KieBaseOption> void setOption(T option) {
+    public void setOption(KieBaseOption option) {
         if (option instanceof SequentialOption) {
             setSequential(((SequentialOption) option).isSequential());
         } else if (option instanceof RemoveIdentitiesOption) {

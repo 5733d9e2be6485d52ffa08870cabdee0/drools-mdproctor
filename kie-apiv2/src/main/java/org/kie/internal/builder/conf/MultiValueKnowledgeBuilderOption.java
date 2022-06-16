@@ -16,12 +16,14 @@
 
 package org.kie.internal.builder.conf;
 
+import org.kie.api.conf.MultiValueOption;
 
 /**
  * A markup interface for MultiValueKnowledgeBuilderConfiguration options
  */
 public interface MultiValueKnowledgeBuilderOption
     extends
-    KnowledgeBuilderOption {
+    KnowledgeBuilderOption,
+    MultiValueOption {
 
 }

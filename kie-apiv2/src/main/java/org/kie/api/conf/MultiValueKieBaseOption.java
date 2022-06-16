@@ -21,6 +21,6 @@ package org.kie.api.conf;
  */
 public interface MultiValueKieBaseOption
     extends
-        KieBaseOption {
+        KieBaseOption, MultiValueOption {
 
 }

@@ -16,12 +16,10 @@
 
 package org.kie.api.conf;
 
-
 /**
- * A markup interface for KieBaseConfiguration options
+ * A markup interface for MultiValueKieBaseConfiguration options
  */
-public interface SingleValueKieBaseOption
-    extends
-    KieBaseOption, SingleValueOption {
+public interface MultiValueOption
+    extends Option {
 
 }
