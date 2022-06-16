@@ -16,7 +16,7 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 
 /**
  * An Enum for ShareAlphaNodes option.
@@ -25,7 +25,7 @@ import org.kie.api.conf.SingleValueKieBaseOption;
  *
  * DEFAULT = true
  */
-public enum ShareAlphaNodesOption implements SingleValueKieBaseOption {
+public enum ShareAlphaNodesOption implements SingleValueFlowBaseOption {
 
     YES(true),
     NO(false);

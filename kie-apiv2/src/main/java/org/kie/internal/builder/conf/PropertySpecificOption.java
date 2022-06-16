@@ -16,7 +16,7 @@
 
 package org.kie.internal.builder.conf;
 
-public enum PropertySpecificOption implements SingleValueKnowledgeBuilderOption {
+public enum PropertySpecificOption implements SingleValueKieBuilderOption {
 
     DISABLED, ALLOWED, ALWAYS;
 

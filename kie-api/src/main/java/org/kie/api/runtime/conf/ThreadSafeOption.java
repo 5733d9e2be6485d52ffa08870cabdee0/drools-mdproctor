@@ -25,7 +25,7 @@ package org.kie.api.runtime.conf;
  *
  * DEFAULT = true
  */
-public enum ThreadSafeOption implements SingleValueKieSessionOption {
+public enum ThreadSafeOption implements SingleValueRuleRuntimeOption {
 
     YES(true),
     NO(false);

@@ -21,7 +21,7 @@ package org.kie.api.runtime.conf;
  * Option to configure if the KieBase should retain a reference to the
  * KieSession or not. The default is YES, i.e., the reference is retained.
  */
-public enum KeepReferenceOption implements SingleValueKieSessionOption {
+public enum KeepReferenceOption implements SingleValueRuleRuntimeOption {
 
     YES(true),
     NO(false);

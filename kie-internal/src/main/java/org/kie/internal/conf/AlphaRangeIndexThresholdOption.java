@@ -16,12 +16,12 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 
 /**
  * A class for the alpha node range index threshold configuration.
  */
-public class AlphaRangeIndexThresholdOption implements SingleValueKieBaseOption {
+public class AlphaRangeIndexThresholdOption implements SingleValueFlowBaseOption {
 
     private static final long serialVersionUID = 510l;
 

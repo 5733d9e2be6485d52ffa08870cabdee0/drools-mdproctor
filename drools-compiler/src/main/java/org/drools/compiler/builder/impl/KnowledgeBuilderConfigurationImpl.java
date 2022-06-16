@@ -50,12 +50,12 @@ import org.kie.internal.builder.conf.GroupDRLsInKieBasesByFolderOption;
 import org.kie.internal.builder.conf.KBuilderSeverityOption;
 import org.kie.internal.builder.conf.KnowledgeBuilderOption;
 import org.kie.internal.builder.conf.LanguageLevelOption;
-import org.kie.internal.builder.conf.MultiValueKnowledgeBuilderOption;
+import org.kie.internal.builder.conf.MultiValueKieBuilderOption;
 import org.kie.internal.builder.conf.ParallelLambdaExternalizationOption;
 import org.kie.internal.builder.conf.ParallelRulesBuildThresholdOption;
 import org.kie.internal.builder.conf.ProcessStringEscapesOption;
 import org.kie.internal.builder.conf.PropertySpecificOption;
-import org.kie.internal.builder.conf.SingleValueKnowledgeBuilderOption;
+import org.kie.internal.builder.conf.SingleValueKieBuilderOption;
 import org.kie.internal.builder.conf.TrimCellsInDTableOption;
 import org.kie.internal.utils.ChainedProperties;
 import org.slf4j.Logger;
@@ -592,7 +592,7 @@ public class KnowledgeBuilderConfigurationImpl
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends SingleValueKnowledgeBuilderOption> T getOption(Class<T> option) {
+    public <T extends SingleValueKieBuilderOption> T getOption(Class<T> option) {
         if (DefaultDialectOption.class.equals(option)) {
             return (T) this.defaultDialect;
         } else if (DumpDirOption.class.equals(option)) {
@@ -620,8 +620,8 @@ public class KnowledgeBuilderConfigurationImpl
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends MultiValueKnowledgeBuilderOption> T getOption(Class<T> option,
-            String key) {
+    public <T extends MultiValueKieBuilderOption> T getOption(Class<T> option,
+                                                              String key) {
         if (AccumulateFunctionOption.class.equals(option)) {
             return (T) AccumulateFunctionOption.get(key,
                     this.accumulateFunctions.get(key));
@@ -636,7 +636,7 @@ public class KnowledgeBuilderConfigurationImpl
         return null;
     }
 
-    public <T extends MultiValueKnowledgeBuilderOption> Set<String> getOptionKeys(
+    public <T extends MultiValueKieBuilderOption> Set<String> getOptionKeys(
             Class<T> option) {
         if (AccumulateFunctionOption.class.equals(option)) {
             return this.accumulateFunctions.keySet();

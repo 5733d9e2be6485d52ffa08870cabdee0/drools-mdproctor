@@ -25,4 +25,7 @@ public interface KnowledgeBuilderOption
     extends
     Option {
 
+    default String getType() {
+        return "Base";
+    }
 }

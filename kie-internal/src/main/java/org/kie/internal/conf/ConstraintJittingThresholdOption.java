@@ -16,13 +16,13 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 
 /**
  * An option to define after how many evaluations in interpreted mode (with mvel)
  * a constraint should be jitted (translated in bytecode)
  */
-public class ConstraintJittingThresholdOption implements SingleValueKieBaseOption {
+public class ConstraintJittingThresholdOption implements SingleValueFlowBaseOption {
 
     private static final long serialVersionUID = 510l;
 

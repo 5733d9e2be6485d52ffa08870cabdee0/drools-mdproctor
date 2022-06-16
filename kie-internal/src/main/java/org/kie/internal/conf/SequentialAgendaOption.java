@@ -16,7 +16,7 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 
 /**
  * An Enum for SequentialAgenda option.
@@ -25,7 +25,7 @@ import org.kie.api.conf.SingleValueKieBaseOption;
  *
  * DEFAULT = sequential
  */
-public enum SequentialAgendaOption implements SingleValueKieBaseOption {
+public enum SequentialAgendaOption implements SingleValueFlowBaseOption {
 
     SEQUENTIAL,
     DYNAMIC;

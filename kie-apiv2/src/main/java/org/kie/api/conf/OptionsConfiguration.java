@@ -1,5 +1,8 @@
 package org.kie.api.conf;
 
+import java.util.Collections;
+import java.util.Set;
+
 public interface OptionsConfiguration<T extends Option, S extends SingleValueOption, M extends MultiValueOption> {
 
     /**
@@ -40,4 +43,14 @@ public interface OptionsConfiguration<T extends Option, S extends SingleValueOpt
      *         not configured.
      */
     public <C extends S> C getOption( Class<C> option );
+
+    /**
+     * Retrieves the set of all keys for a MultiValueKnowledgeBuilderOption.
+     *
+     * @param option the option class for the requested keys
+     * @return a Set of Strings
+     */
+    default <C extends M> Set<String> getOptionKeys(Class<C> option) {
+        return Collections.emptySet();
+    }
 }

@@ -27,7 +27,7 @@ package org.kie.internal.builder.conf;
  *
  * DEFAULT = disabled
  */
-public enum AlphaNetworkCompilerOption implements SingleValueKnowledgeBuilderOption {
+public enum AlphaNetworkCompilerOption implements SingleValueRuleBuilderOption {
 
     DISABLED("disabled"),
     INMEMORY("inmemory"),

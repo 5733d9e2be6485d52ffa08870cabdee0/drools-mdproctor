@@ -23,7 +23,7 @@ package org.kie.internal.builder.conf;
  *
  * DEFAULT = true
  */
-public enum ParallelLambdaExternalizationOption implements SingleValueKnowledgeBuilderOption {
+public enum ParallelLambdaExternalizationOption implements SingleValueRuleBuilderOption {
 
     ENABLED(true),
     DISABLED(false);

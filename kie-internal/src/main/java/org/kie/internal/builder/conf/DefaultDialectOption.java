@@ -20,7 +20,7 @@ package org.kie.internal.builder.conf;
 /**
  * A class for the default dialect configuration.
  */
-public class DefaultDialectOption implements SingleValueKnowledgeBuilderOption {
+public class DefaultDialectOption implements SingleValueKieBuilderOption {
 
     private static final long serialVersionUID = 510l;
 

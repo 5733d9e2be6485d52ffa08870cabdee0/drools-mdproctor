@@ -22,7 +22,7 @@ import org.kie.internal.builder.ResultSeverity;
  */
 public class KBuilderSeverityOption
     implements
-    MultiValueKnowledgeBuilderOption {
+    MultiValueKieBuilderOption {
 
     private static final long    serialVersionUID = 1492178699571897026L;
     public static String         PROPERTY_NAME    = "drools.kbuilder.severity.";

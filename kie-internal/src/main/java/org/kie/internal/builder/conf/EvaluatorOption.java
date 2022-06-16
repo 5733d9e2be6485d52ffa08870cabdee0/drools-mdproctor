@@ -24,7 +24,7 @@ import org.kie.api.runtime.rule.EvaluatorDefinition;
  * Drools supports custom evaluators. After implementing an evaluator
  * use this option class to register it to the knowledge builder.
  */
-public class EvaluatorOption implements MultiValueKnowledgeBuilderOption {
+public class EvaluatorOption implements MultiValueRuleBuilderOption {
 
     private static final long serialVersionUID = 510l;
 

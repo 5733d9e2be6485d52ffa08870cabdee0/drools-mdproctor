@@ -16,12 +16,12 @@
 package org.kie.internal.runtime.conf;
 
 import org.kie.api.definition.rule.Rule;
-import org.kie.api.runtime.conf.SingleValueKieSessionOption;
+import org.kie.api.runtime.conf.SingleValueRuleRuntimeOption;
 
 /**
  * Option to force evaluation and then activation of rules annotated with @Eager.
  */
-public class ForceEagerActivationOption implements SingleValueKieSessionOption {
+public class ForceEagerActivationOption implements SingleValueRuleRuntimeOption {
 
     private static final long serialVersionUID = 510l;
 

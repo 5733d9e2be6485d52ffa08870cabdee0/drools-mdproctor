@@ -19,7 +19,7 @@ package org.kie.internal.builder.conf;
 /**
  * A class for the parallel rules build threshold configuration.
  */
-public class ParallelRulesBuildThresholdOption implements SingleValueKnowledgeBuilderOption {
+public class ParallelRulesBuildThresholdOption implements SingleValueRuleBuilderOption {
 
     private static final long serialVersionUID = 1L;
 

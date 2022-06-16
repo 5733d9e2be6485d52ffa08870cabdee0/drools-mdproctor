@@ -16,12 +16,12 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 
 /**
  * A class for the composite key depth configuration.
  */
-public class CompositeKeyDepthOption implements SingleValueKieBaseOption {
+public class CompositeKeyDepthOption implements SingleValueFlowBaseOption {
 
     private static final long serialVersionUID = 510l;
 

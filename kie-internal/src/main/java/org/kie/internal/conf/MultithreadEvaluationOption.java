@@ -16,7 +16,7 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 
 /**
  * An Enum for multithread evaluation option.
@@ -25,7 +25,7 @@ import org.kie.api.conf.SingleValueKieBaseOption;
  *
  * DEFAULT = false
  */
-public enum MultithreadEvaluationOption implements SingleValueKieBaseOption {
+public enum MultithreadEvaluationOption implements SingleValueFlowBaseOption {
 
     YES(true),
     NO(false);

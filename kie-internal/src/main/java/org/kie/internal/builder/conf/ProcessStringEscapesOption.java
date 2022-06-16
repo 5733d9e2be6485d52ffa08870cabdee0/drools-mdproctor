@@ -35,7 +35,7 @@ package org.kie.internal.builder.conf;
  * if for any reason, you need the Drools 4 behaviour when parsing files, just set this
  * option to NO (false).
  */
-public enum ProcessStringEscapesOption implements SingleValueKnowledgeBuilderOption {
+public enum ProcessStringEscapesOption implements SingleValueRuleBuilderOption {
 
     YES(true),
     NO(false);

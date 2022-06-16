@@ -20,7 +20,7 @@ package org.kie.api.runtime.conf;
 /**
  * A class for the session clock configuration.
  */
-public class ClockTypeOption implements SingleValueKieSessionOption {
+public class ClockTypeOption implements SingleValueRuleRuntimeOption {
 
     private static final long serialVersionUID = 510l;
 

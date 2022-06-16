@@ -17,6 +17,7 @@
 package org.kie.internal.conf;
 
 import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueRuleBaseOption;
 
 /**
  * An Enum for Index Precedence option.
@@ -28,7 +29,7 @@ import org.kie.api.conf.SingleValueKieBaseOption;
  *
  * DEFAULT = equality
  */
-public enum IndexPrecedenceOption implements SingleValueKieBaseOption {
+public enum IndexPrecedenceOption implements SingleValueRuleBaseOption {
 
     PATTERN_ORDER("pattern"),
     EQUALITY_PRIORITY("equality");

@@ -25,7 +25,7 @@ package org.kie.api.runtime.conf;
  *
  * DEFAULT = false
  */
-public enum DirectFiringOption implements SingleValueKieSessionOption {
+public enum DirectFiringOption implements SingleValueRuleRuntimeOption {
 
     YES(true),
     NO(false);

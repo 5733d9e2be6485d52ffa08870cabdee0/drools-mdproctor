@@ -19,7 +19,7 @@ package org.kie.internal.builder.conf;
 /**
  * A class for the language level configuration.
  */
-public enum LanguageLevelOption implements SingleValueKnowledgeBuilderOption {
+public enum LanguageLevelOption implements SingleValueRuleBuilderOption {
 
     DRL5(false), DRL6(false), DRL6_STRICT(true);
 

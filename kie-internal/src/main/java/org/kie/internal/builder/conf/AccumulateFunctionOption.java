@@ -21,7 +21,7 @@ import org.kie.api.runtime.rule.AccumulateFunction;
 /**
  * A class for the accumulate function configuration.
  */
-public class AccumulateFunctionOption implements MultiValueKnowledgeBuilderOption {
+public class AccumulateFunctionOption implements MultiValueRuleBuilderOption {
 
     private static final long serialVersionUID = 510l;
 

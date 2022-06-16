@@ -28,4 +28,6 @@ public interface Option extends Serializable {
      */
     String getPropertyName();
 
+    String getType();
+
 }

@@ -16,13 +16,13 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 import org.kie.api.runtime.rule.ConsequenceExceptionHandler;
 
 /**
  * A class for the consequence exception handler configuration configuration.
  */
-public class ConsequenceExceptionHandlerOption implements SingleValueKieBaseOption {
+public class ConsequenceExceptionHandlerOption implements SingleValueFlowBaseOption {
 
     private static final long serialVersionUID = 510l;
 

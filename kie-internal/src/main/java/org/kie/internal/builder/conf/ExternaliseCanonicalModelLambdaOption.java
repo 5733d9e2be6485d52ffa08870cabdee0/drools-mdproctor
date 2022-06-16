@@ -23,7 +23,7 @@ package org.kie.internal.builder.conf;
  *
  * DEFAULT = false
  */
-public enum ExternaliseCanonicalModelLambdaOption implements SingleValueKnowledgeBuilderOption {
+public enum ExternaliseCanonicalModelLambdaOption implements SingleValueRuleBuilderOption {
 
     ENABLED(true),
     DISABLED(false);

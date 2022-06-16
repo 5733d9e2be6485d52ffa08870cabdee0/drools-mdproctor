@@ -23,4 +23,7 @@ public interface KieBaseOption
     extends
     Option {
 
+    default String getType() {
+        return "Base";
+    }
 }

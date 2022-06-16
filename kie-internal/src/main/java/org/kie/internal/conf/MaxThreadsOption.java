@@ -16,12 +16,12 @@
 
 package org.kie.internal.conf;
 
-import org.kie.api.conf.SingleValueKieBaseOption;
+import org.kie.api.conf.SingleValueFlowBaseOption;
 
 /**
  * A class for the max threads configuration.
  */
-public class MaxThreadsOption implements SingleValueKieBaseOption {
+public class MaxThreadsOption implements SingleValueFlowBaseOption {
 
     private static final long serialVersionUID = 510l;
 

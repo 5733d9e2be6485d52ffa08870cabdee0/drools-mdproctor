@@ -24,7 +24,7 @@ package org.kie.api.runtime.conf;
  *
  * DEFAULT = false
  */
-public enum AccumulateNullPropagationOption implements SingleValueKieSessionOption {
+public enum AccumulateNullPropagationOption implements SingleValueRuleRuntimeOption {
 
     YES(true),
     NO(false);

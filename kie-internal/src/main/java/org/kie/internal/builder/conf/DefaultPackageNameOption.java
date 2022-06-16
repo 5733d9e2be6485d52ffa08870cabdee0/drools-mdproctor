@@ -20,7 +20,7 @@ package org.kie.internal.builder.conf;
 /**
  * A class for the default package name configuration.
  */
-public class DefaultPackageNameOption implements SingleValueKnowledgeBuilderOption {
+public class DefaultPackageNameOption implements SingleValueKieBuilderOption {
 
     private static final long serialVersionUID = 510l;
 

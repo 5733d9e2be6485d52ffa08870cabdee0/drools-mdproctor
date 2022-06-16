@@ -15,17 +15,11 @@
  */
 
 package org.kie.internal.builder.conf;
-
-import java.util.Set;
-
-import org.kie.api.conf.KieBaseOption;
-import org.kie.api.conf.MultiValueKieBaseOption;
 import org.kie.api.conf.OptionsConfiguration;
-import org.kie.api.conf.SingleValueKieBaseOption;
 
 /**
  * A base interface for type safe configurations
  */
-public interface KnowledgeBuilderOptionsConfiguration extends OptionsConfiguration<KnowledgeBuilderOption, SingleValueKnowledgeBuilderOption, MultiValueKnowledgeBuilderOption> {
+public interface KnowledgeBuilderOptionsConfiguration extends OptionsConfiguration<KnowledgeBuilderOption, SingleValueKieBuilderOption, MultiValueKieBuilderOption> {
 
 }
