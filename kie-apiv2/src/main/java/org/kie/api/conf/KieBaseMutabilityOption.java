@@ -35,6 +35,7 @@ public enum KieBaseMutabilityOption implements SingleValueKieBaseOption {
      * The property name for the sequential mode option
      */
     public static final String PROPERTY_NAME = "drools.kieBaseMutability";
+    public static final String CLASS_NAME = "KieBaseMutabilityOption";
 
     /**
      * {@inheritDoc}

@@ -32,6 +32,7 @@ public enum MBeansOption implements SingleValueKieBaseOption {
      * The property name for the mbeans option
      */
     public static final String PROPERTY_NAME = "kie.mbeans";
+    public static final String CLASS_NAME = "MBeansOption";
 
     private boolean value;
 
