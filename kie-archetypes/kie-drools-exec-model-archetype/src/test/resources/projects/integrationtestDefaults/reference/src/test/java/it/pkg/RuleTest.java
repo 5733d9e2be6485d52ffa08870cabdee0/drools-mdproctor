@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
 package it.pkg;
 
@@ -88,10 +88,10 @@ public class RuleTest {
         // Programmatically collect resources and build a KieContainer
         KieServices ks = KieServices.Factory.get();
         KieFileSystem kfs = ks.newKieFileSystem();
-        String packagePath = "${package}".replace(".", "/");
+        String packagePath = "it.pkg".replace(".", "/");
         kfs.write("src/main/resources/" + packagePath + "/rules.drl",
                   ks.getResources().newInputStreamResource(this.getClass().getClassLoader().getResourceAsStream(packagePath + "/rules.drl")));
-        ReleaseId releaseId = ks.newReleaseId("${dollar}{groupId}", "${dollar}{artifactId}", "${dollar}{version}");
+        ReleaseId releaseId = ks.newReleaseId("archetype.it", "basic", "0.1-SNAPSHOT");
         kfs.generateAndWritePomXML(releaseId);
         ks.newKieBuilder(kfs).buildAll(ExecutableModelProject.class);
         return ks.newKieContainer(releaseId);
