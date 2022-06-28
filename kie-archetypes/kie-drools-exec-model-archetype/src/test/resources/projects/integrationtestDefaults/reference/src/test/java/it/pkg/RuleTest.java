@@ -88,10 +88,10 @@ public class RuleTest {
         // Programmatically collect resources and build a KieContainer
         KieServices ks = KieServices.Factory.get();
         KieFileSystem kfs = ks.newKieFileSystem();
-        String packagePath = "it.pkg".replace(".", "/");
+        String packagePath = "${package}".replace(".", "/");
         kfs.write("src/main/resources/" + packagePath + "/rules.drl",
                   ks.getResources().newInputStreamResource(this.getClass().getClassLoader().getResourceAsStream(packagePath + "/rules.drl")));
-        ReleaseId releaseId = ks.newReleaseId("archetype.it", "basic", "0.1-SNAPSHOT");
+        ReleaseId releaseId = ks.newReleaseId("${dollar}{groupId}", "${dollar}{artifactId}", "${dollar}{version}");
         kfs.generateAndWritePomXML(releaseId);
         ks.newKieBuilder(kfs).buildAll(ExecutableModelProject.class);
         return ks.newKieContainer(releaseId);

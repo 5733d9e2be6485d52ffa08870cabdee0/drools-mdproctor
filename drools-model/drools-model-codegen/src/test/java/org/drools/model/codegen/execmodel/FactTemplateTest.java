@@ -17,6 +17,7 @@ package org.drools.model.codegen.execmodel;
 
 import java.util.Collection;
 
+import org.assertj.core.api.Assertions;
 import org.drools.base.facttemplates.Fact;
 import org.drools.base.facttemplates.FactTemplateObjectType;
 import org.drools.core.reteoo.CompositeObjectSinkAdapter;
