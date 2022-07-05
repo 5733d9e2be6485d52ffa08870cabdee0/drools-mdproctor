@@ -25,5 +25,5 @@ public interface SingleValueKieBuilderOption
     extends
     KnowledgeBuilderOption,
     SingleValueOption {
-
+    String TYPE = "Base";
 }

@@ -16,6 +16,7 @@
 
 package org.kie.internal.builder.conf;
 
+import org.kie.api.conf.OptionKey;
 
 /**
  * A class for the default package name configuration.
@@ -28,6 +29,8 @@ public class DefaultPackageNameOption implements SingleValueKieBuilderOption {
      * The property name for the default package name
      */
     public static final String PROPERTY_NAME = "drools.defaultPackageName";
+
+    public static OptionKey<DefaultPackageNameOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     /**
      * package name

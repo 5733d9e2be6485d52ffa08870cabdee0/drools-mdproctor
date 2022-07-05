@@ -16,6 +16,7 @@
 
 package org.kie.internal.builder.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.rule.EvaluatorDefinition;
 
 /**
@@ -32,6 +33,8 @@ public class EvaluatorOption implements MultiValueRuleBuilderOption {
      * The prefix for the property name for evaluators
      */
     public static final String PROPERTY_NAME = "drools.evaluator.";
+
+    public static OptionKey<EvaluatorOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     /**
      * evaluator key

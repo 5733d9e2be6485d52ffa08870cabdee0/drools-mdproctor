@@ -16,6 +16,8 @@
 
 package org.kie.api.runtime.conf;
 
+import org.kie.api.conf.OptionKey;
+
 /**
  * An option to define if the KieSession should should be thread safe or not.
  * By default a KieSession is thread-safe. Flagging it as non-thread-sage will bring a performance improvement
@@ -36,6 +38,8 @@ public enum ThreadSafeOption implements SingleValueRuleRuntimeOption {
      * The property name for the thread safety configuration
      */
     public static final String PROPERTY_NAME = "drools.threadSafe";
+
+    public static OptionKey<ThreadSafeOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     private final boolean threadSafe;
 

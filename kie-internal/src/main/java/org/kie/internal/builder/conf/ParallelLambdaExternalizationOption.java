@@ -16,6 +16,8 @@
 
 package org.kie.internal.builder.conf;
 
+import org.kie.api.conf.OptionKey;
+
 /**
  * An Enum for ParallelLambdaExternalizationOption option.
  *
@@ -32,6 +34,8 @@ public enum ParallelLambdaExternalizationOption implements SingleValueRuleBuilde
      * The property name for the parallel lambda externalization
      */
     public static final String PROPERTY_NAME = "drools.parallelLambdaExternalization";
+
+    public static OptionKey<ParallelLambdaExternalizationOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     private boolean value;
 

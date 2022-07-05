@@ -15,7 +15,9 @@
 
 package org.kie.internal.runtime.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.api.definition.rule.Rule;
+import org.kie.api.runtime.conf.DirectFiringOption;
 import org.kie.api.runtime.conf.SingleValueRuleRuntimeOption;
 
 /**
@@ -26,6 +28,8 @@ public class ForceEagerActivationOption implements SingleValueRuleRuntimeOption 
     private static final long serialVersionUID = 510l;
 
     public static final String PROPERTY_NAME = "drools.forceEagerActivation";
+
+    public static OptionKey<ForceEagerActivationOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     public static final ForceEagerActivationOption YES = new ForceEagerActivationOption(new ForceEagerActivationFilter() {
         @Override

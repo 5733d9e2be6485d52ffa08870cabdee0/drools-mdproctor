@@ -34,6 +34,8 @@ public enum EqualityBehaviorOption implements SingleValueKieBaseOption {
      */
     public static final String PROPERTY_NAME = "drools.equalityBehavior";
 
+    public static final OptionKey KEY = new OptionKey(TYPE, PROPERTY_NAME);
+
     /**
      * {@inheritDoc}
      */

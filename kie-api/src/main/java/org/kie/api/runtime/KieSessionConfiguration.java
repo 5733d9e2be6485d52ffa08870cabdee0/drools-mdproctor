@@ -36,7 +36,7 @@ import org.kie.api.runtime.conf.KieSessionOptionsConfiguration;
  */
 public interface KieSessionConfiguration
     extends
-    PropertiesConfiguration,
+//    PropertiesConfiguration,
     KieSessionOptionsConfiguration {
 
 }

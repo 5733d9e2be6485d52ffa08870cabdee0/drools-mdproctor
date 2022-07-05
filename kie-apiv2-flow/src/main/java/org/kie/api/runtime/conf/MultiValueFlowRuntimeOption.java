@@ -1,7 +1,7 @@
 package org.kie.api.runtime.conf;
 
 public interface MultiValueFlowRuntimeOption extends MultiValueKieSessionOption {
-    default String getType() {
+    default String type() {
         return SingleValueFlowRuntimeOption.TYPE;
     }
 }

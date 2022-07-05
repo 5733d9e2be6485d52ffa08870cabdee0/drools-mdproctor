@@ -38,6 +38,8 @@ public enum BetaRangeIndexOption implements SingleValueKieBaseOption {
      */
     public static final String PROPERTY_NAME = "drools.betaNodeRangeIndexEnabled";
 
+    public static OptionKey<SingleValueKieBaseOption> KEY = new OptionKey(TYPE, PROPERTY_NAME);
+
     private boolean value;
 
     BetaRangeIndexOption(final boolean value) {

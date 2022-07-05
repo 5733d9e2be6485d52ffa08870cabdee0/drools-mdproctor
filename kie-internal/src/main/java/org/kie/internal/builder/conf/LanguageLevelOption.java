@@ -16,6 +16,8 @@
 
 package org.kie.internal.builder.conf;
 
+import org.kie.api.conf.OptionKey;
+
 /**
  * A class for the language level configuration.
  */
@@ -29,6 +31,8 @@ public enum LanguageLevelOption implements SingleValueRuleBuilderOption {
      * The property name for the language level
      */
     public static final String PROPERTY_NAME = "drools.lang.level";
+
+    public static OptionKey<LanguageLevelOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     LanguageLevelOption(boolean useJavaAnnotations) {
         this.useJavaAnnotations = useJavaAnnotations;

@@ -37,6 +37,8 @@ public enum DeclarativeAgendaOption implements SingleValueKieBaseOption {
      */
     public static final String PROPERTY_NAME = "drools.declarativeAgendaEnabled";
 
+    public static OptionKey KEY = new OptionKey(TYPE, PROPERTY_NAME);
+
     private boolean value;
 
     DeclarativeAgendaOption(final boolean value) {

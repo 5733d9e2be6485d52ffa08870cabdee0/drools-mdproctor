@@ -37,6 +37,7 @@ import org.drools.util.StringUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.conf.BetaRangeIndexOption;
+import org.kie.api.conf.Configuration;
 import org.kie.api.conf.DeclarativeAgendaOption;
 import org.kie.api.conf.EqualityBehaviorOption;
 import org.kie.api.conf.EventProcessingOption;
@@ -44,6 +45,7 @@ import org.kie.api.conf.KieBaseMutabilityOption;
 import org.kie.api.conf.KieBaseOption;
 import org.kie.api.conf.MBeansOption;
 import org.kie.api.conf.MultiValueKieBaseOption;
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.RemoveIdentitiesOption;
 import org.kie.api.conf.SequentialOption;
 import org.kie.api.conf.SessionsPoolOption;
@@ -117,6 +119,8 @@ public class KieBaseConfigurationImpl
 
     protected static final transient Logger logger = LoggerFactory.getLogger(KieBaseConfigurationImpl.class);
 
+    public static final Configuration<KieBaseConfigurationImpl> KEY = new Configuration<>("Base");
+
     private ChainedProperties chainedProperties;
 
     private boolean immutable;
@@ -128,63 +132,27 @@ public class KieBaseConfigurationImpl
 
     private transient ClassLoader classLoader;
 
-    private static class DefaultRuleBaseConfigurationHolder {
-        private static final KieBaseConfigurationImpl defaultConf = new KieBaseConfigurationImpl();
-    }
-
-    public static KieBaseConfigurationImpl getDefaultInstance() {
-        return DefaultRuleBaseConfigurationHolder.defaultConf;
-    }
+//    private static class DefaultRuleBaseConfigurationHolder {
+//        private static final KieBaseConfigurationImpl defaultConf = new KieBaseConfigurationImpl();
+//    }
+//
+//    public static KieBaseConfigurationImpl getDefaultInstance() {
+//        return DefaultRuleBaseConfigurationHolder.defaultConf;
+//    }
 
     public void writeExternal(ObjectOutput out) throws IOException {
         // avoid serializing user defined system properties
         chainedProperties.filterDroolsPropertiesForSerialization();
         out.writeObject(chainedProperties);
         out.writeBoolean(immutable);
+        out.writeBoolean(mutabilityEnabled);
     }
 
     public void readExternal(ObjectInput in) throws IOException,
             ClassNotFoundException {
         chainedProperties = (ChainedProperties) in.readObject();
         immutable = in.readBoolean();
-    }
-
-    /**
-     * Creates a new rulebase configuration using the provided properties
-     * as configuration options. Also, if a Thread.currentThread().getContextClassLoader()
-     * returns a non-null class loader, it will be used as the parent classloader
-     * for this rulebase class loaders, otherwise, the RuleBaseConfiguration.class.getClassLoader()
-     * class loader will be used.
-     *
-     * @param properties
-     */
-    public KieBaseConfigurationImpl(Properties properties) {
-        init(properties,
-             null);
-    }
-
-    /**
-     * Creates a new rulebase with a default parent class loader set according
-     * to the following algorithm:
-     *
-     * If a Thread.currentThread().getContextClassLoader() returns a non-null class loader,
-     * it will be used as the parent class loader for this rulebase class loaders, otherwise,
-     * the RuleBaseConfiguration.class.getClassLoader() class loader will be used.
-     */
-    public KieBaseConfigurationImpl() {
-        init(null,
-             null);
-    }
-
-    /**
-     * A constructor that sets the parent classloader to be used
-     * while dealing with this rule base
-     *
-     * @param classLoaders
-     */
-    public KieBaseConfigurationImpl(ClassLoader... classLoaders) {
-        init(null,
-             classLoaders);
+        mutabilityEnabled = in.readBoolean();
     }
 
     public void setProperty(String name,
@@ -194,16 +162,13 @@ public class KieBaseConfigurationImpl
             return;
         }
 
-//        switch(name) {
-//            case: SequentialAgendaOption.PROPERTY_NAME: {
-//
-//            }
-//        }
-
-        if ( name.equals( MBeansOption.PROPERTY_NAME ) ) {
-            setMBeansEnabled( MBeansOption.isEnabled(value));
-        } else if ( name.equals( KieBaseMutabilityOption.PROPERTY_NAME ) ) {
-            setMutabilityEnabled( StringUtils.isEmpty( value ) ? true : KieBaseMutabilityOption.determineMutability(value) == KieBaseMutabilityOption.ALLOWED );
+        switch(name) {
+            case MBeansOption.PROPERTY_NAME: {
+                setMBeansEnabled( MBeansOption.isEnabled(value));
+            }
+            case KieBaseMutabilityOption.PROPERTY_NAME: {
+                setMutabilityEnabled( StringUtils.isEmpty( value ) ? true : KieBaseMutabilityOption.determineMutability(value) == KieBaseMutabilityOption.ALLOWED );
+            }
         }
     }
 
@@ -213,10 +178,13 @@ public class KieBaseConfigurationImpl
             return null;
         }
 
-        if ( name.equals( MBeansOption.PROPERTY_NAME ) ) {
-            return isMBeansEnabled() ? "enabled" : "disabled";
-        } else if ( name.equals( KieBaseMutabilityOption.PROPERTY_NAME ) ) {
-            return isMutabilityEnabled() ? "ALLOWED" : "DISABLED";
+        switch(name) {
+            case MBeansOption.PROPERTY_NAME: {
+                return isMBeansEnabled() ? "enabled" : "disabled";
+            }
+            case KieBaseMutabilityOption.PROPERTY_NAME: {
+                return isMutabilityEnabled() ? "ALLOWED" : "DISABLED";
+            }
         }
 
         return null;
@@ -224,35 +192,28 @@ public class KieBaseConfigurationImpl
 
     /**
      * A constructor that sets the classloader to be used as the parent classloader
-     * of this rule base classloaders, and the properties to be used
+     * of this rule base classloader, and the properties to be used
      * as base configuration options
      *
-     * @param classLoaders
+     * @param classLoader
      * @param properties
      */
-    public KieBaseConfigurationImpl(Properties properties,
-                                    ClassLoader... classLoaders) {
-        init( properties,
-              classLoaders );
+    public KieBaseConfigurationImpl(ClassLoader classLoader,
+                                    ChainedProperties chainedProperties) {
+        init( classLoader,
+              chainedProperties );
     }
     
-    private void init(Properties properties, ClassLoader... classLoaders) {
-        if (classLoaders != null && classLoaders.length > 1) {
-            throw new RuntimeException("Multiple classloaders are no longer supported");
-        }
-        setClassLoader( classLoaders == null || classLoaders.length == 0 ? null : classLoaders[0] );
-        init(properties);
+    private void init(ClassLoader classLoader,
+                      ChainedProperties chainedProperties) {
+        setClassLoader(classLoader);
+        init(chainedProperties);
     }
     
-    private void init(Properties properties) {
+    private void init(ChainedProperties chainedProperties) {
         this.immutable = false;
 
-        this.chainedProperties = ChainedProperties.getChainedProperties( this.classLoader );
-
-        if ( properties != null ) {
-            this.chainedProperties.addProperties( properties );
-        }
-
+        this.chainedProperties = chainedProperties;
 
         setMBeansEnabled( MBeansOption.isEnabled( this.chainedProperties.getProperty( MBeansOption.PROPERTY_NAME,
                                                                                       "disabled" ) ) );
@@ -321,14 +282,14 @@ public class KieBaseConfigurationImpl
         return mutabilityEnabled;
     }
 
-    
+
     @SuppressWarnings("unchecked")
-    public <T extends SingleValueKieBaseOption> T getOption(Class<T> option) {
-        switch(option.getSimpleName()) {
-            case MBeansOption.CLASS_NAME: {
+    public <T extends SingleValueKieBaseOption> T getOption(OptionKey<T> option) {
+        switch(option.name()) {
+            case MBeansOption.PROPERTY_NAME: {
                 return (T) (this.isMBeansEnabled() ? MBeansOption.ENABLED : MBeansOption.DISABLED);
             }
-            case KieBaseMutabilityOption.CLASS_NAME: {
+            case KieBaseMutabilityOption.PROPERTY_NAME: {
                 return (T) (this.isMutabilityEnabled() ? KieBaseMutabilityOption.ALLOWED : KieBaseMutabilityOption.DISABLED);
             }
         }
@@ -347,8 +308,7 @@ public class KieBaseConfigurationImpl
         }
     }
 
-    public <T extends MultiValueKieBaseOption> T getOption(Class<T> option,
-                                                           String key) {
+    @Override public <C extends MultiValueKieBaseOption> C getOption(OptionKey<C> optionKey, String subKey) {
         return null;
     }
 

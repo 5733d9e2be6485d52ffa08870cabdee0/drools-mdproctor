@@ -25,5 +25,9 @@ public interface MultiValueKieBuilderOption
     extends
     KnowledgeBuilderOption,
     MultiValueOption {
+    String TYPE = SingleValueKieBuilderOption.TYPE;
+    default String type() {
+        return TYPE;
+    }
 
 }

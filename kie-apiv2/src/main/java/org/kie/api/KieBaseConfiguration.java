@@ -73,7 +73,7 @@ import org.kie.api.conf.KieBaseOptionsConfiguration;
  */
 public interface KieBaseConfiguration
     extends
-        PropertiesConfiguration,
+//        PropertiesConfiguration,
         KieBaseOptionsConfiguration {
 
 }

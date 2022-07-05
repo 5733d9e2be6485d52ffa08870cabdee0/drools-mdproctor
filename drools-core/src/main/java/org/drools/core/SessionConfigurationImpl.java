@@ -22,12 +22,14 @@ import java.io.ObjectOutput;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.drools.core.process.WorkItemManagerFactory;
 import org.drools.core.util.ConfFileUtils;
 import org.drools.base.util.MVELExecutor;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.KieBase;
+import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.ExecutableRunner;
 import org.kie.api.runtime.KieSessionConfiguration;
@@ -36,6 +38,7 @@ import org.kie.api.runtime.conf.BeliefSystemTypeOption;
 import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.api.runtime.conf.DirectFiringOption;
 import org.kie.api.runtime.conf.KeepReferenceOption;
+import org.kie.api.runtime.conf.MultiValueKieSessionOption;
 import org.kie.api.runtime.conf.QueryListenerOption;
 import org.kie.api.runtime.conf.ThreadSafeOption;
 import org.kie.api.runtime.conf.TimedRuleExecutionFilter;
@@ -74,36 +77,16 @@ public class SessionConfigurationImpl extends SessionConfiguration {
 
     private boolean                        keepReference;
 
-    private boolean                        directFiring;
-
-    private boolean                        threadSafe;
-
-    private boolean                        accumulateNullPropagation;
-
-    private ForceEagerActivationFilter     forceEagerActivationFilter;
-    private TimedRuleExecutionFilter       timedRuleExecutionFilter;
-
     private ClockType                      clockType;
-    
-    private BeliefSystemType               beliefSystemType;
-
-    private QueryListenerOption            queryListener;
-
-    private Map<String, WorkItemHandler>   workItemHandlers;
-    private WorkItemManagerFactory         workItemManagerFactory;
     private ExecutableRunner runner;
 
     private transient ClassLoader          classLoader;
-    
-    private TimerJobFactoryType            timerJobFactoryType;
 
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject( chainedProperties );
         out.writeBoolean(immutable);
         out.writeBoolean( keepReference );
         out.writeObject(clockType);
-        out.writeObject( queryListener );
-        out.writeObject( timerJobFactoryType );
     }
 
     @SuppressWarnings("unchecked")
@@ -113,17 +96,6 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         immutable = in.readBoolean();
         keepReference = in.readBoolean();
         clockType = (ClockType) in.readObject();
-        queryListener = (QueryListenerOption) in.readObject();
-        try {
-            timerJobFactoryType = (TimerJobFactoryType) in.readObject();
-        } catch (java.io.InvalidObjectException e) {
-            // workaround for old typo in TimerJobFactoryType
-            if (e.getMessage().contains( "DEFUALT" )) {
-                timerJobFactoryType = TimerJobFactoryType.DEFAULT;
-            } else {
-                throw e;
-            }
-        }
     }
 
     /**
@@ -135,7 +107,7 @@ public class SessionConfigurationImpl extends SessionConfiguration {
 
     /**
      * Creates a new session configuration using the provided properties
-     * as configuration options. 
+     * as configuration options.
      */
     public SessionConfigurationImpl( Properties properties ) {
         init( properties, null, null );
@@ -147,6 +119,10 @@ public class SessionConfigurationImpl extends SessionConfiguration {
 
     public SessionConfigurationImpl( Properties properties, ClassLoader classLoader, ChainedProperties chainedProperties ) {
         init( properties, classLoader, chainedProperties );
+    }
+
+    @Override public ClassLoader getClassLoader() {
+        return this.classLoader;
     }
 
     private void init(Properties properties, ClassLoader classLoader, ChainedProperties chainedProperties) {
@@ -161,25 +137,9 @@ public class SessionConfigurationImpl extends SessionConfiguration {
             this.chainedProperties.addProperties( properties );
         }
 
-        setKeepReference(Boolean.valueOf( getPropertyValue( KeepReferenceOption.PROPERTY_NAME, "true" ) ));
-
-        setDirectFiring(Boolean.valueOf( getPropertyValue( DirectFiringOption.PROPERTY_NAME, "false" ) ));
-
-        setThreadSafe(Boolean.valueOf( getPropertyValue( ThreadSafeOption.PROPERTY_NAME, "true" ) ));
-
-        setAccumulateNullPropagation(Boolean.valueOf( getPropertyValue( AccumulateNullPropagationOption.PROPERTY_NAME, "false" ) ));
-
-        setForceEagerActivationFilter(ForceEagerActivationOption.resolve( getPropertyValue( ForceEagerActivationOption.PROPERTY_NAME, "false" ) ).getFilter());
-
-        setTimedRuleExecutionFilter(TimedRuleExecutionOption.resolve( getPropertyValue( TimedRuleExecutionOption.PROPERTY_NAME, "false" ) ).getFilter());
-
-        setBeliefSystemType( BeliefSystemType.resolveBeliefSystemType( getPropertyValue( BeliefSystemTypeOption.PROPERTY_NAME, BeliefSystemType.SIMPLE.getId() ) ) );
+        setKeepReference(Boolean.parseBoolean(getPropertyValue(KeepReferenceOption.PROPERTY_NAME, "true")));
 
         setClockType( ClockType.resolveClockType( getPropertyValue( ClockTypeOption.PROPERTY_NAME, ClockType.REALTIME_CLOCK.getId() ) ) );
-
-        setQueryListenerOption( QueryListenerOption.determineQueryListenerClassOption( getPropertyValue( QueryListenerOption.PROPERTY_NAME, QueryListenerOption.STANDARD.getAsString() ) ) );
-
-        setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType( getPropertyValue( TimerJobFactoryOption.PROPERTY_NAME, TimerJobFactoryType.THREAD_SAFE_TRACKABLE.getId() ) ));
     }
 
     public SessionConfigurationImpl addDefaultProperties(Properties properties) {
@@ -223,60 +183,6 @@ public class SessionConfigurationImpl extends SessionConfiguration {
 
     public boolean isKeepReference() {
         return this.keepReference;
-    }
-
-    public void setDirectFiring(boolean directFiring) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        this.directFiring = directFiring;
-    }
-
-    public boolean isDirectFiring() {
-        return this.directFiring;
-    }
-
-    public void setThreadSafe(boolean threadSafe) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        this.threadSafe = threadSafe;
-    }
-
-    public boolean isThreadSafe() {
-        return this.threadSafe;
-    }
-
-    public void setAccumulateNullPropagation(boolean accumulateNullPropagation) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        this.accumulateNullPropagation = accumulateNullPropagation;
-    }
-
-    public boolean isAccumulateNullPropagation() {
-        return this.accumulateNullPropagation;
-    }
-
-    public void setForceEagerActivationFilter(ForceEagerActivationFilter forceEagerActivationFilter) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        this.forceEagerActivationFilter = forceEagerActivationFilter;
-    }
-
-    public ForceEagerActivationFilter getForceEagerActivationFilter() {
-        return this.forceEagerActivationFilter;
-    }
-
-    public void setTimedRuleExecutionFilter(TimedRuleExecutionFilter timedRuleExecutionFilter) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        this.timedRuleExecutionFilter = timedRuleExecutionFilter;
-    }
-
-    public TimedRuleExecutionFilter getTimedRuleExecutionFilter() {
-        return this.timedRuleExecutionFilter;
-    }
-
-    public BeliefSystemType getBeliefSystemType() {
-        return this.beliefSystemType;
-    }
-    
-    public void setBeliefSystemType(BeliefSystemType beliefSystemType) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        this.beliefSystemType = beliefSystemType;
     }
 
     public ClockType getClockType() {
@@ -431,14 +337,5 @@ public class SessionConfigurationImpl extends SessionConfiguration {
 
     public String getPropertyValue( String name, String defaultValue ) {
         return this.chainedProperties.getProperty( name, defaultValue );
-    }
-
-    public QueryListenerOption getQueryListenerOption() {
-        return this.queryListener;
-    }
-
-    public void setQueryListenerOption( QueryListenerOption queryListener ) {
-        checkCanChange();
-        this.queryListener = queryListener;
     }
 }

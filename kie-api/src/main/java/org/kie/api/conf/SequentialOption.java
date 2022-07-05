@@ -33,6 +33,8 @@ public enum SequentialOption implements SingleValueKieBaseOption {
      */
     public static final String PROPERTY_NAME = "drools.sequential";
 
+    public static OptionKey KEY = new OptionKey(TYPE, PROPERTY_NAME);
+
     private boolean value;
 
     SequentialOption( final boolean value ) {

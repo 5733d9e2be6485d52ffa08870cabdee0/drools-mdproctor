@@ -123,12 +123,12 @@ public class ReteooRuleBuilder implements RuleBuilder {
             context.setRule( rule );
 
             // if running in STREAM mode, calculate temporal distance for events
-            if (EventProcessingOption.STREAM.equals( kBase.getConfiguration().getEventProcessingMode() )) {
+            if (EventProcessingOption.STREAM.equals( kBase.getRuleBaseConfiguration().getEventProcessingMode())) {
                 TemporalDependencyMatrix temporal = this.utils.calculateTemporalDistance( subrules[i] );
                 context.setTemporalDistance( temporal );
             }
 
-            if (kBase.getConfiguration().isSequential() ) {
+            if (kBase.getRuleBaseConfiguration().isSequential() ) {
                 context.setTupleMemoryEnabled( false );
                 context.setObjectTypeNodeMemoryEnabled( false );
             } else {
@@ -176,7 +176,7 @@ public class ReteooRuleBuilder implements RuleBuilder {
             builder.build( context, this.utils, rule.getTimer() );
         }
 
-        ActivationListenerFactory factory = context.getRuleBase().getConfiguration().getActivationListenerFactory( rule.getActivationListener() );
+        ActivationListenerFactory factory = context.getRuleBase().getRuleBaseConfiguration().getActivationListenerFactory(rule.getActivationListener());
         TerminalNode terminal = factory.createActivationListener( context.getNextNodeId(),
                                                                   context.getTupleSource(),
                                                                   rule,
@@ -244,8 +244,8 @@ public class ReteooRuleBuilder implements RuleBuilder {
 
         // creates a clean build context for each subrule
         BuildContext context = new BuildContext( kBase, workingMemories );
-        context.setTupleMemoryEnabled( !kBase.getConfiguration().isSequential() );
-        context.setObjectTypeNodeMemoryEnabled( !kBase.getConfiguration().isSequential() );
+        context.setTupleMemoryEnabled( !kBase.getRuleBaseConfiguration().isSequential());
+        context.setObjectTypeNodeMemoryEnabled( !kBase.getRuleBaseConfiguration().isSequential());
 
         // builds and attach
         WindowBuilder.INSTANCE.build( context, this.utils, window );

@@ -20,6 +20,8 @@ public class SessionsPoolOption implements SingleValueKieBaseOption {
 
     public static final String PROPERTY_NAME = "drools.sessionPool";
 
+    public static OptionKey KEY = new OptionKey(TYPE, PROPERTY_NAME);
+
     public static final SessionsPoolOption NO = SessionsPoolOption.get(-1);
 
     /**

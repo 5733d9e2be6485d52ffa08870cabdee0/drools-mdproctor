@@ -93,7 +93,7 @@ public interface AgendaGroupsManager extends Externalizable {
         public SimpleAgendaGroupsManager() { }
 
         public SimpleAgendaGroupsManager(RuleBase kBase) {
-            this.mainAgendaGroup = kBase.getConfiguration().getAgendaGroupFactory().createAgendaGroup( InternalAgendaGroup.MAIN, kBase);
+            this.mainAgendaGroup = kBase.getRuleBaseConfiguration().getAgendaGroupFactory().createAgendaGroup(InternalAgendaGroup.MAIN, kBase);
         }
 
         public SimpleAgendaGroupsManager(ReteEvaluator reteEvaluator) {
@@ -268,7 +268,7 @@ public interface AgendaGroupsManager extends Externalizable {
         public StackedAgendaGroupsManager() { }
 
         public StackedAgendaGroupsManager(RuleBase kBase, boolean initMain) {
-            this.agendaGroupFactory = kBase.getConfiguration().getAgendaGroupFactory();
+            this.agendaGroupFactory = kBase.getRuleBaseConfiguration().getAgendaGroupFactory();
             if (initMain) {
                 initMainAgendaGroup(kBase);
             }

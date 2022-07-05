@@ -22,8 +22,9 @@ package org.kie.api.conf;
 public interface KieBaseOption
     extends
     Option {
+    static String TYPE = "Base";
 
-    default String getType() {
-        return "Base";
+    default String type() {
+        return TYPE;
     }
 }

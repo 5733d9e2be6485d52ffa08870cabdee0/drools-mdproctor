@@ -59,7 +59,7 @@ public class TruthMaintenanceSystemImpl implements TruthMaintenanceSystem {
     public TruthMaintenanceSystemImpl(InternalWorkingMemoryEntryPoint ep) {
         this.ep = ep;
 
-        assertBehaviour = ep.getKnowledgeBase().getConfiguration().getAssertBehaviour();
+        assertBehaviour = ep.getKnowledgeBase().getRuleBaseConfiguration().getAssertBehaviour();
 
         typeConfReg = ep.getObjectTypeConfigurationRegistry();
 

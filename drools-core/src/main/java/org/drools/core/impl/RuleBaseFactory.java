@@ -19,7 +19,6 @@ package org.drools.core.impl;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.SessionConfigurationImpl;
 import org.kie.api.KieBaseConfiguration;
@@ -51,7 +50,7 @@ import org.kie.api.runtime.KieSessionConfiguration;
  * properties.setProperty( "org.kie.sequential", "true");
  * </pre>
  *
- * @see KnowledgeBase
+ * @see RuleBase
  */
 public class RuleBaseFactory {
 
@@ -102,7 +101,7 @@ public class RuleBaseFactory {
      *     The KnowledgeBase
      */
     public static RuleBase newRuleBase(String kbaseId, KieBaseConfiguration conf) {
-        return new KnowledgeBaseImpl( kbaseId, (RuleBaseConfiguration) conf);
+        return new KnowledgeBaseImpl( kbaseId, (DelegatingBaseConfiguration) conf);
     }
 
     /**
@@ -111,7 +110,7 @@ public class RuleBaseFactory {
      *     The KnowledgeBaseConfiguration.
      */
     public static KieBaseConfiguration newKnowledgeBaseConfiguration() {
-        return new RuleBaseConfiguration();
+        return newKnowledgeBaseConfiguration(null, null);
     }
 
     /**
@@ -122,7 +121,13 @@ public class RuleBaseFactory {
      */
     public static KieBaseConfiguration newKnowledgeBaseConfiguration(Properties properties,
                                                                      ClassLoader... classLoaders) {
-        return new RuleBaseConfiguration(properties, classLoaders);
+        if (classLoaders != null && (classLoaders.length > 1 || classLoaders[0] == null)) {
+            throw new UnsupportedOperationException("Pass only a single, non null, classloader. As an array of Classloaders is no longer supported. ");
+        }
+
+        return new DelegatingBaseConfiguration(properties, classLoaders != null ? classLoaders[0] : null,
+                                               ConfigurationFactories.baseConf, ConfigurationFactories.ruleConf,
+                                               ConfigurationFactories.flowConf);
     }
 
     /**

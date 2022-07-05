@@ -34,6 +34,8 @@ public enum RemoveIdentitiesOption implements SingleValueKieBaseOption {
      */
     public static final String PROPERTY_NAME = "drools.removeIdentities";
 
+    public static OptionKey KEY = new OptionKey(TYPE, PROPERTY_NAME);
+
     private boolean value;
 
     RemoveIdentitiesOption( final boolean value ) {

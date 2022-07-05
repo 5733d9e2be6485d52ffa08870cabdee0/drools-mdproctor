@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.drools.base.reteoo.NodeTypeEnums;
+import org.drools.base.util.index.IndexConfiguration;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.common.BetaConstraints;
 import org.drools.core.common.DoubleBetaConstraints;
@@ -98,6 +99,8 @@ public abstract class BetaNode extends LeftTupleSource
 
     private boolean rightInputIsPassive;
 
+    private IndexConfiguration indexConfiguration;
+
     // ------------------------------------------------------------
     // Constructors
     // ------------------------------------------------------------
@@ -138,6 +141,8 @@ public abstract class BetaNode extends LeftTupleSource
         setStreamMode( context.isStreamMode() && getObjectTypeNode(context).getObjectType().isEvent() );
 
         hashcode = calculateHashCode();
+
+        indexConfiguration = context.getRuleBase().getRuleBaseConfiguration();
     }
 
     private ObjectTypeNode getObjectTypeNode(BuildContext context) {
@@ -225,7 +230,8 @@ public abstract class BetaNode extends LeftTupleSource
         BetaNodeFieldConstraint[] betaCconstraints = this.constraints.getConstraints();
         if ( betaCconstraints.length > 0 ) {
             BetaNodeFieldConstraint c = betaCconstraints[0];
-            if ( IndexUtil.isIndexable(c, getType(), RuleBaseConfiguration.getDefaultInstance()) && ((IndexableConstraint) c).isUnification() ) {
+
+            if ( IndexUtil.isIndexable(c, getType(), indexConfiguration) && ((IndexableConstraint) c).isUnification() ) {
                 if ( this.constraints instanceof SingleBetaConstraints ) {
                     setConstraints( new SingleNonIndexSkipBetaConstraints( (SingleBetaConstraints) this.constraints ) );
                 } else if ( this.constraints instanceof DoubleBetaConstraints ) {

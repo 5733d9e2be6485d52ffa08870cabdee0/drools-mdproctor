@@ -15,6 +15,7 @@
 
 package org.kie.api.runtime.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.api.definition.rule.Rule;
 
 public class TimedRuleExecutionOption implements SingleValueRuleRuntimeOption {
@@ -22,6 +23,8 @@ public class TimedRuleExecutionOption implements SingleValueRuleRuntimeOption {
     private static final long serialVersionUID = 510l;
 
     public static final String PROPERTY_NAME = "drools.timedRuleExecution";
+
+    public static OptionKey<TimedRuleExecutionOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     public static final TimedRuleExecutionOption YES = new TimedRuleExecutionOption(rules -> true);
 

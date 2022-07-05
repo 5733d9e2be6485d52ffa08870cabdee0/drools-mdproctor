@@ -16,6 +16,7 @@
 
 package org.kie.internal.builder.conf;
 
+import org.kie.api.conf.OptionKey;
 
 /**
  * A class for the default dialect configuration.
@@ -28,6 +29,8 @@ public class DefaultDialectOption implements SingleValueKieBuilderOption {
      * The property name for the default DIALECT
      */
     public static final String PROPERTY_NAME = "drools.dialect.default";
+
+    public static OptionKey<DefaultDialectOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     /**
      * dialect name

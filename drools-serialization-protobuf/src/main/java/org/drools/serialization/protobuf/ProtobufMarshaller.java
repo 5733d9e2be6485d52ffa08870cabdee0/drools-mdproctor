@@ -25,6 +25,7 @@ import java.util.Map;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.common.InternalWorkingMemory;
+import org.drools.core.impl.KnowledgeBaseImpl;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.core.impl.RuleBaseFactory;
 import org.drools.serialization.protobuf.marshalling.InternalMarshaller;
@@ -78,7 +79,7 @@ public class ProtobufMarshaller
     public ProtobufMarshaller(KieBase kbase,
                               MarshallingConfiguration marshallingConfig) {
         this.kbase = kbase;
-        this.ruleBaseConfig = RuleBaseConfiguration.getDefaultInstance();
+        this.ruleBaseConfig = ((KnowledgeBaseImpl)kbase).getRuleBaseConfiguration();
         this.marshallingConfig = marshallingConfig;
         this.strategyStore = this.marshallingConfig.getObjectMarshallingStrategyStore();
     }

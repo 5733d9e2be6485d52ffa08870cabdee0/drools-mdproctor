@@ -16,12 +16,14 @@
 
 package org.kie.internal.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.SingleValueFlowBaseOption;
+import org.kie.api.conf.SingleValueRuleBaseOption;
 
 /**
  * A class for the composite key depth configuration.
  */
-public class CompositeKeyDepthOption implements SingleValueFlowBaseOption {
+public class CompositeKeyDepthOption implements SingleValueRuleBaseOption {
 
     private static final long serialVersionUID = 510l;
 
@@ -29,6 +31,8 @@ public class CompositeKeyDepthOption implements SingleValueFlowBaseOption {
      * The property name for the default DIALECT
      */
     public static final String PROPERTY_NAME = "drools.compositeKeyDepth";
+
+    public static OptionKey<CompositeKeyDepthOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     /**
      * dialect name

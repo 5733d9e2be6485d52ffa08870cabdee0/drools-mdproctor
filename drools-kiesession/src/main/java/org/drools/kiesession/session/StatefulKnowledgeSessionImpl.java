@@ -317,7 +317,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
         this.nodeMemories = new ConcurrentNodeMemories(kBase);
         registerReceiveNodes(kBase.getReceiveNodes());
 
-        RuleBaseConfiguration conf = kBase.getConfiguration();
+        RuleBaseConfiguration conf = kBase.getRuleBaseConfiguration();
         this.pctxFactory = RuntimeComponentFactory.get().getPropagationContextFactory();
 
         this.agenda = agenda != null ? agenda : RuntimeComponentFactory.get().getAgendaFactory().createAgenda(kBase);
@@ -367,7 +367,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
     }
 
     public void initMBeans(String containerId, String kbaseName, String ksessionName) {
-        if (kBase.getConfiguration() != null && kBase.getConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
+        if (kBase.getRuleBaseConfiguration() != null && kBase.getRuleBaseConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
             this.mbeanRegisteredCBSKey = new DroolsManagementAgent.CBSKey( containerId, kbaseName, ksessionName );
             DroolsManagementAgent.getInstance().registerKnowledgeSessionUnderName( mbeanRegisteredCBSKey, this );
         }

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.drools.core.KieBaseConfigurationImpl;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.base.TraitHelper;
 import org.drools.core.common.ClassAwareObjectStore;
@@ -57,6 +58,7 @@ import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.util.bitmask.AllSetBitMask;
 import org.drools.core.util.bitmask.BitMask;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.runtime.rule.FactHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,10 +109,11 @@ public class NamedEntryPoint implements InternalWorkingMemoryEntryPoint, Propert
         this.lock = reteEvaluator.getSessionConfiguration().isThreadSafe() ? new ReentrantLock() : null;
         this.handleFactory = this.reteEvaluator.getFactHandleFactory();
 
-        RuleBaseConfiguration conf = this.ruleBase.getConfiguration();
+        RuleBaseConfiguration    conf        = this.ruleBase.getRuleBaseConfiguration();
+        KieBaseConfigurationImpl kieBaseConf = this.ruleBase.getKieBaseConfiguration();
         this.pctxFactory = RuntimeComponentFactory.get().getPropagationContextFactory();
         this.isEqualityBehaviour = RuleBaseConfiguration.AssertBehaviour.EQUALITY.equals(conf.getAssertBehaviour());
-        this.objectStore = isEqualityBehaviour || conf.isMutabilityEnabled() ?
+        this.objectStore = isEqualityBehaviour || kieBaseConf.isMutabilityEnabled() ?
                 new ClassAwareObjectStore( isEqualityBehaviour, this.lock ) :
                 new IdentityObjectStore();
     }

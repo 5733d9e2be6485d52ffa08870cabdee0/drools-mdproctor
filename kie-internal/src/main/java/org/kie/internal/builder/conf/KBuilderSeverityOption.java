@@ -15,6 +15,7 @@
 */
 package org.kie.internal.builder.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.internal.builder.ResultSeverity;
 
 /**
@@ -25,8 +26,10 @@ public class KBuilderSeverityOption
     MultiValueKieBuilderOption {
 
     private static final long    serialVersionUID = 1492178699571897026L;
-    public static String         PROPERTY_NAME    = "drools.kbuilder.severity.";
-    private final String         key;
+    public static final String   PROPERTY_NAME    = "drools.kbuilder.severity.";
+
+    public static OptionKey<KBuilderSeverityOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
+    private final String                                           key;
     private final ResultSeverity severity;
 
     private KBuilderSeverityOption(String key,

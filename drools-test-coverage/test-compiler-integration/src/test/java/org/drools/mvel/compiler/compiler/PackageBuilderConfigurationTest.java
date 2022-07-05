@@ -141,9 +141,9 @@ public class PackageBuilderConfigurationTest {
         System.setProperty("drools.kbuilder.severity." + DuplicateFunction.KEY,
                            "ERROR");
         KnowledgeBuilderConfigurationImpl cfg = new KnowledgeBuilderConfigurationImpl();
-        assertThat(1).isEqualTo(cfg.getOptionKeys(KBuilderSeverityOption.class).size());
-        assertThat(ResultSeverity.ERROR).isEqualTo(cfg.getOption(KBuilderSeverityOption.class,
-                DuplicateFunction.KEY).getSeverity());
+        assertThat(1).isEqualTo(cfg.getOptionSubKeys(KBuilderSeverityOption.KEY).size());
+        assertThat(ResultSeverity.ERROR).isEqualTo(cfg.getOption(KBuilderSeverityOption.KEY,
+                                                                 DuplicateFunction.KEY).getSeverity());
     }
 
     @Test
@@ -151,9 +151,9 @@ public class PackageBuilderConfigurationTest {
         System.setProperty("drools.kbuilder.severity." + DuplicateFunction.KEY,
                            "FOO");
         KnowledgeBuilderConfigurationImpl cfg = new KnowledgeBuilderConfigurationImpl();
-        assertThat(1).isEqualTo(cfg.getOptionKeys(KBuilderSeverityOption.class).size());
-        assertThat(ResultSeverity.INFO).isEqualTo(cfg.getOption(KBuilderSeverityOption.class,
-                DuplicateFunction.KEY).getSeverity());
+        assertThat(1).isEqualTo(cfg.getOptionSubKeys(KBuilderSeverityOption.KEY).size());
+        assertThat(ResultSeverity.INFO).isEqualTo(cfg.getOption(KBuilderSeverityOption.KEY,
+                                                                DuplicateFunction.KEY).getSeverity());
     }
 
     @Test

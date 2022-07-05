@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.drools.core.KieBaseConfigurationImpl;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.SessionConfigurationImpl;
@@ -71,7 +72,12 @@ import org.drools.base.ruleunit.RuleUnitDescriptionRegistry;
 import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.builder.ReleaseId;
+import org.kie.api.conf.DelegatingConfiguration;
 import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.conf.KieBaseOption;
+import org.kie.api.conf.MultiValueKieBaseOption;
+import org.kie.api.conf.OptionsConfiguration;
+import org.kie.api.conf.SingleValueKieBaseOption;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.process.Process;
 import org.kie.api.definition.rule.Query;
@@ -100,7 +106,10 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
     // ------------------------------------------------------------
     private String              id;
 
-    private RuleBaseConfiguration config;
+    private DelegatingConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> config;
+
+    private RuleBaseConfiguration    ruleBaseConfig;
+    private KieBaseConfigurationImpl kieBaseConfig;
 
     protected Map<String, InternalKnowledgePackage> pkgs;
 
@@ -139,11 +148,11 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
 
     private boolean hasMultipleAgendaGroups = false;
 
-    public KnowledgeBaseImpl() { }
-
     public KnowledgeBaseImpl(final String id,
-                             final RuleBaseConfiguration config) {
-        this.config = (config != null) ? config : new RuleBaseConfiguration();
+                             final DelegatingConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> config) {
+        this.config = config;
+        this.ruleBaseConfig = config.getDelegate(RuleBaseConfiguration.KEY);
+        this.kieBaseConfig = config.getDelegate(KieBaseConfigurationImpl.KEY);
         this.config.makeImmutable();
 
         createRulebaseId(id);
@@ -158,9 +167,10 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
 
         setupRete();
 
-        sessionConfiguration = new SessionConfigurationImpl( null, this.config.getClassLoader(), this.config.getChainedProperties() );
 
-        mutable = this.config.isMutabilityEnabled();
+        sessionConfiguration = new SessionConfigurationImpl( null, this.config.getClassLoader(), ((DelegatingConfiguration)config).getChainedProperties() );
+
+        mutable = kieBaseConfig.isMutabilityEnabled();
     }
 
     private void createRulebaseId(final String id) {
@@ -168,7 +178,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
             this.id = id;
         } else {
             String key = "";
-            if (config.isMBeansEnabled()) {
+            if (kieBaseConfig.isMBeansEnabled()) {
                 DroolsManagementAgent agent = DroolsManagementAgent.getInstance();
                 key = String.valueOf(agent.getNextKnowledgeBaseId());
             }
@@ -436,7 +446,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
             ruleUnitDescriptionRegistry.add(newPkg.getRuleUnitDescriptionLoader());
         }
 
-        if (config.isMultithreadEvaluation() && !hasMultiplePartitions()) {
+        if (ruleBaseConfig.isMultithreadEvaluation() && !hasMultiplePartitions()) {
             disableMultithreadEvaluation("The rete network cannot be partitioned: disabling multithread evaluation");
         }
     }
@@ -466,7 +476,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
     }
 
     private void checkMultithreadedEvaluation( RuleImpl rule ) {
-        if (config.isMultithreadEvaluation()) {
+        if (ruleBaseConfig.isMultithreadEvaluation()) {
             if (!rule.isMainAgendaGroup()) {
                 disableMultithreadEvaluation( "Agenda-groups are not supported with multithread evaluation: disabling it" );
             } else if (rule.getActivationGroup() != null) {
@@ -496,7 +506,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
     }
 
     private void disableMultithreadEvaluation(String warningMessage) {
-        config.enforceSingleThreadEvaluation();
+        ruleBaseConfig.enforceSingleThreadEvaluation();
         logger.warn( warningMessage );
         for (EntryPointNode entryPointNode : rete.getEntryPointNodes().values()) {
             entryPointNode.setPartitionsEnabled( false );
@@ -504,7 +514,8 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
                 ObjectSinkPropagator sink = otn.getObjectSinkPropagator();
                 if (sink instanceof CompositePartitionAwareObjectSinkAdapter) {
                     otn.setObjectSinkPropagator( ( (CompositePartitionAwareObjectSinkAdapter) sink )
-                                                         .asNonPartitionedSinkPropagator( config.getAlphaNodeHashingThreshold(), config.getAlphaNodeRangeIndexThreshold() ) );
+                                                         .asNonPartitionedSinkPropagator( ruleBaseConfig.getAlphaNodeHashingThreshold(),
+                                                                                          ruleBaseConfig.getAlphaNodeRangeIndexThreshold() ) );
                 }
             }
         }
@@ -581,7 +592,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
 
     private void updateDependentTypes( TypeDeclaration typeDeclaration ) {
         // update OTNs
-        if( this.getConfiguration().getEventProcessingMode().equals( EventProcessingOption.STREAM ) ) {
+        if( ruleBaseConfig.getEventProcessingMode().equals( EventProcessingOption.STREAM ) ) {
             // if the expiration for the type was set, then add 1, otherwise return -1
             long exp = typeDeclaration.getExpirationOffset() > -1 ? typeDeclaration.getExpirationOffset() + 1 : -1;
 
@@ -828,7 +839,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
         // always add the default entry point
         EntryPointNode epn = nodeFactory.buildEntryPointNode(this.reteooBuilder.getNodeIdsGenerator().getNextId(),
                                                              RuleBasePartitionId.MAIN_PARTITION,
-                                                             this.getConfiguration().isMultithreadEvaluation(),
+                                                             ruleBaseConfig.isMultithreadEvaluation(),
                                                              this.rete,
                                                              EntryPointId.DEFAULT);
         epn.attach();
@@ -1112,11 +1123,16 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
         return this.pkgs.get( name );
     }
 
-    public RuleBaseConfiguration getConfiguration() {
-        if ( this.config == null ) {
-            this.config = new RuleBaseConfiguration();
-        }
-        return this.config;
+    public RuleBaseConfiguration getRuleBaseConfiguration() {
+        return this.ruleBaseConfig;
+    }
+
+    public KieBaseConfigurationImpl getKieBaseConfiguration() {
+        return this.kieBaseConfig;
+    }
+
+    @Override public OptionsConfiguration getConfiguration() {
+        return config;
     }
 
     public ClassLoader getRootClassLoader() {

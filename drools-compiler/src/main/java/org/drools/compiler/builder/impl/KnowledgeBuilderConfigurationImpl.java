@@ -36,6 +36,7 @@ import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.drl.parser.DrlParser;
 import org.drools.util.StringUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
+import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.rule.AccumulateFunction;
 import org.kie.internal.builder.KnowledgeBuilderConfiguration;
 import org.kie.internal.builder.ResultSeverity;
@@ -229,6 +230,10 @@ public class KnowledgeBuilderConfigurationImpl
 
         setProperty(ParallelLambdaExternalizationOption.PROPERTY_NAME,
                     this.chainedProperties.getProperty(ParallelLambdaExternalizationOption.PROPERTY_NAME,"true"));
+    }
+
+    @Override public void makeImmutable() {
+        throw new UnsupportedOperationException("Not Implemented Yet");
     }
 
     protected ClassLoader getFunctionFactoryClassLoader() {
@@ -592,92 +597,127 @@ public class KnowledgeBuilderConfigurationImpl
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends SingleValueKieBuilderOption> T getOption(Class<T> option) {
-        if (DefaultDialectOption.class.equals(option)) {
-            return (T) this.defaultDialect;
-        } else if (DumpDirOption.class.equals(option)) {
-            return (T) DumpDirOption.get(this.dumpDirectory);
-        } else if (ProcessStringEscapesOption.class.equals(option)) {
-            return (T) (this.processStringEscapes ? ProcessStringEscapesOption.YES : ProcessStringEscapesOption.NO);
-        } else if (DefaultPackageNameOption.class.equals(option)) {
-            return (T) DefaultPackageNameOption.get(this.defaultPackageName);
-        } else if (TrimCellsInDTableOption.class.equals(option)) {
-            return (T) (this.trimCellsInDTable ? TrimCellsInDTableOption.ENABLED : TrimCellsInDTableOption.DISABLED);
-        } else if (GroupDRLsInKieBasesByFolderOption.class.equals(option)) {
-            return (T) (this.groupDRLsInKieBasesByFolder ? GroupDRLsInKieBasesByFolderOption.ENABLED : GroupDRLsInKieBasesByFolderOption.DISABLED);
-        } else if (PropertySpecificOption.class.equals(option)) {
-            return (T) propertySpecificOption;
-        } else if (LanguageLevelOption.class.equals(option)) {
-            return (T) languageLevel;
-        } else if (ExternaliseCanonicalModelLambdaOption.class.equals(option)) {
-            return (T) (externaliseCanonicalModelLambda ? ExternaliseCanonicalModelLambdaOption.ENABLED : ExternaliseCanonicalModelLambdaOption.DISABLED);
-        } else if (ParallelLambdaExternalizationOption.class.equals(option)) {
-            return (T) (parallelLambdaExternalization ? ParallelLambdaExternalizationOption.ENABLED : ParallelLambdaExternalizationOption.DISABLED);
-        } else if (AlphaNetworkCompilerOption.class.equals(option)) {
-            return (T) alphaNetworkCompilerOption;
+    public <T extends SingleValueKieBuilderOption> T getOption(OptionKey<T> option) {
+        switch ((option.name())) {
+            case DefaultDialectOption.PROPERTY_NAME: {
+                return (T) this.defaultDialect;
+            }
+            case DumpDirOption.PROPERTY_NAME: {
+                return (T) DumpDirOption.get(this.dumpDirectory);
+            }
+            case ProcessStringEscapesOption.PROPERTY_NAME: {
+                return (T) (this.processStringEscapes ? ProcessStringEscapesOption.YES : ProcessStringEscapesOption.NO);
+            }
+            case DefaultPackageNameOption.PROPERTY_NAME: {
+                return (T) DefaultPackageNameOption.get(this.defaultPackageName);
+            }
+            case TrimCellsInDTableOption.PROPERTY_NAME: {
+                return (T) (this.trimCellsInDTable ? TrimCellsInDTableOption.ENABLED : TrimCellsInDTableOption.DISABLED);
+            }
+            case GroupDRLsInKieBasesByFolderOption.PROPERTY_NAME: {
+                return (T) (this.groupDRLsInKieBasesByFolder ? GroupDRLsInKieBasesByFolderOption.ENABLED : GroupDRLsInKieBasesByFolderOption.DISABLED);
+            }
+            case PropertySpecificOption.PROPERTY_NAME: {
+                return (T) propertySpecificOption;
+            }
+            case LanguageLevelOption.PROPERTY_NAME: {
+                return (T) languageLevel;
+            }
+            case ExternaliseCanonicalModelLambdaOption.PROPERTY_NAME: {
+                return (T) (externaliseCanonicalModelLambda ? ExternaliseCanonicalModelLambdaOption.ENABLED : ExternaliseCanonicalModelLambdaOption.DISABLED);
+            }
+            case ParallelLambdaExternalizationOption.PROPERTY_NAME: {
+                return (T) (parallelLambdaExternalization ? ParallelLambdaExternalizationOption.ENABLED : ParallelLambdaExternalizationOption.DISABLED);
+            }
+            case AlphaNetworkCompilerOption.PROPERTY_NAME: {
+                return (T) alphaNetworkCompilerOption;
+            }
         }
+
         return null;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends MultiValueKieBuilderOption> T getOption(Class<T> option,
-                                                              String key) {
-        if (AccumulateFunctionOption.class.equals(option)) {
-            return (T) AccumulateFunctionOption.get(key,
-                    this.accumulateFunctions.get(key));
-        } else if (EvaluatorOption.class.equals(option)) {
-            return (T) EvaluatorOption.get(key,
-                    this.evaluatorRegistry.getEvaluatorDefinition(key));
-        } else if (KBuilderSeverityOption.class.equals(option)) {
-
-            return (T) KBuilderSeverityOption.get(key,
-                    this.severityMap.get(key));
+    public <T extends MultiValueKieBuilderOption> T getOption(OptionKey<T> option,
+                                                              String subKey) {
+        switch (option.name()) {
+            case AccumulateFunctionOption.PROPERTY_NAME: {
+                return (T) AccumulateFunctionOption.get(subKey,
+                                                        this.accumulateFunctions.get(subKey));
+            }
+            case EvaluatorOption.PROPERTY_NAME: {
+                return (T) EvaluatorOption.get(subKey,
+                                               this.evaluatorRegistry.getEvaluatorDefinition(subKey));
+            }
+            case KBuilderSeverityOption.PROPERTY_NAME: {
+                return (T) KBuilderSeverityOption.get(subKey,
+                                                      this.severityMap.get(subKey));
+            }
         }
         return null;
     }
 
-    public <T extends MultiValueKieBuilderOption> Set<String> getOptionKeys(
-            Class<T> option) {
-        if (AccumulateFunctionOption.class.equals(option)) {
-            return this.accumulateFunctions.keySet();
-        } else if (EvaluatorOption.class.equals(option)) {
-            return this.evaluatorRegistry.keySet();
-        } else if (KBuilderSeverityOption.class.equals(option)) {
-            return this.severityMap.keySet();
+    public <T extends MultiValueKieBuilderOption> Set<String> getOptionSubKeys(OptionKey<T> option) {
+        switch(option.name()) {
+            case AccumulateFunctionOption.PROPERTY_NAME:{
+                return this.accumulateFunctions.keySet();
+            }
+            case EvaluatorOption.PROPERTY_NAME:{
+                return this.evaluatorRegistry.keySet();
+            }
+            case KBuilderSeverityOption.PROPERTY_NAME: {
+                return this.severityMap.keySet();
+            }
         }
+
         return null;
     }
 
     public <T extends KnowledgeBuilderOption> void setOption(T option) {
-        if (option instanceof DefaultDialectOption) {
-            this.defaultDialect = (DefaultDialectOption) option;
-        } else if (option instanceof AccumulateFunctionOption) {
-            this.accumulateFunctions.put(((AccumulateFunctionOption) option).getName(),
-                    ((AccumulateFunctionOption) option).getFunction());
-        } else if (option instanceof DumpDirOption) {
-            this.dumpDirectory = ((DumpDirOption) option).getDirectory();
-        } else if (option instanceof EvaluatorOption) {
-            this.evaluatorRegistry.addEvaluatorDefinition((EvaluatorDefinition) ((EvaluatorOption) option).getEvaluatorDefinition());
-        } else if (option instanceof ProcessStringEscapesOption) {
-            this.processStringEscapes = ((ProcessStringEscapesOption) option).isProcessStringEscapes();
-        } else if (option instanceof DefaultPackageNameOption) {
-            setDefaultPackageName(((DefaultPackageNameOption) option).getPackageName());
-        } else if (option instanceof TrimCellsInDTableOption) {
-            setTrimCellsInDTable(((TrimCellsInDTableOption) option).isTrimCellsInDTable());
-        } else if (option instanceof GroupDRLsInKieBasesByFolderOption) {
-            setGroupDRLsInKieBasesByFolder(((GroupDRLsInKieBasesByFolderOption) option).isGroupDRLsInKieBasesByFolder());
-        } else if (option instanceof KBuilderSeverityOption) {
-            this.severityMap.put(((KBuilderSeverityOption) option).getName(), ((KBuilderSeverityOption) option).getSeverity());
-        } else if (option instanceof PropertySpecificOption) {
-            propertySpecificOption = (PropertySpecificOption) option;
-        } else if (option instanceof LanguageLevelOption) {
-            this.languageLevel = ((LanguageLevelOption) option);
-        } else if (option instanceof ExternaliseCanonicalModelLambdaOption) {
-            this.externaliseCanonicalModelLambda = ((ExternaliseCanonicalModelLambdaOption) option).isCanonicalModelLambdaExternalized();
-        } else if (option instanceof ParallelLambdaExternalizationOption) {
-            this.parallelLambdaExternalization = ((ParallelLambdaExternalizationOption) option).isLambdaExternalizationParallel();
-        } else if (option instanceof AlphaNetworkCompilerOption) {
-            this.alphaNetworkCompilerOption = ((AlphaNetworkCompilerOption) option);
+        switch (option.name()) {
+            case DefaultDialectOption.PROPERTY_NAME: {
+                this.defaultDialect = (DefaultDialectOption) option;
+            }
+            case AccumulateFunctionOption.PROPERTY_NAME: {
+                this.accumulateFunctions.put(((AccumulateFunctionOption) option).getName(),
+                                             ((AccumulateFunctionOption) option).getFunction());
+            }
+            case DumpDirOption.PROPERTY_NAME: {
+                this.dumpDirectory = ((DumpDirOption) option).getDirectory();
+            }
+            case EvaluatorOption.PROPERTY_NAME: {
+                this.evaluatorRegistry.addEvaluatorDefinition((EvaluatorDefinition) ((EvaluatorOption) option).getEvaluatorDefinition());
+            }
+            case ProcessStringEscapesOption.PROPERTY_NAME: {
+                this.processStringEscapes = ((ProcessStringEscapesOption) option).isProcessStringEscapes();
+            }
+            case DefaultPackageNameOption.PROPERTY_NAME: {
+                setDefaultPackageName(((DefaultPackageNameOption) option).getPackageName());
+            }
+            case TrimCellsInDTableOption.PROPERTY_NAME: {
+                setTrimCellsInDTable(((TrimCellsInDTableOption) option).isTrimCellsInDTable());
+            }
+            case GroupDRLsInKieBasesByFolderOption.PROPERTY_NAME: {
+                setGroupDRLsInKieBasesByFolder(((GroupDRLsInKieBasesByFolderOption) option).isGroupDRLsInKieBasesByFolder());
+            }
+            case KBuilderSeverityOption.PROPERTY_NAME: {
+                this.severityMap.put(((KBuilderSeverityOption) option).getName(), ((KBuilderSeverityOption) option).getSeverity());
+            }
+            case PropertySpecificOption.PROPERTY_NAME: {
+                propertySpecificOption = (PropertySpecificOption) option;
+            }
+            case LanguageLevelOption.PROPERTY_NAME: {
+                this.languageLevel = ((LanguageLevelOption) option);
+            }
+            case ExternaliseCanonicalModelLambdaOption.PROPERTY_NAME: {
+                this.externaliseCanonicalModelLambda = ((ExternaliseCanonicalModelLambdaOption) option).isCanonicalModelLambdaExternalized();
+            }
+            case ParallelLambdaExternalizationOption.PROPERTY_NAME: {
+                this.parallelLambdaExternalization = ((ParallelLambdaExternalizationOption) option).isLambdaExternalizationParallel();
+            }
+            case AlphaNetworkCompilerOption.PROPERTY_NAME: {
+                this.alphaNetworkCompilerOption = ((AlphaNetworkCompilerOption) option);
+            }
         }
     }
 

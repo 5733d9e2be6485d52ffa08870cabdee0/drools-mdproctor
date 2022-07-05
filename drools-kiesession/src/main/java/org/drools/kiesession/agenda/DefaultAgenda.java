@@ -154,17 +154,17 @@ public class DefaultAgenda implements Externalizable, InternalAgenda {
         this.activationGroups = new HashMap<>();
         this.executionStateMachine = executionStateMachine;
 
-        Object object = ComponentsFactory.createConsequenceExceptionHandler( kBase.getConfiguration().getConsequenceExceptionHandler(),
-                                                                             kBase.getConfiguration().getClassLoader() );
+        Object object = ComponentsFactory.createConsequenceExceptionHandler( kBase.getRuleBaseConfiguration().getConsequenceExceptionHandler(),
+                                                                             kBase.getRuleBaseConfiguration().getClassLoader());
         if ( object instanceof ConsequenceExceptionHandler ) {
             this.legacyConsequenceExceptionHandler = (ConsequenceExceptionHandler) object;
         } else {
             this.consequenceExceptionHandler = (org.kie.api.runtime.rule.ConsequenceExceptionHandler) object;
         }
 
-        this.declarativeAgenda = kBase.getConfiguration().isDeclarativeAgenda();
-        this.sequential = kBase.getConfiguration().isSequential();
-        if (kBase.getConfiguration().getEventProcessingMode() == EventProcessingOption.STREAM) {
+        this.declarativeAgenda = kBase.getRuleBaseConfiguration().isDeclarativeAgenda();
+        this.sequential = kBase.getRuleBaseConfiguration().isSequential();
+        if (kBase.getRuleBaseConfiguration().getEventProcessingMode() == EventProcessingOption.STREAM) {
             expirationContexts = new ArrayList<>();
         }
     }

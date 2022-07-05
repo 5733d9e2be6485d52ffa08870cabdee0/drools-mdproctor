@@ -46,6 +46,8 @@ public enum EventProcessingOption
      */
     public static final String PROPERTY_NAME = "drools.eventProcessingMode";
 
+    public static OptionKey KEY = new OptionKey(TYPE, PROPERTY_NAME);
+
     private String             string;
 
     EventProcessingOption(String mode) {

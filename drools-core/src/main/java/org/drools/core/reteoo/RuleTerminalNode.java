@@ -79,7 +79,7 @@ public class RuleTerminalNode extends AbstractTerminalNode {
                             final BuildContext context) {
         super( id,
                context.getPartitionId(),
-               context.getRuleBase().getConfiguration().isMultithreadEvaluation(),
+               context.getRuleBase().getRuleBaseConfiguration().isMultithreadEvaluation(),
                source,
                context );
 

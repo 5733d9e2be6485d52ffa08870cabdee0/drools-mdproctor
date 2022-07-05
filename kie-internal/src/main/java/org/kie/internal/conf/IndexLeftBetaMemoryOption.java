@@ -16,7 +16,9 @@
 
 package org.kie.internal.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.SingleValueFlowBaseOption;
+import org.kie.api.conf.SingleValueRuleBaseOption;
 
 /**
  * An Enum for indexLeftBetaMemory option.
@@ -25,7 +27,7 @@ import org.kie.api.conf.SingleValueFlowBaseOption;
  *
  * DEFAULT = true
  */
-public enum IndexLeftBetaMemoryOption implements SingleValueFlowBaseOption {
+public enum IndexLeftBetaMemoryOption implements SingleValueRuleBaseOption {
 
     YES(true),
     NO(false);
@@ -34,6 +36,8 @@ public enum IndexLeftBetaMemoryOption implements SingleValueFlowBaseOption {
      * The property name for the share beta nodes option
      */
     public static final String PROPERTY_NAME = "drools.indexLeftBetaMemory";
+
+    public static OptionKey<IndexLeftBetaMemoryOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     private boolean value;
 

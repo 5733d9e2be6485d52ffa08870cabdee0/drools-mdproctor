@@ -16,7 +16,9 @@
 
 package org.kie.internal.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.SingleValueFlowBaseOption;
+import org.kie.api.conf.SingleValueRuleBaseOption;
 
 /**
  * An Enum for multithread evaluation option.
@@ -25,7 +27,7 @@ import org.kie.api.conf.SingleValueFlowBaseOption;
  *
  * DEFAULT = false
  */
-public enum MultithreadEvaluationOption implements SingleValueFlowBaseOption {
+public enum MultithreadEvaluationOption implements SingleValueRuleBaseOption {
 
     YES(true),
     NO(false);
@@ -34,6 +36,8 @@ public enum MultithreadEvaluationOption implements SingleValueFlowBaseOption {
      * The property name for the multithread evaluation option
      */
     public static final String PROPERTY_NAME = "drools.multithreadEvaluation";
+
+    public static OptionKey<MultithreadEvaluationOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     private boolean value;
 

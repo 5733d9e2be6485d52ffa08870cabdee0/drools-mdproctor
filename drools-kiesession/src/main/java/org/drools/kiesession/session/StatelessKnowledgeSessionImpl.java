@@ -128,7 +128,7 @@ public class StatelessKnowledgeSessionImpl extends AbstractRuntime implements St
     }
 
     public void initMBeans(String containerId, String kbaseId, String ksessionName) {
-        if (kBase.getConfiguration() != null && kBase.getConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
+        if (kBase.getRuleBaseConfiguration() != null && kBase.getRuleBaseConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
             this.mbeanRegisteredCBSKey = new DroolsManagementAgent.CBSKey(containerId, kbaseId, ksessionName);
             DroolsManagementAgent.getInstance().registerKnowledgeSessionUnderName(mbeanRegisteredCBSKey, this);
         }

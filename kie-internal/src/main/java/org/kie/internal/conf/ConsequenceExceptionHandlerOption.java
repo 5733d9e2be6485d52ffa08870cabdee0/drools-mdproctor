@@ -16,13 +16,15 @@
 
 package org.kie.internal.conf;
 
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.SingleValueFlowBaseOption;
+import org.kie.api.conf.SingleValueRuleBaseOption;
 import org.kie.api.runtime.rule.ConsequenceExceptionHandler;
 
 /**
  * A class for the consequence exception handler configuration configuration.
  */
-public class ConsequenceExceptionHandlerOption implements SingleValueFlowBaseOption {
+public class ConsequenceExceptionHandlerOption implements SingleValueRuleBaseOption {
 
     private static final long serialVersionUID = 510l;
 
@@ -30,6 +32,8 @@ public class ConsequenceExceptionHandlerOption implements SingleValueFlowBaseOpt
      * The property name for consequence exception handler configuration
      */
     public static final String PROPERTY_NAME = "drools.consequenceExceptionHandler";
+
+    public static OptionKey<ConsequenceExceptionHandlerOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     /**
      * the consequence exception handler class instance

@@ -16,6 +16,8 @@
 
 package org.kie.api.runtime.conf;
 
+import org.kie.api.conf.OptionKey;
+
 /**
  * An enum to configure the session query listener configuration.
  *
@@ -36,6 +38,8 @@ public enum QueryListenerOption implements SingleValueRuleRuntimeOption {
      * The property name for the clock type configuration
      */
     public static final String PROPERTY_NAME = "drools.queryListener";
+
+    public static OptionKey<QueryListenerOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     private String             option;
 

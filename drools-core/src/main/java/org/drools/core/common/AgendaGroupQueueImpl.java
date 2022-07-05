@@ -64,7 +64,7 @@ public class AgendaGroupQueueImpl
     public AgendaGroupQueueImpl(final String name,
                                 final RuleBase kBase) {
         this.name = name;
-        this.sequential = kBase.getConfiguration().isSequential();
+        this.sequential = kBase.getRuleBaseConfiguration().isSequential();
 
         this.clearedForRecency = -1;
     }

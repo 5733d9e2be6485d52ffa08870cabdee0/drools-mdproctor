@@ -31,6 +31,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.drools.core.KieBaseConfigurationImpl;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.base.ClassFieldAccessorCache;
@@ -60,6 +61,7 @@ import org.drools.base.ruleunit.RuleUnitDescriptionRegistry;
 import org.drools.core.rule.accessor.FactHandleFactory;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.builder.ReleaseId;
+import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.process.Process;
 import org.kie.api.definition.rule.Query;
@@ -106,13 +108,21 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     public SessionsAwareKnowledgeBase(RuleBase delegate) {
         this.delegate = (KnowledgeBaseImpl) delegate;
 
-        if (this.delegate.getConfiguration().getSessionPoolSize() > 0) {
-            sessionPool = newKieSessionsPool( this.delegate.getConfiguration().getSessionPoolSize() );
+        if (this.delegate.getRuleBaseConfiguration().getSessionPoolSize() > 0) {
+            sessionPool = newKieSessionsPool( this.delegate.getRuleBaseConfiguration().getSessionPoolSize());
         }
     }
 
     public KnowledgeBaseImpl getDelegate() {
         return delegate;
+    }
+
+    @Override public KieBaseConfigurationImpl getKieBaseConfiguration() {
+        return delegate.getKieBaseConfiguration();
+    }
+
+    @Override public OptionsConfiguration getConfiguration() {
+        return delegate.getConfiguration();
     }
 
     @Override
@@ -173,7 +183,7 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
             environment = EnvironmentFactory.newEnvironment();
         }
 
-        if ( this.getConfiguration().isSequential() ) {
+        if ( this.getRuleBaseConfiguration().isSequential() ) {
             throw new RuntimeException( "Cannot have a stateful rule session, with sequential configuration set to true" );
         }
 
@@ -405,7 +415,7 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
 
     @Override
     public void initMBeans() {
-        if (getConfiguration() != null && getConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
+        if (getRuleBaseConfiguration() != null && delegate.getKieBaseConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
             // no further synch enforced at this point, even if other threads might not immediately see (yet) the MBean registered on JMX.
             DroolsManagementAgent.getInstance().registerKnowledgeBase(this);
         }
@@ -438,6 +448,8 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     public SessionConfiguration getSessionConfiguration() {
         return delegate.getSessionConfiguration();
     }
+
+
 
     @Override
     public void registerAddedEntryNodeCache(EntryPointNode node) {
@@ -722,8 +734,8 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     }
 
     @Override
-    public RuleBaseConfiguration getConfiguration() {
-        return delegate.getConfiguration();
+    public RuleBaseConfiguration getRuleBaseConfiguration() {
+        return delegate.getRuleBaseConfiguration();
     }
 
     @Override

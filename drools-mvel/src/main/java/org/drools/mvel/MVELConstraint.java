@@ -262,7 +262,7 @@ public class MVELConstraint extends MutableTypeConstraint implements IndexableCo
 
     protected boolean evaluate(FactHandle handle, ValueResolver valueResolver, BaseTuple tuple) {
         if (!jitted) {
-            int jittingThreshold = TEST_JITTING ? 0 : ((org.drools.core.impl.RuleBase) valueResolver.getRuleBase()).getConfiguration().getJittingThreshold();
+            int jittingThreshold = TEST_JITTING ? 0 : ((org.drools.core.impl.RuleBase) valueResolver.getRuleBase()).getRuleBaseConfiguration().getJittingThreshold();
             if (conditionEvaluator == null) {
                 if (jittingThreshold == 0 && !isDynamic) { // Only for test purposes or when jitting is enforced at first evaluation
                     synchronized (this) {
