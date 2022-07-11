@@ -8,5 +8,5 @@ public interface ConfigurationFactory<T extends Option, S extends SingleValueOpt
 
     String type();
 
-    OptionsConfiguration<T, S, M> create(ClassLoader classLoader, ChainedProperties chainedProperties);
+    OptionsConfiguration<T, S, M> create(CompositeConfiguration<T, S, M> compConfig, ClassLoader classLoader, ChainedProperties chainedProperties);
 }

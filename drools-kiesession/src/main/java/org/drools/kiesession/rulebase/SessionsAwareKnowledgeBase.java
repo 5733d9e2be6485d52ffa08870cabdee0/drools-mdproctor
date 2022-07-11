@@ -59,9 +59,8 @@ import org.drools.base.rule.InvalidPatternException;
 import org.drools.base.rule.TypeDeclaration;
 import org.drools.base.ruleunit.RuleUnitDescriptionRegistry;
 import org.drools.core.rule.accessor.FactHandleFactory;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.ReleaseId;
-import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.process.Process;
 import org.kie.api.definition.rule.Query;
@@ -71,7 +70,7 @@ import org.kie.api.event.kiebase.KieBaseEventListener;
 import org.kie.api.io.Resource;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.KieSessionsPool;
 import org.kie.api.runtime.StatelessKieSession;
 
@@ -121,7 +120,7 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
         return delegate.getKieBaseConfiguration();
     }
 
-    @Override public OptionsConfiguration getConfiguration() {
+    @Override public KieBaseConfiguration getConfiguration() {
         return delegate.getConfiguration();
     }
 
@@ -445,7 +444,7 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     }
 
     @Override
-    public SessionConfiguration getSessionConfiguration() {
+    public KieSessionConfiguration getSessionConfiguration() {
         return delegate.getSessionConfiguration();
     }
 

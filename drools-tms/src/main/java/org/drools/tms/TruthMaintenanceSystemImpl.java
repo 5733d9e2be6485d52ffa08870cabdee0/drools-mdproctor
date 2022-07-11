@@ -66,7 +66,7 @@ public class TruthMaintenanceSystemImpl implements TruthMaintenanceSystem {
         this.equalityKeyMap = new ObjectHashMap();
         this.equalityKeyMap.setComparator( EqualityKeyComparator.getInstance() );
 
-        defaultBeliefSystem = BeliefSystemFactory.createBeliefSystem(ep.getReteEvaluator().getSessionConfiguration().getBeliefSystemType(), ep, this);
+        defaultBeliefSystem = BeliefSystemFactory.createBeliefSystem(ep.getReteEvaluator().getRuleSessionConfiguration().getBeliefSystemType(), ep, this);
     }
 
     @Override

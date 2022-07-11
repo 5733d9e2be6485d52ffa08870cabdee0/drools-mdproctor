@@ -28,7 +28,7 @@ import org.drools.wiring.api.ResourceProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.KieModule;
 import org.kie.api.builder.KieRepository;
 import org.kie.api.builder.ReleaseId;

@@ -27,7 +27,7 @@ import org.drools.core.util.ObjectHashMap.ObjectEntry;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.junit.Test;
 import org.kie.api.KieBase;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.conf.EqualityBehaviorOption;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;

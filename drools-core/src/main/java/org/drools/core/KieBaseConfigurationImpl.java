@@ -20,50 +20,19 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
-import org.drools.base.rule.consequence.ConflictResolver;
-import org.drools.base.util.MVELExecutor;
-import org.drools.base.util.index.IndexConfiguration;
-import org.drools.core.common.AgendaGroupFactory;
-import org.drools.core.reteoo.RuntimeComponentFactory;
-import org.drools.core.runtime.rule.impl.DefaultConsequenceExceptionHandler;
-import org.drools.core.util.ConfFileUtils;
 import org.drools.util.StringUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
-import org.kie.api.KieBaseConfiguration;
-import org.kie.api.conf.BetaRangeIndexOption;
-import org.kie.api.conf.Configuration;
-import org.kie.api.conf.DeclarativeAgendaOption;
-import org.kie.api.conf.EqualityBehaviorOption;
-import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.conf.CompositeConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
+import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.KieBaseMutabilityOption;
 import org.kie.api.conf.KieBaseOption;
 import org.kie.api.conf.MBeansOption;
 import org.kie.api.conf.MultiValueKieBaseOption;
 import org.kie.api.conf.OptionKey;
-import org.kie.api.conf.RemoveIdentitiesOption;
-import org.kie.api.conf.SequentialOption;
-import org.kie.api.conf.SessionsPoolOption;
+import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.conf.SingleValueKieBaseOption;
-import org.kie.api.runtime.rule.ConsequenceExceptionHandler;
-import org.kie.internal.conf.AlphaRangeIndexThresholdOption;
-import org.kie.internal.conf.AlphaThresholdOption;
-import org.kie.internal.conf.CompositeKeyDepthOption;
-import org.kie.internal.conf.ConsequenceExceptionHandlerOption;
-import org.kie.internal.conf.ConstraintJittingThresholdOption;
-import org.kie.internal.conf.IndexLeftBetaMemoryOption;
-import org.kie.internal.conf.IndexPrecedenceOption;
-import org.kie.internal.conf.IndexRightBetaMemoryOption;
-import org.kie.internal.conf.MaxThreadsOption;
-import org.kie.internal.conf.MultithreadEvaluationOption;
-import org.kie.internal.conf.SequentialAgendaOption;
-import org.kie.internal.conf.ShareAlphaNodesOption;
-import org.kie.internal.conf.ShareBetaNodesOption;
 import org.kie.internal.utils.ChainedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +88,9 @@ public class KieBaseConfigurationImpl
 
     protected static final transient Logger logger = LoggerFactory.getLogger(KieBaseConfigurationImpl.class);
 
-    public static final Configuration<KieBaseConfigurationImpl> KEY = new Configuration<>("Base");
+    public static final ConfigurationKey<KieBaseConfigurationImpl> KEY = new ConfigurationKey<>("Base");
+
+    CompositeConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> compConfig;
 
     private ChainedProperties chainedProperties;
 
@@ -195,21 +166,18 @@ public class KieBaseConfigurationImpl
      * of this rule base classloader, and the properties to be used
      * as base configuration options
      *
+     * @param compConfig
      * @param classLoader
-     * @param properties
+     * @param chainedProperties
      */
-    public KieBaseConfigurationImpl(ClassLoader classLoader,
+    public KieBaseConfigurationImpl(CompositeConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> compConfig,
+                                    ClassLoader classLoader,
                                     ChainedProperties chainedProperties) {
-        init( classLoader,
-              chainedProperties );
-    }
-    
-    private void init(ClassLoader classLoader,
-                      ChainedProperties chainedProperties) {
+        this.compConfig = compConfig;
         setClassLoader(classLoader);
         init(chainedProperties);
     }
-    
+
     private void init(ChainedProperties chainedProperties) {
         this.immutable = false;
 
@@ -314,5 +282,9 @@ public class KieBaseConfigurationImpl
 
     public ChainedProperties getChainedProperties() {
         return chainedProperties;
+    }
+
+    @Override public <X extends OptionsConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption>> X as(ConfigurationKey<X> key) {
+        return compConfig.as(key);
     }
 }

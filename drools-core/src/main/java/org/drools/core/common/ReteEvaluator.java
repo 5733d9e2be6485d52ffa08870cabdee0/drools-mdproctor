@@ -19,6 +19,7 @@ package org.drools.core.common;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.drools.core.RuleSessionConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.base.base.ValueResolver;
@@ -97,6 +98,8 @@ public interface ReteEvaluator extends ValueResolver {
     default FactHandleClassStore getStoreForClass(Class<?> clazz) {
         return getDefaultEntryPoint().getObjectStore().getStoreForClass(clazz);
     }
+
+    RuleSessionConfiguration getRuleSessionConfiguration();
 
     SessionConfiguration getSessionConfiguration();
 

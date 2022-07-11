@@ -25,7 +25,6 @@ import java.util.concurrent.Future;
 
 import org.drools.core.KieBaseConfigurationImpl;
 import org.drools.core.RuleBaseConfiguration;
-import org.drools.core.SessionConfiguration;
 import org.drools.core.base.ClassFieldAccessorCache;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.ReteEvaluator;
@@ -43,14 +42,15 @@ import org.drools.base.rule.InvalidPatternException;
 import org.drools.base.rule.TypeDeclaration;
 import org.drools.base.ruleunit.RuleUnitDescriptionRegistry;
 import org.drools.core.rule.accessor.FactHandleFactory;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.ReleaseId;
-import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.process.Process;
 import org.kie.api.definition.rule.Query;
 import org.kie.api.definition.rule.Rule;
 import org.kie.api.definition.type.FactType;
 import org.kie.api.io.Resource;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 public interface RuleBase extends org.drools.base.definitions.rule.RuleBase {
 
@@ -83,7 +83,7 @@ public interface RuleBase extends org.drools.base.definitions.rule.RuleBase {
 
     KieBaseConfigurationImpl getKieBaseConfiguration();
 
-    OptionsConfiguration getConfiguration();
+    KieBaseConfiguration getConfiguration();
 
     void readLock();
     void readUnlock();
@@ -153,7 +153,7 @@ public interface RuleBase extends org.drools.base.definitions.rule.RuleBase {
     RuleUnitDescriptionRegistry getRuleUnitDescriptionRegistry();
     boolean hasUnits();
 
-    SessionConfiguration getSessionConfiguration();
+    KieSessionConfiguration getSessionConfiguration();
 
     List<AsyncReceiveNode> getReceiveNodes();
     void addReceiveNode(AsyncReceiveNode node);

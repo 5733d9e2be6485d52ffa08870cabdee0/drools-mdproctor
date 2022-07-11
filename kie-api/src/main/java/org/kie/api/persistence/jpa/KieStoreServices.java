@@ -20,7 +20,7 @@ import org.kie.api.KieBase;
 import org.kie.api.internal.utils.KieService;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 public interface KieStoreServices extends KieService {
 

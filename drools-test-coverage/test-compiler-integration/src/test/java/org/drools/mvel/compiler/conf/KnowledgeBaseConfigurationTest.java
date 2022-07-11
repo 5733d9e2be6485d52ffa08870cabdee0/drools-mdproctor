@@ -18,7 +18,7 @@ package org.drools.mvel.compiler.conf;
 import org.drools.core.runtime.rule.impl.DefaultConsequenceExceptionHandler;
 import org.junit.Before;
 import org.junit.Test;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.conf.BetaRangeIndexOption;
 import org.kie.api.conf.EqualityBehaviorOption;

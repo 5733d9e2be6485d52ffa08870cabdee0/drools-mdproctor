@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.api.runtime;
+package org.kie.api.runtime.conf;
 
 import org.kie.api.PropertiesConfiguration;
 import org.kie.api.runtime.conf.KieSessionOptionsConfiguration;

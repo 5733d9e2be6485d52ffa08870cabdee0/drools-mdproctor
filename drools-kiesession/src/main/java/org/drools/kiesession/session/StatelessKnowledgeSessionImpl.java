@@ -41,6 +41,7 @@ import org.kie.api.KieServices;
 import org.kie.api.command.BatchExecutionCommand;
 import org.kie.api.command.Command;
 import org.kie.api.command.ExecutableCommand;
+import org.kie.api.conf.MBeansOption;
 import org.kie.api.event.process.ProcessEventListener;
 import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
@@ -49,7 +50,7 @@ import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.ExecutionResults;
 import org.kie.api.runtime.Globals;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.ObjectFilter;
 import org.kie.api.runtime.StatelessKieSession;
 import org.kie.api.runtime.rule.FactHandle;
@@ -64,7 +65,7 @@ public class StatelessKnowledgeSessionImpl extends AbstractRuntime implements St
 
     private final List<ListnerHolder> listeners = new CopyOnWriteArrayList<>();
 
-    private SessionConfiguration    conf;
+    private KieSessionConfiguration conf;
     private Environment             environment;
 
     private AtomicBoolean mbeanRegistered = new AtomicBoolean(false);
@@ -81,7 +82,7 @@ public class StatelessKnowledgeSessionImpl extends AbstractRuntime implements St
     public StatelessKnowledgeSessionImpl(InternalKnowledgeBase kBase,
                                          KieSessionConfiguration conf) {
         this.kBase = kBase;
-        this.conf = conf != null ? (SessionConfiguration) conf : kBase.getSessionConfiguration();
+        this.conf = conf != null ? (KieSessionConfiguration) conf : kBase.getSessionConfiguration();
         this.environment = EnvironmentFactory.newEnvironment();
         this.pool = null;
         wmCreated = new AtomicLong(0);
@@ -128,7 +129,7 @@ public class StatelessKnowledgeSessionImpl extends AbstractRuntime implements St
     }
 
     public void initMBeans(String containerId, String kbaseId, String ksessionName) {
-        if (kBase.getRuleBaseConfiguration() != null && kBase.getRuleBaseConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
+        if (kBase.getRuleBaseConfiguration() != null && kBase.getConfiguration().getOption(MBeansOption.KEY).isEnabled() && mbeanRegistered.compareAndSet(false, true)) {
             this.mbeanRegisteredCBSKey = new DroolsManagementAgent.CBSKey(containerId, kbaseId, ksessionName);
             DroolsManagementAgent.getInstance().registerKnowledgeSessionUnderName(mbeanRegisteredCBSKey, this);
         }

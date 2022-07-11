@@ -20,7 +20,7 @@ import java.util.function.BiFunction;
 
 import org.drools.commands.NewKieSessionCommand;
 import org.kie.api.runtime.KieContainer;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.internal.builder.fluent.ExecutableBuilder;
 import org.kie.internal.builder.fluent.KieContainerFluent;
 import org.kie.internal.builder.fluent.KieSessionFluent;

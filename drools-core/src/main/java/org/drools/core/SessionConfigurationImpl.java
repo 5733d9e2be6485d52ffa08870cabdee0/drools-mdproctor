@@ -19,34 +19,24 @@ package org.drools.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
-import org.drools.core.process.WorkItemManagerFactory;
-import org.drools.core.util.ConfFileUtils;
-import org.drools.base.util.MVELExecutor;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.KieBase;
-import org.kie.api.conf.OptionKey;
+import org.kie.api.conf.ConfigurationKey;
+import org.kie.api.conf.KieBaseOption;
+import org.kie.api.conf.MultiValueKieBaseOption;
+import org.kie.api.conf.OptionsConfiguration;
+import org.kie.api.conf.SingleValueKieBaseOption;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.ExecutableRunner;
-import org.kie.api.runtime.KieSessionConfiguration;
-import org.kie.api.runtime.conf.AccumulateNullPropagationOption;
-import org.kie.api.runtime.conf.BeliefSystemTypeOption;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.conf.ClockTypeOption;
-import org.kie.api.runtime.conf.DirectFiringOption;
 import org.kie.api.runtime.conf.KeepReferenceOption;
+import org.kie.api.runtime.conf.KieSessionOption;
 import org.kie.api.runtime.conf.MultiValueKieSessionOption;
-import org.kie.api.runtime.conf.QueryListenerOption;
-import org.kie.api.runtime.conf.ThreadSafeOption;
-import org.kie.api.runtime.conf.TimedRuleExecutionFilter;
-import org.kie.api.runtime.conf.TimedRuleExecutionOption;
+import org.kie.api.runtime.conf.SingleValueKieSessionOption;
 import org.kie.api.runtime.conf.TimerJobFactoryOption;
-import org.kie.api.runtime.process.WorkItemHandler;
-import org.kie.internal.runtime.conf.ForceEagerActivationFilter;
-import org.kie.internal.runtime.conf.ForceEagerActivationOption;
 import org.kie.internal.utils.ChainedProperties;
 
 /**
@@ -71,6 +61,8 @@ public class SessionConfigurationImpl extends SessionConfiguration {
 
     private static final long              serialVersionUID = 510l;
 
+    private OptionsConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption> compConfig;
+
     private ChainedProperties              chainedProperties;
 
     private volatile boolean               immutable;
@@ -78,6 +70,9 @@ public class SessionConfigurationImpl extends SessionConfiguration {
     private boolean                        keepReference;
 
     private ClockType                      clockType;
+
+    private TimerJobFactoryType            timerJobFactoryType;
+
     private ExecutableRunner runner;
 
     private transient ClassLoader          classLoader;
@@ -87,6 +82,7 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         out.writeBoolean(immutable);
         out.writeBoolean( keepReference );
         out.writeObject(clockType);
+        out.writeObject( timerJobFactoryType );
     }
 
     @SuppressWarnings("unchecked")
@@ -96,62 +92,48 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         immutable = in.readBoolean();
         keepReference = in.readBoolean();
         clockType = (ClockType) in.readObject();
+        try {
+            timerJobFactoryType = (TimerJobFactoryType) in.readObject();
+        } catch (java.io.InvalidObjectException e) {
+            // workaround for old typo in TimerJobFactoryType
+            if (e.getMessage().contains( "DEFUALT" )) {
+                timerJobFactoryType = TimerJobFactoryType.DEFAULT;
+            } else {
+                throw e;
+            }
+        }
     }
 
-    /**
-     * Creates a new session configuration with default configuration options.
-     */
-    public SessionConfigurationImpl() {
-        init( null, null, null );
-    }
 
-    /**
-     * Creates a new session configuration using the provided properties
-     * as configuration options.
-     */
-    public SessionConfigurationImpl( Properties properties ) {
-        init( properties, null, null );
-    }
-
-    public SessionConfigurationImpl( Properties properties, ClassLoader classLoader ) {
-        init( properties, classLoader, null );
-    }
-
-    public SessionConfigurationImpl( Properties properties, ClassLoader classLoader, ChainedProperties chainedProperties ) {
-        init( properties, classLoader, chainedProperties );
+    public SessionConfigurationImpl( OptionsConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption> compConfig,
+                                     ClassLoader classLoader,
+                                     ChainedProperties chainedProperties ) {
+        this.compConfig = compConfig;
+        setClassLoader( classLoader);
+        init( classLoader, chainedProperties );
     }
 
     @Override public ClassLoader getClassLoader() {
         return this.classLoader;
     }
 
-    private void init(Properties properties, ClassLoader classLoader, ChainedProperties chainedProperties) {
+    private void init(ClassLoader classLoader, ChainedProperties chainedProperties) {
         this.classLoader = classLoader instanceof ProjectClassLoader ? classLoader : ProjectClassLoader.getClassLoader(classLoader, getClass());
 
         this.immutable = false;
 
-        this.chainedProperties = chainedProperties != null ? chainedProperties : ChainedProperties.getChainedProperties( this.classLoader );
-
-        if ( properties != null ) {
-            this.chainedProperties = this.chainedProperties.clone();
-            this.chainedProperties.addProperties( properties );
-        }
+        this.chainedProperties = chainedProperties;
 
         setKeepReference(Boolean.parseBoolean(getPropertyValue(KeepReferenceOption.PROPERTY_NAME, "true")));
 
         setClockType( ClockType.resolveClockType( getPropertyValue( ClockTypeOption.PROPERTY_NAME, ClockType.REALTIME_CLOCK.getId() ) ) );
+
+
+        setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType( getPropertyValue( TimerJobFactoryOption.PROPERTY_NAME, TimerJobFactoryType.THREAD_SAFE_TRACKABLE.getId() ) ));
     }
 
-    public SessionConfigurationImpl addDefaultProperties(Properties properties) {
-        Properties defaultProperties = new Properties();
-        for ( Map.Entry<Object, Object> prop : properties.entrySet() ) {
-            if ( chainedProperties.getProperty( (String) prop.getKey(), null) == null ) {
-                defaultProperties.put( prop.getKey(), prop.getValue() );
-            }
-        }
-
-        this.chainedProperties.addProperties(defaultProperties);
-        return this;
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = ProjectClassLoader.getClassLoader( classLoader, getClass() );
     }
 
     /**
@@ -335,7 +317,20 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         }
     }
 
+    public TimerJobFactoryType getTimerJobFactoryType() {
+        return timerJobFactoryType;
+    }
+
+    public void setTimerJobFactoryType(TimerJobFactoryType timerJobFactoryType) {
+        checkCanChange(); // throws an exception if a change isn't possible;
+        this.timerJobFactoryType = timerJobFactoryType;
+    }
+
     public String getPropertyValue( String name, String defaultValue ) {
         return this.chainedProperties.getProperty( name, defaultValue );
+    }
+
+    @Override public <X extends OptionsConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption>> X as(ConfigurationKey<X> key) {
+        return compConfig.as(key);
     }
 }

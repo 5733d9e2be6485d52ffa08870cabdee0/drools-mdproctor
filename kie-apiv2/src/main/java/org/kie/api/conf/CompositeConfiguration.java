@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.kie.internal.utils.ChainedProperties;
 
-public class DelegatingConfiguration<T extends Option, S extends SingleValueOption, M extends MultiValueOption>
+public class CompositeConfiguration<T extends Option, S extends SingleValueOption, M extends MultiValueOption>
       implements OptionsConfiguration<T, S, M> {
 
     private ClassLoader classLoader;
@@ -16,7 +16,7 @@ public class DelegatingConfiguration<T extends Option, S extends SingleValueOpti
 
     private Map<String, OptionsConfiguration<T, S, M>> configurations = new HashMap<>();
 
-    public DelegatingConfiguration(Properties properties, ClassLoader classloader, ConfigurationFactory<T, S, M>... factories) {
+    public CompositeConfiguration(Properties properties, ClassLoader classloader, ConfigurationFactory<T, S, M>... factories) {
         setClassLoader(classloader);
         this.chainedProperties = ChainedProperties.getChainedProperties( this.classLoader );
 
@@ -25,7 +25,7 @@ public class DelegatingConfiguration<T extends Option, S extends SingleValueOpti
         }
 
         for(ConfigurationFactory<T, S, M> f  : factories) {
-            configurations.put(f.type(), f.create(classloader, chainedProperties));
+            configurations.put(f.type(), f.create(this, classloader, chainedProperties));
         }
     }
 
@@ -81,7 +81,7 @@ public class DelegatingConfiguration<T extends Option, S extends SingleValueOpti
         return chainedProperties;
     }
 
-    public <X extends OptionsConfiguration<T, S, M>> X getDelegate(Configuration configuration) {
+    public <X extends OptionsConfiguration<T, S, M>> X as(ConfigurationKey<X> configuration) {
         return (X) configurations.get(configuration.type());
     }
 }

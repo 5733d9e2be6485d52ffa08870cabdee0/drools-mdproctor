@@ -27,7 +27,7 @@ import org.drools.compiler.kie.builder.impl.ZipKieModule;
 import org.drools.model.codegen.ExecutableModelProject;
 import org.drools.modelcompiler.CanonicalKieModule;
 import org.kie.api.KieBase;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;

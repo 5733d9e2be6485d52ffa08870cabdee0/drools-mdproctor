@@ -17,6 +17,7 @@
 package org.kie.api.runtime;
 
 import org.kie.api.command.Command;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 /**
  * A pool of session created from a KieContainer

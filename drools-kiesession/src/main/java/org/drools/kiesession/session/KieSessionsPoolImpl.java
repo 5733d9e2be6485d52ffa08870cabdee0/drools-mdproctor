@@ -20,7 +20,7 @@ import org.drools.core.SessionConfiguration;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.StatelessKieSession;
 
 public class KieSessionsPoolImpl extends AbstractKieSessionsPool {

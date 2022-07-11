@@ -15,7 +15,6 @@
 
 package org.drools.core.reteoo;
 
-import org.drools.core.SessionConfiguration;
 import org.drools.core.common.AgendaFactory;
 import org.drools.core.common.AgendaGroupFactory;
 import org.drools.core.common.EntryPointFactory;
@@ -33,7 +32,7 @@ import org.kie.api.internal.utils.KieService;
 import org.kie.api.marshalling.ObjectMarshallingStrategy;
 import org.kie.api.marshalling.ObjectMarshallingStrategyAcceptor;
 import org.kie.api.runtime.Environment;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.KieSessionsPool;
 import org.kie.api.runtime.StatelessKieSession;
 
@@ -55,7 +54,7 @@ public interface RuntimeComponentFactory extends KieService {
 
     KnowledgeHelper createKnowledgeHelper(ReteEvaluator reteEvaluator);
 
-    InternalWorkingMemory createStatefulSession(RuleBase ruleBase, Environment environment, SessionConfiguration sessionConfig, boolean fromPool);
+    InternalWorkingMemory createStatefulSession(RuleBase ruleBase, Environment environment, KieSessionConfiguration sessionConfig, boolean fromPool);
 
     StatelessKieSession createStatelessSession(RuleBase ruleBase, KieSessionConfiguration conf);
 

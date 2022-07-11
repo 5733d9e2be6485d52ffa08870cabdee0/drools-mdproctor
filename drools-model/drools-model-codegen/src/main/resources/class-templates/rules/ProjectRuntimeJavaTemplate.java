@@ -21,6 +21,7 @@ import org.kie.api.KieBase;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.KieRuntimeBuilder;
 import org.drools.modelcompiler.KieBaseBuilder;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 public class ProjectRuntime implements KieRuntimeBuilder {
 
@@ -68,7 +69,7 @@ public class ProjectRuntime implements KieRuntimeBuilder {
         return null;
     }
 
-    private org.kie.api.runtime.KieSessionConfiguration getConfForSession(String sessionName) {
+    private KieSessionConfiguration getConfForSession(String sessionName) {
         org.drools.core.SessionConfigurationImpl conf = new org.drools.core.SessionConfigurationImpl();
         switch(sessionName) {
             // populated via codegen

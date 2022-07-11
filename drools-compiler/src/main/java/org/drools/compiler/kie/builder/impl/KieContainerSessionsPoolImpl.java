@@ -21,7 +21,7 @@ import org.drools.kiesession.session.StatefulSessionPool;
 import org.drools.kiesession.session.StatelessKnowledgeSessionImpl;
 import org.kie.api.runtime.KieContainerSessionsPool;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.StatelessKieSession;
 
 public class KieContainerSessionsPoolImpl extends AbstractKieSessionsPool implements KieContainerSessionsPool {

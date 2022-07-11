@@ -17,7 +17,7 @@ package org.kie.api.runtime.manager;
 
 import org.kie.api.KieBase;
 import org.kie.api.runtime.Environment;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.task.UserGroupCallback;
 import org.kie.api.task.UserInfo;
 

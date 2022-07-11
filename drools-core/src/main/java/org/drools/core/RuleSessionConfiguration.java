@@ -18,23 +18,14 @@ package org.drools.core;
 
 import java.io.Externalizable;
 import java.util.Collections;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
-import org.drools.core.process.WorkItemManagerFactory;
-import org.drools.core.time.impl.TimerJobFactoryManager;
 import org.drools.util.StringUtils;
-import org.kie.api.KieBase;
 import org.kie.api.conf.OptionKey;
-import org.kie.api.runtime.Environment;
-import org.kie.api.runtime.ExecutableRunner;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.conf.AccumulateNullPropagationOption;
 import org.kie.api.runtime.conf.BeliefSystemTypeOption;
-import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.api.runtime.conf.DirectFiringOption;
-import org.kie.api.runtime.conf.KeepReferenceOption;
 import org.kie.api.runtime.conf.KieSessionOption;
 import org.kie.api.runtime.conf.MultiValueKieSessionOption;
 import org.kie.api.runtime.conf.QueryListenerOption;
@@ -42,9 +33,6 @@ import org.kie.api.runtime.conf.SingleValueKieSessionOption;
 import org.kie.api.runtime.conf.ThreadSafeOption;
 import org.kie.api.runtime.conf.TimedRuleExecutionFilter;
 import org.kie.api.runtime.conf.TimedRuleExecutionOption;
-import org.kie.api.runtime.conf.TimerJobFactoryOption;
-import org.kie.api.runtime.conf.WorkItemHandlerOption;
-import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.internal.runtime.conf.ForceEagerActivationFilter;
 import org.kie.internal.runtime.conf.ForceEagerActivationOption;
 
@@ -74,8 +62,6 @@ public abstract class RuleSessionConfiguration implements KieSessionConfiguratio
             return true;
         }
     }
-
-    public abstract RuleSessionConfiguration addDefaultProperties(Properties properties);
 
     public abstract void setTimedRuleExecutionFilter(TimedRuleExecutionFilter timedRuleExecutionFilter);
     public abstract TimedRuleExecutionFilter getTimedRuleExecutionFilter();

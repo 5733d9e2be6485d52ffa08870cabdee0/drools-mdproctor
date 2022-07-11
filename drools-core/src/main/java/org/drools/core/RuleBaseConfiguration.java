@@ -20,33 +20,27 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 import org.drools.core.common.AgendaGroupFactory;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.base.rule.consequence.ConflictResolver;
 import org.drools.core.runtime.rule.impl.DefaultConsequenceExceptionHandler;
-import org.drools.core.util.ConfFileUtils;
-import org.drools.base.util.MVELExecutor;
 import org.drools.base.util.index.IndexConfiguration;
 import org.drools.util.StringUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.CompositeConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.conf.BetaRangeIndexOption;
-import org.kie.api.conf.Configuration;
+import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.DeclarativeAgendaOption;
 import org.kie.api.conf.EqualityBehaviorOption;
 import org.kie.api.conf.EventProcessingOption;
-import org.kie.api.conf.KieBaseMutabilityOption;
 import org.kie.api.conf.KieBaseOption;
-import org.kie.api.conf.MBeansOption;
 import org.kie.api.conf.MultiValueKieBaseOption;
 import org.kie.api.conf.OptionKey;
+import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.conf.RemoveIdentitiesOption;
 import org.kie.api.conf.SequentialOption;
 import org.kie.api.conf.SessionsPoolOption;
@@ -118,7 +112,7 @@ public class RuleBaseConfiguration
     IndexConfiguration,
     Externalizable {
 
-    public static final Configuration<RuleBaseConfiguration> KEY = new Configuration<>("Rule");
+    public static final ConfigurationKey<RuleBaseConfiguration> KEY = new ConfigurationKey<>("Rule");
 
     private static final long serialVersionUID = 510l;
 
@@ -128,6 +122,8 @@ public class RuleBaseConfiguration
     public static final String DEFAULT_SIGN_ON_SERIALIZATION = "false";
 
     protected static final transient Logger logger = LoggerFactory.getLogger(RuleBaseConfiguration.class);
+
+    CompositeConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> compConfig;
 
     private ChainedProperties chainedProperties;
 
@@ -387,13 +383,10 @@ public class RuleBaseConfiguration
      * @param classLoader
      * @param chainedProperties
      */
-    public RuleBaseConfiguration(ClassLoader classLoader,
+    public RuleBaseConfiguration(CompositeConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> compConfig,
+                                 ClassLoader classLoader,
                                  ChainedProperties chainedProperties) {
-        init( classLoader,
-              chainedProperties );
-    }
-    
-    private void init(ClassLoader classLoader, ChainedProperties chainedProperties) {
+        this.compConfig = compConfig;
         setClassLoader( classLoader);
         init(chainedProperties);
     }
@@ -1069,8 +1062,8 @@ public class RuleBaseConfiguration
         }
     }
 
-    @Override public <C extends MultiValueKieBaseOption> C getOption(OptionKey<C> optionKey, String subKey) {
-        return null;
+    @Override public <X extends OptionsConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption>> X as(ConfigurationKey<X> key) {
+        return compConfig.as(key);
     }
 
     public ChainedProperties getChainedProperties() {

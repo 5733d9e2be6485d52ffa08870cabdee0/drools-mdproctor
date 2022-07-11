@@ -35,8 +35,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.drools.core.CompositeSessionConfiguration;
 import org.drools.core.QueryResultsImpl;
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.RuleSessionConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.core.base.CalendarsImpl;
@@ -103,6 +105,7 @@ import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.kie.api.KieBase;
 import org.kie.api.command.BatchExecutionCommand;
 import org.kie.api.command.Command;
+import org.kie.api.conf.MBeansOption;
 import org.kie.api.event.KieRuntimeEventManager;
 import org.kie.api.event.kiebase.KieBaseEventListener;
 import org.kie.api.event.process.ProcessEventListener;
@@ -119,7 +122,9 @@ import org.kie.api.runtime.ExecutableRunner;
 import org.kie.api.runtime.Globals;
 import org.kie.api.runtime.KieRuntimeFactory;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.RequestContext;
+import org.kie.api.runtime.conf.QueryListenerOption;
 import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
@@ -204,7 +209,9 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
 
     private PropagationContextFactory pctxFactory;
 
-    protected SessionConfiguration config;
+    protected KieSessionConfiguration config;
+
+    protected RuleSessionConfiguration ruleSessionConfig;
 
     private Map<String, Channel> channels;
 
@@ -255,7 +262,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
     public StatefulKnowledgeSessionImpl(final long id,
                                         final InternalKnowledgeBase kBase,
                                         boolean initInitFactHandle,
-                                        final SessionConfiguration config,
+                                        final KieSessionConfiguration config,
                                         final Environment environment) {
         this(id,
              kBase,
@@ -296,7 +303,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
                                          final FactHandleFactory handleFactory,
                                          final boolean initInitFactHandle,
                                          final long propagationContext,
-                                         final SessionConfiguration config,
+                                         final KieSessionConfiguration config,
                                          final Environment environment,
                                          final RuleRuntimeEventSupport workingMemoryEventSupport,
                                          final AgendaEventSupport agendaEventSupport,
@@ -339,8 +346,9 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
         init( config, environment, 1 );
     }
 
-    private void init( SessionConfiguration config, Environment environment, long propagationContext ) {
+    private void init( KieSessionConfiguration config, Environment environment, long propagationContext ) {
         this.config = config;
+        this.ruleSessionConfig = ((CompositeSessionConfiguration)config).as(RuleBaseConfiguration.KEY);
         this.environment = environment;
 
         this.propagationIdCounter = new AtomicLong( propagationContext);
@@ -367,7 +375,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
     }
 
     public void initMBeans(String containerId, String kbaseName, String ksessionName) {
-        if (kBase.getRuleBaseConfiguration() != null && kBase.getRuleBaseConfiguration().isMBeansEnabled() && mbeanRegistered.compareAndSet(false, true)) {
+        if (kBase.getRuleBaseConfiguration() != null && kBase.getConfiguration().getOption(MBeansOption.KEY).isEnabled() && mbeanRegistered.compareAndSet(false, true)) {
             this.mbeanRegisteredCBSKey = new DroolsManagementAgent.CBSKey( containerId, kbaseName, ksessionName );
             DroolsManagementAgent.getInstance().registerKnowledgeSessionUnderName( mbeanRegisteredCBSKey, this );
         }
@@ -527,7 +535,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
 
     public void update(FactHandle factHandle) {
         this.update(factHandle,
-                    ((InternalFactHandle) factHandle).getObject());
+                    factHandle.getObject());
     }
 
     public void abortProcessInstance(String id) {
@@ -679,7 +687,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
     }
 
     private InternalViewChangedEventListener getQueryListenerInstance() {
-        switch ( this.config.getQueryListenerOption() ) {
+        switch ( this.config.getOption(QueryListenerOption.KEY)) {
             case STANDARD :
                 return new StandardQueryViewChangedEventListener();
             case LIGHTWEIGHT :
@@ -836,8 +844,12 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
         entryPointsManager.updateEntryPointsCache();
     }
 
-    public SessionConfiguration getSessionConfiguration() {
+    public RuleSessionConfiguration getRuleSessionConfiguration() {
         return this.config;
+    }
+
+    @Override public SessionConfiguration getSessionConfiguration() {
+        return null;
     }
 
     public void reset() {
@@ -1515,7 +1527,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
      * multiple threads/entry-points
      */
     public void startOperation() {
-        if ( getSessionConfiguration().isThreadSafe() && this.opCounter.getAndIncrement() == 0 ) {
+        if (getRuleSessionConfiguration().isThreadSafe() && this.opCounter.getAndIncrement() == 0 ) {
             // means the engine was idle, reset the timestamp
             this.lastIdleTimestamp.set(-1);
         }
@@ -1536,7 +1548,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
      * multiple threads/entry-points
      */
     public void endOperation() {
-        if ( getSessionConfiguration().isThreadSafe() && this.opCounter.decrementAndGet() == 0 ) {
+        if (getRuleSessionConfiguration().isThreadSafe() && this.opCounter.decrementAndGet() == 0 ) {
             // means the engine is idle, so, set the timestamp
             if (this.timerService != null) {
                 this.lastIdleTimestamp.set(this.timerService.getCurrentTime());

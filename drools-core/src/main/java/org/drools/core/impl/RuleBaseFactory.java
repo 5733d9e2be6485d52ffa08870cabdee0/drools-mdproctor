@@ -19,10 +19,10 @@ package org.drools.core.impl;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.drools.core.SessionConfiguration;
-import org.drools.core.SessionConfigurationImpl;
-import org.kie.api.KieBaseConfiguration;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.drools.core.CompositeSessionConfiguration;
+import org.drools.core.SessionConfigurationFactories;
+import org.kie.api.conf.KieBaseConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 /**
  * <p>
@@ -101,7 +101,7 @@ public class RuleBaseFactory {
      *     The KnowledgeBase
      */
     public static RuleBase newRuleBase(String kbaseId, KieBaseConfiguration conf) {
-        return new KnowledgeBaseImpl( kbaseId, (DelegatingBaseConfiguration) conf);
+        return new KnowledgeBaseImpl( kbaseId, (CompositeBaseConfiguration) conf);
     }
 
     /**
@@ -125,9 +125,9 @@ public class RuleBaseFactory {
             throw new UnsupportedOperationException("Pass only a single, non null, classloader. As an array of Classloaders is no longer supported. ");
         }
 
-        return new DelegatingBaseConfiguration(properties, classLoaders != null ? classLoaders[0] : null,
-                                               ConfigurationFactories.baseConf, ConfigurationFactories.ruleConf,
-                                               ConfigurationFactories.flowConf);
+        return new CompositeBaseConfiguration(properties, classLoaders != null ? classLoaders[0] : null,
+                                              BaseConfigurationFactories.baseConf, BaseConfigurationFactories.ruleConf,
+                                              BaseConfigurationFactories.flowConf);
     }
 
     /**
@@ -136,7 +136,9 @@ public class RuleBaseFactory {
      *     The KnowledgeSessionConfiguration.
      */
     public static KieSessionConfiguration newKnowledgeSessionConfiguration() {
-        return SessionConfiguration.newInstance();
+        return new CompositeSessionConfiguration(null, null,
+                                                 SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
+                                                 SessionConfigurationFactories.flowConf);
     }
 
     /**
@@ -145,7 +147,14 @@ public class RuleBaseFactory {
      *     The KnowledgeSessionConfiguration.
      */
     public static KieSessionConfiguration newKnowledgeSessionConfiguration(Properties properties) {
-        return new SessionConfigurationImpl(properties);
+        return new CompositeSessionConfiguration(properties, null,
+                                                 SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
+                                                 SessionConfigurationFactories.flowConf);
     }
 
+    public static KieSessionConfiguration newKnowledgeSessionConfiguration(Properties properties, ClassLoader classLoader) {
+        return new CompositeSessionConfiguration(properties, classLoader,
+                                                 SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
+                                                 SessionConfigurationFactories.flowConf);
+    }
 }

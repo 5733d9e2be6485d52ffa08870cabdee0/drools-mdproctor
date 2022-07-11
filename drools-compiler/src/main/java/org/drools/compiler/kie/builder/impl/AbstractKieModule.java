@@ -44,7 +44,7 @@ import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.drools.util.StringUtils;
 import org.drools.io.ResourceConfigurationImpl;
 import org.drools.wiring.api.ResourceProvider;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.ReleaseId;
 import org.kie.api.builder.Results;
 import org.kie.api.builder.model.KieBaseModel;

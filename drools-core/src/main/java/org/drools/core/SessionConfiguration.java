@@ -18,49 +18,41 @@ package org.drools.core;
 
 import java.io.Externalizable;
 import java.util.Collections;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
-import org.drools.core.process.WorkItemManagerFactory;
 import org.drools.core.time.impl.TimerJobFactoryManager;
 import org.drools.util.StringUtils;
 import org.kie.api.KieBase;
 import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.ExecutableRunner;
-import org.kie.api.runtime.KieSessionConfiguration;
-import org.kie.api.runtime.conf.AccumulateNullPropagationOption;
-import org.kie.api.runtime.conf.BeliefSystemTypeOption;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.conf.ClockTypeOption;
-import org.kie.api.runtime.conf.DirectFiringOption;
-import org.kie.api.runtime.conf.KeepReferenceOption;
 import org.kie.api.runtime.conf.KieSessionOption;
 import org.kie.api.runtime.conf.MultiValueKieSessionOption;
-import org.kie.api.runtime.conf.QueryListenerOption;
 import org.kie.api.runtime.conf.SingleValueKieSessionOption;
-import org.kie.api.runtime.conf.ThreadSafeOption;
-import org.kie.api.runtime.conf.TimedRuleExecutionFilter;
-import org.kie.api.runtime.conf.TimedRuleExecutionOption;
 import org.kie.api.runtime.conf.TimerJobFactoryOption;
-import org.kie.api.runtime.conf.WorkItemHandlerOption;
-import org.kie.api.runtime.process.WorkItemHandler;
-import org.kie.internal.runtime.conf.ForceEagerActivationFilter;
-import org.kie.internal.runtime.conf.ForceEagerActivationOption;
 
 public abstract class SessionConfiguration implements KieSessionConfiguration, Externalizable {
 
-    public static SessionConfiguration newInstance() {
-        return new SessionConfigurationImpl();
-    }
-
-    public static SessionConfiguration newInstance(Properties properties) {
-        return new SessionConfigurationImpl(properties);
-    }
+//    public static SessionConfiguration newInstance() {
+//        return new SessionConfigurationImpl();
+//    }
+//
+//    public static SessionConfiguration newInstance(Properties properties) {
+//        return new SessionConfigurationImpl(properties);
+//    }
 
 
     public abstract ClockType getClockType();
     public abstract void setClockType(ClockType clockType);
+
+    public abstract TimerJobFactoryType getTimerJobFactoryType();
+    public abstract void setTimerJobFactoryType(TimerJobFactoryType timerJobFactoryType);
+
+    public final TimerJobFactoryManager getTimerJobFactoryManager() {
+        return getTimerJobFactoryType().createInstance();
+    }
 
     public abstract ExecutableRunner getRunner( KieBase kbase, Environment environment );
 
@@ -68,6 +60,9 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
         switch (option.name()) {
             case ClockTypeOption.PROPERTY_NAME: {
                 setClockType(ClockType.resolveClockType(((ClockTypeOption) option).getClockType()));
+            }
+            case TimerJobFactoryOption.PROPERTY_NAME: {
+                setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(((TimerJobFactoryOption) option).getTimerJobType()));
             }
         }
     }
@@ -77,6 +72,9 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
         switch (option.name()) {
             case ClockTypeOption.PROPERTY_NAME: {
                 return (T) ClockTypeOption.get( getClockType().toExternalForm() );
+            }
+            case TimerJobFactoryOption.PROPERTY_NAME: {
+                return (T) TimerJobFactoryOption.get( getTimerJobFactoryType().toExternalForm() );
             }
         }
         return null;
@@ -103,6 +101,9 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
             case ClockTypeOption.PROPERTY_NAME: {
                 setClockType(ClockType.resolveClockType(StringUtils.isEmpty(value) ? "realtime" : value));
             }
+            case TimerJobFactoryOption.PROPERTY_NAME: {
+                setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(StringUtils.isEmpty(value) ? "default" : value));
+            }
         }
     }
 
@@ -116,6 +117,9 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
             case ClockTypeOption.PROPERTY_NAME: {
                 return getClockType().toExternalForm();
             }
+            case TimerJobFactoryOption.PROPERTY_NAME: {
+                return getTimerJobFactoryType().toExternalForm();
+            }
         }
         return null;
     }
@@ -127,12 +131,15 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
 
         SessionConfiguration that = (SessionConfiguration) o;
 
-        return getClockType() == that.getClockType();
+
+        return getClockType() == that.getClockType() &&
+               getTimerJobFactoryType() == that.getTimerJobFactoryType();
     }
 
     @Override
     public final int hashCode() {
         int result = getClockType().hashCode();
+        result = 31 * result + getTimerJobFactoryType().hashCode();
         return result;
     }
 }

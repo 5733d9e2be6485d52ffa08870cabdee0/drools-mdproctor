@@ -25,42 +25,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.drools.base.rule.consequence.ConflictResolver;
 import org.drools.base.util.MVELExecutor;
-import org.drools.base.util.index.IndexConfiguration;
-import org.drools.core.common.AgendaGroupFactory;
-import org.drools.core.reteoo.RuntimeComponentFactory;
-import org.drools.core.runtime.rule.impl.DefaultConsequenceExceptionHandler;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.util.ConfFileUtils;
-import org.drools.util.StringUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
-import org.kie.api.KieBaseConfiguration;
-import org.kie.api.conf.BetaRangeIndexOption;
-import org.kie.api.conf.Configuration;
-import org.kie.api.conf.DeclarativeAgendaOption;
-import org.kie.api.conf.EqualityBehaviorOption;
-import org.kie.api.conf.EventProcessingOption;
+import org.kie.api.conf.CompositeConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
+import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.KieBaseOption;
 import org.kie.api.conf.MultiValueKieBaseOption;
 import org.kie.api.conf.OptionKey;
-import org.kie.api.conf.RemoveIdentitiesOption;
-import org.kie.api.conf.SequentialOption;
-import org.kie.api.conf.SessionsPoolOption;
+import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.conf.SingleValueKieBaseOption;
-import org.kie.api.runtime.rule.ConsequenceExceptionHandler;
-import org.kie.internal.conf.AlphaRangeIndexThresholdOption;
-import org.kie.internal.conf.AlphaThresholdOption;
-import org.kie.internal.conf.CompositeKeyDepthOption;
-import org.kie.internal.conf.ConsequenceExceptionHandlerOption;
-import org.kie.internal.conf.ConstraintJittingThresholdOption;
-import org.kie.internal.conf.IndexLeftBetaMemoryOption;
-import org.kie.internal.conf.IndexPrecedenceOption;
-import org.kie.internal.conf.IndexRightBetaMemoryOption;
-import org.kie.internal.conf.MaxThreadsOption;
-import org.kie.internal.conf.MultithreadEvaluationOption;
-import org.kie.internal.conf.SequentialAgendaOption;
-import org.kie.internal.conf.ShareAlphaNodesOption;
-import org.kie.internal.conf.ShareBetaNodesOption;
 import org.kie.internal.utils.ChainedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,13 +65,15 @@ public class FlowBaseConfiguration
     KieBaseConfiguration,
     Externalizable {
 
-    public static final Configuration<FlowBaseConfiguration> KEY = new Configuration<>("Rule");
+    public static final ConfigurationKey<FlowBaseConfiguration> KEY = new ConfigurationKey<>("Rule");
 
     private static final long serialVersionUID = 510l;
 
     protected static final transient Logger logger = LoggerFactory.getLogger(FlowBaseConfiguration.class);
 
     private ChainedProperties chainedProperties;
+
+    CompositeConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> compConfig;
 
     private boolean immutable;
     private List<Map<String, Object>> workDefinitions;
@@ -120,18 +98,11 @@ public class FlowBaseConfiguration
      * @param classLoader
      * @param chainedProperties
      */
-    public FlowBaseConfiguration(ClassLoader classLoader,
+    public FlowBaseConfiguration(CompositeConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> compConfig,
+                                 ClassLoader classLoader,
                                  ChainedProperties chainedProperties) {
-        init( classLoader,
-              chainedProperties );
-    }
-    
-    private void init(ClassLoader classLoader, ChainedProperties chainedProperties) {
+        this.compConfig = compConfig;
         setClassLoader( classLoader);
-        init(chainedProperties);
-    }
-    
-    private void init(ChainedProperties chainedProperties) {
         this.immutable = false;
         this.chainedProperties = chainedProperties;
         initWorkDefinitions();
@@ -222,13 +193,8 @@ public class FlowBaseConfiguration
     public void setOption(KieBaseOption option) {
     }
 
-    @Override public <C extends MultiValueKieBaseOption> C getOption(OptionKey<C> optionKey, String subKey) {
-//        switch (optionKey.name()) {
-//            case WorkDefinitionFunctionOption.PROPERTY_NAME: {
-//                return (C) new WorkDefinitionFunctionOption( subKey, work);
-//            }
-//        }
-        return null;
+    @Override public <X extends OptionsConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption>> X as(ConfigurationKey<X> key) {
+        return compConfig.as(key);
     }
 
     public ChainedProperties getChainedProperties() {

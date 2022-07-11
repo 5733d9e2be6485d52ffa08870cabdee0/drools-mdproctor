@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.drools.core.EntryPointsManager;
 import org.drools.core.QueryResultsImpl;
+import org.drools.core.RuleSessionConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.WorkingMemoryEntryPoint;
 import org.drools.core.base.CalendarsImpl;
@@ -191,7 +192,7 @@ public class RuleUnitExecutorImpl implements ReteEvaluator {
     }
 
     @Override
-    public SessionConfiguration getSessionConfiguration() {
+    public RuleSessionConfiguration getRuleSessionConfiguration() {
         return sessionConfiguration;
     }
 

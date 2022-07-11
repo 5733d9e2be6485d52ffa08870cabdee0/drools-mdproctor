@@ -22,7 +22,7 @@ import java.io.OutputStream;
 
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 public interface Marshaller {
 

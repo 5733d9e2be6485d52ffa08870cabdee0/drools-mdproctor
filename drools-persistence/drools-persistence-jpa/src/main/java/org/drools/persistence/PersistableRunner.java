@@ -56,7 +56,7 @@ import org.kie.api.runtime.EnvironmentName;
 import org.kie.api.runtime.Executable;
 import org.kie.api.runtime.ExecutableRunner;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.RequestContext;
 import org.kie.api.runtime.rule.EntryPoint;
 import org.slf4j.Logger;

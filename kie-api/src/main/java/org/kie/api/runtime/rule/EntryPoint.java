@@ -18,6 +18,7 @@ package org.kie.api.runtime.rule;
 
 import java.util.Collection;
 
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.runtime.ObjectFilter;
 
 /**
@@ -121,7 +122,7 @@ public interface EntryPoint {
      * @return the fact handle for the given object, or null in case no fact handle was found for the
      *         given object.
      *
-     * @see org.kie.api.KieBaseConfiguration
+     * @see KieBaseConfiguration
      */
     FactHandle getFactHandle(Object object);
 

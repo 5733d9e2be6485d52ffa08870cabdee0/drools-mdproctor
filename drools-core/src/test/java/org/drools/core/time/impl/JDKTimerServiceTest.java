@@ -29,6 +29,7 @@ import java.util.Stack;
 
 import org.drools.core.ClockType;
 import org.drools.core.SessionConfiguration;
+import org.drools.core.SessionConfigurationFactories;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.phreak.PropagationEntry;
@@ -46,7 +47,7 @@ public class JDKTimerServiceTest {
     
     @Test
     public void testSingleExecutionJob() throws Exception {
-        SessionConfiguration config = SessionConfiguration.newInstance();
+        SessionConfiguration config = (SessionConfiguration) SessionConfigurationFactories.baseConf.create(null,null, null);
         config.setClockType(ClockType.REALTIME_CLOCK);
         TimerService timeService = TimerServiceFactory.getTimerService( config );
         Trigger trigger = new DelayedTrigger( 100 );
@@ -59,7 +60,7 @@ public class JDKTimerServiceTest {
     
     @Test
     public void testRepeatedExecutionJob() throws Exception {
-        SessionConfiguration config = SessionConfiguration.newInstance();
+        SessionConfiguration config = (SessionConfiguration) SessionConfigurationFactories.baseConf.create(null,null, null);
         config.setClockType(ClockType.REALTIME_CLOCK);
         TimerService timeService = TimerServiceFactory.getTimerService( config );
         Trigger trigger = new DelayedTrigger(  new long[] { 100, 100, 100} );
@@ -73,7 +74,7 @@ public class JDKTimerServiceTest {
     
     @Test
     public void testRepeatedExecutionJobWithRemove() throws Exception {
-        SessionConfiguration config = SessionConfiguration.newInstance();
+        SessionConfiguration config = (SessionConfiguration) SessionConfigurationFactories.baseConf.create(null,null, null);
         config.setClockType(ClockType.REALTIME_CLOCK);
         TimerService timeService = TimerServiceFactory.getTimerService( config );
         Trigger trigger = new DelayedTrigger(  new long[] {100, 100, 100, 100, 100, 100, 100, 100} ); 

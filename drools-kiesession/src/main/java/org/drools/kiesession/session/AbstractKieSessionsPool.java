@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.drools.core.impl.EnvironmentFactory;
 import org.kie.api.runtime.Environment;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.KieSessionsPool;
 
 public abstract class AbstractKieSessionsPool implements KieSessionsPool {

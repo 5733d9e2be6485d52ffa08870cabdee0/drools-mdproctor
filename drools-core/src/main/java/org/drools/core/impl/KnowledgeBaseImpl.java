@@ -35,8 +35,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.drools.core.KieBaseConfigurationImpl;
 import org.drools.core.RuleBaseConfiguration;
-import org.drools.core.SessionConfiguration;
-import org.drools.core.SessionConfigurationImpl;
 import org.drools.core.base.ClassFieldAccessorCache;
 import org.drools.base.base.ClassObjectType;
 import org.drools.core.common.InternalWorkingMemory;
@@ -71,13 +69,9 @@ import org.drools.base.rule.WindowDeclaration;
 import org.drools.base.ruleunit.RuleUnitDescriptionRegistry;
 import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.ReleaseId;
-import org.kie.api.conf.DelegatingConfiguration;
 import org.kie.api.conf.EventProcessingOption;
-import org.kie.api.conf.KieBaseOption;
-import org.kie.api.conf.MultiValueKieBaseOption;
-import org.kie.api.conf.OptionsConfiguration;
-import org.kie.api.conf.SingleValueKieBaseOption;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.process.Process;
 import org.kie.api.definition.rule.Query;
@@ -89,6 +83,7 @@ import org.kie.api.internal.io.ResourceTypePackage;
 import org.kie.api.internal.utils.KieService;
 import org.kie.api.internal.weaver.KieWeavers;
 import org.kie.api.io.Resource;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +101,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
     // ------------------------------------------------------------
     private String              id;
 
-    private DelegatingConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> config;
+    private KieBaseConfiguration config;
 
     private RuleBaseConfiguration    ruleBaseConfig;
     private KieBaseConfigurationImpl kieBaseConfig;
@@ -140,7 +135,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
 
     private final RuleUnitDescriptionRegistry ruleUnitDescriptionRegistry = new RuleUnitDescriptionRegistry();
 
-    private SessionConfiguration sessionConfiguration;
+    private KieSessionConfiguration sessionConfiguration;
 
     private List<AsyncReceiveNode> receiveNodes;
 
@@ -149,10 +144,10 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
     private boolean hasMultipleAgendaGroups = false;
 
     public KnowledgeBaseImpl(final String id,
-                             final DelegatingConfiguration<KieBaseOption, SingleValueKieBaseOption, MultiValueKieBaseOption> config) {
+                             final CompositeBaseConfiguration config) {
         this.config = config;
-        this.ruleBaseConfig = config.getDelegate(RuleBaseConfiguration.KEY);
-        this.kieBaseConfig = config.getDelegate(KieBaseConfigurationImpl.KEY);
+        this.ruleBaseConfig = config.as(RuleBaseConfiguration.KEY);
+        this.kieBaseConfig = config.as(KieBaseConfigurationImpl.KEY);
         this.config.makeImmutable();
 
         createRulebaseId(id);
@@ -167,8 +162,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
 
         setupRete();
 
-
-        sessionConfiguration = new SessionConfigurationImpl( null, this.config.getClassLoader(), ((DelegatingConfiguration)config).getChainedProperties() );
+        sessionConfiguration = RuleBaseFactory.newKnowledgeSessionConfiguration(null, this.config.getClassLoader());
 
         mutable = kieBaseConfig.isMutabilityEnabled();
     }
@@ -186,7 +180,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
         }
     }
 
-    public SessionConfiguration getSessionConfiguration() {
+    public KieSessionConfiguration getSessionConfiguration() {
         return sessionConfiguration;
     }
 
@@ -1131,7 +1125,7 @@ public class KnowledgeBaseImpl implements RuleBase, org.drools.base.definitions.
         return this.kieBaseConfig;
     }
 
-    @Override public OptionsConfiguration getConfiguration() {
+    @Override public KieBaseConfiguration getConfiguration() {
         return config;
     }
 

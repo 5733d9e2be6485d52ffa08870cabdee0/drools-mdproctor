@@ -19,29 +19,21 @@ package org.drools.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
-import org.drools.base.util.MVELExecutor;
-import org.drools.core.process.WorkItemManagerFactory;
-import org.drools.core.util.ConfFileUtils;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
-import org.kie.api.KieBase;
-import org.kie.api.runtime.Environment;
-import org.kie.api.runtime.ExecutableRunner;
-import org.kie.api.runtime.KieSessionConfiguration;
+import org.kie.api.conf.CompositeConfiguration;
+import org.kie.api.conf.ConfigurationKey;
+import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.runtime.conf.AccumulateNullPropagationOption;
 import org.kie.api.runtime.conf.BeliefSystemTypeOption;
-import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.api.runtime.conf.DirectFiringOption;
-import org.kie.api.runtime.conf.KeepReferenceOption;
+import org.kie.api.runtime.conf.KieSessionOption;
+import org.kie.api.runtime.conf.MultiValueKieSessionOption;
 import org.kie.api.runtime.conf.QueryListenerOption;
+import org.kie.api.runtime.conf.SingleValueKieSessionOption;
 import org.kie.api.runtime.conf.ThreadSafeOption;
 import org.kie.api.runtime.conf.TimedRuleExecutionFilter;
 import org.kie.api.runtime.conf.TimedRuleExecutionOption;
-import org.kie.api.runtime.conf.TimerJobFactoryOption;
-import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.internal.runtime.conf.ForceEagerActivationFilter;
 import org.kie.internal.runtime.conf.ForceEagerActivationOption;
 import org.kie.internal.utils.ChainedProperties;
@@ -67,6 +59,8 @@ import org.kie.internal.utils.ChainedProperties;
 public class RuleSessionConfigurationImpl extends RuleSessionConfiguration {
 
     private static final long              serialVersionUID = 510l;
+
+    private CompositeConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption> compConfig;
 
     private ChainedProperties              chainedProperties;
 
@@ -100,44 +94,22 @@ public class RuleSessionConfigurationImpl extends RuleSessionConfiguration {
         queryListener = (QueryListenerOption) in.readObject();
     }
 
-    /**
-     * Creates a new session configuration with default configuration options.
-     */
-    public RuleSessionConfigurationImpl() {
-        init( null, null, null );
-    }
-
-    /**
-     * Creates a new session configuration using the provided properties
-     * as configuration options.
-     */
-    public RuleSessionConfigurationImpl(Properties properties) {
-        init( properties, null, null );
-    }
-
-    public RuleSessionConfigurationImpl(Properties properties, ClassLoader classLoader) {
-        init( properties, classLoader, null );
-    }
-
-    public RuleSessionConfigurationImpl(Properties properties, ClassLoader classLoader, ChainedProperties chainedProperties) {
-        init( properties, classLoader, chainedProperties );
+    public RuleSessionConfigurationImpl(CompositeConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption> compConfig,
+                                        ClassLoader classLoader,
+                                        ChainedProperties chainedProperties) {
+        this.compConfig = compConfig;
+        setClassLoader( classLoader);
+        init(chainedProperties );
     }
 
     @Override public ClassLoader getClassLoader() {
         return this.classLoader;
     }
 
-    private void init(Properties properties, ClassLoader classLoader, ChainedProperties chainedProperties) {
-        this.classLoader = classLoader instanceof ProjectClassLoader ? classLoader : ProjectClassLoader.getClassLoader(classLoader, getClass());
-
+    private void init(ChainedProperties chainedProperties) {
         this.immutable = false;
 
-        this.chainedProperties = chainedProperties != null ? chainedProperties : ChainedProperties.getChainedProperties( this.classLoader );
-
-        if ( properties != null ) {
-            this.chainedProperties = this.chainedProperties.clone();
-            this.chainedProperties.addProperties( properties );
-        }
+        this.chainedProperties = chainedProperties;
 
         setDirectFiring(Boolean.parseBoolean(getPropertyValue(DirectFiringOption.PROPERTY_NAME, "false")));
 
@@ -154,16 +126,8 @@ public class RuleSessionConfigurationImpl extends RuleSessionConfiguration {
         setQueryListenerOption( QueryListenerOption.determineQueryListenerClassOption( getPropertyValue( QueryListenerOption.PROPERTY_NAME, QueryListenerOption.STANDARD.getAsString() ) ) );
     }
 
-    public RuleSessionConfigurationImpl addDefaultProperties(Properties properties) {
-        Properties defaultProperties = new Properties();
-        for ( Map.Entry<Object, Object> prop : properties.entrySet() ) {
-            if ( chainedProperties.getProperty( (String) prop.getKey(), null) == null ) {
-                defaultProperties.put( prop.getKey(), prop.getValue() );
-            }
-        }
-
-        this.chainedProperties.addProperties(defaultProperties);
-        return this;
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = ProjectClassLoader.getClassLoader( classLoader, getClass() );
     }
 
     /**
@@ -258,5 +222,9 @@ public class RuleSessionConfigurationImpl extends RuleSessionConfiguration {
     public void setQueryListenerOption( QueryListenerOption queryListener ) {
         checkCanChange();
         this.queryListener = queryListener;
+    }
+
+    @Override public <X extends OptionsConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption>> X as(ConfigurationKey<X> key) {
+        return compConfig.as(key);
     }
 }

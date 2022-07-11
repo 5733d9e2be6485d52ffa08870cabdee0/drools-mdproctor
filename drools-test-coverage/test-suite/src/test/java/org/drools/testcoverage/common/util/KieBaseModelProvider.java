@@ -18,7 +18,7 @@ package org.drools.testcoverage.common.util;
 
 import java.util.Optional;
 
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.model.KieBaseModel;
 import org.kie.api.builder.model.KieModuleModel;

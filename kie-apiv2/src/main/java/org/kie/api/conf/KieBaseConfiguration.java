@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.kie.api;
+package org.kie.api.conf;
 
+import org.kie.api.PropertiesConfiguration;
 import org.kie.api.conf.KieBaseOptionsConfiguration;
 
 /**
@@ -73,7 +74,7 @@ import org.kie.api.conf.KieBaseOptionsConfiguration;
  */
 public interface KieBaseConfiguration
     extends
-//        PropertiesConfiguration,
-        KieBaseOptionsConfiguration {
+//    PropertiesConfiguration,
+    KieBaseOptionsConfiguration {
 
 }

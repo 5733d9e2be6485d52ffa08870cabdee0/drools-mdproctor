@@ -24,7 +24,7 @@ import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.test.model.DroolsTestCase;
 import org.junit.Test;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

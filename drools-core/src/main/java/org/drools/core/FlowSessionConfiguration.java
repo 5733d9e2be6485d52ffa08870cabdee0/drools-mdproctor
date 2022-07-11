@@ -18,35 +18,16 @@ package org.drools.core;
 
 import java.io.Externalizable;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.drools.core.process.WorkItemManagerFactory;
-import org.drools.core.time.impl.TimerJobFactoryManager;
-import org.drools.util.StringUtils;
-import org.kie.api.KieBase;
 import org.kie.api.conf.OptionKey;
-import org.kie.api.runtime.Environment;
-import org.kie.api.runtime.ExecutableRunner;
-import org.kie.api.runtime.KieSessionConfiguration;
-import org.kie.api.runtime.conf.AccumulateNullPropagationOption;
-import org.kie.api.runtime.conf.BeliefSystemTypeOption;
-import org.kie.api.runtime.conf.ClockTypeOption;
-import org.kie.api.runtime.conf.DirectFiringOption;
-import org.kie.api.runtime.conf.KeepReferenceOption;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.conf.KieSessionOption;
 import org.kie.api.runtime.conf.MultiValueKieSessionOption;
-import org.kie.api.runtime.conf.QueryListenerOption;
 import org.kie.api.runtime.conf.SingleValueKieSessionOption;
-import org.kie.api.runtime.conf.ThreadSafeOption;
-import org.kie.api.runtime.conf.TimedRuleExecutionFilter;
-import org.kie.api.runtime.conf.TimedRuleExecutionOption;
-import org.kie.api.runtime.conf.TimerJobFactoryOption;
 import org.kie.api.runtime.conf.WorkItemHandlerOption;
 import org.kie.api.runtime.process.WorkItemHandler;
-import org.kie.internal.runtime.conf.ForceEagerActivationFilter;
-import org.kie.internal.runtime.conf.ForceEagerActivationOption;
-
 public abstract class FlowSessionConfiguration implements KieSessionConfiguration, Externalizable {
 
 //    public static FlowSessionConfiguration newInstance() {
@@ -56,13 +37,6 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
 //    public static FlowSessionConfiguration newInstance(Properties properties) {
 //        return new SessionConfigurationImpl(properties);
 //    }
-
-    public abstract TimerJobFactoryType getTimerJobFactoryType();
-    public abstract void setTimerJobFactoryType(TimerJobFactoryType timerJobFactoryType);
-
-    public final TimerJobFactoryManager getTimerJobFactoryManager() {
-        return getTimerJobFactoryType().createInstance();
-    }
 
     public abstract Map<String, WorkItemHandler> getWorkItemHandlers();
     public abstract Map<String, WorkItemHandler> getWorkItemHandlers(Map<String, Object> params);
@@ -76,9 +50,6 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
 
     public final <T extends KieSessionOption> void setOption(T option) {
         switch (option.name()) {
-            case TimerJobFactoryOption.PROPERTY_NAME: {
-                setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(((TimerJobFactoryOption) option).getTimerJobType()));
-            }
             case WorkItemHandlerOption.PROPERTY_NAME: {
                 getWorkItemHandlers().put(((WorkItemHandlerOption) option).getName(),
                                           ((WorkItemHandlerOption) option).getHandler());
@@ -88,11 +59,6 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
 
     @SuppressWarnings("unchecked")
     public final <T extends SingleValueKieSessionOption> T getOption(OptionKey<T> option) {
-        switch (option.name()) {
-            case TimerJobFactoryOption.PROPERTY_NAME: {
-                return (T) TimerJobFactoryOption.get( getTimerJobFactoryType().toExternalForm() );
-            }
-        }
         return null;
     }
 
@@ -114,28 +80,9 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
 
     public final void setProperty(String name,
                                   String value) {
-        name = name.trim();
-        if ( StringUtils.isEmpty( name ) ) {
-            return;
-        }
-        switch(name) {
-            case TimerJobFactoryOption.PROPERTY_NAME: {
-                setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(StringUtils.isEmpty(value) ? "default" : value));
-            }
-        }
     }
 
     public final String getProperty(String name) {
-        name = name.trim();
-        if ( StringUtils.isEmpty( name ) ) {
-            return null;
-        }
-
-        switch(name) {
-            case TimerJobFactoryOption.PROPERTY_NAME: {
-                return getTimerJobFactoryType().toExternalForm();
-            }
-        }
         return null;
     }
 
@@ -146,12 +93,12 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
 
         FlowSessionConfiguration that = (FlowSessionConfiguration) o;
 
-        return getTimerJobFactoryType() == that.getTimerJobFactoryType();
+        return getWorkItemHandlers().equals(that.getWorkItemHandlers());
     }
 
     @Override
     public final int hashCode() {
-        int result = getTimerJobFactoryType().hashCode();
+        int result = getWorkItemHandlers().hashCode();
         return result;
     }
 }
