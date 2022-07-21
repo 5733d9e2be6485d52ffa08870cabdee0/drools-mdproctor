@@ -19,6 +19,7 @@ package org.drools.core.time.impl;
 import org.drools.core.ClockType;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.SessionConfigurationFactories;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.time.TimerServiceFactory;
 import org.drools.core.time.impl.JDKTimerServiceTest.HelloWorldJob;
 import org.drools.core.time.impl.JDKTimerServiceTest.HelloWorldJobContext;
@@ -31,7 +32,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CronJobTest {
     @Test
     public void testCronTriggerJob() throws Exception {
-        SessionConfiguration config = (SessionConfiguration) SessionConfigurationFactories.baseConf.create(null,null, null);
+
+        SessionConfiguration config = RuleBaseFactory.newKnowledgeSessionConfiguration().as(SessionConfiguration.KEY);
         config.setClockType( ClockType.PSEUDO_CLOCK );
         PseudoClockScheduler timeService = (PseudoClockScheduler) TimerServiceFactory.getTimerService( config );
 

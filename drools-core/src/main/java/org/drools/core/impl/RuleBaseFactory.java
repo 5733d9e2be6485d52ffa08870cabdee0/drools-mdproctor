@@ -76,7 +76,7 @@ public class RuleBaseFactory {
      *     The KnowledgeBase
      */
     public static RuleBase newRuleBase(String kbaseId) {
-        return newRuleBase( kbaseId, null );
+        return newRuleBase( kbaseId,  RuleBaseFactory.newKnowledgeBaseConfiguration() );
     }
 
     /**

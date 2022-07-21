@@ -29,7 +29,9 @@ import org.drools.base.rule.GroupElement;
 import org.drools.base.rule.GroupElementFactory;
 import org.drools.base.rule.Pattern;
 import org.drools.base.rule.consequence.Consequence;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.impl.KnowledgeBaseImpl;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.rule.consequence.KnowledgeHelper;
 import org.junit.Before;
@@ -47,7 +49,7 @@ public class ReteooRuleBuilderTest {
     @Before
     public void setUp() throws Exception {
         this.builder = new ReteooRuleBuilder();
-        this.rulebase = new KnowledgeBaseImpl( "default", null );
+        this.rulebase = new KnowledgeBaseImpl("default", (CompositeBaseConfiguration) RuleBaseFactory.newKnowledgeBaseConfiguration());
     }
 
     @Test

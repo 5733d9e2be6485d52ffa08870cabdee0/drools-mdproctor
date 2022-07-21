@@ -20,6 +20,7 @@ import java.util.Collections;
 import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.junit.Test;
+import org.kie.api.KieServices;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,8 +28,7 @@ public class KnowledgeBaseImplTest {
 
     @Test
     public void testStaticImports() {
-
-        KnowledgeBaseImpl base = new KnowledgeBaseImpl( "default", null);
+        KnowledgeBaseImpl base = new KnowledgeBaseImpl("default", (CompositeBaseConfiguration)  RuleBaseFactory.newKnowledgeBaseConfiguration());
 
         // assume empty knowledge base
         assertThat(base.getPackages()).isEmpty();
