@@ -77,7 +77,7 @@ import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.drools.wiring.api.ComponentsFactory;
 import org.kie.api.KieBase;
-import org.kie.api.conf.KieBaseConfiguration;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.builder.ReleaseId;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.process.Process;
@@ -192,13 +192,13 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
         this.results = new BuildResultCollectorImpl();
 
         this.pkgRegistryManager =
-                new PackageRegistryManagerImpl(
-                        this.configuration, this, this);
+              new PackageRegistryManagerImpl(
+                    this.configuration, this, this);
 
         PackageRegistry pkgRegistry = new PackageRegistry(rootClassLoader, this.configuration, pkg);
         pkgRegistry.setDialect(this.defaultDialect);
         this.pkgRegistryManager.getPackageRegistry().put(pkg.getName(),
-                                pkgRegistry);
+                                                         pkgRegistry);
 
         // add imports to pkg registry
         for (final ImportDeclaration implDecl : pkg.getImports().values()) {
@@ -232,8 +232,8 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
         this.kBase = kBase;
 
         this.pkgRegistryManager =
-                new PackageRegistryManagerImpl(
-                        this.configuration, this, this);
+              new PackageRegistryManagerImpl(
+                    this.configuration, this, this);
 
         processBuilder = ProcessBuilderFactory.newProcessBuilder(this);
 
@@ -242,8 +242,8 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
 
     private TypeDeclarationBuilder createTypeDeclarationBuilder() {
         TypeDeclarationBuilderFactory typeDeclarationBuilderFactory =
-                Optional.ofNullable(KieService.load(TypeDeclarationBuilderFactory.class))
-                        .orElse(new DefaultTypeDeclarationBuilderFactory());
+              Optional.ofNullable(KieService.load(TypeDeclarationBuilderFactory.class))
+                      .orElse(new DefaultTypeDeclarationBuilderFactory());
 
         return typeDeclarationBuilderFactory.createTypeDeclarationBuilder(this);
     }
@@ -286,7 +286,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
      * @throws java.io.IOException
      */
     public void addPackageFromDrl(final Reader reader) throws DroolsParserException,
-            IOException {
+          IOException {
         addPackageFromDrl(reader, new ReaderResource(reader, ResourceType.DRL));
     }
 
@@ -335,17 +335,17 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
      */
     public void addRuleFlow(Reader processSource) {
         addKnowledgeResource(
-                new ReaderResource(processSource, ResourceType.DRF),
-                ResourceType.DRF,
-                null);
+              new ReaderResource(processSource, ResourceType.DRF),
+              ResourceType.DRF,
+              null);
     }
 
     @Deprecated
     public void addProcessFromXml(Resource resource) {
         addKnowledgeResource(
-                resource,
-                resource.getResourceType(),
-                resource.getConfiguration());
+              resource,
+              resource.getResourceType(),
+              resource.getConfiguration());
     }
 
     public ProcessBuilder getProcessBuilder() {
@@ -364,8 +364,8 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
             ((InternalResource) resource).setResourceType(type);
 
             if ((ResourceType.DRL.equals(type)) || (ResourceType.GDRL.equals(type)) || (ResourceType.RDRL.equals(type))
-            || (ResourceType.DESCR.equals(type)) || (ResourceType.TDRL.equals(type)) || (ResourceType.DSLR.equals(type))
-            || (ResourceType.RDSLR.equals(type)) || ResourceType.TEMPLATE.equals(type)) {
+                || (ResourceType.DESCR.equals(type)) || (ResourceType.TDRL.equals(type)) || (ResourceType.DSLR.equals(type))
+                || (ResourceType.RDSLR.equals(type)) || ResourceType.TEMPLATE.equals(type)) {
                 ResourceHandlerManager handlerManager = new ResourceHandlerManager(this.getBuilderConfiguration(), this.releaseId, this::getDslExpander);
                 ResourceHandler handler = handlerManager.handlerForType(type);
                 PackageDescr descr = handler.process(resource,null);
@@ -397,9 +397,9 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
         KieAssemblers assemblers = KieService.load(KieAssemblers.class);
 
         assemblers.addResourceAfterRules(this,
-                               resource,
-                               type,
-                               configuration);
+                                         resource,
+                                         type,
+                                         configuration);
     }
 
     @Deprecated
@@ -433,14 +433,14 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
 
         // merge into existing package
         PackageCompilationPhase packageProcessor =
-                new PackageCompilationPhase(this,
-                        kBase,
-                        configuration,
-                        typeDeclarationManager.getTypeDeclarationBuilder(),
-                        assetFilter,
-                        pkgRegistry,
-                        packageDescr,
-                        resource);
+              new PackageCompilationPhase(this,
+                                          kBase,
+                                          configuration,
+                                          typeDeclarationManager.getTypeDeclarationBuilder(),
+                                          assetFilter,
+                                          pkgRegistry,
+                                          packageDescr,
+                                          resource);
         packageProcessor.process();
         this.results.addAll(packageProcessor.getResults());
 
@@ -455,10 +455,10 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
         Map<String, AttributeDescr> packageAttributes = this.pkgRegistryManager.getPackageAttributes().get(packageDescr.getNamespace());
 
         List<CompilationPhase> phases = asList(
-                new RuleValidator(packageRegistry, packageDescr, configuration), // validateUniqueRuleNames
-                new FunctionCompiler(pkgRegistry, packageDescr, assetFilter, rootClassLoader),
-                new RuleCompilationPhase(pkgRegistry, packageDescr, kBase, parallelRulesBuildThreshold,
-                        assetFilter, packageAttributes, resource, this));
+              new RuleValidator(packageRegistry, packageDescr, configuration), // validateUniqueRuleNames
+              new FunctionCompiler(pkgRegistry, packageDescr, assetFilter, rootClassLoader),
+              new RuleCompilationPhase(pkgRegistry, packageDescr, kBase, parallelRulesBuildThreshold,
+                                       assetFilter, packageAttributes, resource, this));
         phases.forEach(CompilationPhase::process);
         phases.forEach(p -> this.results.addAll(p.getResults()));
     }
@@ -496,15 +496,15 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
 
     @Override
     public <T extends ResourceTypePackage<?>> T computeIfAbsent(
-            ResourceType resourceType,
-            String namespace, java.util.function.Function<? super ResourceType, T> mappingFunction) {
+          ResourceType resourceType,
+          String namespace, java.util.function.Function<? super ResourceType, T> mappingFunction) {
 
         PackageRegistry pkgReg = getOrCreatePackageRegistry(new PackageDescr(namespace));
         InternalKnowledgePackage kpkgs = pkgReg.getPackage();
         return kpkgs.getResourceTypePackages()
-                .computeIfAbsent(
-                        resourceType,
-                        mappingFunction);
+                    .computeIfAbsent(
+                          resourceType,
+                          mappingFunction);
     }
 
     public PackageRegistry getOrCreatePackageRegistry(PackageDescr packageDescr) {
@@ -575,14 +575,14 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
             PackageDescr packageDescr = new PackageDescr(newPkg.getName());
             pkgRegistry = getOrCreatePackageRegistry(packageDescr);
             PackageCompilationPhase packageProcessor =
-                    new PackageCompilationPhase(this,
-                            kBase,
-                            configuration,
-                            typeDeclarationManager.getTypeDeclarationBuilder(),
-                            assetFilter,
-                            this.pkgRegistryManager.getPackageRegistry(packageDescr.getNamespace()),
-                            packageDescr,
-                            null);
+                  new PackageCompilationPhase(this,
+                                              kBase,
+                                              configuration,
+                                              typeDeclarationManager.getTypeDeclarationBuilder(),
+                                              assetFilter,
+                                              this.pkgRegistryManager.getPackageRegistry(packageDescr.getNamespace()),
+                                              packageDescr,
+                                              null);
             packageProcessor.process();
             this.results.addAll(packageProcessor.getResults());
             pkg = pkgRegistry.getPackage();
@@ -1000,15 +1000,15 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
 
     public void buildPackagesWithoutRules(Collection<CompositePackageDescr> packages ) {
         CompositePackageCompilationPhase compositePackageCompilationPhase =
-                new CompositePackageCompilationPhase(
-                        packages,
-                        pkgRegistryManager,
-                        typeDeclarationManager.getTypeDeclarationBuilder(),
-                        globals,
-                        this, // as DroolsAssemblerContext
-                        results,
-                        kBase,
-                        configuration);
+              new CompositePackageCompilationPhase(
+                    packages,
+                    pkgRegistryManager,
+                    typeDeclarationManager.getTypeDeclarationBuilder(),
+                    globals,
+                    this, // as DroolsAssemblerContext
+                    results,
+                    kBase,
+                    configuration);
         compositePackageCompilationPhase.process();
     }
 

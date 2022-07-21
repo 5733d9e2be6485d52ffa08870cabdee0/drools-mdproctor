@@ -998,7 +998,7 @@ public class RuleBaseConfiguration
     }
 
     public void setOption(KieBaseOption option) {
-        switch (option.name()) {
+        switch (option.propertyName()) {
             case SequentialOption.PROPERTY_NAME : {
                 setSequential(((SequentialOption) option).isSequential());
             }

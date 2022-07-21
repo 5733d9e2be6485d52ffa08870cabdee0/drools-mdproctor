@@ -36,8 +36,8 @@ public class KBuilderSetPropertyCommand implements ExecutableCommand<Void> {
     }
     
     public Void execute(Context context) {
-       KnowledgeBuilderConfiguration kconf = (KnowledgeBuilderConfiguration) context.get(kbuilderConfId);
-       kconf.setProperty(this.name, this.value);
+//       KnowledgeBuilderConfiguration kconf = (KnowledgeBuilderConfiguration) context.get(kbuilderConfId);
+//       kconf.setProperty(this.name, this.value);
        return null;
     }
 

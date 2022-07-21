@@ -16,6 +16,9 @@ package org.drools.compiler.compiler;
 
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.compiler.builder.impl.KnowledgeBuilderFactoryServiceImpl;
+import org.drools.compiler.builder.impl.KnowledgeBuilderRulesConfigurationImpl;
+import org.kie.internal.builder.KnowledgeBuilderConfiguration;
 import org.kie.memorycompiler.JavaCompiler;
 import org.kie.memorycompiler.JavaCompilerFactory;
 import org.kie.memorycompiler.JavaConfiguration;
@@ -24,8 +27,7 @@ import org.slf4j.LoggerFactory;
 
 public class JavaDialectConfiguration extends JavaConfiguration implements DialectConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(JavaDialectConfiguration.class);
-
-    private static final JavaDialectConfiguration DEFAULT_JAVA_CONFIGURATION = new JavaDialectConfiguration(new KnowledgeBuilderConfigurationImpl(JavaConfiguration.class.getClassLoader()));
+    private static final JavaDialectConfiguration DEFAULT_JAVA_CONFIGURATION = new JavaDialectConfiguration(new KnowledgeBuilderFactoryServiceImpl().newKnowledgeBuilderConfiguration().as(KnowledgeBuilderConfigurationImpl.KEY));
     private static final String DEFAULT_JAVA_VERSION = findJavaVersion(DEFAULT_JAVA_CONFIGURATION.conf.getChainedProperties().getProperty(JAVA_LANG_LEVEL_PROPERTY, System.getProperty("java.version")));
 
     private KnowledgeBuilderConfigurationImpl conf;

@@ -29,17 +29,26 @@ public class KnowledgeBuilderFactoryServiceImpl implements KnowledgeBuilderFacto
 
     @Override
     public KnowledgeBuilderConfiguration newKnowledgeBuilderConfiguration() {
-        return new KnowledgeBuilderConfigurationImpl();
+        return new CompositeBuilderConfiguration(null, null,
+                                                 KnowledgeBuilderConfigurationFactories.baseConf,
+                                                 KnowledgeBuilderConfigurationFactories.ruleConf,
+                                                 KnowledgeBuilderConfigurationFactories.flowConf);
     }
 
     @Override
     public KnowledgeBuilderConfiguration newKnowledgeBuilderConfiguration(ClassLoader classLoader) {
-        return new KnowledgeBuilderConfigurationImpl(classLoader);
+        return new CompositeBuilderConfiguration(null, classLoader,
+                                                 KnowledgeBuilderConfigurationFactories.baseConf,
+                                                 KnowledgeBuilderConfigurationFactories.ruleConf,
+                                                 KnowledgeBuilderConfigurationFactories.flowConf);
     }
 
     @Override
     public KnowledgeBuilderConfiguration newKnowledgeBuilderConfiguration(Properties properties, ClassLoader classLoader) {
-        return new KnowledgeBuilderConfigurationImpl(properties, classLoader);
+        return new CompositeBuilderConfiguration(properties, classLoader,
+                                                 KnowledgeBuilderConfigurationFactories.baseConf,
+                                                 KnowledgeBuilderConfigurationFactories.ruleConf,
+                                                 KnowledgeBuilderConfigurationFactories.flowConf);
     }
 
     @Override

@@ -74,6 +74,10 @@ public class DefaultPackageNameOption implements SingleValueKieBuilderOption {
         return packageName;
     }
 
+    public String packageName() {
+        return packageName;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

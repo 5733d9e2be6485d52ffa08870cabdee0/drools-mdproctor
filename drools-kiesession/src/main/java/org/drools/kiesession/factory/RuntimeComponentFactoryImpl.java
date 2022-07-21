@@ -85,6 +85,10 @@ public class RuntimeComponentFactoryImpl implements Serializable, RuntimeCompone
         return KnowledgeHelperFactory.get().createKnowledgeHelper(reteEvaluator);
     }
 
+    @Override public InternalWorkingMemory createStatefulSession(RuleBase ruleBase, Environment environment, KieSessionConfiguration sessionConfig, boolean fromPool) {
+        return null;
+    }
+
     public InternalWorkingMemory createStatefulSession(RuleBase ruleBase, Environment environment, SessionConfiguration sessionConfig, boolean fromPool) {
         InternalKnowledgeBase kbase = (InternalKnowledgeBase) ruleBase;
         if (fromPool || kbase.getSessionPool() == null) {

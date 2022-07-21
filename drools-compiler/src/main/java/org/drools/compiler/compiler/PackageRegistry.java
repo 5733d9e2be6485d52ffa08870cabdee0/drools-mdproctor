@@ -22,6 +22,7 @@ import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.base.rule.DialectRuntimeRegistry;
 import org.drools.base.rule.ImportDeclaration;
 import org.kie.api.io.Resource;
+import org.kie.internal.builder.KnowledgeBuilderConfiguration;
 
 public class PackageRegistry {
 
@@ -31,9 +32,10 @@ public class PackageRegistry {
     private final DialectRuntimeRegistry dialectRuntimeRegistry;
     private final DialectCompiletimeRegistry dialectCompiletimeRegistry;
 
-    public PackageRegistry(ClassLoader rootClassLoader, KnowledgeBuilderConfigurationImpl pkgConf, InternalKnowledgePackage pkg) {
+    public PackageRegistry(ClassLoader rootClassLoader, KnowledgeBuilderConfiguration pkgConf, InternalKnowledgePackage pkg) {
         this.pkg = pkg;
-        this.dialectCompiletimeRegistry = pkgConf.buildDialectRegistry(rootClassLoader, pkgConf, this, pkg);
+        KnowledgeBuilderConfigurationImpl buildConfImpl = pkgConf.as(KnowledgeBuilderConfigurationImpl.KEY);
+        this.dialectCompiletimeRegistry = buildConfImpl.buildDialectRegistry(rootClassLoader, buildConfImpl, this, pkg);
         this.dialectRuntimeRegistry = pkg.getDialectRuntimeRegistry();
         pkg.setClassLoader(rootClassLoader);
     }

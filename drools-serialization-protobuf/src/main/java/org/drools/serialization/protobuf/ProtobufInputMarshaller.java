@@ -84,6 +84,7 @@ import org.drools.serialization.protobuf.marshalling.ProcessMarshaller;
 import org.drools.serialization.protobuf.marshalling.ProcessMarshallerFactory;
 import org.drools.tms.TruthMaintenanceSystemEqualityKey;
 import org.drools.tms.TruthMaintenanceSystemImpl;
+import org.kie.api.KieServices;
 import org.kie.api.marshalling.ObjectMarshallingStrategy;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.EnvironmentName;
@@ -142,7 +143,7 @@ public class ProtobufInputMarshaller {
         return readSession( context,
                             id,
                             EnvironmentFactory.newEnvironment(),
-                            new SessionConfigurationImpl() );
+                            KieServices.get().newKieSessionConfiguration().as(SessionConfiguration.KEY));
     }
 
     public static ReadSessionResult readSession( ProtobufMarshallerReaderContext context, int id,

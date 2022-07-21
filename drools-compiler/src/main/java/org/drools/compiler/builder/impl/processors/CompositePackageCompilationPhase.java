@@ -30,6 +30,7 @@ import org.drools.util.StringUtils;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.kie.internal.builder.KnowledgeBuilderResult;
 import org.kie.internal.builder.ResultSeverity;
+import org.kie.internal.builder.conf.LanguageLevelOption;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -104,7 +105,7 @@ public class CompositePackageCompilationPhase implements CompilationPhase {
     private Map<String, Supplier<AnnotationNormalizer>> initAnnotationNormalizers() {
         // use a supplier to ensure a fresh instance
         Map<String, Supplier<AnnotationNormalizer>> annotationNormalizers = new HashMap<>();
-        boolean isStrict = configuration.getLanguageLevel().useJavaAnnotations();
+        boolean isStrict = configuration.getOption(LanguageLevelOption.KEY).useJavaAnnotations();
         for (CompositePackageDescr packageDescr : packages) {
             if (StringUtils.isEmpty(packageDescr.getName())) {
                 packageDescr.setName(configuration.getDefaultPackageName());

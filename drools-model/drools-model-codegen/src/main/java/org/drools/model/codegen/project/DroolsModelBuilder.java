@@ -19,6 +19,7 @@ import org.drools.codegen.common.GeneratedFile;
 import org.drools.codegen.common.GeneratedFileType;
 import org.drools.compiler.builder.impl.BuildResultCollector;
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
+import org.drools.compiler.builder.impl.KnowledgeBuilderFactoryServiceImpl;
 import org.drools.compiler.builder.impl.resources.DecisionTableResourceHandler;
 import org.drools.compiler.builder.impl.resources.DrlResourceHandler;
 import org.drools.compiler.lang.descr.CompositePackageDescr;
@@ -28,6 +29,7 @@ import org.drools.model.codegen.tool.ExplicitCanonicalModelCompiler;
 import org.kie.api.io.Resource;
 import org.kie.api.io.ResourceConfiguration;
 import org.kie.api.io.ResourceType;
+import org.kie.internal.builder.KnowledgeBuilderFactoryService;
 import org.kie.internal.builder.KnowledgeBuilderResult;
 import org.kie.util.maven.support.ReleaseIdImpl;
 import org.slf4j.Logger;
@@ -58,7 +60,7 @@ public class DroolsModelBuilder {
     public DroolsModelBuilder(Collection<Resource> resources, boolean decisionTableSupported) {
         this.resources = resources;
         this.decisionTableSupported = decisionTableSupported;
-        this.knowledgeBuilderConfiguration = new KnowledgeBuilderConfigurationImpl();
+        this.knowledgeBuilderConfiguration = new KnowledgeBuilderFactoryServiceImpl().newKnowledgeBuilderConfiguration().as(KnowledgeBuilderConfigurationImpl.KEY);
         checkDependencyTableSupport();
     }
 

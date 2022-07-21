@@ -8,6 +8,7 @@ import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.kie.api.io.Resource;
+import org.kie.internal.builder.conf.LanguageLevelOption;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public final class PackageCompilationPhase extends AbstractPackageCompilationPha
         AnnotationNormalizer annotationNormalizer =
                 AnnotationNormalizer.of(
                         pkgRegistry.getTypeResolver(),
-                        configuration.getLanguageLevel().useJavaAnnotations());
+                        configuration.getOption(LanguageLevelOption.KEY).useJavaAnnotations());
 
         List<CompilationPhase> phases = asList(
                 new ImportCompilationPhase(pkgRegistry, packageDescr),

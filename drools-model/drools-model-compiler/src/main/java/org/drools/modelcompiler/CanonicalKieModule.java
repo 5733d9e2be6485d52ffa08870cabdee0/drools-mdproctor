@@ -260,7 +260,7 @@ public class CanonicalKieModule implements InternalKieModule {
             options = singletonList(
                     new KieBaseUpdaterOptions.OptionEntry(
                             AlphaNetworkCompilerOption.class,
-                            builderConfiguration.getAlphaNetworkCompilerOption()));
+                            builderConfiguration.getOption(AlphaNetworkCompilerOption.KEY)));
         } else if(resourceFileExists(getANCFile(internalKieModule.getReleaseId()))) { // executable model with ANC
             options = singletonList(
                     new KieBaseUpdaterOptions.OptionEntry(

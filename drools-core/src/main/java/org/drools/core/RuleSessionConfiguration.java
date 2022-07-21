@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.drools.util.StringUtils;
+import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.conf.AccumulateNullPropagationOption;
@@ -45,6 +46,8 @@ public abstract class RuleSessionConfiguration implements KieSessionConfiguratio
 //    public static RuleSessionConfiguration newInstance(Properties properties) {
 //        return new SessionConfigurationImpl(properties);
 //    }
+    public static final ConfigurationKey<RuleSessionConfiguration> KEY = new ConfigurationKey<>("Rule");
+
     public abstract void setDirectFiring(boolean directFiring);
     public abstract boolean isDirectFiring();
     public abstract void setThreadSafe(boolean threadSafe);
@@ -73,7 +76,7 @@ public abstract class RuleSessionConfiguration implements KieSessionConfiguratio
     public abstract void setQueryListenerOption( QueryListenerOption queryListener );
 
     public final <T extends KieSessionOption> void setOption(T option) {
-        switch (option.name()) {
+        switch (option.propertyName()) {
             case DirectFiringOption.PROPERTY_NAME: {
                 setDirectFiring(((DirectFiringOption) option).isDirectFiring());
             }

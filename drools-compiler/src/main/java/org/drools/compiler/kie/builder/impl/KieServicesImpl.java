@@ -24,10 +24,14 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.drools.compiler.kie.builder.impl.event.KieServicesEventListerner;
 import org.drools.compiler.kproject.models.KieModuleModelImpl;
+import org.drools.core.CompositeSessionConfiguration;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
+import org.drools.core.SessionConfigurationFactories;
 import org.drools.core.SessionConfigurationImpl;
 import org.drools.core.concurrent.ExecutorProviderImpl;
+import org.drools.core.impl.BaseConfigurationFactories;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.kiesession.audit.KnowledgeRuntimeLoggerProviderImpl;
 import org.drools.util.io.ResourceFactoryServiceImpl;
@@ -287,27 +291,29 @@ public class KieServicesImpl implements InternalKieServices {
     }
 
     public KieBaseConfiguration newKieBaseConfiguration() {
-        return new RuleBaseConfiguration(null, null);
+        return newKieBaseConfiguration(null, null);
     }
 
     public KieBaseConfiguration newKieBaseConfiguration(Properties properties) {
-        return new RuleBaseConfiguration(properties, null);
+        return newKieBaseConfiguration(properties, null);
     }
 
     public KieBaseConfiguration newKieBaseConfiguration(Properties properties, ClassLoader classLoader) {
-        return new RuleBaseConfiguration(properties, classLoader);
+        return new CompositeBaseConfiguration(properties, classLoader,
+                                              BaseConfigurationFactories.baseConf, BaseConfigurationFactories.ruleConf, BaseConfigurationFactories.flowConf);
     }
 
     public KieSessionConfiguration newKieSessionConfiguration() {
-        return SessionConfiguration.newInstance();
+        return newKieSessionConfiguration(null, null);
     }
 
     public KieSessionConfiguration newKieSessionConfiguration(Properties properties) {
-        return new SessionConfigurationImpl(properties);
+        return newKieSessionConfiguration(properties, null);
     }
 
     public KieSessionConfiguration newKieSessionConfiguration(Properties properties, ClassLoader classLoader) {
-        return new SessionConfigurationImpl(properties, classLoader);
+        return new CompositeSessionConfiguration(properties, classLoader,
+                                          SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf, SessionConfigurationFactories.flowConf);
     }
 
     public Environment newEnvironment() {

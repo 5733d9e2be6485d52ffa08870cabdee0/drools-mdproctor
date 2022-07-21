@@ -2067,7 +2067,7 @@ public class MarshallingTest extends CommonTestMethodBase {
         impl.addRule( rule );
 
         knowledgeBase.addPackages( Collections.singleton( impl ) );
-        SessionConfiguration config = SessionConfiguration.newInstance();
+        SessionConfiguration config = KieServices.get().newKieSessionConfiguration().as(SessionConfiguration.KEY);
         config.setClockType( ClockType.PSEUDO_CLOCK );
         KieSession ksession = knowledgeBase.newKieSession( config, KieServices.get().newEnvironment() );
         PseudoClockScheduler scheduler = (PseudoClockScheduler) ksession.<SessionClock> getSessionClock();

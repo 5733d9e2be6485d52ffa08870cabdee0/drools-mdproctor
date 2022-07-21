@@ -29,7 +29,7 @@ public interface Option extends Serializable {
     @Deprecated // immutable properties should not need getter/setter, this is common now for "value" types.
     String getPropertyName();
 
-    default String name() {
+    default String propertyName() {
         return getPropertyName();
     }
 

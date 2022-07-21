@@ -1238,7 +1238,7 @@ public class KiePackagesBuilder {
     }
 
     private PropertySpecificOption getPropertySpecificOption() {
-        return builderConf != null ? (( KnowledgeBuilderConfigurationImpl ) builderConf).getPropertySpecificOption() : PropertySpecificOption.ALWAYS;
+        return builderConf != null ? builderConf.getOption(PropertySpecificOption.KEY) : PropertySpecificOption.ALWAYS;
     }
 
     private static GroupElement.Type conditionToGroupElementType( Condition.Type type ) {

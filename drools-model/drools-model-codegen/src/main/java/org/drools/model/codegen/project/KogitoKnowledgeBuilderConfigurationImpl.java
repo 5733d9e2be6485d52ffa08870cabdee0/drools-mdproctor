@@ -19,24 +19,28 @@ import java.util.NoSuchElementException;
 
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.codegen.common.DroolsModelBuildContext;
+import org.kie.api.conf.CompositeConfiguration;
+import org.kie.internal.builder.conf.KnowledgeBuilderOption;
+import org.kie.internal.builder.conf.MultiValueKieBuilderOption;
+import org.kie.internal.builder.conf.SingleValueKieBuilderOption;
+import org.kie.internal.utils.ChainedProperties;
 
 public class KogitoKnowledgeBuilderConfigurationImpl extends KnowledgeBuilderConfigurationImpl {
 
     public static KogitoKnowledgeBuilderConfigurationImpl fromContext(DroolsModelBuildContext buildContext) {
-        KogitoKnowledgeBuilderConfigurationImpl conf = new KogitoKnowledgeBuilderConfigurationImpl(buildContext.getClassLoader());
-        for (String prop : buildContext.getApplicationProperties()) {
-            if (prop.startsWith("drools")) {
-                conf.setProperty(prop, buildContext.getApplicationProperty(prop).orElseThrow(NoSuchElementException::new));
-            }
-        }
-        return conf;
+        // @FIXME (mdp)
+//        KogitoKnowledgeBuilderConfigurationImpl conf = new KogitoKnowledgeBuilderConfigurationImpl(buildContext.getClassLoader());
+//        for (String prop : buildContext.getApplicationProperties()) {
+//            if (prop.startsWith("drools")) {
+//                conf.setProperty(prop, buildContext.getApplicationProperty(prop).orElseThrow(NoSuchElementException::new));
+//            }
+//        }
+//        return conf;
+        return null;
     }
 
-    public KogitoKnowledgeBuilderConfigurationImpl() {
-    }
-
-    public KogitoKnowledgeBuilderConfigurationImpl(ClassLoader classLoader) {
-        super(classLoader);
+    public KogitoKnowledgeBuilderConfigurationImpl(CompositeConfiguration<KnowledgeBuilderOption, SingleValueKieBuilderOption, MultiValueKieBuilderOption> compConfig, ClassLoader classLoader, ChainedProperties chainedProperties) {
+        super(compConfig, classLoader, chainedProperties);
     }
 
     @Override

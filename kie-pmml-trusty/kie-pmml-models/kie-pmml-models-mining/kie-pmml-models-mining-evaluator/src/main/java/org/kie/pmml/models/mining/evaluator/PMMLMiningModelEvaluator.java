@@ -30,6 +30,7 @@ import org.drools.core.impl.RuleBase;
 import org.drools.util.StringUtils;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.kie.api.KieBase;
+import org.kie.api.KieServices;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.pmml.PMML4Result;
 import org.kie.api.runtime.KieRuntimeFactory;
@@ -131,7 +132,7 @@ public class PMMLMiningModelEvaluator implements PMMLModelEvaluator<KiePMMLMinin
             final List<KiePackage> packages = kiePackage != null ?
                     Collections.singletonList(knowledgeBase.getKiePackage(kModulePackageName)) :
                     Collections.emptyList();
-            RuleBaseConfiguration conf = new RuleBaseConfiguration();
+            RuleBaseConfiguration conf = KieServices.get().newKieBaseConfiguration().as(RuleBaseConfiguration.KEY);
             conf.setClassLoader(((RuleBase) knowledgeBase).getRootClassLoader());
             InternalKnowledgeBase toReturn = KnowledgeBaseFactory.newKnowledgeBase(kModulePackageName, conf);
             toReturn.addPackages(packages);

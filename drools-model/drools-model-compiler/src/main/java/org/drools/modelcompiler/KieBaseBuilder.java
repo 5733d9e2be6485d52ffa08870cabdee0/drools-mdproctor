@@ -27,6 +27,7 @@ import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.builder.model.KieBaseModel;
 import org.kie.api.conf.KieBaseOption;
+import org.kie.api.internal.utils.KieService;
 
 import static org.drools.compiler.kie.builder.impl.KieBuilderImpl.isPackageInKieBase;
 
@@ -79,7 +80,7 @@ public class KieBaseBuilder {
     }
 
     public static InternalKnowledgeBase createKieBaseFromModel( Collection<Model> models, KieBaseModel kieBaseModel ) {
-        RuleBaseConfiguration kieBaseConf = new RuleBaseConfiguration();
+        RuleBaseConfiguration kieBaseConf = KieServices.get().newKieBaseConfiguration().as(RuleBaseConfiguration.KEY);
         kieBaseConf.setEventProcessingMode(kieBaseModel.getEventProcessingMode());
         kieBaseConf.setSessionPoolSize(kieBaseModel.getSessionsPool().getSize());
 

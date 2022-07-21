@@ -37,6 +37,7 @@ import org.drools.util.ClassUtils;
 import org.kie.api.definition.type.Position;
 import org.kie.api.io.Resource;
 import org.kie.api.runtime.rule.Match;
+import org.kie.internal.builder.conf.PropertySpecificOption;
 
 import static org.drools.compiler.builder.impl.ClassDefinitionFactory.createClassDefinition;
 import static org.drools.compiler.builder.impl.TypeDeclarationConfigurator.processMvelBasedAccessors;
@@ -240,7 +241,7 @@ public class TypeDeclarationCache {
 
     private TypeDeclaration createTypeDeclarationForBean(Class<?> cls) {
         Annotated annotated = new Annotated.ClassAdapter(cls);
-        TypeDeclaration typeDeclaration = TypeDeclaration.createTypeDeclarationForBean(cls, annotated, context.getBuilderConfiguration().getPropertySpecificOption());
+        TypeDeclaration typeDeclaration = TypeDeclaration.createTypeDeclarationForBean(cls, annotated, context.getBuilderConfiguration().getOption(PropertySpecificOption.KEY));
 
         String namespace = ClassUtils.getPackage( cls );
         PackageRegistry pkgRegistry = context.getOrCreatePackageRegistry( new PackageDescr(namespace) );

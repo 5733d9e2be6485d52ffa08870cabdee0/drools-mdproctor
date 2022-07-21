@@ -47,6 +47,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.kie.api.runtime.rule.FactHandle;
+import org.kie.internal.utils.ChainedProperties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -410,7 +411,8 @@ public class ReteTest extends DroolsTestCase {
         Properties properties = new Properties();
         properties.setProperty("drools.shadowProxyExcludes",
                                "org.drools.core.test.model.Cheese");
-        RuleBaseConfiguration conf = new RuleBaseConfiguration(properties);
+        RuleBaseConfiguration conf = new RuleBaseConfiguration(null, null,
+                                                               ChainedProperties.getChainedProperties(null).addProperties(properties));
         InternalKnowledgeBase kBase = (InternalKnowledgeBase) RuleBaseFactory.newRuleBase(conf);
         buildContext = new BuildContext(kBase, Collections.emptyList());
         final StatefulKnowledgeSessionImpl ksession = new StatefulKnowledgeSessionImpl(1L, kBase);

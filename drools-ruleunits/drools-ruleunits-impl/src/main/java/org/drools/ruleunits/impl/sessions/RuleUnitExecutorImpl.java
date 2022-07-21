@@ -87,7 +87,7 @@ public class RuleUnitExecutorImpl implements ReteEvaluator {
     private Calendars calendars;
 
     public RuleUnitExecutorImpl(RuleBase knowledgeBase) {
-        this(knowledgeBase, knowledgeBase.getSessionConfiguration());
+        this(knowledgeBase, knowledgeBase.getSessionConfiguration().as(SessionConfiguration.KEY));
     }
 
     public RuleUnitExecutorImpl(RuleBase knowledgeBase, SessionConfiguration sessionConfiguration) {
@@ -193,6 +193,10 @@ public class RuleUnitExecutorImpl implements ReteEvaluator {
 
     @Override
     public RuleSessionConfiguration getRuleSessionConfiguration() {
+        return sessionConfiguration.as(RuleSessionConfiguration.KEY);
+    }
+
+    @Override public SessionConfiguration getSessionConfiguration() {
         return sessionConfiguration;
     }
 

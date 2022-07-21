@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.drools.core.process.WorkItemManagerFactory;
+import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.conf.KieSessionOption;
@@ -38,6 +39,8 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
 //        return new SessionConfigurationImpl(properties);
 //    }
 
+    public static final ConfigurationKey<FlowSessionConfiguration> KEY = new ConfigurationKey<>("Flow");
+
     public abstract Map<String, WorkItemHandler> getWorkItemHandlers();
     public abstract Map<String, WorkItemHandler> getWorkItemHandlers(Map<String, Object> params);
     public abstract WorkItemManagerFactory getWorkItemManagerFactory();
@@ -49,7 +52,7 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
 
 
     public final <T extends KieSessionOption> void setOption(T option) {
-        switch (option.name()) {
+        switch (option.propertyName()) {
             case WorkItemHandlerOption.PROPERTY_NAME: {
                 getWorkItemHandlers().put(((WorkItemHandlerOption) option).getName(),
                                           ((WorkItemHandlerOption) option).getHandler());

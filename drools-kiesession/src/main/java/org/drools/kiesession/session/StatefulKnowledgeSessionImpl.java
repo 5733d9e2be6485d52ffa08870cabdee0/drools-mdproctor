@@ -36,6 +36,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.drools.core.CompositeSessionConfiguration;
+import org.drools.core.FlowSessionConfiguration;
 import org.drools.core.QueryResultsImpl;
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.RuleSessionConfiguration;
@@ -348,7 +349,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
 
     private void init( KieSessionConfiguration config, Environment environment, long propagationContext ) {
         this.config = config;
-        this.ruleSessionConfig = ((CompositeSessionConfiguration)config).as(RuleBaseConfiguration.KEY);
+        this.ruleSessionConfig = config.as(RuleSessionConfiguration.KEY);
         this.environment = environment;
 
         this.propagationIdCounter = new AtomicLong( propagationContext);
@@ -845,7 +846,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
     }
 
     public RuleSessionConfiguration getRuleSessionConfiguration() {
-        return this.config;
+        return this.ruleSessionConfig;
     }
 
     @Override public SessionConfiguration getSessionConfiguration() {
@@ -1434,10 +1435,11 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
 
     public WorkItemManager getWorkItemManager() {
         if (workItemManager == null) {
-            workItemManager = config.getWorkItemManagerFactory().createWorkItemManager(this.getKnowledgeRuntime());
+            FlowSessionConfiguration flowConf = config.as(FlowSessionConfiguration.KEY);
+            workItemManager = flowConf.getWorkItemManagerFactory().createWorkItemManager(this.getKnowledgeRuntime());
             Map<String, Object> params = new HashMap<>();
             params.put("ksession", this.getKnowledgeRuntime());
-            Map<String, WorkItemHandler> workItemHandlers = config.getWorkItemHandlers(params);
+            Map<String, WorkItemHandler> workItemHandlers = flowConf.getWorkItemHandlers(params);
             if (workItemHandlers != null) {
                 for (Map.Entry<String, WorkItemHandler> entry : workItemHandlers.entrySet()) {
                     workItemManager.registerWorkItemHandler(entry.getKey(),
@@ -1473,7 +1475,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
     }
 
     protected TimerService createTimerService() {
-        return TimerServiceFactory.getTimerService( this.config );
+        return TimerServiceFactory.getTimerService( this.config.as(SessionConfiguration.KEY) );
     }
 
     public SessionClock getSessionClock() {

@@ -23,6 +23,7 @@ import java.util.Set;
 import org.drools.core.time.impl.TimerJobFactoryManager;
 import org.drools.util.StringUtils;
 import org.kie.api.KieBase;
+import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.ExecutableRunner;
@@ -43,6 +44,11 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
 //        return new SessionConfigurationImpl(properties);
 //    }
 
+    public static final ConfigurationKey<SessionConfiguration> KEY = new ConfigurationKey<>("Base");
+
+    public abstract void setKeepReference(boolean keepReference);
+
+    public abstract boolean isKeepReference();
 
     public abstract ClockType getClockType();
     public abstract void setClockType(ClockType clockType);
@@ -57,7 +63,7 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
     public abstract ExecutableRunner getRunner( KieBase kbase, Environment environment );
 
     public final <T extends KieSessionOption> void setOption(T option) {
-        switch (option.name()) {
+        switch (option.propertyName()) {
             case ClockTypeOption.PROPERTY_NAME: {
                 setClockType(ClockType.resolveClockType(((ClockTypeOption) option).getClockType()));
             }

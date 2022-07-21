@@ -92,7 +92,7 @@ import org.kie.internal.builder.conf.KnowledgeBuilderOptionsConfiguration;
  */
 public interface KnowledgeBuilderConfiguration
     extends
-    PropertiesConfiguration,
+//    PropertiesConfiguration,
     KnowledgeBuilderOptionsConfiguration {
 
 }

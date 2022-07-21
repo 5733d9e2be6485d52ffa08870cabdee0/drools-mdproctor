@@ -136,8 +136,9 @@ public class ChainedProperties
     /**
      * Specifically added properties take priority, so they go to the front of the list.
      */
-    public void addProperties(Properties properties) {
+    public ChainedProperties addProperties(Properties properties) {
         this.props.add( 0, properties );
+        return this;
     }
 
     public String getProperty(String key,
