@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import org.drools.core.CompositeSessionConfiguration;
 import org.drools.core.SessionConfigurationFactories;
+import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.runtime.conf.KieSessionConfiguration;
 
@@ -125,7 +126,11 @@ public class RuleBaseFactory {
             throw new UnsupportedOperationException("Pass only a single, non null, classloader. As an array of Classloaders is no longer supported. ");
         }
 
-        return new CompositeBaseConfiguration(properties, classLoaders != null ? classLoaders[0] : null,
+        ClassLoader classLoader = classLoaders != null ? classLoaders[0] : null;
+        ClassLoader projClassLoader = getClassLoader(classLoader);
+
+
+        return new CompositeBaseConfiguration(properties, projClassLoader,
                                               BaseConfigurationFactories.baseConf, BaseConfigurationFactories.ruleConf,
                                               BaseConfigurationFactories.flowConf);
     }
@@ -136,7 +141,8 @@ public class RuleBaseFactory {
      *     The KnowledgeSessionConfiguration.
      */
     public static KieSessionConfiguration newKnowledgeSessionConfiguration() {
-        return new CompositeSessionConfiguration(null, null,
+        ClassLoader projCassLoader = getClassLoader(null);
+        return new CompositeSessionConfiguration(null, projCassLoader,
                                                  SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
                                                  SessionConfigurationFactories.flowConf);
     }
@@ -147,14 +153,22 @@ public class RuleBaseFactory {
      *     The KnowledgeSessionConfiguration.
      */
     public static KieSessionConfiguration newKnowledgeSessionConfiguration(Properties properties) {
-        return new CompositeSessionConfiguration(properties, null,
+        ClassLoader projCassLoader = getClassLoader(null);
+        return new CompositeSessionConfiguration(properties, projCassLoader,
                                                  SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
                                                  SessionConfigurationFactories.flowConf);
     }
 
     public static KieSessionConfiguration newKnowledgeSessionConfiguration(Properties properties, ClassLoader classLoader) {
-        return new CompositeSessionConfiguration(properties, classLoader,
+        ClassLoader projCassLoader = getClassLoader(classLoader);
+        return new CompositeSessionConfiguration(properties, projCassLoader,
                                                  SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
                                                  SessionConfigurationFactories.flowConf);
     }
+
+    private static ClassLoader getClassLoader(ClassLoader classLoader) {
+        ClassLoader projClassLoader = classLoader instanceof ProjectClassLoader ? classLoader : ProjectClassLoader.getClassLoader(classLoader, RuleBaseFactory.class);
+        return projClassLoader;
+    }
+
 }

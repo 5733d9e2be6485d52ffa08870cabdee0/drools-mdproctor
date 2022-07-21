@@ -21,18 +21,19 @@ import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.kie.api.runtime.Environment;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 public interface WorkingMemoryFactory {
     InternalWorkingMemory createWorkingMemory(final long id,
                                               final InternalKnowledgeBase kBase,
-                                              final SessionConfiguration config,
+                                              final KieSessionConfiguration config,
                                               final Environment environment);
 
     InternalWorkingMemory createWorkingMemory(final long id,
                                               final InternalKnowledgeBase kBase,
                                               final FactHandleFactory handleFactory,
                                               final long propagationContext,
-                                              final SessionConfiguration config,
+                                              final KieSessionConfiguration config,
                                               final InternalAgenda agenda,
                                               final Environment environment);
 }

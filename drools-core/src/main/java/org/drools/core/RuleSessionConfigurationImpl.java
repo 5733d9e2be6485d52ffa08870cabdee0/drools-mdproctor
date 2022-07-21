@@ -127,7 +127,7 @@ public class RuleSessionConfigurationImpl extends RuleSessionConfiguration {
     }
 
     public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = ProjectClassLoader.getClassLoader( classLoader, getClass() );
+        this.classLoader = classLoader;
     }
 
     /**

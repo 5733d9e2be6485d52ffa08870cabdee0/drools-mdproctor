@@ -19,6 +19,7 @@ import java.util.Properties;
 
 import org.drools.compiler.builder.conf.DecisionTableConfigurationImpl;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
+import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.KieBase;
 import org.kie.internal.builder.DecisionTableConfiguration;
 import org.kie.internal.builder.KnowledgeBuilder;
@@ -29,7 +30,8 @@ public class KnowledgeBuilderFactoryServiceImpl implements KnowledgeBuilderFacto
 
     @Override
     public KnowledgeBuilderConfiguration newKnowledgeBuilderConfiguration() {
-        return new CompositeBuilderConfiguration(null, null,
+        ClassLoader projClassLoader = getClassLoader(null);
+        return new CompositeBuilderConfiguration(null, projClassLoader,
                                                  KnowledgeBuilderConfigurationFactories.baseConf,
                                                  KnowledgeBuilderConfigurationFactories.ruleConf,
                                                  KnowledgeBuilderConfigurationFactories.flowConf);
@@ -37,15 +39,22 @@ public class KnowledgeBuilderFactoryServiceImpl implements KnowledgeBuilderFacto
 
     @Override
     public KnowledgeBuilderConfiguration newKnowledgeBuilderConfiguration(ClassLoader classLoader) {
-        return new CompositeBuilderConfiguration(null, classLoader,
+        ClassLoader projClassLoader = getClassLoader(classLoader);
+        return new CompositeBuilderConfiguration(null, projClassLoader,
                                                  KnowledgeBuilderConfigurationFactories.baseConf,
                                                  KnowledgeBuilderConfigurationFactories.ruleConf,
                                                  KnowledgeBuilderConfigurationFactories.flowConf);
     }
 
+    private ClassLoader getClassLoader(ClassLoader classLoader) {
+        ClassLoader projClassLoader = classLoader instanceof ProjectClassLoader ? classLoader : ProjectClassLoader.getClassLoader(classLoader, getClass());
+        return projClassLoader;
+    }
+
     @Override
     public KnowledgeBuilderConfiguration newKnowledgeBuilderConfiguration(Properties properties, ClassLoader classLoader) {
-        return new CompositeBuilderConfiguration(properties, classLoader,
+        ClassLoader projClassLoader = getClassLoader(classLoader);
+        return new CompositeBuilderConfiguration(properties, projClassLoader,
                                                  KnowledgeBuilderConfigurationFactories.baseConf,
                                                  KnowledgeBuilderConfigurationFactories.ruleConf,
                                                  KnowledgeBuilderConfigurationFactories.flowConf);

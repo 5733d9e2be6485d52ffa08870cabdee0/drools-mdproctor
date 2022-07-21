@@ -282,7 +282,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
                                         final InternalKnowledgeBase kBase,
                                         final FactHandleFactory handleFactory,
                                         final long propagationContext,
-                                        final SessionConfiguration config,
+                                        final KieSessionConfiguration config,
                                         final InternalAgenda agenda,
                                         final Environment environment) {
         this(id,

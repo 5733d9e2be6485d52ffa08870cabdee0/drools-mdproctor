@@ -43,6 +43,7 @@ import org.drools.kiesession.session.KieSessionsPoolImpl;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.drools.kiesession.session.StatelessKnowledgeSessionImpl;
 import org.kie.api.runtime.Environment;
+import org.kie.api.runtime.conf.KeepReferenceOption;
 import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.KieSessionsPool;
 import org.kie.api.runtime.StatelessKieSession;
@@ -85,11 +86,7 @@ public class RuntimeComponentFactoryImpl implements Serializable, RuntimeCompone
         return KnowledgeHelperFactory.get().createKnowledgeHelper(reteEvaluator);
     }
 
-    @Override public InternalWorkingMemory createStatefulSession(RuleBase ruleBase, Environment environment, KieSessionConfiguration sessionConfig, boolean fromPool) {
-        return null;
-    }
-
-    public InternalWorkingMemory createStatefulSession(RuleBase ruleBase, Environment environment, SessionConfiguration sessionConfig, boolean fromPool) {
+    public InternalWorkingMemory createStatefulSession(RuleBase ruleBase, Environment environment, KieSessionConfiguration sessionConfig, boolean fromPool) {
         InternalKnowledgeBase kbase = (InternalKnowledgeBase) ruleBase;
         if (fromPool || kbase.getSessionPool() == null) {
             StatefulKnowledgeSessionImpl session = ( StatefulKnowledgeSessionImpl ) getWorkingMemoryFactory()
@@ -99,8 +96,8 @@ public class RuntimeComponentFactoryImpl implements Serializable, RuntimeCompone
         return (InternalWorkingMemory) kbase.getSessionPool().newKieSession( sessionConfig );
     }
 
-    private StatefulKnowledgeSessionImpl internalInitSession( InternalKnowledgeBase kbase, SessionConfiguration sessionConfig, StatefulKnowledgeSessionImpl session ) {
-        if ( sessionConfig.isKeepReference() ) {
+    private StatefulKnowledgeSessionImpl internalInitSession( InternalKnowledgeBase kbase, KieSessionConfiguration sessionConfig, StatefulKnowledgeSessionImpl session ) {
+        if ( sessionConfig.getOption(KeepReferenceOption.KEY).isKeepReference() ) {
             kbase.addStatefulSession(session);
         }
         return session;

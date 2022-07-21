@@ -27,6 +27,7 @@ import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.ExecutableRunner;
+import org.kie.api.runtime.conf.KeepReferenceOption;
 import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.api.runtime.conf.KieSessionOption;
@@ -70,6 +71,9 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
             case TimerJobFactoryOption.PROPERTY_NAME: {
                 setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(((TimerJobFactoryOption) option).getTimerJobType()));
             }
+            case KeepReferenceOption.PROPERTY_NAME: {
+                setKeepReference(((KeepReferenceOption)option).isKeepReference());
+            }
         }
     }
 
@@ -81,6 +85,9 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
             }
             case TimerJobFactoryOption.PROPERTY_NAME: {
                 return (T) TimerJobFactoryOption.get( getTimerJobFactoryType().toExternalForm() );
+            }
+            case KeepReferenceOption.PROPERTY_NAME: {
+                return (T) (isKeepReference() ? KeepReferenceOption.YES : KeepReferenceOption.NO);
             }
         }
         return null;

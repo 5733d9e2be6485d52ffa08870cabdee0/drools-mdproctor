@@ -30,6 +30,7 @@ import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.drools.ruleunits.impl.facthandles.RuleUnitDefaultFactHandle;
 import org.kie.api.runtime.Environment;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.rule.FactHandle;
 import org.drools.ruleunits.api.RuleUnits;
 
@@ -44,11 +45,11 @@ public class RuleUnitStatefulKnowledgeSessionImpl extends StatefulKnowledgeSessi
         super(id, kBase);
     }
 
-    public RuleUnitStatefulKnowledgeSessionImpl(long id, InternalKnowledgeBase kBase, boolean initInitFactHandle, SessionConfiguration config, Environment environment) {
+    public RuleUnitStatefulKnowledgeSessionImpl(long id, InternalKnowledgeBase kBase, boolean initInitFactHandle, KieSessionConfiguration config, Environment environment) {
         super(id, kBase, initInitFactHandle, config, environment);
     }
 
-    public RuleUnitStatefulKnowledgeSessionImpl(long id, InternalKnowledgeBase kBase, FactHandleFactory handleFactory, long propagationContext, SessionConfiguration config, InternalAgenda agenda,
+    public RuleUnitStatefulKnowledgeSessionImpl(long id, InternalKnowledgeBase kBase, FactHandleFactory handleFactory, long propagationContext, KieSessionConfiguration config, InternalAgenda agenda,
                                                 Environment environment) {
         super(id, kBase, handleFactory, propagationContext, config, agenda, environment);
     }

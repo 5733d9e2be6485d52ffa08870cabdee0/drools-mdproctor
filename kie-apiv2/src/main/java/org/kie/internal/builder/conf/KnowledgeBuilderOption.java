@@ -24,8 +24,9 @@ import org.kie.api.conf.Option;
 public interface KnowledgeBuilderOption
     extends
     Option {
+    String TYPE = "Base";
 
     default String type() {
-        return "Base";
+        return TYPE;
     }
 }

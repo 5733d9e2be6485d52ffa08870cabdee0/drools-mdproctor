@@ -112,7 +112,7 @@ public class KnowledgeBuilderConfigurationImpl
                                              ClassLoader classLoader,
                                              ChainedProperties chainedProperties) {
         this.compConfig = compConfig;
-        this.classLoader = ProjectClassLoader.getClassLoader(classLoader, getClass());
+        this.classLoader = classLoader;
         this.chainedProperties = chainedProperties;
         init();
     }

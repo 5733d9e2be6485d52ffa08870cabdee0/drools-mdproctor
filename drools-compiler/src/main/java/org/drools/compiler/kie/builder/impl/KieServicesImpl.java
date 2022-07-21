@@ -35,6 +35,7 @@ import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.kiesession.audit.KnowledgeRuntimeLoggerProviderImpl;
 import org.drools.util.io.ResourceFactoryServiceImpl;
+import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
@@ -299,7 +300,8 @@ public class KieServicesImpl implements InternalKieServices {
     }
 
     public KieBaseConfiguration newKieBaseConfiguration(Properties properties, ClassLoader classLoader) {
-        return new CompositeBaseConfiguration(properties, classLoader,
+        ClassLoader projClassLoader = getClassLoader(classLoader);
+        return new CompositeBaseConfiguration(properties, projClassLoader,
                                               BaseConfigurationFactories.baseConf, BaseConfigurationFactories.ruleConf, BaseConfigurationFactories.flowConf);
     }
 
@@ -312,8 +314,14 @@ public class KieServicesImpl implements InternalKieServices {
     }
 
     public KieSessionConfiguration newKieSessionConfiguration(Properties properties, ClassLoader classLoader) {
-        return new CompositeSessionConfiguration(properties, classLoader,
-                                          SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf, SessionConfigurationFactories.flowConf);
+        ClassLoader projClassLoader = getClassLoader(classLoader);
+        return new CompositeSessionConfiguration(properties, projClassLoader,
+                                                 SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf, SessionConfigurationFactories.flowConf);
+    }
+
+    private ClassLoader getClassLoader(ClassLoader classLoader) {
+        ClassLoader projClassLoader = classLoader instanceof ProjectClassLoader ? classLoader : ProjectClassLoader.getClassLoader(classLoader, getClass());
+        return projClassLoader;
     }
 
     public Environment newEnvironment() {

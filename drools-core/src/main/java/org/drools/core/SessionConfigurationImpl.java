@@ -118,7 +118,7 @@ public class SessionConfigurationImpl extends SessionConfiguration {
     }
 
     private void init(ClassLoader classLoader, ChainedProperties chainedProperties) {
-        this.classLoader = classLoader instanceof ProjectClassLoader ? classLoader : ProjectClassLoader.getClassLoader(classLoader, getClass());
+        this.classLoader = classLoader;
 
         this.immutable = false;
 
@@ -133,7 +133,7 @@ public class SessionConfigurationImpl extends SessionConfiguration {
     }
 
     public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = ProjectClassLoader.getClassLoader( classLoader, getClass() );
+        this.classLoader = classLoader;
     }
 
     /**

@@ -21,7 +21,7 @@ import org.kie.api.conf.OptionKey;
 /**
  * A class for the timer job factory manager configuration.
  */
-public class TimerJobFactoryOption implements SingleValueRuleRuntimeOption {
+public class TimerJobFactoryOption implements SingleValueKieSessionOption {
 
     private static final long serialVersionUID = 510l;
 

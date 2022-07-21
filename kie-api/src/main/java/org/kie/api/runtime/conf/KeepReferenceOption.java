@@ -22,7 +22,7 @@ import org.kie.api.conf.OptionKey;
  * Option to configure if the KieBase should retain a reference to the
  * KieSession or not. The default is YES, i.e., the reference is retained.
  */
-public enum KeepReferenceOption implements SingleValueRuleRuntimeOption {
+public enum KeepReferenceOption implements SingleValueKieSessionOption {
 
     YES(true),
     NO(false);

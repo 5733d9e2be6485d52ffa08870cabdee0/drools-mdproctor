@@ -21,7 +21,7 @@ import org.kie.api.conf.OptionKey;
 /**
  * A class for the session clock configuration.
  */
-public class ClockTypeOption implements SingleValueRuleRuntimeOption {
+public class ClockTypeOption implements SingleValueKieSessionOption {
 
     private static final long serialVersionUID = 510l;
 

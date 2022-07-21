@@ -24,5 +24,9 @@ import org.kie.api.conf.Option;
 public interface KieSessionOption
     extends
     Option {
+    static String TYPE = "Base";
 
+    default String type() {
+        return TYPE;
+    }
 }

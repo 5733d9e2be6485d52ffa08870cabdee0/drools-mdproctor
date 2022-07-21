@@ -176,8 +176,6 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
             conf = getSessionConfiguration();
         }
 
-        SessionConfiguration sessionConfig = (SessionConfiguration) conf;
-
         if ( environment == null ) {
             environment = EnvironmentFactory.newEnvironment();
         }
@@ -188,7 +186,7 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
 
         readLock();
         try {
-            return (KieSession) RuntimeComponentFactory.get().createStatefulSession(this, environment, sessionConfig, fromPool );
+            return (KieSession) RuntimeComponentFactory.get().createStatefulSession(this, environment, conf, fromPool );
         } finally {
             readUnlock();
         }

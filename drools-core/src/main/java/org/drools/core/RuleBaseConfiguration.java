@@ -795,7 +795,7 @@ public class RuleBaseConfiguration
     }
 
     public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = ProjectClassLoader.getClassLoader( classLoader, getClass() );
+        this.classLoader = classLoader;
     }
 
     public static class AssertBehaviour

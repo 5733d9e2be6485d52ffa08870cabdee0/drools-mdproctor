@@ -24,6 +24,7 @@ import org.drools.core.rule.accessor.FactHandleFactory;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.session.StatefulKnowledgeSessionImpl;
 import org.kie.api.runtime.Environment;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 public class PhreakWorkingMemoryFactory implements WorkingMemoryFactory, Serializable {
 
@@ -33,11 +34,11 @@ public class PhreakWorkingMemoryFactory implements WorkingMemoryFactory, Seriali
         return INSTANCE;
     }
 
-    public InternalWorkingMemory createWorkingMemory(long id, InternalKnowledgeBase kBase, SessionConfiguration config, Environment environment) {
+    public InternalWorkingMemory createWorkingMemory(long id, InternalKnowledgeBase kBase, KieSessionConfiguration config, Environment environment) {
         return new StatefulKnowledgeSessionImpl( id, kBase, true, config, environment);
     }
 
-    public InternalWorkingMemory createWorkingMemory(long id, InternalKnowledgeBase kBase, FactHandleFactory handleFactory, long propagationContext, SessionConfiguration config, InternalAgenda agenda, Environment environment) {
+    public InternalWorkingMemory createWorkingMemory(long id, InternalKnowledgeBase kBase, FactHandleFactory handleFactory, long propagationContext, KieSessionConfiguration config, InternalAgenda agenda, Environment environment) {
         return new StatefulKnowledgeSessionImpl(id, kBase, handleFactory, propagationContext, config, agenda, environment);
     }
 }
