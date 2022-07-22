@@ -16,7 +16,7 @@
 
 package org.drools.base.rule.accessor;
 
-import static org.kie.internal.ruleunit.RuleUnitUtil.RULE_UNIT_DECLARATION;
+import static org.drools.base.ruleunit.RuleUnitUtil.RULE_UNIT_DECLARATION;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -34,8 +34,6 @@ import org.drools.base.rule.GroupElement;
 import org.drools.base.rule.Pattern;
 import org.drools.base.rule.RuleConditionElement;
 import org.drools.base.ruleunit.RuleUnitDescription;
-
-import static org.drools.base.ruleunit.RuleUnitUtil.RULE_UNIT_DECLARATION;
 
 /**
  * A class capable of resolving a declaration in the current build context
