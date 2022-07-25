@@ -708,60 +708,6 @@ public class RuleBaseConfiguration
     public void setDeclarativeAgendaEnabled(boolean enabled) {
         checkCanChange(); // throws an exception if a change isn't possible;
         this.declarativeAgenda = enabled;
-    }    
-
-    public List<Map<String, Object>> getWorkDefinitions() {
-        if ( this.workDefinitions == null ) {
-            initWorkDefinitions();
-        }
-        return this.workDefinitions;
-
-    }
-
-    private void initWorkDefinitions() {
-        this.workDefinitions = new ArrayList<>();
-
-        // split on each space
-        String locations[] = this.chainedProperties.getProperty( "drools.workDefinitions",
-                                                                 "" ).split( "\\s" );
-
-        // load each SemanticModule
-        for ( String factoryLocation : locations ) {
-            // trim leading/trailing spaces and quotes
-            factoryLocation = factoryLocation.trim();
-            if ( factoryLocation.startsWith( "\"" ) ) {
-                factoryLocation = factoryLocation.substring( 1 );
-            }
-            if ( factoryLocation.endsWith( "\"" ) ) {
-                factoryLocation = factoryLocation.substring( 0,
-                                                             factoryLocation.length() - 1 );
-            }
-            if ( !factoryLocation.equals( "" ) ) {
-                loadWorkItems( factoryLocation );
-            }
-        }
-    }
-
-    private void loadWorkItems(String location) {
-        String content = ConfFileUtils.URLContentsToString( ConfFileUtils.getURL( location,
-                                                                                  null,
-                                                                                  RuleBaseConfiguration.class ) );
-        try {
-            this.workDefinitions.addAll(
-                (List<Map<String, Object>>) MVELExecutor.get().eval( content, new HashMap() ) );
-        } catch ( Throwable t ) {
-            logger.error("Error occurred while loading work definitions " + location
-                    + "\nContinuing without reading these work definitions", t);
-            throw new RuntimeException( "Could not parse work definitions " + location + ": " + t.getMessage() );
-        }
-    }
-
-    public boolean isAdvancedProcessRuleIntegration() {
-        return advancedProcessRuleIntegration;
-    }
-
-    public void setAdvancedProcessRuleIntegration(boolean advancedProcessRuleIntegration) {
-        this.advancedProcessRuleIntegration = advancedProcessRuleIntegration;
     }
     
     public void addActivationListener(String name, ActivationListenerFactory factory) {

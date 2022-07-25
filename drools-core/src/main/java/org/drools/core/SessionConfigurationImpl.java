@@ -185,102 +185,6 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         this.timerJobFactoryType = timerJobFactoryType;
     }
 
-    private void setQueryListenerClass(QueryListenerOption option) {
-        checkCanChange();
-        this.queryListener = option;
-    }
-
-    public Map<String, WorkItemHandler> getWorkItemHandlers() {
-
-        if ( this.workItemHandlers == null ) {
-            initWorkItemHandlers(new HashMap<>());
-        }
-        return this.workItemHandlers;
-
-    }
-    
-    public Map<String, WorkItemHandler> getWorkItemHandlers(Map<String, Object> params) {
-        
-        if ( this.workItemHandlers == null ) {
-            initWorkItemHandlers(params);
-        }
-        return this.workItemHandlers;
-    }
-    
-
-    private void initWorkItemHandlers(Map<String, Object> params) {
-        this.workItemHandlers = new HashMap<>();
-
-        // split on each space
-        String locations[] = getPropertyValue( "drools.workItemHandlers", "" ).split( "\\s" );
-
-        // load each SemanticModule
-        for ( String factoryLocation : locations ) {
-            // trim leading/trailing spaces and quotes
-            factoryLocation = factoryLocation.trim();
-            if ( factoryLocation.startsWith( "\"" ) ) {
-                factoryLocation = factoryLocation.substring( 1 );
-            }
-            if ( factoryLocation.endsWith( "\"" ) ) {
-                factoryLocation = factoryLocation.substring( 0,
-                                                             factoryLocation.length() - 1 );
-            }
-            if ( !factoryLocation.equals( "" ) ) {
-                loadWorkItemHandlers( factoryLocation, params );
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void loadWorkItemHandlers(String location, Map<String, Object> params) {
-        String content = ConfFileUtils.URLContentsToString( ConfFileUtils.getURL( location,
-                                                                                  null,
-                                                                                  RuleBaseConfiguration.class ) );
-        Map<String, WorkItemHandler> workItemHandlers = (Map<String, WorkItemHandler>) MVELExecutor.get().eval( content, params );
-        this.workItemHandlers.putAll( workItemHandlers );
-    }
-
-    public WorkItemManagerFactory getWorkItemManagerFactory() {
-        if ( this.workItemManagerFactory == null ) {
-            initWorkItemManagerFactory();
-        }
-        return this.workItemManagerFactory;
-    }
-
-    @Override
-    public void setWorkItemManagerFactory(WorkItemManagerFactory workItemManagerFactory) {
-        this.workItemManagerFactory = workItemManagerFactory;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void initWorkItemManagerFactory() {
-        String className = getPropertyValue( "drools.workItemManagerFactory", "org.drools.core.process.impl.DefaultWorkItemManagerFactory" );
-        Class<WorkItemManagerFactory> clazz = null;
-        try {
-            clazz = (Class<WorkItemManagerFactory>) this.classLoader.loadClass( className );
-        } catch ( ClassNotFoundException e ) {
-        }
-
-        if ( clazz != null ) {
-            try {
-                this.workItemManagerFactory = clazz.newInstance();
-            } catch ( Exception e ) {
-                throw new IllegalArgumentException( "Unable to instantiate work item manager factory '" + className + "'",
-                                                    e );
-            }
-        } else {
-            throw new IllegalArgumentException( "Work item manager factory '" + className + "' not found" );
-        }
-    }
-
-    public String getProcessInstanceManagerFactory() {
-        return getPropertyValue( "drools.processInstanceManagerFactory", "org.jbpm.process.instance.impl.DefaultProcessInstanceManagerFactory" );
-    }
-
-    public String getSignalManagerFactory() {
-        return getPropertyValue( "drools.processSignalManagerFactory", "org.jbpm.process.instance.event.DefaultSignalManagerFactory" );
-    }
-
     public ExecutableRunner getRunner( KieBase kbase, Environment environment ) {
         if ( this.runner == null ) {
             initCommandService( kbase,
@@ -315,15 +219,6 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         } else {
             throw new IllegalArgumentException( "Command service '" + className + "' not found" );
         }
-    }
-
-    public TimerJobFactoryType getTimerJobFactoryType() {
-        return timerJobFactoryType;
-    }
-
-    public void setTimerJobFactoryType(TimerJobFactoryType timerJobFactoryType) {
-        checkCanChange(); // throws an exception if a change isn't possible;
-        this.timerJobFactoryType = timerJobFactoryType;
     }
 
     public String getPropertyValue( String name, String defaultValue ) {

@@ -21,19 +21,16 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.drools.base.util.MVELExecutor;
 import org.drools.core.process.WorkItemManagerFactory;
 import org.drools.core.util.ConfFileUtils;
-import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.conf.CompositeConfiguration;
 import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.runtime.conf.KieSessionOption;
 import org.kie.api.runtime.conf.MultiValueKieSessionOption;
 import org.kie.api.runtime.conf.SingleValueKieSessionOption;
-import org.kie.api.runtime.conf.TimerJobFactoryOption;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.internal.utils.ChainedProperties;
 

@@ -26,9 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.drools.base.util.MVELExecutor;
-import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.util.ConfFileUtils;
-import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.conf.CompositeConfiguration;
 import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.conf.ConfigurationKey;
