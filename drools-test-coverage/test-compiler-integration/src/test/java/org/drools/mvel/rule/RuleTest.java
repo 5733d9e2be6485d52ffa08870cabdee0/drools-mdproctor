@@ -29,6 +29,8 @@ import org.drools.core.time.impl.PseudoClockScheduler;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.drools.mvel.expr.MVELSalienceExpression;
 import org.junit.Test;
+import org.kie.api.KieServices;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -127,7 +129,7 @@ public class RuleTest {
 
     @Test
     public void testTimeMachine() {
-        SessionConfiguration conf = SessionConfiguration.newInstance();
+        SessionConfiguration conf = KieServices.get().newKieSessionConfiguration().as(SessionConfiguration.KEY);
         conf.setClockType( ClockType.PSEUDO_CLOCK );
         WorkingMemory wm = (WorkingMemory) KnowledgeBaseFactory.newKnowledgeBase("x", null).newKieSession(conf, null);
         

@@ -19,6 +19,8 @@ package org.drools.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collections;
+import java.util.Set;
 
 import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
@@ -26,6 +28,7 @@ import org.kie.api.KieBase;
 import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.KieBaseOption;
 import org.kie.api.conf.MultiValueKieBaseOption;
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.conf.SingleValueKieBaseOption;
 import org.kie.api.runtime.Environment;
@@ -219,6 +222,53 @@ public class SessionConfigurationImpl extends SessionConfiguration {
         } else {
             throw new IllegalArgumentException( "Command service '" + className + "' not found" );
         }
+    }
+
+    public final <T extends KieSessionOption> void setOption(T option) {
+        switch (option.propertyName()) {
+            case ClockTypeOption.PROPERTY_NAME: {
+                setClockType(ClockType.resolveClockType(((ClockTypeOption) option).getClockType()));
+                break;
+            }
+            case TimerJobFactoryOption.PROPERTY_NAME: {
+                setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(((TimerJobFactoryOption) option).getTimerJobType()));
+                break;
+            }
+            case KeepReferenceOption.PROPERTY_NAME: {
+                setKeepReference(((KeepReferenceOption)option).isKeepReference());
+                break;
+            }
+            default:
+                compConfig.setOption(option);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <T extends SingleValueKieSessionOption> T getOption(OptionKey<T> option) {
+        switch (option.name()) {
+            case ClockTypeOption.PROPERTY_NAME: {
+                return (T) ClockTypeOption.get( getClockType().toExternalForm() );
+            }
+            case TimerJobFactoryOption.PROPERTY_NAME: {
+                return (T) TimerJobFactoryOption.get( getTimerJobFactoryType().toExternalForm() );
+            }
+            case KeepReferenceOption.PROPERTY_NAME: {
+                return (T) (isKeepReference() ? KeepReferenceOption.YES : KeepReferenceOption.NO);
+            }
+            default:
+                return compConfig.getOption(option);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <T extends MultiValueKieSessionOption> T getOption(OptionKey<T> option,
+                                                                    String subKey) {
+
+        return compConfig.getOption(option, subKey);
+    }
+
+    @Override public <C extends MultiValueKieSessionOption> Set<String> getOptionSubKeys(OptionKey<C> optionKey) {
+        return compConfig.getOptionSubKeys(optionKey);
     }
 
     public String getPropertyValue( String name, String defaultValue ) {

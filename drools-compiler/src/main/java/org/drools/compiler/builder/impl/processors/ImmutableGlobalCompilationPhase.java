@@ -17,10 +17,10 @@
 
 package org.drools.compiler.builder.impl.processors;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.compiler.builder.impl.GlobalVariableContext;
 import org.drools.compiler.compiler.GlobalError;
 import org.drools.compiler.compiler.PackageRegistry;
-import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.drl.ast.descr.GlobalDescr;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.slf4j.Logger;
@@ -40,8 +40,8 @@ public class ImmutableGlobalCompilationPhase extends AbstractPackageCompilationP
     }
 
     public final void process() {
-        InternalKnowledgePackage pkg = pkgRegistry.getPackage();
-        Set<String> existingGlobals = new HashSet<>(pkg.getGlobals().keySet());
+        InternalKnowledgePackage pkg             = pkgRegistry.getPackage();
+        Set<String>              existingGlobals = new HashSet<>(pkg.getGlobals().keySet());
 
         for (final GlobalDescr global : packageDescr.getGlobals()) {
             final String identifier = global.getIdentifier();

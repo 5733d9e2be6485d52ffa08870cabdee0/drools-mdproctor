@@ -22,12 +22,7 @@ import java.util.Set;
 
 import org.drools.core.process.WorkItemManagerFactory;
 import org.kie.api.conf.ConfigurationKey;
-import org.kie.api.conf.OptionKey;
 import org.kie.api.runtime.conf.KieSessionConfiguration;
-import org.kie.api.runtime.conf.KieSessionOption;
-import org.kie.api.runtime.conf.MultiValueKieSessionOption;
-import org.kie.api.runtime.conf.SingleValueKieSessionOption;
-import org.kie.api.runtime.conf.WorkItemHandlerOption;
 import org.kie.api.runtime.process.WorkItemHandler;
 public abstract class FlowSessionConfiguration implements KieSessionConfiguration, Externalizable {
 
@@ -49,37 +44,6 @@ public abstract class FlowSessionConfiguration implements KieSessionConfiguratio
     public abstract String getProcessInstanceManagerFactory();
 
     public abstract String getSignalManagerFactory();
-
-
-    public final <T extends KieSessionOption> void setOption(T option) {
-        switch (option.propertyName()) {
-            case WorkItemHandlerOption.PROPERTY_NAME: {
-                getWorkItemHandlers().put(((WorkItemHandlerOption) option).getName(),
-                                          ((WorkItemHandlerOption) option).getHandler());
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public final <T extends SingleValueKieSessionOption> T getOption(OptionKey<T> option) {
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public final <T extends MultiValueKieSessionOption> T getOption(OptionKey<T> option,
-                                                                    String subKey) {
-        switch(option.name()) {
-            case WorkItemHandlerOption.PROPERTY_NAME: {
-                return (T) WorkItemHandlerOption.get(subKey,
-                                                     getWorkItemHandlers().get(subKey));
-            }
-        }
-        return null;
-    }
-
-    @Override public <C extends MultiValueKieSessionOption> Set<String> getOptionSubKeys(OptionKey<C> optionKey) {
-        return getWorkItemHandlers().keySet();
-    }
 
     public final void setProperty(String name,
                                   String value) {

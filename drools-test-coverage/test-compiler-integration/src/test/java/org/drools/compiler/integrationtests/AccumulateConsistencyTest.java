@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.drools.core.RuleSessionConfiguration;
 import org.drools.testcoverage.common.model.MyFact;
 import org.drools.testcoverage.common.model.Person;
 import org.drools.testcoverage.common.util.KieBaseTestConfiguration;
@@ -75,7 +76,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -105,7 +106,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -135,7 +136,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -165,7 +166,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -191,7 +192,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -218,7 +219,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -248,7 +249,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         Map<String, Integer> result = new HashMap<>();
@@ -282,7 +283,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -315,7 +316,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -344,7 +345,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {
@@ -376,7 +377,7 @@ public class AccumulateConsistencyTest {
 
         final KieBase kieBase = KieBaseUtil.getKieBaseFromKieModuleFromDrl("accumulate-test", kieBaseTestConfiguration, drl);
         KieSessionConfiguration kieSessionConfiguration = KieServices.get().newKieSessionConfiguration();
-        kieSessionConfiguration.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
+        kieSessionConfiguration.as(RuleSessionConfiguration.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME, Boolean.toString(accumulateNullPropagation));
         final KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
 
         try {

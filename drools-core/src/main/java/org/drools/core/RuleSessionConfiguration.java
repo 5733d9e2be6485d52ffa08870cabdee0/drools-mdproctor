@@ -75,64 +75,6 @@ public abstract class RuleSessionConfiguration implements KieSessionConfiguratio
     public abstract QueryListenerOption getQueryListenerOption();
     public abstract void setQueryListenerOption( QueryListenerOption queryListener );
 
-    public final <T extends KieSessionOption> void setOption(T option) {
-        switch (option.propertyName()) {
-            case DirectFiringOption.PROPERTY_NAME: {
-                setDirectFiring(((DirectFiringOption) option).isDirectFiring());
-            }
-            case ThreadSafeOption.PROPERTY_NAME: {
-                setThreadSafe(((ThreadSafeOption) option).isThreadSafe());
-            }
-            case AccumulateNullPropagationOption.PROPERTY_NAME: {
-                setAccumulateNullPropagation(((AccumulateNullPropagationOption) option).isAccumulateNullPropagation());
-            }
-            case ForceEagerActivationOption.PROPERTY_NAME: {
-                setForceEagerActivationFilter(((ForceEagerActivationOption) option).getFilter());
-            }
-            case TimedRuleExecutionOption.PROPERTY_NAME: {
-                setTimedRuleExecutionFilter(((TimedRuleExecutionOption) option).getFilter());
-            }
-            case QueryListenerOption.PROPERTY_NAME: {
-                setQueryListenerOption((QueryListenerOption) option);
-            }
-            case BeliefSystemTypeOption.PROPERTY_NAME: {
-                setBeliefSystemType(((BeliefSystemType.resolveBeliefSystemType(((BeliefSystemTypeOption) option).getBeliefSystemType()))));
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public final <T extends SingleValueKieSessionOption> T getOption(OptionKey<T> option) {
-        switch (option.name()) {
-            case DirectFiringOption.PROPERTY_NAME: {
-                return (T) (isDirectFiring() ? DirectFiringOption.YES : DirectFiringOption.NO);
-            }
-            case ThreadSafeOption.PROPERTY_NAME: {
-                return (T) (isThreadSafe() ? ThreadSafeOption.YES : ThreadSafeOption.NO);
-            }
-            case AccumulateNullPropagationOption.PROPERTY_NAME: {
-                return (T) (isAccumulateNullPropagation() ? AccumulateNullPropagationOption.YES : AccumulateNullPropagationOption.NO);
-            }
-            case QueryListenerOption.PROPERTY_NAME: {
-                return (T) getQueryListenerOption();
-            }
-            case BeliefSystemTypeOption.PROPERTY_NAME: {
-                return (T) BeliefSystemTypeOption.get( this.getBeliefSystemType().getId() );
-            }
-        }
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public final <T extends MultiValueKieSessionOption> T getOption(OptionKey<T> option,
-                                                                    String subKey) {
-        return null;
-    }
-
-    @Override public <C extends MultiValueKieSessionOption> Set<String> getOptionSubKeys(OptionKey<C> optionKey) {
-        return Collections.emptySet();
-    }
-
     public final void setProperty(String name,
                                   String value) {
         name = name.trim();
@@ -142,25 +84,32 @@ public abstract class RuleSessionConfiguration implements KieSessionConfiguratio
         switch(name) {
             case DirectFiringOption.PROPERTY_NAME: {
                 setDirectFiring(!StringUtils.isEmpty(value) && Boolean.parseBoolean(value));
+                break;
             }
             case ThreadSafeOption.PROPERTY_NAME: {
                 setThreadSafe(StringUtils.isEmpty(value) || Boolean.parseBoolean(value));
+                break;
             }
             case AccumulateNullPropagationOption.PROPERTY_NAME: {
                 setAccumulateNullPropagation(!StringUtils.isEmpty(value) && Boolean.parseBoolean(value));
+                break;
             }
             case ForceEagerActivationOption.PROPERTY_NAME: {
                 setForceEagerActivationFilter(ForceEagerActivationOption.resolve(StringUtils.isEmpty(value) ? "false" : value).getFilter());
+                break;
             }
             case TimedRuleExecutionOption.PROPERTY_NAME: {
                 setTimedRuleExecutionFilter(TimedRuleExecutionOption.resolve(StringUtils.isEmpty(value) ? "false" : value).getFilter());
+                break;
             }
             case QueryListenerOption.PROPERTY_NAME: {
                 String property = StringUtils.isEmpty(value) ? QueryListenerOption.STANDARD.getAsString() : value;
                 setQueryListenerOption(QueryListenerOption.determineQueryListenerClassOption(property));
+                break;
             }
             case BeliefSystemTypeOption.PROPERTY_NAME: {
                 setBeliefSystemType(StringUtils.isEmpty(value) ? BeliefSystemType.SIMPLE : BeliefSystemType.resolveBeliefSystemType(value));
+                break;
             }
         }
     }

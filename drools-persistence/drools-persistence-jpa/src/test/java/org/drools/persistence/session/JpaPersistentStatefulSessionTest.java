@@ -31,6 +31,8 @@ import org.drools.commands.ChainableRunner;
 import org.drools.commands.impl.CommandBasedStatefulKnowledgeSessionImpl;
 import org.drools.commands.impl.FireAllRulesInterceptor;
 import org.drools.commands.impl.LoggingInterceptor;
+import org.drools.core.FlowSessionConfiguration;
+import org.drools.core.FlowSessionConfigurationImpl;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.impl.RuleBaseFactory;
 import org.drools.mvel.compiler.Address;
@@ -414,7 +416,7 @@ public class JpaPersistentStatefulSessionTest {
         final KieSession ksession = KieServices.get().getStoreServices().newKieSession(kbase, config, env);
         final SessionConfiguration sessionConfig = (SessionConfiguration) ksession.getSessionConfiguration();
 
-        assertThat(sessionConfig.getProcessInstanceManagerFactory()).isEqualTo("com.example.CustomJPAProcessInstanceManagerFactory");
+        assertThat(sessionConfig.as(FlowSessionConfiguration.KEY).getProcessInstanceManagerFactory()).isEqualTo("com.example.CustomJPAProcessInstanceManagerFactory");
     }
 
     @Test(expected = IllegalStateException.class)

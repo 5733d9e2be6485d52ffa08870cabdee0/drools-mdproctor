@@ -17,12 +17,12 @@
 
 package org.drools.compiler.builder.impl.processors;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.compiler.builder.impl.AssetFilter;
 import org.drools.compiler.builder.impl.TypeDeclarationContext;
 import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.compiler.lang.descr.CompositePackageDescr;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.drl.ast.descr.AttributeDescr;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.drl.ast.descr.RuleDescr;
@@ -69,8 +69,8 @@ public class RuleCompilationPhase extends ImmutableRuleCompilationPhase {
             return;
         }
 
-        InternalKnowledgePackage pkg = pkgRegistry.getPackage();
-        boolean needsRemoval = false;
+        InternalKnowledgePackage pkg          = pkgRegistry.getPackage();
+        boolean                  needsRemoval = false;
 
         // first, check if any rules no longer exist
         for (org.kie.api.definition.rule.Rule rule : pkg.getRules()) {

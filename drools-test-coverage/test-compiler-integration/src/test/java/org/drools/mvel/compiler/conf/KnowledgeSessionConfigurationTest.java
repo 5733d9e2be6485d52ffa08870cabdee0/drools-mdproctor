@@ -16,6 +16,8 @@
 package org.drools.mvel.compiler.conf;
 
 import org.drools.core.BeliefSystemType;
+import org.drools.core.RuleSessionConfigurationImpl;
+import org.drools.core.SessionConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.kie.api.KieServices;
@@ -45,18 +47,18 @@ public class KnowledgeSessionConfigurationTest {
         config.setOption( ClockTypeOption.PSEUDO );
 
         // checking the type safe getOption() method
-        assertThat(config.getOption(ClockTypeOption.class)).isEqualTo(ClockTypeOption.PSEUDO);
+        assertThat(config.getOption(ClockTypeOption.KEY)).isEqualTo(ClockTypeOption.PSEUDO);
         // checking the string based getProperty() method
-        assertThat(config.getProperty(ClockTypeOption.PROPERTY_NAME)).isEqualTo("pseudo");
+        assertThat(config.as(SessionConfiguration.KEY).getProperty(ClockTypeOption.PROPERTY_NAME)).isEqualTo("pseudo");
 
         // setting the options using the string based setProperty() method
-        config.setProperty( ClockTypeOption.PROPERTY_NAME,
-                            "realtime" );
+        config.as(SessionConfiguration.KEY).setProperty( ClockTypeOption.PROPERTY_NAME,
+                                                         "realtime" );
 
         // checking the type safe getOption() method
-        assertThat(config.getOption(ClockTypeOption.class)).isEqualTo(ClockTypeOption.REALTIME);
+        assertThat(config.getOption(ClockTypeOption.KEY)).isEqualTo(ClockTypeOption.REALTIME);
         // checking the string based getProperty() method
-        assertThat(config.getProperty(ClockTypeOption.PROPERTY_NAME)).isEqualTo("realtime");
+        assertThat(config.as(SessionConfiguration.KEY).getProperty(ClockTypeOption.PROPERTY_NAME)).isEqualTo("realtime");
     }
 
 
@@ -64,41 +66,41 @@ public class KnowledgeSessionConfigurationTest {
     public void testBeliefSystemType() {
         config.setOption( BeliefSystemTypeOption.get( BeliefSystemType.JTMS.toString() ) );
 
-        assertThat(config.getOption(BeliefSystemTypeOption.class)).isEqualTo(BeliefSystemTypeOption.get(BeliefSystemType.JTMS.toString()));
+        assertThat(config.getOption(BeliefSystemTypeOption.KEY)).isEqualTo(BeliefSystemTypeOption.get(BeliefSystemType.JTMS.toString()));
 
         // checking the string based getProperty() method
-        assertThat(config.getProperty(BeliefSystemTypeOption.PROPERTY_NAME)).isEqualTo(BeliefSystemType.JTMS.getId());
+        assertThat(config.as(RuleSessionConfigurationImpl.KEY).getProperty(BeliefSystemTypeOption.PROPERTY_NAME)).isEqualTo(BeliefSystemType.JTMS.getId());
 
         // setting the options using the string based setProperty() method
-        config.setProperty( BeliefSystemTypeOption.PROPERTY_NAME,
-                            BeliefSystemType.DEFEASIBLE.getId() );
+        config.as(RuleSessionConfigurationImpl.KEY).setProperty( BeliefSystemTypeOption.PROPERTY_NAME,
+                                                                 BeliefSystemType.DEFEASIBLE.getId() );
 
         // checking the type safe getOption() method
-        assertThat(config.getOption(BeliefSystemTypeOption.class)).isEqualTo(BeliefSystemTypeOption.get(BeliefSystemType.DEFEASIBLE.getId()));
+        assertThat(config.getOption(BeliefSystemTypeOption.KEY)).isEqualTo(BeliefSystemTypeOption.get(BeliefSystemType.DEFEASIBLE.getId()));
         // checking the string based getProperty() method
-        assertThat(config.getProperty(BeliefSystemTypeOption.PROPERTY_NAME)).isEqualTo(BeliefSystemType.DEFEASIBLE.getId());
+        assertThat(config.as(RuleSessionConfigurationImpl.KEY).getProperty(BeliefSystemTypeOption.PROPERTY_NAME)).isEqualTo(BeliefSystemType.DEFEASIBLE.getId());
     }
 
     @Test
     public void testAccumulateNullPropagation() {
         // false by default
-        assertThat(config.getOption(AccumulateNullPropagationOption.class)).isEqualTo(AccumulateNullPropagationOption.NO);
-        assertThat(config.getProperty(AccumulateNullPropagationOption.PROPERTY_NAME)).isEqualTo("false");
+        assertThat(config.getOption(AccumulateNullPropagationOption.KEY)).isEqualTo(AccumulateNullPropagationOption.NO);
+        assertThat(config.as(RuleSessionConfigurationImpl.KEY).getProperty(AccumulateNullPropagationOption.PROPERTY_NAME)).isEqualTo("false");
 
         config.setOption(AccumulateNullPropagationOption.YES);
 
-        assertThat(config.getOption(AccumulateNullPropagationOption.class)).isEqualTo(AccumulateNullPropagationOption.YES);
+        assertThat(config.getOption(AccumulateNullPropagationOption.KEY)).isEqualTo(AccumulateNullPropagationOption.YES);
 
         // checking the string based getProperty() method
-        assertThat(config.getProperty(AccumulateNullPropagationOption.PROPERTY_NAME)).isEqualTo("true");
+        assertThat(config.as(RuleSessionConfigurationImpl.KEY).getProperty(AccumulateNullPropagationOption.PROPERTY_NAME)).isEqualTo("true");
 
         // setting the options using the string based setProperty() method
-        config.setProperty(AccumulateNullPropagationOption.PROPERTY_NAME,
+        config.as(RuleSessionConfigurationImpl.KEY).setProperty(AccumulateNullPropagationOption.PROPERTY_NAME,
                            "false");
 
         // checking the type safe getOption() method
-        assertThat(config.getOption(AccumulateNullPropagationOption.class)).isEqualTo(AccumulateNullPropagationOption.NO);
+        assertThat(config.getOption(AccumulateNullPropagationOption.KEY)).isEqualTo(AccumulateNullPropagationOption.NO);
         // checking the string based getProperty() method
-        assertThat(config.getProperty(AccumulateNullPropagationOption.PROPERTY_NAME)).isEqualTo("false");
+        assertThat(config.as(RuleSessionConfigurationImpl.KEY).getProperty(AccumulateNullPropagationOption.PROPERTY_NAME)).isEqualTo("false");
     }
 }

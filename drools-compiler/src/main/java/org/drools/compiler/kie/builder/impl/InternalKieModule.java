@@ -34,7 +34,7 @@ import org.drools.compiler.kie.util.KieJarChangeSet;
 import org.drools.compiler.kproject.models.KieBaseModelImpl;
 import org.drools.compiler.kproject.models.KieModuleModelImpl;
 import org.drools.base.definitions.InternalKnowledgePackage;
-import org.drools.util.io.InternalResource;
+import org.drools.io.InternalResource;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.wiring.api.ResourceProvider;
 import org.drools.wiring.api.classloader.ProjectClassLoader;
@@ -83,7 +83,7 @@ public interface InternalKieModule extends KieModule, Serializable {
     byte[] getBytes( );  
     
     boolean hasResource( String fileName );
-    InternalResource getResource( String fileName );
+    InternalResource getResource(String fileName);
 
     ResourceConfiguration getResourceConfiguration( String fileName );
     

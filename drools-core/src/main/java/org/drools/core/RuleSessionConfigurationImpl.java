@@ -19,10 +19,13 @@ package org.drools.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collections;
+import java.util.Set;
 
 import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.conf.CompositeConfiguration;
 import org.kie.api.conf.ConfigurationKey;
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.runtime.conf.AccumulateNullPropagationOption;
 import org.kie.api.runtime.conf.BeliefSystemTypeOption;
@@ -222,6 +225,75 @@ public class RuleSessionConfigurationImpl extends RuleSessionConfiguration {
     public void setQueryListenerOption( QueryListenerOption queryListener ) {
         checkCanChange();
         this.queryListener = queryListener;
+    }
+
+
+    public final <T extends KieSessionOption> void setOption(T option) {
+        switch (option.propertyName()) {
+            case DirectFiringOption.PROPERTY_NAME: {
+                setDirectFiring(((DirectFiringOption) option).isDirectFiring());
+                break;
+            }
+            case ThreadSafeOption.PROPERTY_NAME: {
+                setThreadSafe(((ThreadSafeOption) option).isThreadSafe());
+                break;
+            }
+            case AccumulateNullPropagationOption.PROPERTY_NAME: {
+                setAccumulateNullPropagation(((AccumulateNullPropagationOption) option).isAccumulateNullPropagation());
+                break;
+            }
+            case ForceEagerActivationOption.PROPERTY_NAME: {
+                setForceEagerActivationFilter(((ForceEagerActivationOption) option).getFilter());
+                break;
+            }
+            case TimedRuleExecutionOption.PROPERTY_NAME: {
+                setTimedRuleExecutionFilter(((TimedRuleExecutionOption) option).getFilter());
+                break;
+            }
+            case QueryListenerOption.PROPERTY_NAME: {
+                setQueryListenerOption((QueryListenerOption) option);
+                break;
+            }
+            case BeliefSystemTypeOption.PROPERTY_NAME: {
+                setBeliefSystemType(((BeliefSystemType.resolveBeliefSystemType(((BeliefSystemTypeOption) option).getBeliefSystemType()))));
+                break;
+            }
+            default:
+                compConfig.setOption(option);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <T extends SingleValueKieSessionOption> T getOption(OptionKey<T> option) {
+        switch (option.name()) {
+            case DirectFiringOption.PROPERTY_NAME: {
+                return (T) (isDirectFiring() ? DirectFiringOption.YES : DirectFiringOption.NO);
+            }
+            case ThreadSafeOption.PROPERTY_NAME: {
+                return (T) (isThreadSafe() ? ThreadSafeOption.YES : ThreadSafeOption.NO);
+            }
+            case AccumulateNullPropagationOption.PROPERTY_NAME: {
+                return (T) (isAccumulateNullPropagation() ? AccumulateNullPropagationOption.YES : AccumulateNullPropagationOption.NO);
+            }
+            case QueryListenerOption.PROPERTY_NAME: {
+                return (T) getQueryListenerOption();
+            }
+            case BeliefSystemTypeOption.PROPERTY_NAME: {
+                return (T) BeliefSystemTypeOption.get( this.getBeliefSystemType().getId() );
+            }
+            default:
+                return compConfig.getOption(option);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <T extends MultiValueKieSessionOption> T getOption(OptionKey<T> option,
+                                                                    String subKey) {
+        return compConfig.getOption(option, subKey);
+    }
+
+    @Override public <C extends MultiValueKieSessionOption> Set<String> getOptionSubKeys(OptionKey<C> optionKey) {
+        return compConfig.getOptionSubKeys(optionKey);
     }
 
     @Override public <X extends OptionsConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption>> X as(ConfigurationKey<X> key) {

@@ -243,63 +243,83 @@ public class RuleBaseConfiguration
         switch(name) {
             case SequentialAgendaOption.PROPERTY_NAME: {
                 setSequentialAgenda(SequentialAgenda.determineSequentialAgenda(StringUtils.isEmpty(value) ? "sequential" : value));
+                break;
             } 
             case SequentialOption.PROPERTY_NAME: {
                 setSequential(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
+                break;
             }
             case RemoveIdentitiesOption.PROPERTY_NAME: {
                 setRemoveIdentities(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
+                break;
             }
             case ShareAlphaNodesOption.PROPERTY_NAME: {
                 setShareAlphaNodes(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
+                break;
             }
             case ShareBetaNodesOption.PROPERTY_NAME: {
                 setShareBetaNodes(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
+                break;
             }
             case ConstraintJittingThresholdOption.PROPERTY_NAME: {
                 setJittingThreshold(StringUtils.isEmpty(value) ? ConstraintJittingThresholdOption.DEFAULT_VALUE : Integer.parseInt(value));
+                break;
             }
             case AlphaThresholdOption.PROPERTY_NAME: {
                 setAlphaNodeHashingThreshold(StringUtils.isEmpty(value) ? 3 : Integer.parseInt(value));
+                break;
             }
             case AlphaRangeIndexThresholdOption.PROPERTY_NAME: {
                 setAlphaNodeRangeIndexThreshold(StringUtils.isEmpty(value) ? AlphaRangeIndexThresholdOption.DEFAULT_VALUE : Integer.parseInt(value));
+                break;
             }
             case BetaRangeIndexOption.PROPERTY_NAME: {
                 setBetaNodeRangeIndexEnabled(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
+                break;
             }
             case SessionsPoolOption.PROPERTY_NAME: {
                 setSessionPoolSize(StringUtils.isEmpty(value) ? -1 : Integer.parseInt(value));
+                break;
             }
             case CompositeKeyDepthOption.PROPERTY_NAME: {
                 setCompositeKeyDepth(StringUtils.isEmpty(value) ? 3 : Integer.parseInt(value));
+                break;
             }
             case IndexLeftBetaMemoryOption.PROPERTY_NAME: {
                 setIndexLeftBetaMemory(StringUtils.isEmpty(value) ? true : Boolean.valueOf(value));
+                break;
             }
             case IndexRightBetaMemoryOption.PROPERTY_NAME: {
                 setIndexRightBetaMemory(StringUtils.isEmpty(value) ? true : Boolean.valueOf(value));
+                break;
             }
             case IndexPrecedenceOption.PROPERTY_NAME: {
                 setIndexPrecedenceOption(StringUtils.isEmpty(value) ? IndexPrecedenceOption.EQUALITY_PRIORITY : IndexPrecedenceOption.determineIndexPrecedence(value));
+                break;
             }
             case EqualityBehaviorOption.PROPERTY_NAME: {
                 setAssertBehaviour(AssertBehaviour.determineAssertBehaviour(StringUtils.isEmpty(value) ? "identity" : value));
+                break;
             }
             case ConsequenceExceptionHandlerOption.PROPERTY_NAME: {
                 setConsequenceExceptionHandler(StringUtils.isEmpty(value) ? DefaultConsequenceExceptionHandler.class.getName() : value);
+                break;
             }
             case "drools.ruleBaseUpdateHandler": {
                 setRuleBaseUpdateHandler(StringUtils.isEmpty(value) ? "" : value);
+                break;
             }
             case MultithreadEvaluationOption.PROPERTY_NAME: {
                 setMultithreadEvaluation(StringUtils.isEmpty(value) ? false : Boolean.valueOf(value));
+                break;
             }
             case MaxThreadsOption.PROPERTY_NAME: {
                 setMaxThreads(StringUtils.isEmpty(value) ? 3 : Integer.parseInt(value));
+                break;
             }
             case EventProcessingOption.PROPERTY_NAME: {
                 setEventProcessingMode(EventProcessingOption.determineEventProcessingMode(StringUtils.isEmpty(value) ? "cloud" : value));
+                break;
             }
         }
     }
@@ -938,8 +958,9 @@ public class RuleBaseConfiguration
             case DeclarativeAgendaOption.PROPERTY_NAME: {
                 return (T) (this.isDeclarativeAgenda() ? DeclarativeAgendaOption.ENABLED : DeclarativeAgendaOption.DISABLED);
             }
+            default:
+                return compConfig.getOption(option);
         }
-        return null;
 
     }
 
@@ -947,64 +968,86 @@ public class RuleBaseConfiguration
         switch (option.propertyName()) {
             case SequentialOption.PROPERTY_NAME : {
                 setSequential(((SequentialOption) option).isSequential());
+                break;
             }
             case RemoveIdentitiesOption.PROPERTY_NAME: {
                 setRemoveIdentities(((RemoveIdentitiesOption) option).isRemoveIdentities());
+                break;
             }
             case ShareAlphaNodesOption.PROPERTY_NAME: {
                 setShareAlphaNodes(((ShareAlphaNodesOption) option).isShareAlphaNodes());
+                break;
             }
             case ShareBetaNodesOption.PROPERTY_NAME: {
                 setShareBetaNodes(((ShareBetaNodesOption) option).isShareBetaNodes());
+                break;
             }
             case IndexLeftBetaMemoryOption.PROPERTY_NAME: {
                 setIndexLeftBetaMemory(((IndexLeftBetaMemoryOption) option).isIndexLeftBetaMemory());
+                break;
             }
             case IndexRightBetaMemoryOption.PROPERTY_NAME: {
                 setIndexRightBetaMemory(((IndexRightBetaMemoryOption) option).isIndexRightBetaMemory());
+                break;
             }
             case IndexPrecedenceOption.PROPERTY_NAME: {
                 setIndexPrecedenceOption((IndexPrecedenceOption) option);
+                break;
             }
             case EqualityBehaviorOption.PROPERTY_NAME: {
                 setAssertBehaviour((option == EqualityBehaviorOption.IDENTITY) ? AssertBehaviour.IDENTITY : AssertBehaviour.EQUALITY);
+                break;
             }
             case SequentialAgendaOption.PROPERTY_NAME: {
                 setSequentialAgenda((option == SequentialAgendaOption.SEQUENTIAL) ? SequentialAgenda.SEQUENTIAL : SequentialAgenda.DYNAMIC);
+                break;
             }
             case ConstraintJittingThresholdOption.PROPERTY_NAME: {
                 setJittingThreshold( ( (ConstraintJittingThresholdOption) option ).getThreshold());
+                break;
             }
             case AlphaThresholdOption.PROPERTY_NAME: {
                 setAlphaNodeHashingThreshold( ( (AlphaThresholdOption) option ).getThreshold());
+                break;
             }
             case AlphaRangeIndexThresholdOption.PROPERTY_NAME: {
                 setAlphaNodeRangeIndexThreshold( ( (AlphaRangeIndexThresholdOption) option ).getThreshold());
+                break;
             }
             case BetaRangeIndexOption.PROPERTY_NAME: {
                 setBetaNodeRangeIndexEnabled( ( (BetaRangeIndexOption) option ).isBetaRangeIndexEnabled());
+                break;
             }
             case SessionsPoolOption.PROPERTY_NAME: {
                 setSessionPoolSize( ( ( SessionsPoolOption ) option ).getSize());
+                break;
             }
             case CompositeKeyDepthOption.PROPERTY_NAME: {
                 setCompositeKeyDepth( ( (CompositeKeyDepthOption) option ).getDepth());
+                break;
             }
             case ConsequenceExceptionHandlerOption.PROPERTY_NAME: {
                 setConsequenceExceptionHandler( ( (ConsequenceExceptionHandlerOption) option ).getHandler().getName());
+                break;
             }
             case EventProcessingOption.PROPERTY_NAME: {
                 setEventProcessingMode( (EventProcessingOption) option);
+                break;
             }
             case MaxThreadsOption.PROPERTY_NAME: {
                 setMaxThreads( ( (MaxThreadsOption) option ).getMaxThreads());
+                break;
             }
             case MultithreadEvaluationOption.PROPERTY_NAME: {
                 setMultithreadEvaluation( ( (MultithreadEvaluationOption) option ).isMultithreadEvaluation());
+                break;
             }
             case DeclarativeAgendaOption.PROPERTY_NAME: {
                 setDeclarativeAgendaEnabled(((DeclarativeAgendaOption) option).isDeclarativeAgendaEnabled());
+                break;
             }
+            default:
+                compConfig.setOption(option);
         }
     }
 

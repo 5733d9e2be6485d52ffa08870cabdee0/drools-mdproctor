@@ -33,7 +33,7 @@ import org.junit.Test;
 
 import static org.drools.base.time.Interval.MAX;
 import static org.drools.base.time.Interval.MIN;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BuildUtilsTest {
     

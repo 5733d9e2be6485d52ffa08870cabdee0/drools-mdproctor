@@ -21,16 +21,19 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.drools.base.util.MVELExecutor;
 import org.drools.core.process.WorkItemManagerFactory;
 import org.drools.core.util.ConfFileUtils;
 import org.kie.api.conf.CompositeConfiguration;
 import org.kie.api.conf.ConfigurationKey;
+import org.kie.api.conf.OptionKey;
 import org.kie.api.conf.OptionsConfiguration;
 import org.kie.api.runtime.conf.KieSessionOption;
 import org.kie.api.runtime.conf.MultiValueKieSessionOption;
 import org.kie.api.runtime.conf.SingleValueKieSessionOption;
+import org.kie.api.runtime.conf.WorkItemHandlerOption;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.internal.utils.ChainedProperties;
 
@@ -206,6 +209,41 @@ public class FlowSessionConfigurationImpl extends FlowSessionConfiguration {
 
     public String getSignalManagerFactory() {
         return getPropertyValue( "drools.processSignalManagerFactory", "org.jbpm.process.instance.event.DefaultSignalManagerFactory" );
+    }
+
+
+    public final <T extends KieSessionOption> void setOption(T option) {
+        switch (option.propertyName()) {
+            case WorkItemHandlerOption.PROPERTY_NAME: {
+                getWorkItemHandlers().put(((WorkItemHandlerOption) option).getName(),
+                                          ((WorkItemHandlerOption) option).getHandler());
+                break;
+            }
+            default:
+                compConfig.setOption(option);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <T extends SingleValueKieSessionOption> T getOption(OptionKey<T> option) {
+        return compConfig.getOption(option);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final <T extends MultiValueKieSessionOption> T getOption(OptionKey<T> option,
+                                                                    String subKey) {
+        switch(option.name()) {
+            case WorkItemHandlerOption.PROPERTY_NAME: {
+                return (T) WorkItemHandlerOption.get(subKey,
+                                                     getWorkItemHandlers().get(subKey));
+            }
+            default:
+                return compConfig.getOption(option, subKey);
+        }
+    }
+
+    @Override public <C extends MultiValueKieSessionOption> Set<String> getOptionSubKeys(OptionKey<C> optionKey) {
+        return getWorkItemHandlers().keySet();
     }
 
     @Override public <X extends OptionsConfiguration<KieSessionOption, SingleValueKieSessionOption, MultiValueKieSessionOption>> X as(ConfigurationKey<X> key) {

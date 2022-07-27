@@ -144,21 +144,21 @@ public class KnowledgeBuilderFlowConfigurationImpl
 
     @SuppressWarnings("unchecked")
     public <T extends SingleValueKieBuilderOption> T getOption(OptionKey<T> option) {
-
-        return null;
+        return compConfig.getOption(option);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends MultiValueKieBuilderOption> T getOption(OptionKey<T> option,
                                                               String subKey) {
-        return null;
+        return compConfig.getOption(option, subKey);
     }
 
     public <T extends MultiValueKieBuilderOption> Set<String> getOptionSubKeys(OptionKey<T> option) {
-        return null;
+        return compConfig.getOptionSubKeys(option);
     }
 
     public <T extends KnowledgeBuilderOption> void setOption(T option) {
+        compConfig.setOption(option);
     }
 
     @Override public <X extends OptionsConfiguration<KnowledgeBuilderOption, SingleValueKieBuilderOption, MultiValueKieBuilderOption>> X as(ConfigurationKey<X> configuration) {

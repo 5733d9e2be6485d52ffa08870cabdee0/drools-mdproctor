@@ -63,47 +63,6 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
 
     public abstract ExecutableRunner getRunner( KieBase kbase, Environment environment );
 
-    public final <T extends KieSessionOption> void setOption(T option) {
-        switch (option.propertyName()) {
-            case ClockTypeOption.PROPERTY_NAME: {
-                setClockType(ClockType.resolveClockType(((ClockTypeOption) option).getClockType()));
-            }
-            case TimerJobFactoryOption.PROPERTY_NAME: {
-                setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(((TimerJobFactoryOption) option).getTimerJobType()));
-            }
-            case KeepReferenceOption.PROPERTY_NAME: {
-                setKeepReference(((KeepReferenceOption)option).isKeepReference());
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public final <T extends SingleValueKieSessionOption> T getOption(OptionKey<T> option) {
-        switch (option.name()) {
-            case ClockTypeOption.PROPERTY_NAME: {
-                return (T) ClockTypeOption.get( getClockType().toExternalForm() );
-            }
-            case TimerJobFactoryOption.PROPERTY_NAME: {
-                return (T) TimerJobFactoryOption.get( getTimerJobFactoryType().toExternalForm() );
-            }
-            case KeepReferenceOption.PROPERTY_NAME: {
-                return (T) (isKeepReference() ? KeepReferenceOption.YES : KeepReferenceOption.NO);
-            }
-        }
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public final <T extends MultiValueKieSessionOption> T getOption(OptionKey<T> option,
-                                                                    String subKey) {
-
-        return null;
-    }
-
-    @Override public <C extends MultiValueKieSessionOption> Set<String> getOptionSubKeys(OptionKey<C> optionKey) {
-        return Collections.emptySet();
-    }
-
     public final void setProperty(String name,
                                   String value) {
         name = name.trim();
@@ -113,9 +72,11 @@ public abstract class SessionConfiguration implements KieSessionConfiguration, E
         switch(name) {
             case ClockTypeOption.PROPERTY_NAME: {
                 setClockType(ClockType.resolveClockType(StringUtils.isEmpty(value) ? "realtime" : value));
+                break;
             }
             case TimerJobFactoryOption.PROPERTY_NAME: {
                 setTimerJobFactoryType(TimerJobFactoryType.resolveTimerJobFactoryType(StringUtils.isEmpty(value) ? "default" : value));
+                break;
             }
         }
     }

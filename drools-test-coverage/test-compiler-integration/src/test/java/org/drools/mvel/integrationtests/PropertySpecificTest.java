@@ -53,8 +53,7 @@ import org.kie.api.definition.type.Modifies;
 import org.kie.api.definition.type.PropertyReactive;
 import org.kie.api.runtime.KieSession;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.drools.base.util.PropertySpecificUtil.calculateNegativeMask;
 import static org.drools.base.util.PropertySpecificUtil.calculatePositiveMask;
 import static org.junit.Assert.assertEquals;

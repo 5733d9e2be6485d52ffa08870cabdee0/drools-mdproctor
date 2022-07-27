@@ -128,16 +128,7 @@ public class MVELSalienceBuilderTest {
 
         RuleTerminalNode rtn = new RuleTerminalNode();
         rtn.setSalienceDeclarations( context.getDeclarationResolver().getDeclarations( context.getRule() ).values().toArray( new Declaration[1] ) );
-<<<<<<< HEAD
-        AgendaItem item = new AgendaItemImpl(0, tuple, 0, null, rtn, null);
-
-        assertThat(context.getRule().getSalience().getValue(item.getTuple(), context.getRule(), ksession)).isEqualTo(25);
-=======
-
-        assertEquals( 25,
-                      context.getRule().getSalience().getValue( tuple, rtn.getSalienceDeclarations(), context.getRule(), ksession ) );
-
->>>>>>> fixed salience based tests, by passing Declarations directly
+        assertThat(context.getRule().getSalience().getValue( tuple, rtn.getSalienceDeclarations(), context.getRule(), ksession )).isEqualTo(25);
     }
 
     @Test

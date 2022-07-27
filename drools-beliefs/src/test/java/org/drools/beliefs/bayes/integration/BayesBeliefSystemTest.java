@@ -22,6 +22,7 @@ import org.drools.beliefs.bayes.BayesModeFactoryImpl;
 import org.drools.beliefs.bayes.PropertyReference;
 import org.drools.beliefs.bayes.runtime.BayesRuntime;
 import org.drools.core.BeliefSystemType;
+import org.drools.core.RuleSessionConfigurationImpl;
 import org.drools.core.SessionConfiguration;
 import org.drools.kiesession.entrypoints.NamedEntryPoint;
 import org.drools.core.common.TruthMaintenanceSystemFactory;
@@ -176,7 +177,7 @@ public class BayesBeliefSystemTest {
         kBase.addPackages( kBuilder.getKnowledgePackages() );
 
         KieSessionConfiguration ksConf = RuleBaseFactory.newKnowledgeSessionConfiguration();
-        ((SessionConfiguration) ksConf).setBeliefSystemType( BeliefSystemType.DEFEASIBLE );
+        ((SessionConfiguration) ksConf).as(RuleSessionConfigurationImpl.KEY).setBeliefSystemType(BeliefSystemType.DEFEASIBLE);
 
         KieSession kSession = kBase.newKieSession( ksConf, null );
         return kSession;

@@ -16,6 +16,8 @@
 
 package org.drools.kiesession.debug;
 
+import java.util.Collection;
+
 import org.drools.base.common.NetworkNode;
 import org.drools.base.util.Iterator;
 import org.drools.core.reteoo.FromNode;

@@ -416,7 +416,7 @@ public class KnowledgeBuilderTest {
         assertThat(kbuilder2.hasErrors()).as(kbuilder2.getErrors().toString()).isFalse();
 
         InternalKnowledgePackage kp2 = (InternalKnowledgePackage) kbuilder2.getKnowledgePackages().iterator().next();
-        assertEquals( 1, kp2.getRules().size() );
+        assertThat(kp2.getRules().size()).isEqualTo(1);
         Rule r2 = kp2.getRules().iterator().next();
         assertThat(((RuleImpl) r2).getResource()).isEqualTo(res2);
     }

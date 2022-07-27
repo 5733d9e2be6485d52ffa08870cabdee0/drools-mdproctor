@@ -16,7 +16,6 @@
 
 package org.drools.compiler.builder.impl;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,18 +23,11 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-import org.drools.base.definitions.InternalKnowledgePackage;
-import org.drools.compiler.compiler.Dialect;
-import org.drools.compiler.compiler.DialectCompiletimeRegistry;
-import org.drools.compiler.compiler.DialectConfiguration;
-import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.compiler.kie.builder.impl.InternalKieModule.CompilationCache;
-import org.drools.compiler.rule.builder.ConstraintBuilder;
 import org.drools.compiler.rule.builder.EvaluatorDefinition;
 import org.drools.compiler.rule.builder.util.AccumulateUtil;
 import org.drools.drl.parser.DrlParser;
 import org.drools.util.StringUtils;
-import org.drools.wiring.api.classloader.ProjectClassLoader;
 import org.kie.api.conf.CompositeConfiguration;
 import org.kie.api.conf.ConfigurationKey;
 import org.kie.api.conf.OptionKey;
@@ -194,34 +186,43 @@ public class KnowledgeBuilderRulesConfigurationImpl
         switch (name) {
             case ProcessStringEscapesOption.PROPERTY_NAME: {
                 setProcessStringEscapes(Boolean.parseBoolean(value));
+                break;
             } case TrimCellsInDTableOption.PROPERTY_NAME: {
                 setTrimCellsInDTable(Boolean.parseBoolean(value));
+                break;
             } case GroupDRLsInKieBasesByFolderOption.PROPERTY_NAME: {
                 setGroupDRLsInKieBasesByFolder(Boolean.parseBoolean(value));
+                break;
             } case PropertySpecificOption.PROPERTY_NAME: {
                 try {
                     setPropertySpecificOption(PropertySpecificOption.valueOf(value.toUpperCase()));
                 } catch (IllegalArgumentException e) {
                     log.warn("Invalid value " + value + " for option " + PropertySpecificOption.PROPERTY_NAME);
                 }
+                break;
             } case LanguageLevelOption.PROPERTY_NAME: {
                 try {
                     setLanguageLevel(LanguageLevelOption.valueOf(value.toUpperCase()));
                 } catch (IllegalArgumentException e) {
                     log.warn("Invalid value " + value + " for option " + LanguageLevelOption.PROPERTY_NAME);
                 }
+                break;
             } case ParallelRulesBuildThresholdOption.PROPERTY_NAME: {
                 setParallelRulesBuildThreshold(Integer.valueOf(value));
+                break;
             } case ExternaliseCanonicalModelLambdaOption.PROPERTY_NAME: {
                 setExternaliseCanonicalModelLambda(Boolean.valueOf(value));
+                break;
             } case ParallelLambdaExternalizationOption.PROPERTY_NAME: {
                 setParallelLambdaExternalization(Boolean.valueOf(value));
+                break;
             } case AlphaNetworkCompilerOption.PROPERTY_NAME: {
                 try {
                     setAlphaNetworkCompilerOption(AlphaNetworkCompilerOption.determineAlphaNetworkCompilerMode(value.toUpperCase()));
                 } catch (IllegalArgumentException e) {
                     log.warn("Invalid value " + value + " for option " + AlphaNetworkCompilerOption.PROPERTY_NAME);
                 }
+                break;
             } default: {
                 if (name.startsWith(AccumulateFunctionOption.PROPERTY_NAME)) {
                     addAccumulateFunction(name.substring(AccumulateFunctionOption.PROPERTY_NAME.length()),
@@ -460,12 +461,15 @@ public class KnowledgeBuilderRulesConfigurationImpl
             case ParallelLambdaExternalizationOption.PROPERTY_NAME: {
                 return (T) (parallelLambdaExternalization ? ParallelLambdaExternalizationOption.ENABLED : ParallelLambdaExternalizationOption.DISABLED);
             }
+            case ParallelRulesBuildThresholdOption.PROPERTY_NAME: {
+                return (T) parallelRulesBuildThreshold;
+            }
             case AlphaNetworkCompilerOption.PROPERTY_NAME: {
                 return (T) alphaNetworkCompilerOption;
             }
+            default:
+               return compConfig.getOption(option);
         }
-
-        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -480,21 +484,22 @@ public class KnowledgeBuilderRulesConfigurationImpl
                 return (T) EvaluatorOption.get(subKey,
                                                this.evaluatorRegistry.getEvaluatorDefinition(subKey));
             }
+            default:
+                return compConfig.getOption(option, subKey);
         }
-        return null;
     }
 
     public <T extends MultiValueKieBuilderOption> Set<String> getOptionSubKeys(OptionKey<T> option) {
         switch(option.name()) {
-            case AccumulateFunctionOption.PROPERTY_NAME:{
+            case AccumulateFunctionOption.PROPERTY_NAME: {
                 return this.accumulateFunctions.keySet();
             }
-            case EvaluatorOption.PROPERTY_NAME:{
+            case EvaluatorOption.PROPERTY_NAME: {
                 return this.evaluatorRegistry.keySet();
             }
+            default:
+                return compConfig.getOptionSubKeys(option);
         }
-
-        return null;
     }
 
     public <T extends KnowledgeBuilderOption> void setOption(T option) {
@@ -502,39 +507,55 @@ public class KnowledgeBuilderRulesConfigurationImpl
             case AccumulateFunctionOption.PROPERTY_NAME: {
                 this.accumulateFunctions.put(((AccumulateFunctionOption) option).getName(),
                                              ((AccumulateFunctionOption) option).getFunction());
+                break;
             }
             case EvaluatorOption.PROPERTY_NAME: {
                 this.evaluatorRegistry.addEvaluatorDefinition((EvaluatorDefinition) ((EvaluatorOption) option).getEvaluatorDefinition());
+                break;
             }
             case ProcessStringEscapesOption.PROPERTY_NAME: {
                 this.processStringEscapes = ((ProcessStringEscapesOption) option).isProcessStringEscapes();
+                break;
             }
             case TrimCellsInDTableOption.PROPERTY_NAME: {
                 setTrimCellsInDTable(((TrimCellsInDTableOption) option).isTrimCellsInDTable());
+                break;
             }
             case GroupDRLsInKieBasesByFolderOption.PROPERTY_NAME: {
                 setGroupDRLsInKieBasesByFolder(((GroupDRLsInKieBasesByFolderOption) option).isGroupDRLsInKieBasesByFolder());
+                break;
             }
             case PropertySpecificOption.PROPERTY_NAME: {
                 propertySpecificOption = (PropertySpecificOption) option;
+                break;
             }
             case LanguageLevelOption.PROPERTY_NAME: {
                 this.languageLevel = ((LanguageLevelOption) option);
+                break;
             }
             case ExternaliseCanonicalModelLambdaOption.PROPERTY_NAME: {
                 this.externaliseCanonicalModelLambda = ((ExternaliseCanonicalModelLambdaOption) option).isCanonicalModelLambdaExternalized();
+                break;
             }
             case ParallelLambdaExternalizationOption.PROPERTY_NAME: {
                 this.parallelLambdaExternalization = ((ParallelLambdaExternalizationOption) option).isLambdaExternalizationParallel();
+                break;
+            }
+            case ParallelRulesBuildThresholdOption.PROPERTY_NAME: {
+                this.parallelRulesBuildThreshold = (ParallelRulesBuildThresholdOption)option;
+                break;
             }
             case AlphaNetworkCompilerOption.PROPERTY_NAME: {
-                this.alphaNetworkCompilerOption = ((AlphaNetworkCompilerOption) option);
+                this.alphaNetworkCompilerOption = (AlphaNetworkCompilerOption) option;
+                break;
             }
+            default:
+                compConfig.setOption(option);
         }
     }
 
     @Override public <X extends OptionsConfiguration<KnowledgeBuilderOption, SingleValueKieBuilderOption, MultiValueKieBuilderOption>> X as(ConfigurationKey<X> configuration) {
-        return null;
+        return compConfig.as(configuration);
     }
 
     public CompilationCache getCompilationCache() {

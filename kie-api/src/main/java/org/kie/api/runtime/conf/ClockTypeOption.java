@@ -33,7 +33,7 @@ public class ClockTypeOption implements SingleValueKieSessionOption {
      */
     public static final String PROPERTY_NAME = "drools.clockType";
 
-    public static OptionKey<BeliefSystemTypeOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
+    public static OptionKey<ClockTypeOption> KEY = new OptionKey<>(TYPE, PROPERTY_NAME);
 
     /**
      * clock type

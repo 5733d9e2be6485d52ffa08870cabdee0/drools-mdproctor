@@ -21,7 +21,9 @@ import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.base.definitions.rule.impl.RuleImpl;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.impl.KnowledgeBaseImpl;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.phreak.PhreakJoinNode;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.CoreComponentFactory;
@@ -738,7 +740,7 @@ public class ScenarioTest {
 
     public BuildContext createContext() {
 
-        RuleBaseConfiguration conf = new RuleBaseConfiguration();
+        CompositeBaseConfiguration conf = (CompositeBaseConfiguration) RuleBaseFactory.newKnowledgeBaseConfiguration();
 
         KnowledgeBaseImpl rbase = new KnowledgeBaseImpl( "ID",
                                                    conf );

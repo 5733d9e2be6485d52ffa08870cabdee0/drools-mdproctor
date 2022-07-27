@@ -279,16 +279,9 @@ public class QueryTest extends BaseModelTest {
 
         QueryResults results = ksession.getQueryResults( "isRelatedTo", "A", "B" );
 
-<<<<<<< HEAD
         assertThat(results.size()).isEqualTo(1);
         String paramName = ((QueryImpl) ksession.getKieBase().getQuery("defaultpkg", "isRelatedTo" )).getParameters()[1].getIdentifier();
         assertThat(results.iterator().next().get(paramName)).isEqualTo("B");
-=======
-        assertEquals( 1, results.size() );
-        String paramName = ((QueryImpl) ksession.getKieBase().getQuery("defaultpkg", "isRelatedTo")).getParameters()[1].getIdentifier();
-        assertEquals("B", results.iterator().next().get(paramName));
->>>>>>> Mark refactor (#17)
-
     }
 
     @Test

@@ -28,7 +28,6 @@ import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.compiler.DialectCompiletimeRegistry;
 import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.base.definitions.InternalKnowledgePackage;
-import org.drools.util.io.InputStreamResource;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.model.codegen.ExecutableModelProject;
 import org.drools.model.codegen.execmodel.KJARUtils;
@@ -46,6 +45,8 @@ import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.ReleaseId;
 import org.kie.api.runtime.KieContainer;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
+import org.kie.internal.builder.KnowledgeBuilderFactoryService;
 import org.kie.internal.builder.KnowledgeBuilderResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -97,11 +98,11 @@ public class DrlxCompilerTest {
         InternalKnowledgePackage knowledgePackage = registry.getPackage();
         PackageModel packageModel =
                 new PackageModel(
-                        "com.example:dummy:1.0.0",
-                        packageDescr.getName(),
-                        new KnowledgeBuilderConfigurationImpl(),
-                        new DialectCompiletimeRegistry(),
-                        new DRLIdGenerator());
+                      "com.example:dummy:1.0.0",
+                      packageDescr.getName(),
+                      KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration().as(KnowledgeBuilderConfigurationImpl.KEY),
+                      new DialectCompiletimeRegistry(),
+                      new DRLIdGenerator());
         ModelGenerator.generateModel(
                 kbuilder,
                 knowledgePackage,

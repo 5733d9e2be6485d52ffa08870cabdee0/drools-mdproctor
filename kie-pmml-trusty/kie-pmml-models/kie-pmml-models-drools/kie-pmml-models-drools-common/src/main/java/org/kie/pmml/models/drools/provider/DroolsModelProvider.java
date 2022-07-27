@@ -236,7 +236,7 @@ public abstract class DroolsModelProvider<T extends Model, E extends KiePMMLDroo
      */
     protected List<GeneratedFile> generateRulesFiles(PackageDescr packageDescr) {
         ModelBuilderImpl<PackageSources> modelBuilder = new ModelBuilderImpl<>(PackageSources::dumpSources,
-                                                                               (KnowledgeBuilderConfigurationImpl) newKnowledgeBuilderConfiguration(getClass().getClassLoader()),
+                                                                               newKnowledgeBuilderConfiguration(getClass().getClassLoader()).as(KnowledgeBuilderConfigurationImpl.KEY),
                                                                                new ReleaseIdImpl("dummy:dummy:0.0.0"),
                                                                                false);
         CompositeKnowledgeBuilder batch = modelBuilder.batch();

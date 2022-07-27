@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.compiler.builder.impl.KnowledgeBuilderFactoryServiceImpl;
 import org.drools.drl.parser.DrlParser;
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
@@ -37,9 +36,9 @@ import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.drl.ast.descr.RuleDescr;
 import org.drools.drl.ast.descr.TypeDeclarationDescr;
 import org.drools.drl.ast.descr.TypeFieldDescr;
+import org.drools.io.ByteArrayResource;
 import org.drools.util.TypeResolver;
 import org.drools.base.definitions.InternalKnowledgePackage;
-import org.drools.util.io.ByteArrayResource;
 import org.drools.util.StringUtils;
 import org.kie.api.io.ResourceType;
 import org.kie.internal.builder.ChangeType;
@@ -150,7 +149,7 @@ public class ChangeSetBuilder {
         ResourceType type = ResourceType.determineResourceType( file );
         if( ResourceType.DRL.equals( type ) || ResourceType.GDRL.equals( type ) || ResourceType.RDRL.equals( type ) || ResourceType.TDRL.equals( type )) {
             try {
-                PackageDescr originalPkg = new DrlParser().parse( new ByteArrayResource( originalBytes ) );
+                PackageDescr originalPkg = new DrlParser().parse( new ByteArrayResource(originalBytes ));
                 PackageDescr currentPkg = new DrlParser().parse( new ByteArrayResource( currentBytes ) );
                 String pkgName = isEmpty(currentPkg.getName()) ? getDefaultPackageName() : currentPkg.getName();
                 String oldPkgName = isEmpty(originalPkg.getName()) ? getDefaultPackageName() : originalPkg.getName();

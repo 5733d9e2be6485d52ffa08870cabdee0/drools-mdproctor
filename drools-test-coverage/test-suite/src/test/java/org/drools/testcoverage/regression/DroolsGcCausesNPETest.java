@@ -90,7 +90,6 @@ public class DroolsGcCausesNPETest {
     public void setUp() throws Exception {
         final KieSessionConfiguration conf = SERVICES.newKieSessionConfiguration();
         conf.setOption(ClockTypeOption.PSEUDO);
-        conf.setProperty("type", "stateful");
         final KieContainer container = SERVICES.newKieContainer(RELEASE_ID);
         session = container.getKieBase(KIE_BASE_NAME).newKieSession(conf,
                 SERVICES.newEnvironment());

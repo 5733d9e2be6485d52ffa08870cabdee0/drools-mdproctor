@@ -28,6 +28,7 @@ import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
 import org.drools.compiler.kie.builder.impl.KieContainerImpl;
 import org.drools.core.RuleBaseConfiguration;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
@@ -127,8 +128,7 @@ public class PMMLRuntimeFactoryInternal {
     }
 
     public static PMMLRuntime getPMMLRuntime(String pmmlFileName, String pmmlModelName, KieBase kieBase) {
-        RuleBaseConfiguration ruleBaseConfiguration =
-                new RuleBaseConfiguration(((InternalKnowledgeBase) kieBase).getRootClassLoader());
+        RuleBaseConfiguration ruleBaseConfiguration = RuleBaseFactory.newKnowledgeBaseConfiguration(null, ((InternalKnowledgeBase) kieBase).getRootClassLoader()).as(RuleBaseConfiguration.KEY);
         InternalKnowledgeBase kieBaseNew = KnowledgeBaseFactory.newKnowledgeBase(ruleBaseConfiguration);
         KiePackage kiePackage = getKiePackageByModelName(pmmlModelName, kieBase);
         kieBaseNew.addPackage(kiePackage);

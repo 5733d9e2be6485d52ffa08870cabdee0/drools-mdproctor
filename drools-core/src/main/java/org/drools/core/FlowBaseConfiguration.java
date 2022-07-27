@@ -174,8 +174,8 @@ public class FlowBaseConfiguration
                                                                                   null,
                                                                                   FlowBaseConfiguration.class));
         try {
-            this.workDefinitions.addAll(
-                (List<Map<String, Object>>) MVELExecutor.get().eval( content, new HashMap() ) );
+//            this.workDefinitions.addAll(
+//                (List<Map<String, Object>>) MVELExecutor.get().eval( content, new HashMap() ) );
         } catch ( Throwable t ) {
             logger.error("Error occurred while loading work definitions " + location
                     + "\nContinuing without reading these work definitions", t);
@@ -185,7 +185,7 @@ public class FlowBaseConfiguration
 
     @SuppressWarnings("unchecked")
     public <T extends SingleValueKieBaseOption> T getOption(OptionKey<T> option) {
-        return null;
+        return compConfig.getOption(option);
     }
 
     public void setOption(KieBaseOption option) {

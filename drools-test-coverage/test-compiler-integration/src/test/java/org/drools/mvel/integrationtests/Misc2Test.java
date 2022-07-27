@@ -60,7 +60,9 @@ import org.drools.base.facttemplates.FactTemplate;
 import org.drools.base.facttemplates.FactTemplateImpl;
 import org.drools.base.facttemplates.FieldTemplate;
 import org.drools.base.facttemplates.FieldTemplateImpl;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.impl.RuleBase;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.LeftTuple;
@@ -5538,7 +5540,7 @@ public class Misc2Test {
                 "System.out.println(\"Finally t=\"+t);\n" +
                 "end\n";
 
-        KnowledgeBuilderConfigurationImpl pkgBuilderCfg = new KnowledgeBuilderConfigurationImpl();
+        KnowledgeBuilderConfigurationImpl pkgBuilderCfg = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration().as(KnowledgeBuilderConfigurationImpl.KEY);
         MVELDialectConfiguration mvelConf = (MVELDialectConfiguration) pkgBuilderCfg.getDialectConfiguration( "mvel" );
         mvelConf.setStrict( false );
 

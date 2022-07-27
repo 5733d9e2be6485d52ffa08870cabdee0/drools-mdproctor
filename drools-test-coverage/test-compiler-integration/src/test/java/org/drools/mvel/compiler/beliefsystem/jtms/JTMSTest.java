@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.drools.core.BeliefSystemType;
+import org.drools.core.RuleSessionConfigurationImpl;
 import org.drools.core.SessionConfiguration;
 import org.drools.kiesession.entrypoints.NamedEntryPoint;
 import org.drools.core.common.TruthMaintenanceSystem;
@@ -77,7 +78,7 @@ public class JTMSTest {
         }
 
         KieSessionConfiguration ksConf = RuleBaseFactory.newKnowledgeSessionConfiguration();
-        ((SessionConfiguration) ksConf).setBeliefSystemType( BeliefSystemType.JTMS );
+        ksConf.as(RuleSessionConfigurationImpl.KEY).setBeliefSystemType(BeliefSystemType.JTMS);
         
         KieSession kSession = kBase.newKieSession( ksConf, null );
         return kSession;
@@ -87,7 +88,7 @@ public class JTMSTest {
         KieBase kBase = KieBaseUtil.getKieBaseFromClasspathResources(this.getClass(), kieBaseTestConfiguration, ruleFile);
 
         KieSessionConfiguration ksConf = RuleBaseFactory.newKnowledgeSessionConfiguration();
-        ((SessionConfiguration) ksConf).setBeliefSystemType( BeliefSystemType.JTMS );
+        ksConf.as(RuleSessionConfigurationImpl.KEY).setBeliefSystemType( BeliefSystemType.JTMS );
         
         KieSession kSession = kBase.newKieSession( ksConf, null );
         return kSession;

@@ -163,10 +163,13 @@ public class KnowledgeBuilderConfigurationImpl
         switch (name) {
             case DefaultDialectOption.PROPERTY_NAME: {
                 setDefaultDialect(value);
+                break;
             } case DumpDirOption.PROPERTY_NAME: {
                 buildDumpDirectory(value);
+                break;
             } case DefaultPackageNameOption.PROPERTY_NAME: {
                 setDefaultPackageName(value);
+                break;
             } default: {
                 if (name.startsWith(KBuilderSeverityOption.PROPERTY_NAME)) {
                     String key = name.substring(name.lastIndexOf('.') + 1);
@@ -304,9 +307,9 @@ public class KnowledgeBuilderConfigurationImpl
             case DefaultPackageNameOption.PROPERTY_NAME: {
                 return (T) DefaultPackageNameOption.get(this.defaultPackageName);
             }
+            default:
+                return compConfig.getOption(option);
         }
-
-        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -317,8 +320,9 @@ public class KnowledgeBuilderConfigurationImpl
                 return (T) KBuilderSeverityOption.get(subKey,
                                                       this.severityMap.get(subKey));
             }
+            default:
+                return compConfig.getOption(option, subKey);
         }
-        return null;
     }
 
     public <T extends MultiValueKieBuilderOption> Set<String> getOptionSubKeys(OptionKey<T> option) {
@@ -326,25 +330,31 @@ public class KnowledgeBuilderConfigurationImpl
             case KBuilderSeverityOption.PROPERTY_NAME: {
                 return this.severityMap.keySet();
             }
+            default:
+                return compConfig.getOptionSubKeys(option);
         }
-
-        return null;
     }
 
     public <T extends KnowledgeBuilderOption> void setOption(T option) {
         switch (option.propertyName()) {
             case DefaultDialectOption.PROPERTY_NAME: {
                 this.defaultDialect = (DefaultDialectOption) option;
+                break;
             }
             case DumpDirOption.PROPERTY_NAME: {
                 this.dumpDirectory = ((DumpDirOption) option).getDirectory();
+                break;
             }
             case DefaultPackageNameOption.PROPERTY_NAME: {
                 setDefaultPackageName(((DefaultPackageNameOption) option).getPackageName());
+                break;
             }
             case KBuilderSeverityOption.PROPERTY_NAME: {
                 this.severityMap.put(((KBuilderSeverityOption) option).getName(), ((KBuilderSeverityOption) option).getSeverity());
+                break;
             }
+            default:
+                compConfig.setOption(option);
         }
     }
 

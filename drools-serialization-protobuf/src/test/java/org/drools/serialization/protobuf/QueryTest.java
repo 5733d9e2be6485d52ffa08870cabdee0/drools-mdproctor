@@ -134,7 +134,7 @@ public class QueryTest extends CommonTestMethodBase {
         kbase.removeQuery( "org.drools.compiler.test",
                            "simple query" );
 
-        assertTrue(((InternalKnowledgePackage) kbase.getKiePackage("org.drools.compiler.test")).getRules().isEmpty() );
+        assertThat(((InternalKnowledgePackage) kbase.getKiePackage("org.drools.compiler.test")).getRules().isEmpty()).isTrue();
 
         try {
             results = session.getQueryResults( "simple query" );

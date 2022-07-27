@@ -20,6 +20,7 @@ import org.drools.compiler.builder.impl.GlobalVariableContext;
 import org.drools.compiler.builder.impl.GlobalVariableContextImpl;
 import org.drools.compiler.builder.impl.InternalKnowledgeBaseProvider;
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
+import org.drools.compiler.builder.impl.KnowledgeBuilderRulesConfigurationImpl;
 import org.drools.compiler.builder.impl.PackageRegistryManagerImpl;
 import org.drools.compiler.builder.impl.RootClassLoaderProvider;
 import org.drools.compiler.builder.impl.TypeDeclarationBuilder;
@@ -55,6 +56,7 @@ import org.junit.Test;
 import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.io.Resource;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -72,7 +74,7 @@ public class ExplicitCompilerTest {
 
         int parallelRulesBuildThreshold = 0;
         InternalKnowledgeBase kBase = null;
-        KnowledgeBuilderConfigurationImpl configuration = new KnowledgeBuilderConfigurationImpl();
+        KnowledgeBuilderConfigurationImpl configuration = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration().as(KnowledgeBuilderConfigurationImpl.KEY);
         ClassLoader rootClassLoader = configuration.getClassLoader();
 
         BuildResultCollectorImpl results = new BuildResultCollectorImpl();
@@ -103,9 +105,7 @@ public class ExplicitCompilerTest {
         AnnotationNormalizer annotationNormalizer =
                 AnnotationNormalizer.of(
                         packageRegistry.getTypeResolver(),
-                        configuration.getLanguageLevel().useJavaAnnotations());
-
-
+                        configuration.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getLanguageLevel().useJavaAnnotations());
 
         Map<String, AttributeDescr> attributesForPackage =
                 packageRegistryManager.getPackageAttributes().get(packageDescr.getNamespace());

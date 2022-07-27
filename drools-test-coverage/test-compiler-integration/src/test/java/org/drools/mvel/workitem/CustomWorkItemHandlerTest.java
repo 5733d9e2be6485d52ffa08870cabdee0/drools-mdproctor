@@ -16,6 +16,7 @@ package org.drools.mvel.workitem;
 import java.util.Map;
 import java.util.Properties;
 
+import org.drools.core.FlowSessionConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.core.impl.RuleBaseFactory;
@@ -44,7 +45,7 @@ public class CustomWorkItemHandlerTest {
         WorkItemManager manager = ksession.getWorkItemManager();
         assertThat(manager).isNotNull();
         
-        Map<String, WorkItemHandler> handlers = ((SessionConfiguration)config).getWorkItemHandlers();
+        Map<String, WorkItemHandler> handlers = config.as(FlowSessionConfiguration.KEY).getWorkItemHandlers();
         assertThat(handlers).isNotNull();
         assertThat(handlers.size()).isEqualTo(1);
         assertThat(handlers.containsKey("Custom")).isTrue();

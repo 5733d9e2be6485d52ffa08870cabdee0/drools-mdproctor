@@ -17,6 +17,8 @@ package org.drools.mvel.compiler.rule.builder.dialect.java;
 
 import java.util.HashMap;
 
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.rule.Accumulate;
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.compiler.BoundIdentifiers;
@@ -24,23 +26,18 @@ import org.drools.compiler.compiler.Dialect;
 import org.drools.compiler.compiler.DialectCompiletimeRegistry;
 import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.rule.Accumulate;
 import org.drools.drl.ast.descr.AccumulateDescr;
 import org.drools.drl.ast.descr.BindingDescr;
 import org.drools.drl.ast.descr.PackageDescr;
 import org.drools.drl.ast.descr.PatternDescr;
 import org.drools.drl.ast.descr.RuleDescr;
-import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.base.definitions.InternalKnowledgePackage;
-import org.drools.base.rule.Accumulate;
 import org.drools.mvel.java.JavaAccumulateBuilder;
 import org.drools.mvel.java.JavaAnalysisResult;
 import org.drools.mvel.java.JavaExprAnalyzer;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class JavaAccumulateBuilderTest {
 

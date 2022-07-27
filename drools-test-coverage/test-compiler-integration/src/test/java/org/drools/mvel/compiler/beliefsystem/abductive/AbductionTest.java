@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.drools.core.BeliefSystemType;
 import org.drools.core.QueryResultsImpl;
+import org.drools.core.RuleSessionConfigurationImpl;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.common.EqualityKey;
 import org.drools.core.common.InternalFactHandle;
@@ -79,7 +80,7 @@ public class AbductionTest {
         KieBase kbase = KieBaseUtil.newKieBaseFromKieModuleWithAdditionalOptions(kieModule, kieBaseTestConfiguration, options);
 
         KieSessionConfiguration ksConf = RuleBaseFactory.newKnowledgeSessionConfiguration();
-        ((SessionConfiguration) ksConf).setBeliefSystemType( BeliefSystemType.DEFEASIBLE );
+        ksConf.as(RuleSessionConfigurationImpl.KEY).setBeliefSystemType(BeliefSystemType.DEFEASIBLE);
         return kbase.newKieSession( ksConf, null );
     }
 

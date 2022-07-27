@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import org.drools.base.base.ClassObjectType;
+import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.event.DebugAgendaEventListener;
 import org.drools.core.reteoo.EntryPointNode;
 import org.drools.core.reteoo.FromNode;
@@ -684,7 +685,7 @@ public class FromTest {
         final KieModule kieModule = KieUtil.getKieModuleFromDrls("from-test", kieBaseTestConfiguration, drl);
         final KieContainer kieContainer = KieServices.get().newKieContainer(kieModule.getReleaseId());
         final KieBaseConfiguration kieBaseConfiguration = kieBaseTestConfiguration.getKieBaseConfiguration();
-        kieBaseConfiguration.setProperty(LanguageLevelOption.PROPERTY_NAME, "DRL5");
+        kieBaseConfiguration.as(RuleBaseConfiguration.KEY).setProperty(LanguageLevelOption.PROPERTY_NAME, "DRL5");
         kieContainer.newKieBase(kieBaseConfiguration);
     }
 

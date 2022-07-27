@@ -136,9 +136,11 @@ public class KieBaseConfigurationImpl
         switch(name) {
             case MBeansOption.PROPERTY_NAME: {
                 setMBeansEnabled( MBeansOption.isEnabled(value));
+                break;
             }
             case KieBaseMutabilityOption.PROPERTY_NAME: {
                 setMutabilityEnabled( StringUtils.isEmpty( value ) ? true : KieBaseMutabilityOption.determineMutability(value) == KieBaseMutabilityOption.ALLOWED );
+                break;
             }
         }
     }
@@ -260,24 +262,28 @@ public class KieBaseConfigurationImpl
             case KieBaseMutabilityOption.PROPERTY_NAME: {
                 return (T) (this.isMutabilityEnabled() ? KieBaseMutabilityOption.ALLOWED : KieBaseMutabilityOption.DISABLED);
             }
+            default:
+                return compConfig.getOption(option);
         }
-        return null;
-
     }
 
     public void setOption(KieBaseOption option) {
         switch(option.getPropertyName()) {
             case MBeansOption.PROPERTY_NAME: {
                 setMBeansEnabled( ( (MBeansOption) option ).isEnabled());
+                break;
             }
             case KieBaseMutabilityOption.PROPERTY_NAME: {
                 setMutabilityEnabled(option == KieBaseMutabilityOption.ALLOWED);
+                break;
             }
+            default:
+                compConfig.setOption(option);
         }
     }
 
     @Override public <C extends MultiValueKieBaseOption> C getOption(OptionKey<C> optionKey, String subKey) {
-        return null;
+        return compConfig.getOption(optionKey, subKey);
     }
 
     public ChainedProperties getChainedProperties() {

@@ -58,7 +58,7 @@ public class MergePackageTest {
             assertThat(kpkg1.getRules().size()).isEqualTo(1);
 
             Collection<KiePackage> kpkgs2 = KieBaseUtil.getKieBaseFromClasspathResources("tmp", getClass(), kieBaseTestConfiguration, "test_RuleNameClashes2.drl").getKiePackages();
-            KiePackage kpkg2 = kpkgs2.stream().filter( pkg -> pkg.getName().equals( "org.drools.package2" ) ).findFirst().get();
+            InternalKnowledgePackage kpkg2 = (InternalKnowledgePackage) kpkgs2.stream().filter( pkg -> pkg.getName().equals( "org.drools.package2" ) ).findFirst().get();
             assertThat(kpkg2.getRules().size()).isEqualTo(1);
 
             InternalKnowledgeBase kbase = (InternalKnowledgeBase) KieBaseUtil.getKieBaseFromKieModuleFromDrl("test", kieBaseTestConfiguration);

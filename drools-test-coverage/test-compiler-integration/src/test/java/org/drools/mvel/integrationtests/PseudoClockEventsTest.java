@@ -20,6 +20,7 @@ package org.drools.mvel.integrationtests;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
+import org.drools.core.SessionConfiguration;
 import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.time.impl.PseudoClockScheduler;
 import org.drools.mvel.compiler.StockTick;
@@ -135,7 +136,7 @@ public class PseudoClockEventsTest {
 
         KieSessionConfiguration ksessionConfig = RuleBaseFactory.newKnowledgeSessionConfiguration();
         ksessionConfig.setOption(ClockTypeOption.PSEUDO);
-        ksessionConfig.setProperty("keep.reference", "true");
+        ksessionConfig.as(SessionConfiguration.KEY).setProperty("keep.reference", "true");
         final KieSession ksession = kbase.newKieSession(ksessionConfig, null);
         ksession.addEventListener(agendaEventListener);
 

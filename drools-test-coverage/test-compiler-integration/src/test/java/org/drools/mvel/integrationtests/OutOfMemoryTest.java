@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.kie.api.KieBase;
+import org.kie.api.KieServices;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.FactHandle;
 import org.slf4j.Logger;
@@ -68,7 +69,7 @@ public class OutOfMemoryTest {
 
         int i = 0;
 
-        SessionConfiguration conf = SessionConfiguration.newInstance();
+        SessionConfiguration conf = KieServices.get().newKieSessionConfiguration().as(SessionConfiguration.KEY);
         conf.setKeepReference( true ); // this is just for documentation purposes, since the default value is "true"
         try {
             for ( i = 0; i < 300000; i++ ) {

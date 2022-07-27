@@ -30,6 +30,7 @@ import org.drools.core.impl.RuleBaseFactory;
 import org.drools.util.IoUtils;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.kie.api.conf.KieBaseConfiguration;
+import org.kie.api.conf.RemoveIdentitiesOption;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;
@@ -48,9 +49,9 @@ public class WaltzDbBenchmark {
                               ResourceType.DRL );
         Collection<KiePackage> pkgs = kbuilder.getKnowledgePackages();
 
+
         KieBaseConfiguration kbaseConfiguration = RuleBaseFactory.newKnowledgeBaseConfiguration();
-        kbaseConfiguration.setProperty( "drools.removeIdentities",
-                                        "true" );
+        kbaseConfiguration.setOption(RemoveIdentitiesOption.YES);
 
         final InternalKnowledgeBase kbase = KnowledgeBaseFactory.newKnowledgeBase( kbaseConfiguration );
         //                final RuleBase ruleBase = RuleBaseFactory.newRuleBase( RuleBase.RETEOO,

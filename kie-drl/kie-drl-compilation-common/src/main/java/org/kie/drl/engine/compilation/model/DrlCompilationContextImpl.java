@@ -15,6 +15,7 @@
  */
 package org.kie.drl.engine.compilation.model;
 
+import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.kie.efesto.compilationmanager.api.model.EfestoCompilationContextImpl;
 import org.kie.internal.builder.KnowledgeBuilderConfiguration;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
@@ -28,6 +29,6 @@ public class DrlCompilationContextImpl extends EfestoCompilationContextImpl impl
 
     @Override
     public KnowledgeBuilderConfiguration newKnowledgeBuilderConfiguration() {
-        return KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration(memoryCompilerClassLoader);
+        return KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration(memoryCompilerClassLoader).as(KnowledgeBuilderConfigurationImpl.KEY);
     }
 }

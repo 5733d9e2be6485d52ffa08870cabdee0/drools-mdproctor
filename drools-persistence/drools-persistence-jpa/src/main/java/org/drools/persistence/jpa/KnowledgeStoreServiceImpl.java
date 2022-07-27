@@ -25,6 +25,7 @@ import org.drools.core.process.WorkItemManagerFactory;
 import org.drools.persistence.PersistableRunner;
 import org.drools.persistence.jpa.processinstance.JPAWorkItemManagerFactory;
 import org.kie.api.KieBase;
+import org.kie.api.KieServices;
 import org.kie.api.persistence.jpa.KieStoreServices;
 import org.kie.api.runtime.CommandExecutor;
 import org.kie.api.runtime.Environment;
@@ -57,7 +58,7 @@ public class KnowledgeStoreServiceImpl
                                                   KieSessionConfiguration configuration,
                                                   Environment environment) {
         if ( configuration == null ) {
-            configuration = SessionConfiguration.newInstance();
+            configuration = KieServices.get().newKieSessionConfiguration();
         }
 
         if ( environment == null ) {
@@ -75,7 +76,7 @@ public class KnowledgeStoreServiceImpl
                                                    KieSessionConfiguration configuration,
                                                    Environment environment) {
         if ( configuration == null ) {
-            configuration = SessionConfiguration.newInstance();
+            configuration = KieServices.get().newKieSessionConfiguration();
         }
 
         if ( environment == null ) {
@@ -94,7 +95,7 @@ public class KnowledgeStoreServiceImpl
             KieSessionConfiguration configuration,
             Environment environment) {
         if ( configuration == null ) {
-            configuration = SessionConfiguration.newInstance();
+            configuration = KieServices.get().newKieSessionConfiguration();
         }
 
         if ( environment == null ) {
@@ -166,9 +167,10 @@ public class KnowledgeStoreServiceImpl
     }
 
     private KieSessionConfiguration mergeConfig(KieSessionConfiguration configuration) {
-        KieSessionConfiguration merged = ((SessionConfiguration) configuration).addDefaultProperties( configProps );
-        merged.setOption(TimerJobFactoryOption.get("jpa"));
-        return merged;
+//        KieSessionConfiguration merged = ((SessionConfiguration) configuration).addDefaultProperties( configProps );
+//        merged.setOption(TimerJobFactoryOption.get("jpa"));
+//        return merged;
+        return configuration;
     }
 
     public long getStatefulKnowledgeSessionId(StatefulKnowledgeSession ksession) {
