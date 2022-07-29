@@ -21,6 +21,7 @@ import java.util.List;
 import org.assertj.core.data.Offset;
 import org.drools.commands.runtime.SetGlobalCommand;
 import org.drools.commands.runtime.rule.InsertObjectCommand;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ import static org.kie.pmml.commons.Constants.PACKAGE_NAME;
 
 public class KiePMMLSessionUtilsTest {
 
-    private static final KieBase KIE_BASE = KnowledgeBaseFactory.newKnowledgeBase("PMML", null);
+    private static final KieBase KIE_BASE = KnowledgeBaseFactory.newKnowledgeBase("PMML", RuleBaseFactory.newKnowledgeBaseConfiguration());
     private final static String MODEL_NAME = "MODELNAME";
     private final static PMML4Result PMML4_RESULT = new PMML4Result();
     private KiePMMLSessionUtils.Builder builder;
