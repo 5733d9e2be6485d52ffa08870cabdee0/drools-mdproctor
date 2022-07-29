@@ -71,7 +71,7 @@ public class ProjectRuntime implements KieRuntimeBuilder {
     }
 
     private KieSessionConfiguration getConfForSession(String sessionName) {
-        KieSessionConfiguration conf = org.drools.core.impl.RuleBaseFactory.newKnowledgeSessionConfiguration();
+        org.drools.core.SessionConfigurationImpl conf = (org.drools.core.SessionConfigurationImpl) org.drools.core.impl.RuleBaseFactory.newKnowledgeSessionConfiguration().as(org.drools.core.SessionConfiguration.KEY);
         switch(sessionName) {
             // populated via codegen
         }
