@@ -32,8 +32,10 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.kie.builder.impl.KieBuilderImpl;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.impl.KnowledgeBaseImpl;
 import org.drools.core.impl.RuleBase;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.rulebase.SessionsAwareKnowledgeBase;
 import org.drools.model.codegen.execmodel.GeneratedFile;
@@ -205,7 +207,7 @@ public class GeneratePMMLModelExecutor {
     }
 
     private static PMMLResource parseResource(Resource resource) {
-        final RuleBase ruleBase = new KnowledgeBaseImpl("PMML", null);
+        final RuleBase ruleBase = new KnowledgeBaseImpl("PMML", (CompositeBaseConfiguration) RuleBaseFactory.newKnowledgeBaseConfiguration());
         final InternalKnowledgeBase knowledgeBase = new SessionsAwareKnowledgeBase(ruleBase);
         KnowledgeBuilderImpl kbuilderImpl = new KnowledgeBuilderImpl(knowledgeBase);
         List<KiePMMLModel> kiePMMLModels = getKiePMMLModelsFromResourceWithSources(kbuilderImpl, resource);

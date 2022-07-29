@@ -40,6 +40,7 @@ import org.drools.io.InternalResource;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.ReleaseId;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieRuntimeFactory;
@@ -128,8 +129,8 @@ public class PMMLRuntimeFactoryInternal {
     }
 
     public static PMMLRuntime getPMMLRuntime(String pmmlFileName, String pmmlModelName, KieBase kieBase) {
-        RuleBaseConfiguration ruleBaseConfiguration = RuleBaseFactory.newKnowledgeBaseConfiguration(null, ((InternalKnowledgeBase) kieBase).getRootClassLoader()).as(RuleBaseConfiguration.KEY);
-        InternalKnowledgeBase kieBaseNew = KnowledgeBaseFactory.newKnowledgeBase(ruleBaseConfiguration);
+        KieBaseConfiguration  kieBaseConfiguration = RuleBaseFactory.newKnowledgeBaseConfiguration(null, ((InternalKnowledgeBase) kieBase).getRootClassLoader());
+        InternalKnowledgeBase kieBaseNew            = KnowledgeBaseFactory.newKnowledgeBase(kieBaseConfiguration);
         KiePackage kiePackage = getKiePackageByModelName(pmmlModelName, kieBase);
         kieBaseNew.addPackage(kiePackage);
         List<KiePackage> nestedKiePackages = getNestedKiePackages((InternalKnowledgePackage) kiePackage, kieBase);

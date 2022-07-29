@@ -141,10 +141,7 @@ public class RuleBaseFactory {
      *     The KnowledgeSessionConfiguration.
      */
     public static KieSessionConfiguration newKnowledgeSessionConfiguration() {
-        ClassLoader projCassLoader = getClassLoader(null);
-        return new CompositeSessionConfiguration(null, projCassLoader,
-                                                 SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
-                                                 SessionConfigurationFactories.flowConf);
+        return newKnowledgeSessionConfiguration(null);
     }
 
     /**
@@ -153,10 +150,7 @@ public class RuleBaseFactory {
      *     The KnowledgeSessionConfiguration.
      */
     public static KieSessionConfiguration newKnowledgeSessionConfiguration(Properties properties) {
-        ClassLoader projCassLoader = getClassLoader(null);
-        return new CompositeSessionConfiguration(properties, projCassLoader,
-                                                 SessionConfigurationFactories.baseConf, SessionConfigurationFactories.ruleConf,
-                                                 SessionConfigurationFactories.flowConf);
+        return newKnowledgeSessionConfiguration(properties, getClassLoader(null));
     }
 
     public static KieSessionConfiguration newKnowledgeSessionConfiguration(Properties properties, ClassLoader classLoader) {
