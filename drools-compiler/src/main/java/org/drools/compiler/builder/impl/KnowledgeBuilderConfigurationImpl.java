@@ -153,8 +153,7 @@ public class KnowledgeBuilderConfigurationImpl
         }
     }
 
-    public void setProperty(String name,
-            String value) {
+    public void setProperty(String name, String value) {
         name = name.trim();
         if (StringUtils.isEmpty(name)) {
             return;

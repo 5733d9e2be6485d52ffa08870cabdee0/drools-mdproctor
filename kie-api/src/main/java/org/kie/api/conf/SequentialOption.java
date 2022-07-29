@@ -23,7 +23,7 @@ package org.kie.api.conf;
  *
  * DEFAULT = false
  */
-public enum SequentialOption implements SingleValueKieBaseOption {
+public enum SequentialOption implements SingleValueRuleBaseOption {
 
     YES(true),
     NO(false);

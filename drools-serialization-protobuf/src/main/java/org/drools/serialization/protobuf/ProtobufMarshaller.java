@@ -41,6 +41,7 @@ import org.kie.api.marshalling.MarshallingConfiguration;
 import org.kie.api.marshalling.ObjectMarshallingStrategyStore;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.conf.KeepReferenceOption;
 import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
 
@@ -79,7 +80,7 @@ public class ProtobufMarshaller
     public ProtobufMarshaller(KieBase kbase,
                               MarshallingConfiguration marshallingConfig) {
         this.kbase = kbase;
-        this.ruleBaseConfig = ((KnowledgeBaseImpl)kbase).getRuleBaseConfiguration();
+        this.ruleBaseConfig = ((InternalKnowledgeBase)kbase).getRuleBaseConfiguration();
         this.marshallingConfig = marshallingConfig;
         this.strategyStore = this.marshallingConfig.getObjectMarshallingStrategyStore();
     }
@@ -144,10 +145,10 @@ public class ProtobufMarshaller
         ReadSessionResult readSessionResult = ProtobufInputMarshaller.readSession(context,
                                                                                   id,
                                                                                   environment,
-                                                                                  (SessionConfiguration) config,
+                                                                                  config,
                                                                                   initializer);
         context.close();
-        if ( ((SessionConfiguration) config).isKeepReference() ) {
+        if ( config.getOption(KeepReferenceOption.KEY).isKeepReference() ) {
             ((InternalKnowledgeBase) this.kbase).addStatefulSession(readSessionResult.getSession());
         }
         return readSessionResult;

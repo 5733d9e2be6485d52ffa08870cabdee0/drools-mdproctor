@@ -246,16 +246,11 @@ public abstract class AbstractKieModule implements InternalKieModule, Serializab
     }
 
     public KnowledgeBuilderConfiguration createBuilderConfiguration( KieBaseModel kBaseModel, ClassLoader classLoader) {
-        KnowledgeBuilderConfigurationImpl pconf = newKnowledgeBuilderConfiguration(classLoader).as(KnowledgeBuilderConfigurationImpl.KEY);
+        Properties props = new Properties();
+        props.putAll(kModuleModel.getConfigurationProperties());
+        KnowledgeBuilderConfigurationImpl pconf = newKnowledgeBuilderConfiguration(props, classLoader).as(KnowledgeBuilderConfigurationImpl.KEY);
         pconf.setCompilationCache(getCompilationCache(kBaseModel.getName()));
-        setModelPropsOnConf( ((KieBaseModelImpl) kBaseModel).getKModule(), pconf );
         return pconf;
-    }
-
-    static void setModelPropsOnConf( KieModuleModel kModuleModel, KnowledgeBuilderConfigurationImpl pconf ) {
-        for (Map.Entry<String, String> entry : kModuleModel.getConfigurationProperties().entrySet()) {
-            pconf.setProperty(entry.getKey(), entry.getValue());
-        }
     }
 
     public final boolean addResourceToCompiler(CompositeKnowledgeBuilder ckbuilder, KieBaseModel kieBaseModel, String fileName) {

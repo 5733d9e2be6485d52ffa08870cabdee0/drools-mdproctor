@@ -28,7 +28,7 @@ package org.kie.api.conf;
  * <b>DEFAULT = false.</b>
  *
  */
-public enum DeclarativeAgendaOption implements SingleValueKieBaseOption {
+public enum DeclarativeAgendaOption implements SingleValueRuleBaseOption {
 
     ENABLED(true), DISABLED(false);
 

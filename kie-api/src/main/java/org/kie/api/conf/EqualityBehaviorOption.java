@@ -24,7 +24,7 @@ package org.kie.api.conf;
  *
  * DEFAULT = identity
  */
-public enum EqualityBehaviorOption implements SingleValueKieBaseOption {
+public enum EqualityBehaviorOption implements SingleValueRuleBaseOption {
 
     IDENTITY,
     EQUALITY;

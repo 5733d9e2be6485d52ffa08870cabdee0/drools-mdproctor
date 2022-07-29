@@ -18,7 +18,7 @@ package org.kie.internal.builder.conf;
 
 import org.kie.api.conf.OptionKey;
 
-public enum PropertySpecificOption implements SingleValueKieBuilderOption {
+public enum PropertySpecificOption implements SingleValueRuleBuilderOption {
 
     DISABLED, ALLOWED, ALWAYS;
 

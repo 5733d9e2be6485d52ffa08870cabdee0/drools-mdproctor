@@ -88,6 +88,7 @@ import org.kie.api.KieServices;
 import org.kie.api.marshalling.ObjectMarshallingStrategy;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.EnvironmentName;
+import org.kie.api.runtime.conf.KieSessionConfiguration;
 import org.kie.api.runtime.rule.AgendaFilter;
 import org.kie.api.runtime.rule.EntryPoint;
 import org.kie.api.runtime.rule.Match;
@@ -154,7 +155,7 @@ public class ProtobufInputMarshaller {
     public static ReadSessionResult readSession( ProtobufMarshallerReaderContext context,
                                                   int id,
                                                   Environment environment,
-                                                  SessionConfiguration config,
+                                                  KieSessionConfiguration config,
                                                   KieSessionInitializer initializer) throws IOException, ClassNotFoundException {
 
         ProtobufMessages.KnowledgeSession _session = loadAndParseSession( context );
@@ -193,7 +194,7 @@ public class ProtobufInputMarshaller {
     private static StatefulKnowledgeSessionImpl createAndInitializeSession( ProtobufMarshallerReaderContext context,
                                                                             int id,
                                                                             Environment environment,
-                                                                            SessionConfiguration config,
+                                                                            KieSessionConfiguration config,
                                                                             ProtobufMessages.KnowledgeSession _session) throws IOException {
         FactHandleFactory handleFactory = context.getKnowledgeBase().newFactHandleFactory( _session.getRuleData().getLastId(),
                                                                                  _session.getRuleData().getLastRecency() );

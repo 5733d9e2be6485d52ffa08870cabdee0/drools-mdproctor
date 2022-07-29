@@ -36,7 +36,7 @@ package org.kie.api.conf;
  * </ul>
  */
 public enum EventProcessingOption
-        implements SingleValueKieBaseOption {
+        implements SingleValueRuleBaseOption {
 
     CLOUD("cloud"),
     STREAM("stream");

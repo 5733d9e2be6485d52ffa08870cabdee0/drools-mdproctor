@@ -28,7 +28,7 @@ package org.kie.api.conf;
  * <b>DEFAULT = false</b>
  *
  */
-public enum BetaRangeIndexOption implements SingleValueKieBaseOption {
+public enum BetaRangeIndexOption implements SingleValueRuleBaseOption {
 
     ENABLED(true),
     DISABLED(false);

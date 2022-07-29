@@ -177,7 +177,7 @@ public class BayesBeliefSystemTest {
         kBase.addPackages( kBuilder.getKnowledgePackages() );
 
         KieSessionConfiguration ksConf = RuleBaseFactory.newKnowledgeSessionConfiguration();
-        ((SessionConfiguration) ksConf).as(RuleSessionConfigurationImpl.KEY).setBeliefSystemType(BeliefSystemType.DEFEASIBLE);
+        ksConf.as(RuleSessionConfigurationImpl.KEY).setBeliefSystemType(BeliefSystemType.DEFEASIBLE);
 
         KieSession kSession = kBase.newKieSession( ksConf, null );
         return kSession;

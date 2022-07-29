@@ -72,7 +72,7 @@ public class KnowledgeBuilderFactoryServiceImpl implements KnowledgeBuilderFacto
 
     @Override
     public KnowledgeBuilder newKnowledgeBuilder(KnowledgeBuilderConfiguration conf) {
-        return new KnowledgeBuilderImpl( (KnowledgeBuilderConfigurationImpl) conf );
+        return new KnowledgeBuilderImpl(conf);
     }
 
     @Override

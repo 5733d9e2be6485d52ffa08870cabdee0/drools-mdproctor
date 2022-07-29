@@ -24,7 +24,7 @@ package org.kie.api.conf;
  *
  * DEFAULT = false
  */
-public enum RemoveIdentitiesOption implements SingleValueKieBaseOption {
+public enum RemoveIdentitiesOption implements SingleValueRuleBaseOption {
 
     YES(true),
     NO(false);

@@ -16,7 +16,7 @@
 
 package org.kie.api.conf;
 
-public class SessionsPoolOption implements SingleValueKieBaseOption {
+public class SessionsPoolOption implements SingleValueRuleBaseOption {
 
     public static final String PROPERTY_NAME = "drools.sessionPool";
 

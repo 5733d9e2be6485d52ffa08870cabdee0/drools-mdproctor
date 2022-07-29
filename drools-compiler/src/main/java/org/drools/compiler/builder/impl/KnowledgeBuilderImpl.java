@@ -170,13 +170,13 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
      * should be considered immutable. Do not modify its properties while it is
      * being used by a PackageBuilder.
      */
-    public KnowledgeBuilderImpl(final KnowledgeBuilderConfigurationImpl configuration) {
+    public KnowledgeBuilderImpl(final KnowledgeBuilderConfiguration configuration) {
         this((InternalKnowledgeBase) null,
              configuration);
     }
 
     public KnowledgeBuilderImpl(InternalKnowledgePackage pkg,
-                                KnowledgeBuilderConfigurationImpl configuration) {
+                                KnowledgeBuilderConfiguration configuration) {
         if (configuration == null) {
             this.configuration = new KnowledgeBuilderConfigurationImpl();
         } else {
@@ -210,9 +210,13 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
     }
 
     public KnowledgeBuilderImpl(InternalKnowledgeBase kBase,
-                                KnowledgeBuilderConfigurationImpl configuration) {
+                                KnowledgeBuilderConfiguration configuration) {
         if (configuration == null) {
+<<<<<<< HEAD
             this.configuration = new KnowledgeBuilderConfigurationImpl();
+=======
+            this.configuration = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration();
+>>>>>>> fixing issues, so more tests pass
         } else {
             this.configuration = configuration;
         }
