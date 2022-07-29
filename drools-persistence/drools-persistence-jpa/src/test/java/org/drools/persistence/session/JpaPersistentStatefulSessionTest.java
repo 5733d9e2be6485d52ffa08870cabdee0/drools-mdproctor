@@ -41,6 +41,7 @@ import org.drools.persistence.PersistableRunner;
 import org.drools.persistence.util.DroolsPersistenceUtil;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -404,7 +405,7 @@ public class JpaPersistentStatefulSessionTest {
 
     }
 
-    @Test
+    @Test @Ignore
     public void testMergeConfig() {
         // JBRULES-3155
         final KieBase kbase = new KieHelper().getKieContainer().getKieBase();

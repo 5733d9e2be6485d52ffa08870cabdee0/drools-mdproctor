@@ -24,7 +24,9 @@ import java.security.CodeSource;
 import org.drools.base.base.BaseTuple;
 import org.drools.base.base.ValueResolver;
 import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.core.impl.CompositeBaseConfiguration;
 import org.drools.core.impl.KnowledgeBaseImpl;
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.base.rule.Declaration;
 import org.drools.base.rule.EvalCondition;
@@ -62,7 +64,7 @@ public class PackageCompilationDataTest {
     public void testCodeSourceUrl() throws Exception {
         final String className = TestEvalExpression.class.getName();
 
-        KnowledgeBaseImpl kBase = new KnowledgeBaseImpl( "xxx", null );
+        KnowledgeBaseImpl kBase = new KnowledgeBaseImpl("xxx", (CompositeBaseConfiguration) RuleBaseFactory.newKnowledgeBaseConfiguration());
 
         InternalKnowledgePackage pkg = CoreComponentFactory.get().createKnowledgePackage("org.drools");
         pkg.setClassLoader( Thread.currentThread().getContextClassLoader() );

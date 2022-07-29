@@ -4940,7 +4940,7 @@ public class TraitTest extends CommonTraitTest {
         knowledgeSession.fireAllRules();
 
         assertThat(list.size()).isEqualTo(2);
-        assertThat(list).isEqualTo(Arrays.asList("test.Mask.test.Core_Proxy", "org.drools.core.factmodel.traits.Thing.test.Core_Proxy"));
+        assertThat(list).isEqualTo(Arrays.asList("test.Mask.test.Core_Proxy", "org.drools.base.factmodel.traits.Thing.test.Core_Proxy"));
     }
 
 
@@ -5031,7 +5031,7 @@ public class TraitTest extends CommonTraitTest {
         knowledgeSession.fireAllRules();
 
         assertThat(list.size()).isEqualTo(3);
-        assertThat(list).isEqualTo(Arrays.asList("test.Mask.test.Core_Proxy", "test.Mask2.test.Core_Proxy", "org.drools.core.factmodel.traits.Thing.test.Core_Proxy"));
+        assertThat(list).isEqualTo(Arrays.asList("test.Mask.test.Core_Proxy", "test.Mask2.test.Core_Proxy", "org.drools.base.factmodel.traits.Thing.test.Core_Proxy"));
 
     }
 

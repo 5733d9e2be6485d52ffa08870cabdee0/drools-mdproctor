@@ -69,7 +69,7 @@ public class AccumulateFunctionOption implements MultiValueRuleBuilderOption {
      * {@inheritDoc}
      */
     public String getPropertyName() {
-        return PROPERTY_NAME+name;
+        return PROPERTY_NAME;
     }
 
     /**

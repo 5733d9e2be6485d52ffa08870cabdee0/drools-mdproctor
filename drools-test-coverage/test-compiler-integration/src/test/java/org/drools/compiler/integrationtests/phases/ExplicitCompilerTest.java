@@ -143,7 +143,7 @@ public class ExplicitCompilerTest {
         List<InternalKnowledgePackage> packages =
                 packageRegistryManager.getPackageRegistry().values()
                         .stream().map(PackageRegistry::getPackage).collect(Collectors.toList());
-        RuleBase kbase = RuleBaseFactory.newRuleBase((KieBaseConfiguration)null);
+        RuleBase kbase = RuleBaseFactory.newRuleBase(RuleBaseFactory.newKnowledgeBaseConfiguration());
         kbase.addPackages(packages);
         SessionsAwareKnowledgeBase sessionsAwareKnowledgeBase =
                 new SessionsAwareKnowledgeBase(kbase);

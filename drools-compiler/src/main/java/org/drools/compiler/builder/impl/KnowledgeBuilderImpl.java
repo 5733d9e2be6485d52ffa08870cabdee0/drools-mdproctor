@@ -937,7 +937,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
     }
 
     public KieBase newKieBase() {
-        return newKnowledgeBase(null);
+        return newKnowledgeBase(RuleBaseFactory.newKnowledgeBaseConfiguration());
     }
 
     public KieBase newKnowledgeBase(KieBaseConfiguration conf) {

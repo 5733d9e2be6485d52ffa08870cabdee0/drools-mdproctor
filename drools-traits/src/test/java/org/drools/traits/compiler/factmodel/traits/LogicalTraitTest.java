@@ -1385,6 +1385,6 @@ public class LogicalTraitTest extends CommonTraitTest {
         System.out.println( "list" + list );
 
         assertThat(list.size()).isEqualTo(1);
-        assertThat(list.get(0).getClass().getName()).isEqualTo("org.drools.core.factmodel.traits.test.Bar");
+        assertThat(list.get(0).getClass().getName()).isEqualTo("org.drools.base.factmodel.traits.test.Bar");
     }
 }

@@ -850,7 +850,7 @@ public class StatefulKnowledgeSessionImpl extends AbstractRuntime
     }
 
     @Override public SessionConfiguration getSessionConfiguration() {
-        return null;
+        return this.config.as(SessionConfiguration.KEY);
     }
 
     public void reset() {

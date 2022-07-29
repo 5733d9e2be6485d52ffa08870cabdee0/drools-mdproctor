@@ -27,7 +27,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.drools.core.SessionConfiguration;
 import org.drools.core.base.MapGlobalResolver;
 import org.drools.core.common.InternalFactHandle;
 import org.drools.core.common.InternalWorkingMemory;
@@ -91,7 +90,7 @@ public class StatelessKnowledgeSessionImpl extends AbstractRuntime implements St
     public StatelessKnowledgeSessionImpl(KieSessionConfiguration conf,
                                          StatefulSessionPool pool) {
         this.kBase = pool.getKieBase();
-        this.conf = conf != null ? (SessionConfiguration) conf : kBase.getSessionConfiguration();
+        this.conf = conf != null ? conf : kBase.getSessionConfiguration();
         this.environment = null;
         this.pool = pool;
         wmCreated = new AtomicLong(1);

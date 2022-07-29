@@ -73,7 +73,7 @@ public class EvaluatorOption implements MultiValueRuleBuilderOption {
      * {@inheritDoc}
      */
     public String getPropertyName() {
-        return PROPERTY_NAME+key;
+        return PROPERTY_NAME;
     }
 
     /**

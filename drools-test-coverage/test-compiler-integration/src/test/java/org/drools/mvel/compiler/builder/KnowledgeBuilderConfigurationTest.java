@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
+import org.drools.compiler.builder.impl.KnowledgeBuilderRulesConfigurationImpl;
 import org.drools.compiler.rule.builder.EvaluatorDefinition;
 import org.drools.core.base.accumulators.AverageAccumulateFunction;
 import org.drools.core.base.accumulators.MaxAccumulateFunction;
@@ -91,10 +92,10 @@ public class KnowledgeBuilderConfigurationTest {
         // checking string conversion
         assertThat(config.getOption( LanguageLevelOption.KEY)).isEqualTo(LanguageLevelOption.DRL5);
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(LanguageLevelOption.PROPERTY_NAME)).isEqualTo("DRL5");
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(LanguageLevelOption.PROPERTY_NAME)).isEqualTo("DRL5");
 
         // setting the default dialect using the string based setProperty() method
-        config.as(KnowledgeBuilderConfigurationImpl.KEY).setProperty( LanguageLevelOption.PROPERTY_NAME,
+        config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).setProperty( LanguageLevelOption.PROPERTY_NAME,
                             "DRL6" );
 
         // checking the type safe getOption() method
@@ -103,7 +104,7 @@ public class KnowledgeBuilderConfigurationTest {
         // checking string conversion
         assertThat(config.getOption(LanguageLevelOption.KEY)).isEqualTo(LanguageLevelOption.DRL6);
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(LanguageLevelOption.PROPERTY_NAME)).isEqualTo("DRL6");
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(LanguageLevelOption.PROPERTY_NAME)).isEqualTo("DRL6");
     }
 
     @Test
@@ -124,13 +125,13 @@ public class KnowledgeBuilderConfigurationTest {
         assertThat(config.getOption(AccumulateFunctionOption.KEY, "avg").getName()).isEqualTo("avg");
         assertThat(config.getOption(AccumulateFunctionOption.KEY, "avg").getFunction()).isEqualTo(function);
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(AccumulateFunctionOption.PROPERTY_NAME + "avg")).isEqualTo(AverageAccumulateFunction.class.getName());
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(AccumulateFunctionOption.PROPERTY_NAME + "avg")).isEqualTo(AverageAccumulateFunction.class.getName());
         // check the key set
         keySet.add( "avg" );
         assertThat(config.getOptionSubKeys(AccumulateFunctionOption.KEY).contains("avg")).isTrue();
 
         // wiring the accumulate function using the string based setProperty() method
-        config.as(KnowledgeBuilderConfigurationImpl.KEY).setProperty( AccumulateFunctionOption.PROPERTY_NAME+"maximum",
+        config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).setProperty( AccumulateFunctionOption.PROPERTY_NAME+"maximum",
                             MaxAccumulateFunction.class.getName() );
         
         MaxAccumulateFunction max = new MaxAccumulateFunction();
@@ -140,11 +141,11 @@ public class KnowledgeBuilderConfigurationTest {
         assertThat(config.getOption( AccumulateFunctionOption.KEY, "maximum").getName()).isEqualTo("maximum");
         assertThat(config.getOption( AccumulateFunctionOption.KEY, "maximum").getFunction().getClass().getName()).isEqualTo(max.getClass().getName());
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(AccumulateFunctionOption.PROPERTY_NAME + "maximum")).isEqualTo(MaxAccumulateFunction.class.getName());
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(AccumulateFunctionOption.PROPERTY_NAME + "maximum")).isEqualTo(MaxAccumulateFunction.class.getName());
         keySet.add( "avg" );
         
         // wiring the inner class accumulate function using the string based setProperty() method
-        config.as(KnowledgeBuilderConfigurationImpl.KEY).setProperty( AccumulateFunctionOption.PROPERTY_NAME+"inner",
+        config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).setProperty( AccumulateFunctionOption.PROPERTY_NAME+"inner",
                             InnerAccumulateFuncion.class.getName() );
         
         InnerAccumulateFuncion inner = new InnerAccumulateFuncion();
@@ -154,7 +155,7 @@ public class KnowledgeBuilderConfigurationTest {
         assertThat(config.getOption( AccumulateFunctionOption.KEY, "inner").getName()).isEqualTo("inner");
         assertThat(config.getOption( AccumulateFunctionOption.KEY, "inner").getFunction().getClass().getName()).isEqualTo(inner.getClass().getName());
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(AccumulateFunctionOption.PROPERTY_NAME + "inner")).isEqualTo(InnerAccumulateFuncion.class.getName());
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(AccumulateFunctionOption.PROPERTY_NAME + "inner")).isEqualTo(InnerAccumulateFuncion.class.getName());
         keySet.add( "avg" );
 
         assertThat(config.getOptionSubKeys(AccumulateFunctionOption.KEY).containsAll(keySet)).isTrue();
@@ -207,10 +208,10 @@ public class KnowledgeBuilderConfigurationTest {
         assertThat(config.getOption( EvaluatorOption.KEY, "after").getName()).isEqualTo("after");
         assertThat(config.getOption( EvaluatorOption.KEY, "after").getEvaluatorDefinition()).isEqualTo(afterDef);
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(EvaluatorOption.PROPERTY_NAME + "after")).isEqualTo(AfterEvaluatorDefinition.class.getName());
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(EvaluatorOption.PROPERTY_NAME + "after")).isEqualTo(AfterEvaluatorDefinition.class.getName());
 
         // wiring the evaluator definition using the string based setProperty() method
-        config.as(KnowledgeBuilderConfigurationImpl.KEY).setProperty( EvaluatorOption.PROPERTY_NAME+"before",
+        config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).setProperty( EvaluatorOption.PROPERTY_NAME+"before",
                             BeforeEvaluatorDefinition.class.getName() );
         
         BeforeEvaluatorDefinition beforeDef = new BeforeEvaluatorDefinition();
@@ -220,7 +221,7 @@ public class KnowledgeBuilderConfigurationTest {
         assertThat(config.getOption( EvaluatorOption.KEY, "before").getName()).isEqualTo("before");
         assertThat(config.getOption( EvaluatorOption.KEY, "before").getEvaluatorDefinition().getClass().getName()).isEqualTo(beforeDef.getClass().getName());
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(EvaluatorOption.PROPERTY_NAME + "before")).isEqualTo(beforeDef.getClass().getName());
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(EvaluatorOption.PROPERTY_NAME + "before")).isEqualTo(beforeDef.getClass().getName());
     }
     
     @Test
@@ -231,16 +232,16 @@ public class KnowledgeBuilderConfigurationTest {
         // checking the type safe getOption() method
         assertThat(config.getOption( ProcessStringEscapesOption.KEY)).isEqualTo(ProcessStringEscapesOption.YES);
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(ProcessStringEscapesOption.PROPERTY_NAME)).isEqualTo("true");
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(ProcessStringEscapesOption.PROPERTY_NAME)).isEqualTo("true");
 
         // setting the default dialect using the string based setProperty() method
-        config.as(KnowledgeBuilderConfigurationImpl.KEY).setProperty( ProcessStringEscapesOption.PROPERTY_NAME,
+        config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).setProperty( ProcessStringEscapesOption.PROPERTY_NAME,
                             "false" );
 
         // checking the type safe getOption() method
         assertThat(config.getOption(ProcessStringEscapesOption.KEY) ).isEqualTo(ProcessStringEscapesOption.NO);
         // checking the string based getProperty() method
-        assertThat(config.as(KnowledgeBuilderConfigurationImpl.KEY).getProperty(ProcessStringEscapesOption.PROPERTY_NAME)).isEqualTo("false");
+        assertThat(config.as(KnowledgeBuilderRulesConfigurationImpl.KEY).getProperty(ProcessStringEscapesOption.PROPERTY_NAME)).isEqualTo("false");
     }
 
     @Test

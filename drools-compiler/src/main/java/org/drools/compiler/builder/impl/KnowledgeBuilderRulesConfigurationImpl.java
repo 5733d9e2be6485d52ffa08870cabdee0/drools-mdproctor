@@ -161,6 +161,10 @@ public class KnowledgeBuilderRulesConfigurationImpl
                     this.chainedProperties.getProperty(ProcessStringEscapesOption.PROPERTY_NAME,
                                                        "true"));
 
+        setProperty(AlphaNetworkCompilerOption.PROPERTY_NAME,
+                    this.chainedProperties.getProperty(AlphaNetworkCompilerOption.PROPERTY_NAME,
+                                                       "disabled"));
+
         setProperty(ExternaliseCanonicalModelLambdaOption.PROPERTY_NAME,
                     this.chainedProperties.getProperty(ExternaliseCanonicalModelLambdaOption.PROPERTY_NAME,"true"));
 
