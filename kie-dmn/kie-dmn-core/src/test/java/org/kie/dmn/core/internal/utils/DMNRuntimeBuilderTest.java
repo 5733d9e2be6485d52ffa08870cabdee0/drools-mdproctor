@@ -19,6 +19,7 @@ package org.kie.dmn.core.internal.utils;
 import java.util.Collections;
 import java.util.function.Function;
 
+import org.drools.core.impl.RuleBaseFactory;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DMNRuntimeBuilderTest {
 
-    private static final KieBase KIE_BASE = KnowledgeBaseFactory.newKnowledgeBase("DMN", null);
+    private static final KieBase KIE_BASE = KnowledgeBaseFactory.newKnowledgeBase("DMN", RuleBaseFactory.newKnowledgeBaseConfiguration());
     private DMNRuntimeBuilder dmnRuntimeBuilder;
 
     @Before
