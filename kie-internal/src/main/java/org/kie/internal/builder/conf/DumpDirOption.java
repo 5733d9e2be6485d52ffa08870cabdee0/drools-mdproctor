@@ -25,7 +25,7 @@ import org.kie.api.conf.OptionKey;
  * where Drools will dump generated code for debugging purposes. If this
  * option is not set, drools will generate and compile all code in memory.
  */
-public class DumpDirOption implements SingleValueRuleBuilderOption {
+public class DumpDirOption implements SingleValueKieBuilderOption {
 
     private static final long serialVersionUID = 510l;
 
