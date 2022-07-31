@@ -33,7 +33,7 @@ public class DefaultTimerJobFactoryManager
     public TimerJobInstance createTimerJobInstance(Job job,
                                                    JobContext ctx,
                                                    Trigger trigger,
-                                                   JobHandle handle,
+                                                   AbstractJobHandle handle,
                                                    InternalSchedulerService scheduler) {
         ctx.setJobHandle( handle );
         return new DefaultTimerJobInstance( job,

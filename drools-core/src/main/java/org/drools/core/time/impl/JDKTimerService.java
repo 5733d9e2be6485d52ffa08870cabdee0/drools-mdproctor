@@ -92,7 +92,7 @@ public class JDKTimerService
         this.scheduler.shutdownNow();
     }
 
-    public JobHandle scheduleJob(Job job,
+    public AbstractJobHandle scheduleJob(Job job,
             JobContext ctx,
             Trigger trigger) {
         Date date = trigger.hasNextFireTime();
@@ -135,7 +135,7 @@ public class JDKTimerService
         jobFactoryManager.addTimerJobInstance(timerJobInstance);
     }
 
-    public boolean removeJob(JobHandle jobHandle) {
+    public boolean removeJob(AbstractJobHandle jobHandle) {
         jobHandle.setCancel(true);
         JDKJobHandle jdkJobHandle = (JDKJobHandle) jobHandle;
         jobFactoryManager.removeTimerJobInstance(jdkJobHandle.getTimerJobInstance());

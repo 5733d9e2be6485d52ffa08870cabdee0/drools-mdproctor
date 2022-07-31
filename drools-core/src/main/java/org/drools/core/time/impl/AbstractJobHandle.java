@@ -16,19 +16,21 @@
 package org.drools.core.time.impl;
 
 import org.drools.base.time.JobHandle;
+import org.drools.base.util.LinkedListNode;
 
-public abstract class AbstractJobHandle implements JobHandle {
+public abstract class AbstractJobHandle implements JobHandle,
+                                                   LinkedListNode<AbstractJobHandle> {
 
-    private JobHandle previous;
-    private JobHandle next;
+    private AbstractJobHandle previous;
+    private AbstractJobHandle next;
 
     @Override
-    public JobHandle getPrevious() {
+    public AbstractJobHandle getPrevious() {
         return previous;
     }
 
     @Override
-    public void setPrevious(JobHandle previous) {
+    public void setPrevious(AbstractJobHandle previous) {
         this.previous = previous;
     }
 
@@ -39,12 +41,12 @@ public abstract class AbstractJobHandle implements JobHandle {
     }
 
     @Override
-    public void setNext(JobHandle next) {
+    public void setNext(AbstractJobHandle next) {
         this.next = next;
     }
 
     @Override
-    public JobHandle getNext() {
+    public AbstractJobHandle getNext() {
         return next;
     }
 }

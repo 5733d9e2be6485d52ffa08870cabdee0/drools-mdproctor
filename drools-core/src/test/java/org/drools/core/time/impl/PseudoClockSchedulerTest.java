@@ -50,7 +50,7 @@ public class PseudoClockSchedulerTest {
         final Date triggerTime = new Date(1000);
         when( mockTrigger_1.hasNextFireTime() ).thenReturn(triggerTime);
 
-        JobHandle jobHandle = scheduler.scheduleJob(mockJob_1, this.mockContext_1, mockTrigger_1);
+        AbstractJobHandle jobHandle = scheduler.scheduleJob(mockJob_1, this.mockContext_1, mockTrigger_1);
         assertThat(scheduler.getTimeToNextJob()).isEqualTo(triggerTime.getTime());
 
         scheduler.removeJob(jobHandle);
@@ -66,8 +66,8 @@ public class PseudoClockSchedulerTest {
         when( mockTrigger_1.hasNextFireTime() ).thenReturn(triggerTime_1);
         when( mockTrigger_2.hasNextFireTime() ).thenReturn(triggerTime_2);
 
-        JobHandle jobHandle_1 = scheduler.scheduleJob(mockJob_1, this.mockContext_1, mockTrigger_1);
-        JobHandle jobHandle_2 = scheduler.scheduleJob(mockJob_2, this.mockContext_2, mockTrigger_2);
+        AbstractJobHandle jobHandle_1 = scheduler.scheduleJob(mockJob_1, this.mockContext_1, mockTrigger_1);
+        AbstractJobHandle jobHandle_2 = scheduler.scheduleJob(mockJob_2, this.mockContext_2, mockTrigger_2);
         assertThat(scheduler.getTimeToNextJob()).isEqualTo(triggerTime_1.getTime());
 
         scheduler.removeJob(jobHandle_1);

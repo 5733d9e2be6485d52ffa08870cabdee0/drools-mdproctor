@@ -111,7 +111,7 @@ public class PseudoClockScheduler
      *
      * @see org.drools.core.time.TimerService#scheduleJob(Job, JobContext, Trigger)
      */
-    public JobHandle scheduleJob(Job job,
+    public AbstractJobHandle scheduleJob(Job job,
                                  JobContext ctx,
                                  Trigger trigger) {
 
@@ -144,7 +144,7 @@ public class PseudoClockScheduler
      * @inheritDoc
      * @see org.drools.core.time.TimerService#removeJob(JobHandle)
      */
-    public synchronized boolean removeJob(JobHandle jobHandle) {
+    public synchronized boolean removeJob(AbstractJobHandle jobHandle) {
         jobHandle.setCancel(true);
         jobFactoryManager.removeTimerJobInstance(((DefaultJobHandle) jobHandle).getTimerJobInstance());
         return this.queue.remove(((DefaultJobHandle) jobHandle).getTimerJobInstance());

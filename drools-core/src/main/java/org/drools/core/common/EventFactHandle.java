@@ -24,6 +24,7 @@ import org.drools.base.rule.EntryPointId;
 import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerService;
 import org.drools.base.util.LinkedList;
+import org.drools.core.time.impl.AbstractJobHandle;
 
 public class EventFactHandle extends DefaultFactHandle implements Comparable<EventFactHandle> {
 
@@ -42,7 +43,7 @@ public class EventFactHandle extends DefaultFactHandle implements Comparable<Eve
 
     private AtomicInteger     notExpiredPartitions;
 
-    private final transient LinkedList<JobHandle> jobs = new LinkedList<>();
+    private final transient LinkedList<AbstractJobHandle> jobs = new LinkedList<>();
 
     // ----------------------------------------------------------------------
     // Constructors
@@ -308,18 +309,18 @@ public class EventFactHandle extends DefaultFactHandle implements Comparable<Eve
         return (getStartTimestamp() < e.getStartTimestamp()) ? -1 : (getStartTimestamp() == e.getStartTimestamp() ? 0 : 1);
     }
 
-    public void addJob(JobHandle job) {
+    public void addJob(AbstractJobHandle job) {
         synchronized (jobs) {
-            jobs.add(job);
+            jobs.add((AbstractJobHandle)job);
         }
     }
 
-    public void removeJob(JobHandle job) {
+    public void removeJob(AbstractJobHandle job) {
         synchronized (jobs) {
             // the job could have been already removed if the event has been just retracted
             // and then the unscheduleAllJobs method has been invoked concurrently
-            if (jobs.contains(job)) {
-                jobs.remove(job);
+            if (jobs.contains((AbstractJobHandle)job)) {
+                jobs.remove((AbstractJobHandle)job);
             }
         }
     }
@@ -329,7 +330,7 @@ public class EventFactHandle extends DefaultFactHandle implements Comparable<Eve
             synchronized (jobs) {
                 TimerService clock = reteEvaluator.getTimerService();
                 while ( !jobs.isEmpty() ) {
-                    JobHandle job = jobs.removeFirst();
+                    AbstractJobHandle job = jobs.removeFirst();
                     clock.removeJob(job);
                 }
             }

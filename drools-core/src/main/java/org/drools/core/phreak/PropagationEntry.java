@@ -37,6 +37,7 @@ import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.common.PropagationContext;
 import org.drools.core.time.JobContext;
 import org.drools.base.time.JobHandle;
+import org.drools.core.time.impl.AbstractJobHandle;
 import org.drools.core.time.impl.PointInTimeTrigger;
 
 import static org.drools.core.reteoo.EntryPointNode.removeRightTuplesMatchingOTN;
@@ -246,8 +247,8 @@ public interface PropagationEntry {
                 reteEvaluator.addPropagation( action );
             } else {
                 JobContext jobctx = new ObjectTypeNode.ExpireJobContext( action, reteEvaluator );
-                JobHandle jobHandle = reteEvaluator.getTimerService()
-                                        .scheduleJob( job,
+                AbstractJobHandle jobHandle = reteEvaluator.getTimerService()
+                                                           .scheduleJob( job,
                                                       jobctx,
                                                       PointInTimeTrigger.createPointInTimeTrigger( nextTimestamp, null ) );
                 jobctx.setJobHandle( jobHandle );

@@ -38,6 +38,7 @@ import org.drools.core.time.Job;
 import org.drools.core.time.JobContext;
 import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerService;
+import org.drools.core.time.impl.AbstractJobHandle;
 import org.drools.core.time.impl.PointInTimeTrigger;
 
 import static org.drools.core.common.PhreakPropagationContextFactory.createPropagationContextForFact;
@@ -212,7 +213,7 @@ public class SlidingTimeWindow
                 }
 
                 JobContext jobctx = new BehaviorJobContext( nodeId, reteEvaluator, this, context);
-                JobHandle handle = clock.scheduleJob( job,
+                AbstractJobHandle handle = clock.scheduleJob( job,
                                                       jobctx,
                                                       PointInTimeTrigger.createPointInTimeTrigger( nextTimestamp, null ) );
                 jobctx.setJobHandle( handle );
@@ -237,19 +238,19 @@ public class SlidingTimeWindow
 
         private PriorityQueue<EventFactHandle> queue;
         private EventFactHandle                expiringHandle;
-        private JobHandle                      jobHandle;
+        private AbstractJobHandle                      jobHandle;
 
         public SlidingTimeWindowContext() {
             this.queue = new PriorityQueue<>(16); // arbitrary size... can we improve it?
         }
 
         @Override
-        public JobHandle getJobHandle() {
+        public AbstractJobHandle getJobHandle() {
             return this.jobHandle;
         }
 
         @Override
-        public void setJobHandle(JobHandle jobHandle) {
+        public void setJobHandle(AbstractJobHandle jobHandle) {
             this.jobHandle = jobHandle;
         }
 
@@ -332,12 +333,12 @@ public class SlidingTimeWindow
         }
 
         @Override
-        public JobHandle getJobHandle() {
+        public AbstractJobHandle getJobHandle() {
             return behaviorContext.getJobHandle();
         }
 
         @Override
-        public void setJobHandle(JobHandle jobHandle) {
+        public void setJobHandle(AbstractJobHandle jobHandle) {
             behaviorContext.setJobHandle( jobHandle );
         }
 

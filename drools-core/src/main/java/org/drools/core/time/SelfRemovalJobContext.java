@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.drools.base.time.JobHandle;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.core.time.impl.AbstractJobHandle;
 import org.drools.core.time.impl.TimerJobInstance;
 
 public class SelfRemovalJobContext implements JobContext {
@@ -39,12 +40,12 @@ public class SelfRemovalJobContext implements JobContext {
     }
 
     @Override
-    public void setJobHandle(JobHandle jobHandle) {
+    public void setJobHandle(AbstractJobHandle jobHandle) {
         jobContext.setJobHandle( jobHandle );
     }
 
     @Override
-    public JobHandle getJobHandle() {
+    public AbstractJobHandle getJobHandle() {
         return jobContext.getJobHandle();
     }
 

@@ -46,6 +46,7 @@ import org.drools.core.common.PropagationContext;
 import org.drools.core.time.Job;
 import org.drools.core.time.JobContext;
 import org.drools.base.time.JobHandle;
+import org.drools.core.time.impl.AbstractJobHandle;
 import org.drools.core.util.bitmask.BitMask;
 import org.drools.core.util.bitmask.EmptyBitMask;
 
@@ -538,7 +539,7 @@ public class ObjectTypeNode extends ObjectSource implements ObjectSink, MemoryFa
             Externalizable {
         public final WorkingMemoryReteExpireAction expireAction;
         public final ReteEvaluator         reteEvaluator;
-        public JobHandle                     handle;
+        public AbstractJobHandle                     handle;
 
         public ExpireJobContext(WorkingMemoryReteExpireAction expireAction,
                                 ReteEvaluator reteEvaluator) {
@@ -548,12 +549,12 @@ public class ObjectTypeNode extends ObjectSource implements ObjectSink, MemoryFa
         }
 
         @Override
-        public JobHandle getJobHandle() {
+        public AbstractJobHandle getJobHandle() {
             return this.handle;
         }
 
         @Override
-        public void setJobHandle(JobHandle jobHandle) {
+        public void setJobHandle(AbstractJobHandle jobHandle) {
             this.handle = jobHandle;
         }
 
@@ -569,7 +570,7 @@ public class ObjectTypeNode extends ObjectSource implements ObjectSink, MemoryFa
             return handle;
         }
 
-        public void setHandle(JobHandle handle) {
+        public void setHandle(AbstractJobHandle handle) {
             this.handle = handle;
         }
 

@@ -38,6 +38,7 @@ import org.drools.core.time.JobContext;
 import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerService;
 import org.drools.base.time.Trigger;
+import org.drools.core.time.impl.AbstractJobHandle;
 import org.drools.core.time.impl.DefaultJobHandle;
 import org.drools.base.time.impl.Timer;
 import org.drools.base.util.LinkedList;
@@ -457,7 +458,7 @@ public class PhreakTimerNode {
     public static class TimerNodeJobContext
             implements
             JobContext {
-        private       JobHandle             jobHandle;
+        private       AbstractJobHandle     jobHandle;
         private final Trigger               trigger;
 
         private final Tuple                 tuple;
@@ -484,7 +485,7 @@ public class PhreakTimerNode {
             this.reteEvaluator = reteEvaluator;
         }
 
-        public JobHandle getJobHandle() {
+        public AbstractJobHandle getJobHandle() {
             return this.jobHandle;
         }
 
@@ -493,7 +494,7 @@ public class PhreakTimerNode {
             return reteEvaluator;
         }
 
-        public void setJobHandle(JobHandle jobHandle) {
+        public void setJobHandle(AbstractJobHandle jobHandle) {
             this.jobHandle = jobHandle;
         }
 

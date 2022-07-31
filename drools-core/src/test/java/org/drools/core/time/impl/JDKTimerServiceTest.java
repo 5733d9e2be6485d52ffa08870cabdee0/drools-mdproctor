@@ -101,7 +101,7 @@ public class JDKTimerServiceTest {
     public static class HelloWorldJobContext implements JobContext {
         private String message;
         private  TimerService timeService;
-        private JobHandle jobHandle;
+        private AbstractJobHandle jobHandle;
 
         private List list;
 
@@ -122,11 +122,11 @@ public class JDKTimerServiceTest {
             return this.counter++;
         }
 
-        public JobHandle getJobHandle() {
+        public AbstractJobHandle getJobHandle() {
             return this.jobHandle;
         }
 
-        public void setJobHandle(JobHandle jobHandle) {
+        public void setJobHandle(AbstractJobHandle jobHandle) {
             this.jobHandle = jobHandle;
         }
 

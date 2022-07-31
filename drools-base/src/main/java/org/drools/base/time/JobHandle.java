@@ -16,13 +16,10 @@
 
 package org.drools.base.time;
 
-
-import org.drools.base.util.LinkedListNode;
-
 /**
  * An interface for Job Handles
  */
-public interface JobHandle extends LinkedListNode<JobHandle> {
+public interface JobHandle {
     
     public long getId();
 

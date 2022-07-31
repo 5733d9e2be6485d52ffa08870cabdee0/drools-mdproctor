@@ -27,7 +27,7 @@ public interface TimerJobFactoryManager {
     TimerJobInstance createTimerJobInstance(Job job,
                                             JobContext ctx,
                                             Trigger trigger,
-                                            JobHandle handle,
+                                            AbstractJobHandle handle,
                                             InternalSchedulerService scheduler);
     
     void addTimerJobInstance(TimerJobInstance instance);

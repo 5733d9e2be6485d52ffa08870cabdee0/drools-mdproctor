@@ -23,14 +23,15 @@ import org.drools.base.time.JobHandle;
 import org.drools.core.common.InternalKnowledgeRuntime;
 import org.drools.core.common.InternalWorkingMemory;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.core.time.impl.AbstractJobHandle;
 
 public interface JobContext extends Serializable {
     /**
      * This method should only be called by the scheduler
      */    
-    void setJobHandle(JobHandle jobHandle);
+    void setJobHandle(AbstractJobHandle jobHandle);
 
-    JobHandle getJobHandle();
+    AbstractJobHandle getJobHandle();
 
     ReteEvaluator getReteEvaluator();
 

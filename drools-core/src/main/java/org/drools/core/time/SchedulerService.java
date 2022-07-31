@@ -16,8 +16,8 @@
  */
 package org.drools.core.time;
 
-import org.drools.base.time.JobHandle;
 import org.drools.base.time.Trigger;
+import org.drools.core.time.impl.AbstractJobHandle;
 
 public interface SchedulerService {
 
@@ -30,7 +30,7 @@ public interface SchedulerService {
      * 
      * @return
      */
-    JobHandle scheduleJob(Job job, JobContext ctx, Trigger trigger);
+    AbstractJobHandle scheduleJob(Job job, JobContext ctx, Trigger trigger);
 
     /**
      * Remove the job identified by the given job handle from the 
@@ -40,5 +40,5 @@ public interface SchedulerService {
      * 
      * @return
      */
-    boolean removeJob(JobHandle jobHandle);
+    boolean removeJob(AbstractJobHandle jobHandle);
 }
