@@ -156,6 +156,7 @@
         <module>kie-apiv2-flow</module>
         <module>kie-apiv2-rules</module>
         <module>drools-base</module>
+        <module>drools-network</module>
         <module>kie-api</module>
         <module>kie-internal</module>
         <module>kie-archetypes</module>
@@ -263,6 +264,7 @@
         <module>kie-apiv2-flow</module>
         <module>kie-apiv2-rules</module>
         <module>drools-base</module>
+        <module>drools-network</module>
         <module>kie-api</module>
         <module>kie-util</module>
         <module>kie-memory-compiler</module>
