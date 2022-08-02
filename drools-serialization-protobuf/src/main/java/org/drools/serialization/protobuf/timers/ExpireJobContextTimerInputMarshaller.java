@@ -25,6 +25,7 @@ import org.drools.core.reteoo.ObjectTypeNode.ExpireJobContext;
 import org.drools.core.time.JobContext;
 import org.drools.base.time.JobHandle;
 import org.drools.core.time.TimerService;
+import org.drools.core.time.impl.AbstractJobHandle;
 import org.drools.core.time.impl.PointInTimeTrigger;
 import org.drools.serialization.protobuf.ProtobufMarshallerReaderContext;
 import org.drools.serialization.protobuf.ProtobufMessages;
@@ -43,9 +44,9 @@ public class ExpireJobContextTimerInputMarshaller implements TimersInputMarshall
         TimerService clock = inCtx.getWorkingMemory().getTimerService();
 
         JobContext jobctx = new ExpireJobContext( new WorkingMemoryReteExpireAction( ( EventFactHandle ) factHandle ), inCtx.getWorkingMemory() );
-        JobHandle handle = clock.scheduleJob( job,
-                jobctx,
-                PointInTimeTrigger.createPointInTimeTrigger( nextTimeStamp, null ) );
+        AbstractJobHandle handle = clock.scheduleJob(job,
+                                                     jobctx,
+                                                     PointInTimeTrigger.createPointInTimeTrigger( nextTimeStamp, null ));
         jobctx.setJobHandle( handle );
 
     }
@@ -58,10 +59,10 @@ public class ExpireJobContextTimerInputMarshaller implements TimersInputMarshall
         TimerService clock = inCtx.getWorkingMemory().getTimerService();
 
         JobContext jobctx = new ExpireJobContext( new WorkingMemoryReteExpireAction((EventFactHandle)factHandle),
-                inCtx.getWorkingMemory() );
-        JobHandle jobHandle = clock.scheduleJob( job,
-                jobctx,
-                PointInTimeTrigger.createPointInTimeTrigger( expire.getNextFireTimestamp(), null ) );
+                                                  inCtx.getWorkingMemory() );
+        AbstractJobHandle jobHandle = clock.scheduleJob( job,
+                                                         jobctx,
+                                                         PointInTimeTrigger.createPointInTimeTrigger( expire.getNextFireTimestamp(), null ) );
         jobctx.setJobHandle( jobHandle );
         ((EventFactHandle) factHandle).addJob(jobHandle);
     }

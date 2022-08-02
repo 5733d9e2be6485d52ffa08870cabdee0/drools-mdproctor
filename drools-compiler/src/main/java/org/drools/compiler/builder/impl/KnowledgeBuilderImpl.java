@@ -53,14 +53,14 @@ import org.drools.compiler.compiler.ProcessBuilderFactory;
 import org.drools.compiler.compiler.ResourceTypeDeclarationWarning;
 import org.drools.compiler.kie.builder.impl.BuildContext;
 import org.drools.compiler.lang.descr.CompositePackageDescr;
-import org.drools.core.base.ObjectType;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.base.base.ObjectType;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.impl.RuleBaseFactory;
-import org.drools.core.rule.Function;
-import org.drools.core.rule.ImportDeclaration;
-import org.drools.core.rule.TypeDeclaration;
+import org.drools.base.rule.Function;
+import org.drools.base.rule.ImportDeclaration;
+import org.drools.base.rule.TypeDeclaration;
 import org.drools.drl.ast.descr.AttributeDescr;
 import org.drools.drl.ast.descr.ImportDescr;
 import org.drools.drl.ast.descr.PackageDescr;
@@ -77,7 +77,7 @@ import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
 import org.drools.wiring.api.ComponentsFactory;
 import org.kie.api.KieBase;
-import org.kie.api.KieBaseConfiguration;
+import org.kie.api.conf.KieBaseConfiguration;
 import org.kie.api.builder.ReleaseId;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.process.Process;
@@ -89,12 +89,17 @@ import org.kie.api.io.ResourceConfiguration;
 import org.kie.api.io.ResourceType;
 import org.kie.api.io.ResourceWithConfiguration;
 import org.kie.internal.builder.CompositeKnowledgeBuilder;
+import org.kie.internal.builder.KnowledgeBuilderConfiguration;
 import org.kie.internal.builder.KnowledgeBuilderError;
 import org.kie.internal.builder.KnowledgeBuilderErrors;
+import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.builder.KnowledgeBuilderResult;
 import org.kie.internal.builder.KnowledgeBuilderResults;
 import org.kie.internal.builder.ResourceChange;
 import org.kie.internal.builder.ResultSeverity;
+import org.kie.internal.builder.conf.DefaultDialectOption;
+import org.kie.internal.builder.conf.LanguageLevelOption;
+import org.kie.internal.builder.conf.ParallelRulesBuildThresholdOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +111,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
 
     private final BuildResultCollectorImpl results;
 
-    private final KnowledgeBuilderConfigurationImpl configuration;
+    private final KnowledgeBuilderConfiguration configuration;
 
     /**
      * Optional RuleBase for incremental live building
@@ -178,16 +183,16 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
     public KnowledgeBuilderImpl(InternalKnowledgePackage pkg,
                                 KnowledgeBuilderConfiguration configuration) {
         if (configuration == null) {
-            this.configuration = new KnowledgeBuilderConfigurationImpl();
+            this.configuration = new KnowledgeBuilderFactoryServiceImpl().newKnowledgeBuilderConfiguration();
         } else {
             this.configuration = configuration;
         }
 
         this.rootClassLoader = this.configuration.getClassLoader();
 
-        this.defaultDialect = this.configuration.getDefaultDialect();
+        this.defaultDialect = this.configuration.getOption(DefaultDialectOption.KEY).dialectName();
 
-        this.parallelRulesBuildThreshold = this.configuration.getParallelRulesBuildThreshold();
+        this.parallelRulesBuildThreshold = this.configuration.getOption(ParallelRulesBuildThresholdOption.KEY).getParallelRulesBuildThreshold();
 
         this.results = new BuildResultCollectorImpl();
 
@@ -212,11 +217,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
     public KnowledgeBuilderImpl(InternalKnowledgeBase kBase,
                                 KnowledgeBuilderConfiguration configuration) {
         if (configuration == null) {
-<<<<<<< HEAD
-            this.configuration = new KnowledgeBuilderConfigurationImpl();
-=======
             this.configuration = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration();
->>>>>>> fixing issues, so more tests pass
         } else {
             this.configuration = configuration;
         }
@@ -227,9 +228,9 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
             this.rootClassLoader = this.configuration.getClassLoader();
         }
 
-        this.defaultDialect = this.configuration.getDefaultDialect();
+        this.defaultDialect = this.configuration.getOption(DefaultDialectOption.KEY).dialectName();
 
-        this.parallelRulesBuildThreshold = this.configuration.getParallelRulesBuildThreshold();
+        this.parallelRulesBuildThreshold = this.configuration.getOption(ParallelRulesBuildThresholdOption.KEY).getParallelRulesBuildThreshold();
 
         this.results = new BuildResultCollectorImpl();
 
@@ -304,7 +305,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
      */
     public void addPackageFromDrl(final Reader reader,
                                   final Resource sourceResource) throws DroolsParserException, IOException {
-        final DrlParser parser = new DrlParser(configuration.getLanguageLevel());
+        final DrlParser parser = new DrlParser(configuration.getOption(LanguageLevelOption.KEY));
         final PackageDescr pkg = parser.parse(sourceResource, reader);
         this.results.addAll(parser.getErrors());
         if (pkg == null) {
@@ -439,7 +440,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
         PackageCompilationPhase packageProcessor =
               new PackageCompilationPhase(this,
                                           kBase,
-                                          configuration,
+                                          configuration.as(KnowledgeBuilderConfigurationImpl.KEY),
                                           typeDeclarationManager.getTypeDeclarationBuilder(),
                                           assetFilter,
                                           pkgRegistry,
@@ -581,7 +582,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
             PackageCompilationPhase packageProcessor =
                   new PackageCompilationPhase(this,
                                               kBase,
-                                              configuration,
+                                              configuration.as(KnowledgeBuilderConfigurationImpl.KEY),
                                               typeDeclarationManager.getTypeDeclarationBuilder(),
                                               assetFilter,
                                               this.pkgRegistryManager.getPackageRegistry(packageDescr.getNamespace()),
@@ -711,7 +712,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
      * @return The PackageBuilderConfiguration
      */
     public KnowledgeBuilderConfigurationImpl getBuilderConfiguration() {
-        return this.configuration;
+        return configuration.as(KnowledgeBuilderConfigurationImpl.KEY);
     }
 
     public PackageRegistry getPackageRegistry(String name) {
@@ -937,7 +938,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
     }
 
     public KieBase newKieBase() {
-        return newKnowledgeBase(RuleBaseFactory.newKnowledgeBaseConfiguration());
+        return newKnowledgeBase(null);
     }
 
     public KieBase newKnowledgeBase(KieBaseConfiguration conf) {
@@ -1012,7 +1013,7 @@ public class KnowledgeBuilderImpl implements InternalKnowledgeBuilder, TypeDecla
                     this, // as DroolsAssemblerContext
                     results,
                     kBase,
-                    configuration);
+                    configuration.as(KnowledgeBuilderConfigurationImpl.KEY));
         compositePackageCompilationPhase.process();
     }
 
