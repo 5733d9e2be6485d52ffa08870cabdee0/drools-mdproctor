@@ -55,6 +55,7 @@ import org.drools.core.reteoo.Rete;
 import org.drools.core.reteoo.ReteooBuilder;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.SegmentMemory;
+import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
 import org.drools.core.rule.InvalidPatternException;
 import org.drools.core.rule.TypeDeclaration;
 import org.drools.core.rule.accessor.FactHandleFactory;
@@ -496,7 +497,7 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     }
 
     @Override
-    public SegmentMemory.Prototype getSegmentPrototype(SegmentMemory segment) {
+    public SegmentPrototype getSegmentPrototype(SegmentMemory segment) {
         return delegate.getSegmentPrototype(segment);
     }
 
@@ -800,6 +801,11 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     @Override
     public void addReceiveNode(AsyncReceiveNode node) {
         delegate.addReceiveNode(node);
+    }
+
+    @Override
+    public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentPrototype smem) {
+        delegate.registerSegmentPrototype(tupleSource, smem);
     }
 
     @Override

@@ -61,6 +61,9 @@ public class ReteooBuilder
     /** The RuleBase */
     private transient RuleBase  kBase;
 
+    private transient Set<LeftTupleNode> splits;
+    private transient Set<LeftTupleNode> merges;
+
     private Map<String, TerminalNode[]>          rules;
     private Map<String, QueryTerminalNode[]>     queries;
 
@@ -88,11 +91,21 @@ public class ReteooBuilder
         this.rules = new HashMap<>();
         this.queries = new HashMap<>();
         this.namedWindows = new HashMap<>();
+        this.splits = new HashSet<>();
+        this.merges = new HashSet<>();
 
         this.ruleBuilder = new ReteooRuleBuilder();
     }
 
-    // ------------------------------------------------------------
+    public Set<LeftTupleNode> getSplits() {
+        return splits;
+    }
+
+    public Set<LeftTupleNode> getMerges() {
+        return merges;
+    }
+
+// ------------------------------------------------------------
     // Instance methods
     // ------------------------------------------------------------
 
@@ -171,8 +184,10 @@ public class ReteooBuilder
                 continue;
             }
 
-            for ( TerminalNode node : rulesTerminalNodes ) {
-                removeTerminalNode( context, (TerminalNode) node, workingMemories );
+
+            for ( TerminalNode tn : rulesTerminalNodes ) {
+                AddRemoveRule.removeRule( tn, workingMemories, kBase );
+                removeTerminalNode( context, tn, workingMemories );
             }
 
             if ( rule.isQuery() ) {
@@ -186,8 +201,6 @@ public class ReteooBuilder
     }
 
     public void removeTerminalNode(RuleRemovalContext context, TerminalNode tn, Collection<InternalWorkingMemory> workingMemories)  {
-        AddRemoveRule.removeRule( tn, workingMemories, kBase );
-
         BaseNode node = (BaseNode) tn;
         removeNodeAssociation(node, context.getRule(), new HashSet<>());
 

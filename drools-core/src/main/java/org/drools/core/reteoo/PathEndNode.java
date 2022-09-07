@@ -40,6 +40,14 @@ public interface PathEndNode extends LeftTupleSinkNode {
             this.allLinkedTestMask = allLinkedTestMask;
             this.smemCount = smemCount;
         }
+
+        public long allLinkedTestMask() {
+            return allLinkedTestMask;
+        }
+
+        public int smemCount() {
+            return smemCount;
+        }
     }
 
     default PathMemSpec calculatePathMemSpec(LeftTupleSource startTupleSource) {

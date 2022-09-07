@@ -33,31 +33,48 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Stream;
 
 import org.drools.core.RuleBaseConfiguration;
 import org.drools.core.SessionConfiguration;
 import org.drools.core.SessionConfigurationImpl;
 import org.drools.core.base.ClassFieldAccessorCache;
 import org.drools.core.base.ClassObjectType;
+import org.drools.core.common.BaseNode;
 import org.drools.core.common.InternalWorkingMemory;
+import org.drools.core.common.NetworkNode;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.RuleBasePartitionId;
 import org.drools.core.definitions.InternalKnowledgePackage;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.factmodel.ClassDefinition;
 import org.drools.core.management.DroolsManagementAgent;
+import org.drools.core.phreak.AddRemoveRule;
+import org.drools.core.phreak.SegmentUtilities;
+import org.drools.core.phreak.SegmentUtilities2;
 import org.drools.core.reteoo.AsyncReceiveNode;
 import org.drools.core.reteoo.CompositePartitionAwareObjectSinkAdapter;
 import org.drools.core.reteoo.CoreComponentFactory;
 import org.drools.core.reteoo.EntryPointNode;
+import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.LeftTupleNode;
+import org.drools.core.reteoo.LeftTupleSink;
+import org.drools.core.reteoo.LeftTupleSinkNode;
 import org.drools.core.reteoo.LeftTupleSource;
+import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.core.reteoo.ObjectSink;
+import org.drools.core.reteoo.ObjectSinkNode;
 import org.drools.core.reteoo.ObjectSinkPropagator;
+import org.drools.core.reteoo.ObjectSource;
 import org.drools.core.reteoo.ObjectTypeNode;
+import org.drools.core.reteoo.PathEndNode;
 import org.drools.core.reteoo.Rete;
 import org.drools.core.reteoo.ReteooBuilder;
+import org.drools.core.reteoo.RightInputAdapterNode;
 import org.drools.core.reteoo.RuntimeComponentFactory;
 import org.drools.core.reteoo.SegmentMemory;
+import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
+import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.reteoo.builder.NodeFactory;
 import org.drools.core.rule.DialectRuntimeRegistry;
@@ -86,6 +103,8 @@ import org.kie.api.internal.weaver.KieWeavers;
 import org.kie.api.io.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.text.Segment;
 
 import static org.drools.util.ClassUtils.convertClassToResourcePath;
 import static org.drools.util.BitMaskUtil.isSet;
@@ -122,7 +141,7 @@ public class KnowledgeBaseImpl implements RuleBase {
     /** The root Rete-OO for this <code>RuleBase</code>. */
     private transient Rete rete;
     private ReteooBuilder reteooBuilder;
-    private final transient Map<Integer, SegmentMemory.Prototype> segmentProtos = new ConcurrentHashMap<>();
+    private final transient Map<Integer, SegmentPrototype> segmentProtos = new HashMap<>();
 
     // This is just a hack, so spring can find the list of generated classes
     public List<List<String>> jaxbClasses;
@@ -895,6 +914,10 @@ public class KnowledgeBaseImpl implements RuleBase {
         segmentProtos.put(tupleSource.getId(), smem.asPrototype());
     }
 
+    public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentPrototype smem) {
+        segmentProtos.put(tupleSource.getId(), smem);
+    }
+
     public boolean hasSegmentPrototypes() {
         return !segmentProtos.isEmpty();
     }
@@ -905,14 +928,14 @@ public class KnowledgeBaseImpl implements RuleBase {
 
     @Override
     public SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource tupleSource) {
-        SegmentMemory.Prototype proto = segmentProtos.get(tupleSource.getId());
+        SegmentPrototype proto = segmentProtos.get(tupleSource.getId());
         if (proto == null) {
             return null;
         }
         return proto.newSegmentMemory(reteEvaluator);
     }
 
-    public SegmentMemory.Prototype getSegmentPrototype(SegmentMemory segment) {
+    public SegmentPrototype getSegmentPrototype(SegmentMemory segment) {
         return segmentProtos.get(segment.getRootNode().getId());
     }
 
@@ -1013,6 +1036,37 @@ public class KnowledgeBaseImpl implements RuleBase {
             checkMultithreadedEvaluation( rule );
             this.hasMultipleAgendaGroups |= !rule.isMainAgendaGroup();
             this.reteooBuilder.addRule(rule, workingMemories);
+        }
+
+//        // All remove must be done before this rule addition is gone
+//        for (LeftTupleNode node : reteooBuilder.getSplits()) {
+//            while( !SegmentUtilities.isRootNode(node, null) ) {
+//                // make sure we have the root of the segment, before we invalidate
+//                node = node.getLeftTupleSource();
+//            }
+//            // invalidate the tree of nodes, from this start point.
+//            invalidateSegmentsFromNode(node);
+//
+//            for (Rule rule : node.getAssociatedRules() ) {
+//                for (TerminalNode tn : reteooBuilder.getTerminalNodes(((RuleImpl)rule).getFullyQualifiedName()) ) {
+//                    SegmentUtilities2.createPathMemories(tn, this);
+//                }
+//            }
+//        }
+    }
+
+
+    public void invalidateSegmentsFromNode(LeftTupleNode node) {
+        if (SegmentUtilities.isRootNode(node, null) || NodeTypeEnums.isEndNode(node)) {
+            invalidateSegmentPrototype(node);
+        }
+
+        if (NodeTypeEnums.isEndNode(node)) {
+            ((PathEndNode)node).resetPathMemSpec(null);
+        }
+
+        for (LeftTupleSink sink : node.getSinkPropagator().getSinks() ) {
+            invalidateSegmentsFromNode(sink);
         }
     }
 

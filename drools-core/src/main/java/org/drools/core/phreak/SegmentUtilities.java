@@ -385,7 +385,7 @@ public class SegmentUtilities {
      * This is because the rianode only cares if all of it's segments are linked, then
      * it sets the bit of node it is the right input for.
      */
-    private static int updateRiaAndTerminalMemory( LeftTupleSource lt,
+    public static int updateRiaAndTerminalMemory( LeftTupleSource lt,
                                                    LeftTupleSource originalLt,
                                                    SegmentMemory smem,
                                                    ReteEvaluator reteEvaluator,
@@ -497,7 +497,7 @@ public class SegmentUtilities {
             return false;
         }
 
-        // we know the sink size is creater than 1 and that there is a removingRule that needs to be ignored.
+        // we know the sink size is greater than 1 and that there is a removingRule that needs to be ignored.
         int count = 0;
         for ( LeftTupleSinkNode sink = sinkPropagator.getFirstLeftTupleSink(); sink != null; sink = sink.getNextLeftTupleSinkNode() ) {
             if ( sinkNotExclusivelyAssociatedWithTerminal( removingTN, sink ) ) {

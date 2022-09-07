@@ -26,6 +26,10 @@ public class Bag<T> implements Collection<T>, Serializable {
 
     private int size = 0;
 
+    public Set<T> keySet() {
+        return map.keySet();
+    }
+
     @Override
     public int size() {
         return size;

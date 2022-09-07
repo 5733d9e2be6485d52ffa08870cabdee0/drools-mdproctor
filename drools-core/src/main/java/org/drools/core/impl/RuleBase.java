@@ -39,6 +39,7 @@ import org.drools.core.reteoo.LeftTupleSource;
 import org.drools.core.reteoo.Rete;
 import org.drools.core.reteoo.ReteooBuilder;
 import org.drools.core.reteoo.SegmentMemory;
+import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
 import org.drools.core.rule.InvalidPatternException;
 import org.drools.core.rule.TypeDeclaration;
 import org.drools.core.ruleunit.RuleUnitDescriptionRegistry;
@@ -119,7 +120,7 @@ public interface RuleBase {
     boolean hasSegmentPrototypes();
     void invalidateSegmentPrototype(LeftTupleNode rootNode);
     SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluatorm, LeftTupleSource tupleSource);
-    SegmentMemory.Prototype getSegmentPrototype(SegmentMemory segment);
+    SegmentPrototype getSegmentPrototype(SegmentMemory segment);
 
     void processAllTypesDeclaration( Collection<InternalKnowledgePackage> pkgs );
 
@@ -158,6 +159,8 @@ public interface RuleBase {
     default int getWorkingMemoryCounter() {
         return 0;
     }
+
+    void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentPrototype smem);
 
     void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentMemory smem);
 }

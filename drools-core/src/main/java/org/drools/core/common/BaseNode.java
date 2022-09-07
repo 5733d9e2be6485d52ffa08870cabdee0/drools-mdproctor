@@ -17,9 +17,17 @@
 package org.drools.core.common;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.drools.core.phreak.SegmentUtilities;
 import org.drools.core.reteoo.EntryPointNode;
+import org.drools.core.reteoo.LeftTupleNode;
+import org.drools.core.reteoo.LeftTupleSinkNode;
 import org.drools.core.reteoo.LeftTupleSource;
+import org.drools.core.reteoo.NodeTypeEnums;
+import org.drools.core.reteoo.ObjectSinkNode;
 import org.drools.core.reteoo.ObjectSource;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.ReteooBuilder;
@@ -38,6 +46,7 @@ public abstract class BaseNode
 
     protected int                 id;
     protected int                 memoryId = -1;
+
     protected RuleBasePartitionId partitionId;
     protected boolean             partitionsEnabled;
     protected Bag<Rule>           associations;
@@ -102,8 +111,22 @@ public abstract class BaseNode
      */
     public void attach(BuildContext context) {
         // do common shared code here, so it executes for all nodes
+
+//        boolean wasTip = false;
+//        LeftTupleNode parent = null;
+//        if (NodeTypeEnums.LeftInputAdapterNode != getType() && NodeTypeEnums.isLeftTupleNode(this)) {
+//            // check if this node was already the end of a segment.
+//            parent = ((LeftTupleNode)this).getLeftTupleSource();
+//            wasTip = SegmentUtilities.isTipNode(parent, null);
+//        }
+
         doAttach(context);
         // do common shared code here, so it executes for all nodes
+
+//        if (parent != null && !wasTip && SegmentUtilities.isTipNode(parent, null)) {
+//            // the node addition has split a previous whole segment.
+//            context.getRuleBase().getReteooBuilder().getSplits().add(parent);
+//        }
     }
 
     public void doAttach(BuildContext context) {
@@ -120,10 +143,24 @@ public abstract class BaseNode
 
     public boolean remove(RuleRemovalContext context,
                           ReteooBuilder builder) {
+//        boolean wasTip = false;
+//        LeftTupleNode parent = null;
+//        if (NodeTypeEnums.LeftInputAdapterNode != getType() && NodeTypeEnums.isLeftTupleNode(this)) {
+//            parent = ((LeftTupleNode)this).getLeftTupleSource();
+//            wasTip = SegmentUtilities.isTipNode(parent, null);
+//        }
+
         boolean removed = doRemove( context, builder );
+
         if ( !this.isInUse() && !(this instanceof EntryPointNode) ) {
             builder.releaseId(this);
         }
+
+//        if (parent != null && wasTip && !SegmentUtilities.isTipNode(parent, null)) {
+//            // the node removal has merged previous two segments.
+//            context.getRuleBase().getReteooBuilder().getMerges().add(parent);
+//        }
+
         return removed;
     }
 
