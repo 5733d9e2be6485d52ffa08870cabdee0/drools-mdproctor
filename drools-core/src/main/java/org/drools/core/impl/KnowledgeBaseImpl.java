@@ -1062,7 +1062,7 @@ public class KnowledgeBaseImpl implements RuleBase {
         }
 
         if (NodeTypeEnums.isEndNode(node)) {
-            ((PathEndNode)node).resetPathMemSpec(null);
+            ((PathEndNode)node).resetPathMemSpec();
         }
 
         for (LeftTupleSink sink : node.getSinkPropagator().getSinks() ) {

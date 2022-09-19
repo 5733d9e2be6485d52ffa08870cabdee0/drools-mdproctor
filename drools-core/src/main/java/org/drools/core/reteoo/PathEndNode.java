@@ -30,7 +30,7 @@ public interface PathEndNode extends LeftTupleSinkNode {
     PathEndNode[] getPathEndNodes();
 
     PathMemSpec getPathMemSpec();
-    void resetPathMemSpec(TerminalNode removingTN);
+    void resetPathMemSpec();
 
     class PathMemSpec implements Serializable {
         final long allLinkedTestMask;

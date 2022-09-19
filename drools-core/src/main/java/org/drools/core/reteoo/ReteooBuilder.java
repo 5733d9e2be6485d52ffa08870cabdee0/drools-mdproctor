@@ -40,6 +40,7 @@ import org.drools.core.common.NetworkNode;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.phreak.AddRemoveRule;
+import org.drools.core.phreak.AddRemoveRule.PathEndNodes;
 import org.drools.core.reteoo.builder.ReteooRuleBuilder;
 import org.drools.core.rule.InvalidPatternException;
 import org.drools.core.rule.WindowDeclaration;
@@ -185,9 +186,20 @@ public class ReteooBuilder
             }
 
 
+            PathEndNodes[] pathEndNodesCol = new PathEndNodes[rulesTerminalNodes.length];
+            int i = 0;
             for ( TerminalNode tn : rulesTerminalNodes ) {
-                AddRemoveRule.removeRule( tn, workingMemories, kBase );
+                pathEndNodesCol[i++] = AddRemoveRule.removeRule1( tn, workingMemories, kBase );
                 removeTerminalNode( context, tn, workingMemories );
+            }
+
+            // Reset the PathMemSpec for remaining pathEnds
+            for (PathEndNodes pathEndNodes : pathEndNodesCol) {
+                pathEndNodes.otherEndNodes.forEach(n -> n.resetPathMemSpec());
+            }
+
+            for (PathEndNodes pathEndNodes : pathEndNodesCol) {
+                AddRemoveRule.removeRule2( pathEndNodes, workingMemories, kBase );
             }
 
             if ( rule.isQuery() ) {
