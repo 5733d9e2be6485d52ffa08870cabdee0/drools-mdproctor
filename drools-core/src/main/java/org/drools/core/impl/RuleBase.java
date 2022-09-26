@@ -119,8 +119,13 @@ public interface RuleBase {
 
     boolean hasSegmentPrototypes();
     void invalidateSegmentPrototype(LeftTupleNode rootNode);
-    SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluatorm, LeftTupleSource tupleSource);
+    SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource tupleSource);
+
+    SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluator, SegmentPrototype smem);
+
     SegmentPrototype getSegmentPrototype(SegmentMemory segment);
+
+    SegmentPrototype getSegmentPrototype(LeftTupleSource node);
 
     void processAllTypesDeclaration( Collection<InternalKnowledgePackage> pkgs );
 

@@ -393,21 +393,6 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
         return this == obj || (obj instanceof SegmentMemory && rootNode.getId() == ((SegmentMemory) obj).rootNode.getId());
     }
 
-    public SegmentPrototype asPrototype() {
-        return new SegmentPrototype(this);
-    }
-
-    public List<NetworkNode> getNodesInSegment() {
-        List<NetworkNode> nodes = new java.util.LinkedList<>();
-        NetworkNode currentNode = tipNode;
-        while (currentNode != rootNode) {
-            nodes.add(0, currentNode);
-            currentNode = ((LeftTupleSinkNode)currentNode).getLeftTupleSource();
-        }
-        nodes.add(0, currentNode);
-        return nodes;
-    }
-
     public void reset(SegmentPrototype segmentPrototype) {
         this.dirtyNodeMask = 0L;
         this.linkedNodeMask = segmentPrototype != null ? segmentPrototype.linkedNodeMask : 0L;
@@ -426,24 +411,18 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
         long allLinkedMaskTest;
         long segmentPosMaskBit;
         int pos;
-        List<MemoryPrototype> memories = new ArrayList<>();
-        List<NetworkNode> nodesInSegment;
+
+        MemoryPrototype[] memories;
+
+        NetworkNode[] nodesInSegment;
+
+        PathEndNode[] pathEndNodes;
+
+        int nodeTypesInSegment = 0;
 
         public SegmentPrototype(LeftTupleNode rootNode, LeftTupleNode tipNode) {
             this.rootNode = rootNode;
             this.tipNode = tipNode;
-        }
-
-        public SegmentPrototype(SegmentMemory smem) {
-            this.rootNode = smem.rootNode;
-            this.tipNode = smem.tipNode;
-            this.linkedNodeMask = smem.linkedNodeMask;
-            this.allLinkedMaskTest = smem.allLinkedMaskTest;
-            this.segmentPosMaskBit = smem.segmentPosMaskBit;
-            this.pos = smem.pos;
-            for (Memory mem = smem.nodeMemories.getFirst(); mem != null; mem = mem.getNext()) {
-                memories.add(MemoryPrototype.get(mem));
-            }
         }
 
         public SegmentMemory newSegmentMemory(ReteEvaluator reteEvaluator) {
@@ -454,24 +433,17 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
             smem.segmentPosMaskBit = segmentPosMaskBit;
             smem.pos = pos;
             int i = 0;
-            for (NetworkNode node : getNodesInSegment(smem)) {
+            for (NetworkNode node : getNodesInSegment()) {
                 Memory mem = reteEvaluator.getNodeMemory((MemoryFactory) node);
                 mem.setSegmentMemory(smem);
                 smem.getNodeMemories().add(mem);
-                MemoryPrototype proto = memories.get(i++);
+                MemoryPrototype proto = memories[i++];
                 if (proto != null) {
                     proto.populateMemory(reteEvaluator, mem);
                 }
             }
 
             return smem;
-        }
-
-        private List<NetworkNode> getNodesInSegment(SegmentMemory smem) {
-            if (nodesInSegment == null) {
-                nodesInSegment = smem.getNodesInSegment();
-            }
-            return nodesInSegment;
         }
 
         public LeftTupleNode getRootNode() {
@@ -522,20 +494,36 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
             this.pos = pos;
         }
 
-        public List<MemoryPrototype> getMemories() {
+        public MemoryPrototype[] getMemories() {
             return memories;
         }
 
-        public void setMemories(List<MemoryPrototype> memories) {
+        public void setMemories(MemoryPrototype[] memories) {
             this.memories = memories;
         }
 
-        public List<NetworkNode> getNodesInSegment() {
+        public NetworkNode[] getNodesInSegment() {
             return nodesInSegment;
         }
 
-        public void setNodesInSegment(List<NetworkNode> nodesInSegment) {
+        public void setNodesInSegment(NetworkNode[] nodesInSegment) {
             this.nodesInSegment = nodesInSegment;
+        }
+
+        public int getNodeTypesInSegment() {
+            return nodeTypesInSegment;
+        }
+
+        public void setNodeTypesInSegment(int nodeTypesInSegment) {
+            this.nodeTypesInSegment = nodeTypesInSegment;
+        }
+
+        public PathEndNode[] getPathEndNodes() {
+            return pathEndNodes;
+        }
+
+        public void setPathEndNodes(PathEndNode[] pathEndNodes) {
+            this.pathEndNodes = pathEndNodes;
         }
     }
 

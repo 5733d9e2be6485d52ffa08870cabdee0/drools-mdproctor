@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -127,6 +128,45 @@ public class ReteooBuilder
         }
     }
 
+    public synchronized void addRules(final Collection<? extends Rule> ruleCol, Collection<InternalWorkingMemory> workingMemories) {
+        for (Rule rule : ruleCol) {
+            addRule((RuleImpl) rule, workingMemories);
+        }
+
+        List<PathEndNodes> pathEndNodes = new ArrayList<>();
+        for (Rule rule : ruleCol) {
+            TerminalNode[] nodes = rules.get(((RuleImpl)rule).getFullyQualifiedName());
+            for (TerminalNode tn : nodes) {
+                pathEndNodes.add(AddRemoveRule.addRule1(tn, workingMemories, kBase));
+            }
+        }
+
+        // Reset the PathMemSpec for remaining pathEnds
+        // a subject node, might appear as a other node for a differnet rule, so use a set to avoid duplicate efforts.
+        Set<PathEndNode> endNodes = new HashSet<>();
+        for (PathEndNodes pathEndNode : pathEndNodes) {
+            pathEndNode.subjectEndNodes.stream().filter(n-> !endNodes.contains(n)).forEach(n -> {
+                n.resetPathMemSpec();
+                n.setSegmentPrototypes(null);
+                endNodes.add(n);
+            });
+
+            pathEndNode.otherEndNodes.stream().filter(n-> !endNodes.contains(n)).forEach(n -> {
+                n.resetPathMemSpec();
+                n.setSegmentPrototypes(null);
+                endNodes.add(n);
+            });
+        }
+
+        int i = 0;
+        for (Rule rule : ruleCol) {
+            TerminalNode[] nodes = rules.get(((RuleImpl)rule).getFullyQualifiedName());
+            for (TerminalNode tn : nodes) {
+                AddRemoveRule.addRule2(tn, pathEndNodes.get(i++), workingMemories, kBase);
+            }
+        }
+    }
+
     public void addEntryPoint( String id, Collection<InternalWorkingMemory> workingMemories ) {
         this.ruleBuilder.addEntryPoint( id, this.kBase, workingMemories );
     }
@@ -195,7 +235,10 @@ public class ReteooBuilder
 
             // Reset the PathMemSpec for remaining pathEnds
             for (PathEndNodes pathEndNodes : pathEndNodesCol) {
-                pathEndNodes.otherEndNodes.forEach(n -> n.resetPathMemSpec());
+                pathEndNodes.otherEndNodes.forEach(n -> {
+                    n.resetPathMemSpec();
+                    n.setSegmentPrototypes(null);
+                });
             }
 
             for (PathEndNodes pathEndNodes : pathEndNodesCol) {

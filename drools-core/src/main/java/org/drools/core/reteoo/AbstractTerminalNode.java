@@ -23,6 +23,7 @@ import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.RuleBasePartitionId;
 import org.drools.core.common.UpdateContext;
 import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.Pattern;
 import org.drools.core.base.ObjectType;
@@ -43,6 +44,8 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
     private LeftTupleNode[] pathNodes;
 
     private transient PathEndNode[] pathEndNodes;
+
+    private SegmentPrototype[] segmentPrototypes;
 
     private PathMemSpec pathMemSpec;
 
@@ -76,9 +79,20 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
         this.pathEndNodes = pathEndNodes;
     }
 
+
     @Override
     public PathEndNode[] getPathEndNodes() {
         return pathEndNodes;
+    }
+
+    @Override
+    public void setSegmentPrototypes(SegmentPrototype[] smems) {
+        this.segmentPrototypes = smems;
+    }
+
+    @Override
+    public SegmentPrototype[] getSegmentPrototypes() {
+        return segmentPrototypes;
     }
 
     public int getPathIndex() {
@@ -141,7 +155,7 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
 
     public static PathMemory initPathMemory( PathEndNode pathEndNode, PathMemory pmem ) {
         PathMemSpec pathMemSpec = pathEndNode.getPathMemSpec();
-        pmem.setAllLinkedMaskTest(pathMemSpec. allLinkedTestMask );
+        pmem.setAllLinkedMaskTest(pathMemSpec.allLinkedTestMask );
         pmem.setSegmentMemories( new SegmentMemory[pathMemSpec.smemCount] );
         return pmem;
     }

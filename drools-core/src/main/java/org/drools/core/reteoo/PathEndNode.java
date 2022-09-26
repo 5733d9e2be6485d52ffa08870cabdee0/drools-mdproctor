@@ -19,6 +19,7 @@ package org.drools.core.reteoo;
 import java.io.Serializable;
 
 import org.drools.core.phreak.SegmentUtilities;
+import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
 
 import static org.drools.core.phreak.SegmentUtilities.nextNodePosMask;
 
@@ -28,6 +29,10 @@ public interface PathEndNode extends LeftTupleSinkNode {
 
     void setPathEndNodes(PathEndNode[] pathEndNodes);
     PathEndNode[] getPathEndNodes();
+
+    void setSegmentPrototypes(SegmentPrototype[] smems);
+
+    SegmentPrototype[] getSegmentPrototypes();
 
     PathMemSpec getPathMemSpec();
     void resetPathMemSpec();

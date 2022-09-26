@@ -911,7 +911,8 @@ public class KnowledgeBaseImpl implements RuleBase {
     }
 
     public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentMemory smem) {
-        segmentProtos.put(tupleSource.getId(), smem.asPrototype());
+        throw new RuntimeException("unsupported, it's all moving compile time baby!!!");
+        //segmentProtos.put(tupleSource.getId(), smem.asPrototype());
     }
 
     public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentPrototype smem) {
@@ -927,8 +928,17 @@ public class KnowledgeBaseImpl implements RuleBase {
     }
 
     @Override
+    public SegmentPrototype getSegmentPrototype(LeftTupleSource node) {
+        return segmentProtos.get(node.getId());
+    }
+
+    @Override
     public SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource tupleSource) {
         SegmentPrototype proto = segmentProtos.get(tupleSource.getId());
+        return createSegmentFromPrototype(reteEvaluator, proto);
+    }
+
+    public SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluator, SegmentPrototype proto) {
         if (proto == null) {
             return null;
         }
@@ -1032,11 +1042,13 @@ public class KnowledgeBaseImpl implements RuleBase {
 
     public void kBaseInternal_addRules(Collection<? extends Rule> rules, Collection<InternalWorkingMemory> workingMemories ) {
         for (Rule r : rules) {
+            // check validations before adding the rules
             RuleImpl rule = (RuleImpl) r;
             checkMultithreadedEvaluation( rule );
             this.hasMultipleAgendaGroups |= !rule.isMainAgendaGroup();
-            this.reteooBuilder.addRule(rule, workingMemories);
         }
+
+        this.reteooBuilder.addRules(rules, workingMemories);
 
 //        // All remove must be done before this rule addition is gone
 //        for (LeftTupleNode node : reteooBuilder.getSplits()) {

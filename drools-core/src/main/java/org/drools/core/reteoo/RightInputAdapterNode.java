@@ -26,6 +26,7 @@ import org.drools.core.common.Memory;
 import org.drools.core.common.MemoryFactory;
 import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.UpdateContext;
+import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.base.ObjectType;
 import org.drools.core.common.PropagationContext;
@@ -60,6 +61,8 @@ public class RightInputAdapterNode extends ObjectSource
     private PathEndNode[] pathEndNodes;
 
     private PathMemSpec pathMemSpec;
+
+    private SegmentPrototype[] segmentPrototypes;
 
     private int objectCount;
 
@@ -101,6 +104,16 @@ public class RightInputAdapterNode extends ObjectSource
     @Override
     public void resetPathMemSpec() {
         pathMemSpec = calculatePathMemSpec( null );
+    }
+
+    @Override
+    public void setSegmentPrototypes(SegmentPrototype[] smems) {
+        this.segmentPrototypes = smems;
+    }
+
+    @Override
+    public SegmentPrototype[] getSegmentPrototypes() {
+        return segmentPrototypes;
     }
 
     @Override

@@ -90,7 +90,7 @@ public class AddRemoveRule {
      * This method is called after the rule nodes have been added to the network
      * For add tuples are processed after the segments and pmems have been adjusted
      */
-    public static void addRule(TerminalNode tn, Collection<InternalWorkingMemory> wms, RuleBase kBase) {
+    public static PathEndNodes addRule1(TerminalNode tn, Collection<InternalWorkingMemory> wms, RuleBase kBase) {
         if (log.isTraceEnabled()) {
             log.trace("Adding Rule {}", tn.getRule().getName());
         }
@@ -99,7 +99,7 @@ public class AddRemoveRule {
         boolean hasWms = !wms.isEmpty();
 
         if (!hasProtos && !hasWms) {
-            return;
+            return null;
         }
 
         RuleImpl rule = tn.getRule();
@@ -112,22 +112,60 @@ public class AddRemoveRule {
         for (InternalWorkingMemory wm : wms) {
             wm.flushPropagations();
 
+            PathEndNodeMemories tnms = null;
+            if (!(NodeTypeEnums.LeftInputAdapterNode == firstSplit.getType() && firstSplit.getAssociationsSize() == 1)) {
+                tnms = getPathEndMemories(wm, pathEndNodes);
+
+                if (tnms.subjectPmem != null) {
+                    // The existing PathMemories must be initialized or there will be no Segments or tuples to process
+                    Map<PathMemory, SegmentMemory[]> prevSmemsLookup = reInitPathMemories(tnms.otherPmems);
+
+                    // must collect all visited SegmentMemories, for link notification
+                    Set<SegmentMemory> smemsToNotify = handleExistingPaths(prevSmemsLookup, tnms.otherPmems, wm, ExistingPathStrategy.ADD_STRATEGY);
+                    pathEndNodes.smemsToNotify = smemsToNotify;
+                }
+            }
+            pathEndNodes.pathEndNodeMemoriesList.add(tnms);
+        }
+
+        return pathEndNodes;
+    }
+
+    /**
+     * This method is called after the rule nodes have been added to the network
+     * For add tuples are processed after the segments and pmems have been adjusted
+     */
+    public static void addRule2(TerminalNode tn, PathEndNodes pathEndNodes, Collection<InternalWorkingMemory> wms, RuleBase kBase) {
+        if (log.isTraceEnabled()) {
+            log.trace("Adding Rule {}", tn.getRule().getName());
+        }
+
+        boolean hasProtos = kBase.hasSegmentPrototypes();
+        boolean hasWms = !wms.isEmpty();
+
+        if (!hasProtos && !hasWms) {
+            return;
+        }
+
+        RuleImpl rule = tn.getRule();
+        LeftTupleNode firstSplit = pathEndNodes.subjectSplit;
+        Set<SegmentMemory> smemsToNotify = pathEndNodes.smemsToNotify;
+
+//        PathEndNodes pathEndNodes = getPathEndNodes(kBase, firstSplit, tn, rule, hasProtos, hasWms);
+
+        // Insert the facts for the new paths. This will iterate each new path from EndNode to the splitStart - but will not process the splitStart itself (as tha already exist).
+        // It does not matter that the prior segments have not yet been processed for splitting, as this will only apply for branches of paths that did not exist before
+
+        int i = 0;
+        for (InternalWorkingMemory wm : wms) {
+            wm.flushPropagations();
+
+            PathEndNodeMemories tnms = pathEndNodes.pathEndNodeMemoriesList.get(i++);
+
             if (NodeTypeEnums.LeftInputAdapterNode == firstSplit.getType() && firstSplit.getAssociationsSize() == 1) {
                 // rule added with no sharing
                 insertLiaFacts(firstSplit, wm);
-            } else {
-                PathEndNodeMemories tnms = getPathEndMemories(wm, pathEndNodes);
-
-                if (tnms.subjectPmem == null) {
-                    // If the existing PathMemories are not yet initialized there are no Segments or tuples to process
-                    continue;
-                }
-
-                Map<PathMemory, SegmentMemory[]> prevSmemsLookup = reInitPathMemories(tnms.otherPmems, null);
-
-                // must collect all visited SegmentMemories, for link notification
-                Set<SegmentMemory> smemsToNotify = handleExistingPaths(prevSmemsLookup, tnms.otherPmems, wm, ExistingPathStrategy.ADD_STRATEGY);
-
+            } else if (tnms != null) {
                 addNewPaths(wm, smemsToNotify, tnms.subjectPmems);
 
                 processLeftTuples(firstSplit, wm, true, rule);
@@ -138,11 +176,13 @@ public class AddRemoveRule {
 
         if (hasWms) {
             insertFacts( pathEndNodes, wms );
-        } else {
-            for (PathEndNode node : pathEndNodes.otherEndNodes) {
-                node.resetPathMemSpec();
-            }
         }
+
+//    } else {
+//        for (PathEndNode node : pathEndNodes.otherEndNodes) {
+//            node.resetPathMemSpec();
+//        }
+
     }
 
     /**
@@ -169,6 +209,7 @@ public class AddRemoveRule {
             wm.flushPropagations();
 
             PathEndNodeMemories tnms = getPathEndMemories(wm, pathEndNodes);
+            pathEndNodes.pathEndNodeMemoriesList.add(tnms);
 
             if ( !tnms.subjectPmems.isEmpty() ) {
                 if (NodeTypeEnums.LeftInputAdapterNode == firstSplit.getType() && firstSplit.getAssociationsSize() == 1) {
@@ -212,17 +253,20 @@ public class AddRemoveRule {
 
     public static void removeRule2( PathEndNodes pathEndNodes, Collection<InternalWorkingMemory> wms, RuleBase kBase) {
         LeftTupleNode firstSplit = pathEndNodes.subjectSplit;
+        int i = 0;
         for (InternalWorkingMemory wm : wms) {
+            PathEndNodeMemories tnms = pathEndNodes.pathEndNodeMemoriesList.get(i++);
             if (NodeTypeEnums.LeftInputAdapterNode == firstSplit.getType() && firstSplit.getAssociationsSize() == 1) {
             } else {
                 //pathEndNodes.stream().collect(Collectors.toMap( p -> wm.getNodeMemories().g)
                 //Map<PathMemory, SegmentMemory[]> prevSmemsLookup = getSegmentMemoryMap(pathEndNodes, wm);
-                List<PathMemory> otherPmems = new ArrayList<>();
-                populatePathMemories(wm, pathEndNodes.otherEndNodes, otherPmems, null);
-                Map<PathMemory, SegmentMemory[]> prevSmemsLookup = reInitPathMemories(otherPmems, null);
+                //List<PathMemory> otherPmems = new ArrayList<>();
+                //populatePathMemories(wm, pathEndNodes.otherEndNodes, otherPmems, null);
+
+                Map<PathMemory, SegmentMemory[]> prevSmemsLookup = reInitPathMemories(tnms.otherPmems);
 
                 // must collect all visited SegmentMemories, for link notification
-                Set<SegmentMemory> smemsToNotify = handleExistingPaths(prevSmemsLookup, otherPmems, wm, ExistingPathStrategy.REMOVE_STRATEGY);
+                Set<SegmentMemory> smemsToNotify = handleExistingPaths(prevSmemsLookup, tnms.otherPmems, wm, ExistingPathStrategy.REMOVE_STRATEGY);
 
                 notifySegments(smemsToNotify, wm);
             }
@@ -780,7 +824,7 @@ public class AddRemoveRule {
     }
 
 
-    private static Map<PathMemory, SegmentMemory[]> reInitPathMemories(List<PathMemory> pathMems, TerminalNode removingTN) {
+    private static Map<PathMemory, SegmentMemory[]> reInitPathMemories(List<PathMemory> pathMems) {
         Map<PathMemory, SegmentMemory[]> previousSmems = new HashMap<>();
         for (PathMemory pmem : pathMems) {
             // Re initialise all the PathMemories
@@ -1559,5 +1603,9 @@ public class AddRemoveRule {
         public List<PathEndNode>   subjectEndNodes = new ArrayList<>();
         public List<LeftTupleNode> subjectSplits   = new ArrayList<>();
         public List<PathEndNode>   otherEndNodes   = new ArrayList<>();
+
+        public Set<SegmentMemory> smemsToNotify;
+
+        public List<PathEndNodeMemories> pathEndNodeMemoriesList = new ArrayList<>();
     }
 }

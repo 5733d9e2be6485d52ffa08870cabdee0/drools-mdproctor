@@ -19,6 +19,9 @@ import org.drools.core.common.Memory;
 import org.drools.core.common.MemoryFactory;
 import org.drools.core.common.NetworkNode;
 import org.drools.core.common.ReteEvaluator;
+import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.core.impl.RuleBase;
+import org.drools.core.phreak.AddRemoveRule.PathEndNodes;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AlphaNode;
 import org.drools.core.reteoo.AsyncReceiveNode;
@@ -44,16 +47,22 @@ import org.drools.core.reteoo.NotNode;
 import org.drools.core.reteoo.ObjectSink;
 import org.drools.core.reteoo.ObjectSource;
 import org.drools.core.reteoo.ObjectTypeNode;
+import org.drools.core.reteoo.PathEndNode;
 import org.drools.core.reteoo.PathMemory;
 import org.drools.core.reteoo.QueryElementNode;
 import org.drools.core.reteoo.QueryElementNode.QueryElementNodeMemory;
 import org.drools.core.reteoo.RightInputAdapterNode;
 import org.drools.core.reteoo.RightInputAdapterNode.RiaNodeMemory;
 import org.drools.core.reteoo.SegmentMemory;
+import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.reteoo.TimerNode;
 import org.drools.core.reteoo.TimerNode.TimerNodeMemory;
 import org.drools.core.rule.constraint.QueryNameConstraint;
+import org.kie.api.definition.rule.Rule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SegmentUtilities {
 
@@ -72,118 +81,115 @@ public class SegmentUtilities {
         }
 
         LeftTupleSource segmentRoot = tupleSource;
-        int nodeTypesInSegment = 0;
 
-        smem = restoreSegmentFromPrototype(reteEvaluator, segmentRoot, nodeTypesInSegment);
-        if ( smem != null ) {
-            if (NodeTypeEnums.isBetaNode(segmentRoot) && ( (BetaNode) segmentRoot ).isRightInputIsRiaNode()) {
-                createRiaSegmentMemory( (BetaNode) segmentRoot, reteEvaluator );
-            }
-            return smem;
+        smem = restoreSegmentFromPrototype(reteEvaluator, segmentRoot);
+        if (NodeTypeEnums.isBetaNode(segmentRoot) && ( (BetaNode) segmentRoot ).isRightInputIsRiaNode()) {
+            createRiaSegmentMemory( (BetaNode) segmentRoot, reteEvaluator );
         }
-
-        smem = new SegmentMemory(segmentRoot);
-
-        // Iterate all nodes on the same segment, assigning their position as a bit mask value
-        // allLinkedTestMask is the resulting mask used to test if all nodes are linked in
-        long nodePosMask = 1;
-        long allLinkedTestMask = 0;
-        boolean updateNodeBit = true;  // nodes after a branch CE can notify, but they cannot impact linking
-
-        while (true) {
-            nodeTypesInSegment = updateNodeTypesMask(tupleSource, nodeTypesInSegment);
-            if (NodeTypeEnums.isBetaNode(tupleSource)) {
-                allLinkedTestMask = processBetaNode((BetaNode)tupleSource, reteEvaluator, smem, nodePosMask, allLinkedTestMask, updateNodeBit);
-            } else {
-                switch (tupleSource.getType()) {
-                    case NodeTypeEnums.LeftInputAdapterNode:
-                        allLinkedTestMask = processLiaNode((LeftInputAdapterNode) tupleSource, reteEvaluator, smem, nodePosMask, allLinkedTestMask);
-                        break;
-                    case NodeTypeEnums.EvalConditionNode:
-                        processEvalNode((EvalConditionNode) tupleSource, reteEvaluator, smem);
-                        break;
-                    case NodeTypeEnums.ConditionalBranchNode:
-                        updateNodeBit = processBranchNode((ConditionalBranchNode) tupleSource, reteEvaluator, smem);
-                        break;
-                    case NodeTypeEnums.FromNode:
-                        processFromNode((FromNode) tupleSource, reteEvaluator, smem);
-                        break;
-                    case NodeTypeEnums.ReactiveFromNode:
-                        processReactiveFromNode((MemoryFactory) tupleSource, reteEvaluator, smem, nodePosMask);
-                        break;
-                    case NodeTypeEnums.TimerConditionNode:
-                        processTimerNode((TimerNode) tupleSource, reteEvaluator, smem, nodePosMask);
-                        break;
-                    case NodeTypeEnums.AsyncSendNode:
-                        processAsyncSendNode((AsyncSendNode) tupleSource, reteEvaluator, smem);
-                        break;
-                    case NodeTypeEnums.AsyncReceiveNode:
-                        processAsyncReceiveNode((AsyncReceiveNode) tupleSource, reteEvaluator, smem, nodePosMask);
-                        break;
-                    case NodeTypeEnums.QueryElementNode:
-                        updateNodeBit = processQueryNode((QueryElementNode) tupleSource, reteEvaluator, segmentRoot, smem, nodePosMask);
-                        break;
-                }
-            }
-
-            nodePosMask = nextNodePosMask(nodePosMask);
-
-            if (tupleSource.getSinkPropagator().size() == 1) {
-                LeftTupleSinkNode sink = tupleSource.getSinkPropagator().getFirstLeftTupleSink();
-                if (NodeTypeEnums.isLeftTupleSource(sink)) {
-                    tupleSource = (LeftTupleSource) sink;
-                } else {
-                    // rtn or rian
-                    // While not technically in a segment, we want to be able to iterate easily from the last node memory to the ria/rtn memory
-                    // we don't use createNodeMemory, as these may already have been created by, but not added, by the method updateRiaAndTerminalMemory
-                    Memory memory = reteEvaluator.getNodeMemory((MemoryFactory) sink);
-                    if (sink.getType() == NodeTypeEnums.RightInputAdaterNode) {
-                        PathMemory riaPmem = ((RiaNodeMemory)memory).getRiaPathMemory();
-                        smem.getNodeMemories().add( riaPmem );
-
-                        RightInputAdapterNode rian = ( RightInputAdapterNode ) sink;
-                        ObjectSink[] nodes = rian.getObjectSinkPropagator().getSinks();
-                        for ( ObjectSink node : nodes ) {
-                            if ( NodeTypeEnums.isLeftTupleSource(node) )  {
-                                getOrCreateSegmentMemory( (LeftTupleSource) node, reteEvaluator );
-                            }
-                        }
-                    } else if (NodeTypeEnums.isTerminalNode(sink)) {
-                        smem.getNodeMemories().add(memory);
-                    }
-                    memory.setSegmentMemory(smem);
-                    smem.setTipNode(sink);
-                    break;
-                }
-            } else {
-                // not in same segment
-                smem.setTipNode(tupleSource);
-                break;
-            }
-        }
-        smem.setAllLinkedMaskTest(allLinkedTestMask);
-
-        // iterate to find root and determine the SegmentNodes position in the RuleSegment
-        LeftTupleSource pathRoot = segmentRoot;
-        int ruleSegmentPosMask = 1;
-        int counter = 0;
-        while (pathRoot.getType() != NodeTypeEnums.LeftInputAdapterNode) {
-            LeftTupleSource leftTupleSource = pathRoot.getLeftTupleSource();
-            if (SegmentUtilities.isNonTerminalTipNode(leftTupleSource, null)) {
-                // for each new found segment, increase the mask bit position
-                ruleSegmentPosMask = ruleSegmentPosMask << 1;
-                counter++;
-            }
-            pathRoot = leftTupleSource;
-        }
-        smem.setSegmentPosMaskBit(ruleSegmentPosMask);
-        smem.setPos(counter);
-
-        updateRiaAndTerminalMemory(tupleSource, tupleSource, smem, reteEvaluator, false, nodeTypesInSegment);
-
-        reteEvaluator.getKnowledgeBase().registerSegmentPrototype(segmentRoot, smem);
-
         return smem;
+//
+//        smem = new SegmentMemory(segmentRoot);
+//
+//        // Iterate all nodes on the same segment, assigning their position as a bit mask value
+//        // allLinkedTestMask is the resulting mask used to test if all nodes are linked in
+//        long nodePosMask = 1;
+//        long allLinkedTestMask = 0;
+//        boolean updateNodeBit = true;  // nodes after a branch CE can notify, but they cannot impact linking
+//
+//        while (true) {
+//            nodeTypesInSegment = updateNodeTypesMask(tupleSource, nodeTypesInSegment);
+//            if (NodeTypeEnums.isBetaNode(tupleSource)) {
+//                allLinkedTestMask = processBetaNode((BetaNode)tupleSource, reteEvaluator, smem, nodePosMask, allLinkedTestMask, updateNodeBit);
+//            } else {
+//                switch (tupleSource.getType()) {
+//                    case NodeTypeEnums.LeftInputAdapterNode:
+//                        allLinkedTestMask = processLiaNode((LeftInputAdapterNode) tupleSource, reteEvaluator, smem, nodePosMask, allLinkedTestMask);
+//                        break;
+//                    case NodeTypeEnums.EvalConditionNode:
+//                        processEvalNode((EvalConditionNode) tupleSource, reteEvaluator, smem);
+//                        break;
+//                    case NodeTypeEnums.ConditionalBranchNode:
+//                        updateNodeBit = processBranchNode((ConditionalBranchNode) tupleSource, reteEvaluator, smem);
+//                        break;
+//                    case NodeTypeEnums.FromNode:
+//                        processFromNode((FromNode) tupleSource, reteEvaluator, smem);
+//                        break;
+//                    case NodeTypeEnums.ReactiveFromNode:
+//                        processReactiveFromNode((MemoryFactory) tupleSource, reteEvaluator, smem, nodePosMask);
+//                        break;
+//                    case NodeTypeEnums.TimerConditionNode:
+//                        processTimerNode((TimerNode) tupleSource, reteEvaluator, smem, nodePosMask);
+//                        break;
+//                    case NodeTypeEnums.AsyncSendNode:
+//                        processAsyncSendNode((AsyncSendNode) tupleSource, reteEvaluator, smem);
+//                        break;
+//                    case NodeTypeEnums.AsyncReceiveNode:
+//                        processAsyncReceiveNode((AsyncReceiveNode) tupleSource, reteEvaluator, smem, nodePosMask);
+//                        break;
+//                    case NodeTypeEnums.QueryElementNode:
+//                        updateNodeBit = processQueryNode((QueryElementNode) tupleSource, reteEvaluator, segmentRoot, smem, nodePosMask);
+//                        break;
+//                }
+//            }
+//
+//            nodePosMask = nextNodePosMask(nodePosMask);
+//
+//            if (tupleSource.getSinkPropagator().size() == 1) {
+//                LeftTupleSinkNode sink = tupleSource.getSinkPropagator().getFirstLeftTupleSink();
+//                if (NodeTypeEnums.isLeftTupleSource(sink)) {
+//                    tupleSource = (LeftTupleSource) sink;
+//                } else {
+//                    // rtn or rian
+//                    // While not technically in a segment, we want to be able to iterate easily from the last node memory to the ria/rtn memory
+//                    // we don't use createNodeMemory, as these may already have been created by, but not added, by the method updateRiaAndTerminalMemory
+//                    Memory memory = reteEvaluator.getNodeMemory((MemoryFactory) sink);
+//                    if (sink.getType() == NodeTypeEnums.RightInputAdaterNode) {
+//                        PathMemory riaPmem = ((RiaNodeMemory)memory).getRiaPathMemory();
+//                        smem.getNodeMemories().add( riaPmem );
+//
+//                        RightInputAdapterNode rian = ( RightInputAdapterNode ) sink;
+//                        ObjectSink[] nodes = rian.getObjectSinkPropagator().getSinks();
+//                        for ( ObjectSink node : nodes ) {
+//                            if ( NodeTypeEnums.isLeftTupleSource(node) )  {
+//                                getOrCreateSegmentMemory( (LeftTupleSource) node, reteEvaluator );
+//                            }
+//                        }
+//                    } else if (NodeTypeEnums.isTerminalNode(sink)) {
+//                        smem.getNodeMemories().add(memory);
+//                    }
+//                    memory.setSegmentMemory(smem);
+//                    smem.setTipNode(sink);
+//                    break;
+//                }
+//            } else {
+//                // not in same segment
+//                smem.setTipNode(tupleSource);
+//                break;
+//            }
+//        }
+//        smem.setAllLinkedMaskTest(allLinkedTestMask);
+//
+//        // iterate to find root and determine the SegmentNodes position in the RuleSegment
+//        LeftTupleSource pathRoot = segmentRoot;
+//        int ruleSegmentPosMask = 1;
+//        int counter = 0;
+//        while (pathRoot.getType() != NodeTypeEnums.LeftInputAdapterNode) {
+//            LeftTupleSource leftTupleSource = pathRoot.getLeftTupleSource();
+//            if (SegmentUtilities.isNonTerminalTipNode(leftTupleSource, null)) {
+//                // for each new found segment, increase the mask bit position
+//                ruleSegmentPosMask = ruleSegmentPosMask << 1;
+//                counter++;
+//            }
+//            pathRoot = leftTupleSource;
+//        }
+//        smem.setSegmentPosMaskBit(ruleSegmentPosMask);
+//        smem.setPos(counter);
+//
+//        updateRiaAndTerminalMemory(tupleSource, tupleSource, smem, reteEvaluator, false, nodeTypesInSegment);
+//
+//        reteEvaluator.getKnowledgeBase().registerSegmentPrototype(segmentRoot, smem);
+//
+//        return smem;
     }
 
     public static long nextNodePosMask(long nodePosMask) {
@@ -194,10 +200,11 @@ public class SegmentUtilities {
         return nextNodePosMask > 0 ? nextNodePosMask : nodePosMask;
     }
 
-    private static SegmentMemory restoreSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource segmentRoot, int nodeTypesInSegment) {
-        SegmentMemory smem = reteEvaluator.getKnowledgeBase().createSegmentFromPrototype(reteEvaluator, segmentRoot);
+    private static SegmentMemory restoreSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource segmentRoot) {
+        SegmentPrototype proto = reteEvaluator.getKnowledgeBase().getSegmentPrototype(segmentRoot);
+        SegmentMemory smem = reteEvaluator.getKnowledgeBase().createSegmentFromPrototype(reteEvaluator, proto);
         if ( smem != null ) {
-            updateRiaAndTerminalMemory(segmentRoot, segmentRoot, smem, reteEvaluator, true, nodeTypesInSegment);
+            updateRiaAndTerminalMemory(segmentRoot, segmentRoot, smem, proto, reteEvaluator);
         }
         return smem;
     }
@@ -377,6 +384,8 @@ public class SegmentUtilities {
         return false;
     }
 
+
+
     /**
      * This adds the segment memory to the terminal node or ria node's list of memories.
      * In the case of the terminal node this allows it to know that all segments from
@@ -385,61 +394,28 @@ public class SegmentUtilities {
      * This is because the rianode only cares if all of it's segments are linked, then
      * it sets the bit of node it is the right input for.
      */
-    public static int updateRiaAndTerminalMemory( LeftTupleSource lt,
-                                                   LeftTupleSource originalLt,
-                                                   SegmentMemory smem,
-                                                   ReteEvaluator reteEvaluator,
-                                                   boolean fromPrototype,
-                                                   int nodeTypesInSegment ) {
-
-        nodeTypesInSegment = checkSegmentBoundary(lt, reteEvaluator, nodeTypesInSegment);
-
-        PathMemory pmem = null;
-        for (LeftTupleSink sink : lt.getSinkPropagator().getSinks()) {
-            if (NodeTypeEnums.isLeftTupleSource(sink)) {
-                nodeTypesInSegment = updateRiaAndTerminalMemory((LeftTupleSource) sink, originalLt, smem, reteEvaluator, fromPrototype, nodeTypesInSegment);
-            } else if (sink.getType() == NodeTypeEnums.RightInputAdaterNode) {
-                // Even though we don't add the pmem and smem together, all pmem's for all pathend nodes must be initialized
-                RiaNodeMemory riaMem = (RiaNodeMemory) reteEvaluator.getNodeMemory((MemoryFactory) sink);
-                // Only add the RIANode, if the LeftTupleSource is part of the RIANode subnetwork
-                if (inSubNetwork((RightInputAdapterNode) sink, originalLt)) {
-                    pmem = riaMem.getRiaPathMemory();
-
-                    if (fromPrototype) {
-                        ObjectSink[] nodes = ((RightInputAdapterNode) sink).getObjectSinkPropagator().getSinks();
-                        for ( ObjectSink node : nodes ) {
-                            // check if the SegmentMemory has been already created by the BetaNode and if so avoid to build it twice
-                            if ( NodeTypeEnums.isLeftTupleSource(node) && reteEvaluator.getNodeMemory((MemoryFactory) node).getSegmentMemory() == null )  {
-                                restoreSegmentFromPrototype(reteEvaluator, (LeftTupleSource) node, nodeTypesInSegment);
-                            }
-                        }
-                    } else if ( ( pmem.getAllLinkedMaskTest() & ( 1L << pmem.getSegmentMemories().length ) ) == 0 ) {
-                        // must eagerly initialize child segment memories
-                        ObjectSink[] nodes = ((RightInputAdapterNode) sink).getObjectSinkPropagator().getSinks();
-                        for ( ObjectSink node : nodes ) {
-                            if ( NodeTypeEnums.isLeftTupleSource(node) )  {
-                                getOrCreateSegmentMemory( (LeftTupleSource) node, reteEvaluator );
-                            }
-                        }
-                    }
-                }
-
-            } else if (NodeTypeEnums.isTerminalNode(sink)) {
-                pmem = (PathMemory) reteEvaluator.getNodeMemory((MemoryFactory) sink);
+    public static void updateRiaAndTerminalMemory(LeftTupleSource lt,
+                                                 LeftTupleSource originalLt,
+                                                 SegmentMemory smem,
+                                                 SegmentPrototype proto,
+                                                 ReteEvaluator reteEvaluator) {
+        for (PathEndNode pathEndNode : proto.getPathEndNodes()) {
+            PathMemory pmem;
+            if (pathEndNode.getType() == NodeTypeEnums.RightInputAdaterNode) {
+                RiaNodeMemory riaMem = reteEvaluator.getNodeMemory((MemoryFactory<RiaNodeMemory>) pathEndNode);
+                pmem = riaMem.getRiaPathMemory();
+            } else {
+                pmem = reteEvaluator.getNodeMemory((MemoryFactory<PathMemory>) pathEndNode);
             }
 
-            if (pmem != null && smem.getPos() < pmem.getSegmentMemories().length) {
-                smem.addPathMemory( pmem );
-                pmem.setSegmentMemory( smem.getPos(), smem );
-                if (smem.isSegmentLinked()) {
-                    // not's can cause segments to be linked, and the rules need to be notified for evaluation
-                    smem.notifyRuleLinkSegment(reteEvaluator);
-                }
-                checkEagerSegmentCreation(sink.getLeftTupleSource(), reteEvaluator, nodeTypesInSegment);
-                pmem = null;
+            smem.addPathMemory( pmem );
+            pmem.setSegmentMemory( smem.getPos(), smem );
+            if (smem.isSegmentLinked()) {
+                // not's can cause segments to be linked, and the rules need to be notified for evaluation
+                smem.notifyRuleLinkSegment(reteEvaluator);
             }
+            //checkEagerSegmentCreation(sink.getLeftTupleSource(), reteEvaluator, proto.getNodeTypesInSegment());
         }
-        return nodeTypesInSegment;
     }
 
     private static int checkSegmentBoundary(LeftTupleSource lt, ReteEvaluator reteEvaluator, int nodeTypesInSegment) {

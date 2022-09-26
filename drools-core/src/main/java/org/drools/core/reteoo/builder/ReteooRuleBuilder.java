@@ -190,8 +190,6 @@ public class ReteooRuleBuilder implements RuleBuilder {
 
         setPathEndNodes(context);
 
-        AddRemoveRule.addRule( terminal, context.getWorkingMemories(), context.getRuleBase() );
-
         // adds the terminal node to the list of nodes created/added by this sub-rule
         context.getNodes().add( baseTerminalNode );
 
