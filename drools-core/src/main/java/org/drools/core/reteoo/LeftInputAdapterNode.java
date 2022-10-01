@@ -166,7 +166,7 @@ public class LeftInputAdapterNode extends LeftTupleSource
                                       boolean useLeftMemory) {
         SegmentMemory sm = lm.getOrCreateSegmentMemory( liaNode, reteEvaluator );
         if ( sm.getTipNode() == liaNode) {
-            // liaNode in it's own segment and child segments not yet created
+            // liaNode in its own segment and child segments not yet created
             if ( sm.isEmpty() ) {
                 SegmentUtilities.createChildSegments( reteEvaluator,
                                                       sm,
@@ -180,7 +180,7 @@ public class LeftInputAdapterNode extends LeftTupleSource
         boolean notifySegment = linkOrNotify && counter != 0;
 
         if ( counter == 0) {
-            // if there is no left mempry, then there is no linking or notification
+            // if there is no left memory, then there is no linking or notification
             if ( linkOrNotify ) {
                 // link and notify
                 lm.linkNode( reteEvaluator );

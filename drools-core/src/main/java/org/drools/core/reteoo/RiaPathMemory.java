@@ -64,7 +64,7 @@ public class RiaPathMemory extends PathMemory {
 
     @Override
     public short getNodeType() {
-        return NodeTypeEnums.RightInputAdaterNode;
+        return NodeTypeEnums.RightInputAdapterNode;
     }
 
     private void updateRuleTerminalNodes() {
@@ -79,7 +79,7 @@ public class RiaPathMemory extends PathMemory {
     private void findAndAddTN( LeftTupleSink ltsink, List<RuleImpl> terminalNodes) {
         if ( NodeTypeEnums.isTerminalNode(ltsink)) {
             terminalNodes.add( ((TerminalNode)ltsink).getRule() );
-        } else if ( ltsink.getType() == NodeTypeEnums.RightInputAdaterNode ) {
+        } else if ( ltsink.getType() == NodeTypeEnums.RightInputAdapterNode) {
             for ( Sink childSink : (( RightInputAdapterNode ) ltsink).getSinks() )  {
                 findAndAddTN((LeftTupleSink)childSink, terminalNodes);
             }

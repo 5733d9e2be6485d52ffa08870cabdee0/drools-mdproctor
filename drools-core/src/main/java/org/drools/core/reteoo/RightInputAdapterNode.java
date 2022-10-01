@@ -64,6 +64,8 @@ public class RightInputAdapterNode extends ObjectSource
 
     private SegmentPrototype[] segmentPrototypes;
 
+    private SegmentPrototype[] eagerSegmentPrototypes;
+
     private int objectCount;
 
     public RightInputAdapterNode() {
@@ -117,6 +119,16 @@ public class RightInputAdapterNode extends ObjectSource
     }
 
     @Override
+    public SegmentPrototype[] getEagerSegmentPrototypes() {
+        return eagerSegmentPrototypes;
+    }
+
+    @Override
+    public void setEagerSegmentPrototypes(SegmentPrototype[] eagerSegmentPrototypes) {
+        this.eagerSegmentPrototypes = eagerSegmentPrototypes;
+    }
+
+    @Override
     public void setPathEndNodes(PathEndNode[] pathEndNodes) {
         this.pathEndNodes = pathEndNodes;
     }
@@ -148,10 +160,10 @@ public class RightInputAdapterNode extends ObjectSource
     public RiaNodeMemory createMemory(final RuleBaseConfiguration config, ReteEvaluator reteEvaluator) {
         RiaNodeMemory rianMem = new RiaNodeMemory();
 
+        // do not set the SegmentMemory[] here yet, as a null check is used to detect first time an smem is added
         RiaPathMemory pmem = new RiaPathMemory(this, reteEvaluator);
         PathMemSpec pathMemSpec = getPathMemSpec();
         pmem.setAllLinkedMaskTest( pathMemSpec.allLinkedTestMask );
-        pmem.setSegmentMemories( new SegmentMemory[pathMemSpec.smemCount] );
         rianMem.setRiaPathMemory(pmem);
         
         return rianMem;
@@ -227,7 +239,7 @@ public class RightInputAdapterNode extends ObjectSource
     }
 
     public short getType() {
-        return NodeTypeEnums.RightInputAdaterNode;
+        return NodeTypeEnums.RightInputAdapterNode;
     }
 
     private int calculateHashCode() {
@@ -327,8 +339,10 @@ public class RightInputAdapterNode extends ObjectSource
             pathMemory.setSegmentMemory(segmentMemory);
         }
 
+
+
         public short getNodeType() {
-            return NodeTypeEnums.RightInputAdaterNode;
+            return NodeTypeEnums.RightInputAdapterNode;
         }
 
         public void reset() {

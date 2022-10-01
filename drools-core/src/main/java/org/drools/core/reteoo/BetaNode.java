@@ -121,7 +121,7 @@ public abstract class BetaNode extends LeftTupleSource
         setLeftTupleSource(leftInput);
         this.rightInput = rightInput;
 
-        rightInputIsRiaNode = NodeTypeEnums.RightInputAdaterNode == rightInput.getType();
+        rightInputIsRiaNode = NodeTypeEnums.RightInputAdapterNode == rightInput.getType();
 
         setConstraints(constraints);
 
@@ -360,7 +360,7 @@ public abstract class BetaNode extends LeftTupleSource
 
     public void setRightInput( ObjectSource rightInput ) {
         this.rightInput = rightInput;
-        rightInputIsRiaNode = NodeTypeEnums.RightInputAdaterNode == rightInput.getType();
+        rightInputIsRiaNode = NodeTypeEnums.RightInputAdapterNode == rightInput.getType();
     }
 
     public FastIterator getRightIterator( TupleMemory memory ) {

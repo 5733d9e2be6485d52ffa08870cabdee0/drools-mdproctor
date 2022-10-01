@@ -19,13 +19,9 @@ import org.drools.core.common.Memory;
 import org.drools.core.common.MemoryFactory;
 import org.drools.core.common.NetworkNode;
 import org.drools.core.common.ReteEvaluator;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import org.drools.core.impl.RuleBase;
-import org.drools.core.phreak.AddRemoveRule.PathEndNodes;
 import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AlphaNode;
 import org.drools.core.reteoo.AsyncReceiveNode;
-import org.drools.core.reteoo.AsyncSendNode;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.BetaNode;
 import org.drools.core.reteoo.ConditionalBranchNode;
@@ -38,7 +34,6 @@ import org.drools.core.reteoo.FromNode;
 import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.LeftInputAdapterNode.LiaNodeMemory;
 import org.drools.core.reteoo.LeftTupleNode;
-import org.drools.core.reteoo.LeftTupleSink;
 import org.drools.core.reteoo.LeftTupleSinkNode;
 import org.drools.core.reteoo.LeftTupleSinkPropagator;
 import org.drools.core.reteoo.LeftTupleSource;
@@ -59,10 +54,9 @@ import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.reteoo.TimerNode;
 import org.drools.core.reteoo.TimerNode.TimerNodeMemory;
 import org.drools.core.rule.constraint.QueryNameConstraint;
-import org.kie.api.definition.rule.Rule;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SegmentUtilities {
 
@@ -82,7 +76,7 @@ public class SegmentUtilities {
 
         LeftTupleSource segmentRoot = tupleSource;
 
-        smem = restoreSegmentFromPrototype(reteEvaluator, segmentRoot);
+        smem = restoreSegmentFromPrototype(reteEvaluator, segmentRoot, new HashSet<>());
         if (NodeTypeEnums.isBetaNode(segmentRoot) && ( (BetaNode) segmentRoot ).isRightInputIsRiaNode()) {
             createRiaSegmentMemory( (BetaNode) segmentRoot, reteEvaluator );
         }
@@ -200,11 +194,12 @@ public class SegmentUtilities {
         return nextNodePosMask > 0 ? nextNodePosMask : nodePosMask;
     }
 
-    private static SegmentMemory restoreSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource segmentRoot) {
+    private static SegmentMemory restoreSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource segmentRoot, Set<Integer> visited) {
+        visited.add(segmentRoot.getId());
         SegmentPrototype proto = reteEvaluator.getKnowledgeBase().getSegmentPrototype(segmentRoot);
         SegmentMemory smem = reteEvaluator.getKnowledgeBase().createSegmentFromPrototype(reteEvaluator, proto);
         if ( smem != null ) {
-            updateRiaAndTerminalMemory(segmentRoot, segmentRoot, smem, proto, reteEvaluator);
+            updateRiaAndTerminalMemory(smem, proto, reteEvaluator, visited);
         }
         return smem;
     }
@@ -366,27 +361,6 @@ public class SegmentUtilities {
     }
 
     /**
-     * Is the LeftTupleSource a node in the sub network for the RightInputAdapterNode
-     * To be in the same network, it must be a node is after the two output of the parent
-     * and before the rianode.
-     */
-    public static boolean inSubNetwork(RightInputAdapterNode riaNode, LeftTupleSource leftTupleSource) {
-        LeftTupleSource startTupleSource = riaNode.getStartTupleSource();
-        LeftTupleSource parent = riaNode.getLeftTupleSource();
-
-        while (parent != startTupleSource) {
-            if (parent == leftTupleSource) {
-                return true;
-            }
-            parent = parent.getLeftTupleSource();
-        }
-
-        return false;
-    }
-
-
-
-    /**
      * This adds the segment memory to the terminal node or ria node's list of memories.
      * In the case of the terminal node this allows it to know that all segments from
      * the tip to root are linked.
@@ -394,18 +368,32 @@ public class SegmentUtilities {
      * This is because the rianode only cares if all of it's segments are linked, then
      * it sets the bit of node it is the right input for.
      */
-    public static void updateRiaAndTerminalMemory(LeftTupleSource lt,
-                                                 LeftTupleSource originalLt,
-                                                 SegmentMemory smem,
+    public static void updateRiaAndTerminalMemory(SegmentMemory smem,
                                                  SegmentPrototype proto,
-                                                 ReteEvaluator reteEvaluator) {
+                                                 ReteEvaluator reteEvaluator,
+                                                 Set<Integer> visited) {
         for (PathEndNode pathEndNode : proto.getPathEndNodes()) {
             PathMemory pmem;
-            if (pathEndNode.getType() == NodeTypeEnums.RightInputAdaterNode) {
+            if (pathEndNode.getType() == NodeTypeEnums.RightInputAdapterNode) {
                 RiaNodeMemory riaMem = reteEvaluator.getNodeMemory((MemoryFactory<RiaNodeMemory>) pathEndNode);
                 pmem = riaMem.getRiaPathMemory();
+                LeftTupleSource subnetworkStartNode = ((RightInputAdapterNode)pathEndNode).getStartTupleSource();
+                if (subnetworkStartNode.getPathIndex() >= smem.getTipNode().getPathIndex()) {
+                    // this is a rian path, and the smem is before the subnetwork, so skip.
+                    continue;
+                }
             } else {
                 pmem = reteEvaluator.getNodeMemory((MemoryFactory<PathMemory>) pathEndNode);
+            }
+
+            if (pmem.getSegmentMemories() == null) {
+                // setting this now, stops recursion.
+                pmem.setSegmentMemories( new SegmentMemory[pathEndNode.getPathMemSpec().smemCount()]);
+                for (SegmentPrototype eager : pathEndNode.getEagerSegmentPrototypes()) {
+                    if (!visited.contains(eager.getRootNode().getId())) {
+                        restoreSegmentFromPrototype(reteEvaluator, (LeftTupleSource) eager.getRootNode(), visited);
+                    }
+                }
             }
 
             smem.addPathMemory( pmem );
@@ -414,25 +402,6 @@ public class SegmentUtilities {
                 // not's can cause segments to be linked, and the rules need to be notified for evaluation
                 smem.notifyRuleLinkSegment(reteEvaluator);
             }
-            //checkEagerSegmentCreation(sink.getLeftTupleSource(), reteEvaluator, proto.getNodeTypesInSegment());
-        }
-    }
-
-    private static int checkSegmentBoundary(LeftTupleSource lt, ReteEvaluator reteEvaluator, int nodeTypesInSegment) {
-        if ( isRootNode( lt, null ) )  {
-            // we are in a new child segment
-            checkEagerSegmentCreation(lt.getLeftTupleSource(), reteEvaluator, nodeTypesInSegment);
-            nodeTypesInSegment = 0;
-        }
-        return updateNodeTypesMask(lt, nodeTypesInSegment);
-    }
-
-    public static void checkEagerSegmentCreation(LeftTupleSource lt, ReteEvaluator reteEvaluator, int nodeTypesInSegment) {
-        // A Not node has to be eagerly initialized unless in its segment there is at least a join node
-        if ( isSet(nodeTypesInSegment, NOT_NODE_BIT) &&
-             !isSet(nodeTypesInSegment, JOIN_NODE_BIT) &&
-             !isSet(nodeTypesInSegment, REACTIVE_EXISTS_NODE_BIT) ) {
-            getOrCreateSegmentMemory(lt, reteEvaluator);
         }
     }
 

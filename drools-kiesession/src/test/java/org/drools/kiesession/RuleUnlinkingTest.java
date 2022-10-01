@@ -26,6 +26,8 @@ import org.drools.core.common.NetworkNode;
 import org.drools.core.common.PhreakPropagationContextFactory;
 import org.drools.core.common.PropagationContextFactory;
 import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.core.phreak.SegmentUtilities2;
+import org.drools.core.reteoo.TerminalNode;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.core.phreak.SegmentUtilities;
 import org.drools.core.reteoo.BetaMemory;
@@ -156,12 +158,14 @@ public class RuleUnlinkingTest {
         liaNode.addAssociation( rule1 );
         liaNode.addAssociation( rule2 );
         liaNode.addAssociation( rule3 );
+
         n1.addAssociation( rule1 );
         n1.addAssociation( rule2 );
         n1.addAssociation( rule3 );
         n2.addAssociation( rule1 );
         n2.addAssociation( rule2 );
         n2.addAssociation( rule3 );
+
         n3.addAssociation( rule1 );
         n3.addAssociation( rule2 );
         n3.addAssociation( rule3 );
@@ -174,8 +178,12 @@ public class RuleUnlinkingTest {
         n6.addAssociation( rule3 );
         n7.addAssociation( rule3 );
         n8.addAssociation( rule3 );
-        
-        
+
+        // assumes no subnetworks
+        for (TerminalNode tn : new TerminalNode[] {rtn1, rtn2, rtn3}) {
+            tn.resetPathMemSpec();
+            SegmentUtilities2.createPathMemories(tn, kBase);
+        }
         
     }
 
@@ -203,7 +211,6 @@ public class RuleUnlinkingTest {
     public void testSegmentNodeReferencesToSegments() {
         setUp( JOIN_NODE );
 
-        InternalKnowledgeBase kBase = KnowledgeBaseFactory.newKnowledgeBase();
         StatefulKnowledgeSessionImpl wm = new StatefulKnowledgeSessionImpl( 1L, kBase );
 
         BetaMemory bm = null;
@@ -298,7 +305,6 @@ public class RuleUnlinkingTest {
     public void testRuleSegmentLinking() {
         setUp( JOIN_NODE );
 
-        InternalKnowledgeBase kBase = KnowledgeBaseFactory.newKnowledgeBase();
         StatefulKnowledgeSessionImpl wm = new StatefulKnowledgeSessionImpl( 1L, kBase );
 
         BetaMemory bm = null;
@@ -358,6 +364,12 @@ public class RuleUnlinkingTest {
         assertThat(rtn1Rs.isRuleLinked()).isFalse();
         assertThat(rtn2Rs.isRuleLinked()).isFalse();
         assertThat(rtn3Rs.isRuleLinked()).isFalse();
+
+        // assumes no subnetworks
+        for (TerminalNode tn : new TerminalNode[] {rtn1, rtn2, rtn3}) {
+            tn.resetPathMemSpec();
+            SegmentUtilities2.createPathMemories(tn, kBase);
+        }
     }
 
     private static BetaMemory createSegmentMemory(BetaNode node,

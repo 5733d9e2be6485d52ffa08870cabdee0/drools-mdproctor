@@ -910,17 +910,13 @@ public class KnowledgeBaseImpl implements RuleBase {
         return this.reteooBuilder.getMemoryIdsGenerator().getLastId() + 1;
     }
 
-    public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentMemory smem) {
+    public void registerSegmentPrototype(LeftTupleNode tupleSource, SegmentMemory smem) {
         throw new RuntimeException("unsupported, it's all moving compile time baby!!!");
         //segmentProtos.put(tupleSource.getId(), smem.asPrototype());
     }
 
-    public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentPrototype smem) {
+    public void registerSegmentPrototype(LeftTupleNode tupleSource, SegmentPrototype smem) {
         segmentProtos.put(tupleSource.getId(), smem);
-    }
-
-    public boolean hasSegmentPrototypes() {
-        return !segmentProtos.isEmpty();
     }
 
     public void invalidateSegmentPrototype(LeftTupleNode rootNode) {

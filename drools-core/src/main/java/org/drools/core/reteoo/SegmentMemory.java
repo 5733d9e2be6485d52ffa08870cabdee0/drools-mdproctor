@@ -27,6 +27,7 @@ import org.drools.core.common.ReteEvaluator;
 import org.drools.core.common.TupleSets;
 import org.drools.core.common.TupleSetsImpl;
 import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.core.reteoo.AccumulateNode.AccumulateMemory;
 import org.drools.core.reteoo.AsyncReceiveNode.AsyncReceiveMemory;
 import org.drools.core.reteoo.PathEndNode.PathMemSpec;
 import org.drools.core.reteoo.QueryElementNode.QueryElementNodeMemory;
@@ -431,6 +432,7 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
             smem.linkedNodeMask = linkedNodeMask;
             smem.allLinkedMaskTest = allLinkedMaskTest;
             smem.segmentPosMaskBit = segmentPosMaskBit;
+            smem.linkedNodeMask = linkedNodeMask;
             smem.pos = pos;
             int i = 0;
             for (NetworkNode node : getNodesInSegment()) {
@@ -466,9 +468,9 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
             return linkedNodeMask;
         }
 
-        public void setLinkedNodeMask(long linkedNodeMask) {
-            this.linkedNodeMask = linkedNodeMask;
-        }
+        public void linkNode(long mask) {
+            linkedNodeMask |= mask;
+        };
 
         public long getAllLinkedMaskTest() {
             return allLinkedMaskTest;
@@ -528,28 +530,6 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
     }
 
     public abstract static class MemoryPrototype {
-        public static MemoryPrototype get(Memory memory) {
-            if (memory instanceof BetaMemory) {
-                return new BetaMemoryPrototype((BetaMemory)memory);
-            }
-            if (memory instanceof LeftInputAdapterNode.LiaNodeMemory) {
-                return new LiaMemoryPrototype((LeftInputAdapterNode.LiaNodeMemory)memory);
-            }
-            if (memory instanceof QueryElementNode.QueryElementNodeMemory) {
-                return new QueryMemoryPrototype((QueryElementNode.QueryElementNodeMemory)memory);
-            }
-            if (memory instanceof TimerNodeMemory) {
-                return new TimerMemoryPrototype((TimerNodeMemory)memory);
-            }
-            if (memory instanceof AccumulateNode.AccumulateMemory) {
-                return new AccumulateMemoryPrototype((AccumulateNode.AccumulateMemory)memory);
-            }
-            if (memory instanceof ReactiveFromNode.ReactiveFromMemory) {
-                return new ReactiveFromMemoryPrototype((ReactiveFromNode.ReactiveFromMemory)memory);
-            }
-            return null;
-        }
-
         public abstract void populateMemory(ReteEvaluator reteEvaluator, Memory memory);
     }
 
@@ -561,13 +541,6 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
         public BetaMemoryPrototype(long nodePosMaskBit, RightInputAdapterNode riaNode) {
             this.nodePosMaskBit = nodePosMaskBit;
             this.riaNode = riaNode;
-        }
-
-        private BetaMemoryPrototype(BetaMemory betaMemory) {
-            this.nodePosMaskBit = betaMemory.getNodePosMaskBit();
-            if (betaMemory.getRiaRuleMemory() != null) {
-                riaNode = betaMemory.getRiaRuleMemory().getRightInputAdapterNode();
-            }
         }
 
         @Override
@@ -587,10 +560,6 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
 
         public LiaMemoryPrototype(long nodePosMaskBit) {
             this.nodePosMaskBit = nodePosMaskBit;
-        }
-
-        private LiaMemoryPrototype(LeftInputAdapterNode.LiaNodeMemory liaMemory) {
-            this.nodePosMaskBit = liaMemory.getNodePosMaskBit();
         }
 
         @Override
@@ -614,6 +583,57 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
         @Override
         public void populateMemory(ReteEvaluator reteEvaluator, Memory memory) {
             ((ReactiveFromNode.ReactiveFromMemory)memory).setNodePosMaskBit( nodePosMaskBit );
+        }
+    }
+
+    public static class ConditionalBranchMemoryPrototype extends MemoryPrototype {
+
+        public ConditionalBranchMemoryPrototype() {
+        }
+
+        @Override
+        public void populateMemory(ReteEvaluator reteEvaluator, Memory memory) {
+        }
+    }
+
+
+    public static class RightInputAdapterPrototype extends MemoryPrototype {
+
+        public RightInputAdapterPrototype() {
+        }
+
+        @Override
+        public void populateMemory(ReteEvaluator reteEvaluator, Memory memory) {
+        }
+    }
+
+    public static class TerminalPrototype extends MemoryPrototype {
+
+        public TerminalPrototype() {
+        }
+
+        @Override
+        public void populateMemory(ReteEvaluator reteEvaluator, Memory memory) {
+        }
+    }
+
+    public static class FromMemoryPrototype extends MemoryPrototype {
+
+        public FromMemoryPrototype() {
+        }
+
+        @Override
+        public void populateMemory(ReteEvaluator reteEvaluator, Memory memory) {
+        }
+    }
+
+    public static class EvalMemoryPrototype extends MemoryPrototype {
+
+        public EvalMemoryPrototype() {
+        }
+
+        @Override
+        public void populateMemory(ReteEvaluator reteEvaluator, Memory memory) {
         }
     }
 
@@ -660,6 +680,16 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
         }
     }
 
+    public static class AsyncSendMemoryPrototype extends MemoryPrototype {
+
+        public AsyncSendMemoryPrototype() {
+        }
+
+        @Override
+        public void populateMemory(ReteEvaluator reteEvaluator, Memory mem) {
+        }
+    }
+
     public static class AsyncReceiveMemoryPrototype extends MemoryPrototype {
 
         private final long nodePosMaskBit;
@@ -683,8 +713,8 @@ public class SegmentMemory extends LinkedList<SegmentMemory>
 
         private final BetaMemoryPrototype betaProto;
 
-        private AccumulateMemoryPrototype(AccumulateNode.AccumulateMemory accMemory) {
-            betaProto = new BetaMemoryPrototype(accMemory.getBetaMemory());
+        public AccumulateMemoryPrototype(BetaMemoryPrototype betaProto) {
+            this.betaProto = betaProto;
         }
 
         @Override

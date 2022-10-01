@@ -15,15 +15,18 @@
 
 package org.drools.core.phreak;
 
-import org.drools.core.common.MemoryFactory;
 import org.drools.core.common.NetworkNode;
-import org.drools.core.common.ReteEvaluator;
 import org.drools.core.impl.RuleBase;
 import org.drools.core.reteoo.AlphaNode;
+import org.drools.core.reteoo.AlphaTerminalNode;
 import org.drools.core.reteoo.AsyncReceiveNode;
+import org.drools.core.reteoo.AsyncSendNode;
 import org.drools.core.reteoo.BetaNode;
+import org.drools.core.reteoo.ConditionalBranchNode;
 import org.drools.core.reteoo.EntryPointNode;
+import org.drools.core.reteoo.EvalConditionNode;
 import org.drools.core.reteoo.ExistsNode;
+import org.drools.core.reteoo.FromNode;
 import org.drools.core.reteoo.LeftInputAdapterNode;
 import org.drools.core.reteoo.LeftTupleNode;
 import org.drools.core.reteoo.LeftTupleSinkNode;
@@ -38,14 +41,20 @@ import org.drools.core.reteoo.PathEndNode;
 import org.drools.core.reteoo.QueryElementNode;
 import org.drools.core.reteoo.ReactiveFromNode;
 import org.drools.core.reteoo.RightInputAdapterNode;
-import org.drools.core.reteoo.SegmentMemory;
+import org.drools.core.reteoo.SegmentMemory.AccumulateMemoryPrototype;
 import org.drools.core.reteoo.SegmentMemory.AsyncReceiveMemoryPrototype;
+import org.drools.core.reteoo.SegmentMemory.AsyncSendMemoryPrototype;
 import org.drools.core.reteoo.SegmentMemory.BetaMemoryPrototype;
+import org.drools.core.reteoo.SegmentMemory.ConditionalBranchMemoryPrototype;
+import org.drools.core.reteoo.SegmentMemory.EvalMemoryPrototype;
+import org.drools.core.reteoo.SegmentMemory.FromMemoryPrototype;
 import org.drools.core.reteoo.SegmentMemory.LiaMemoryPrototype;
 import org.drools.core.reteoo.SegmentMemory.MemoryPrototype;
 import org.drools.core.reteoo.SegmentMemory.QueryMemoryPrototype;
+import org.drools.core.reteoo.SegmentMemory.RightInputAdapterPrototype;
 import org.drools.core.reteoo.SegmentMemory.SegmentPrototype;
 import org.drools.core.reteoo.SegmentMemory.ReactiveFromMemoryPrototype;
+import org.drools.core.reteoo.SegmentMemory.TerminalPrototype;
 import org.drools.core.reteoo.SegmentMemory.TimerMemoryPrototype;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.reteoo.TimerNode;
@@ -59,23 +68,45 @@ public class SegmentUtilities2 {
 
     public static void createPathMemories(TerminalNode tn, RuleBase rbase) {
         // Will initialise all segments in a path
-        SegmentPrototype[] smems = createPathMemories(tn.getLeftTupleSource(), null, rbase);
-        tn.setSegmentPrototypes(smems);
+        SegmentPrototype[] smems = createPathMemories(tn, null, rbase);
+
+        // smems are null, if there is no beta network. Which means it has an AlphaTerminalNode
+        if  (smems != null) {
+            setSegments(tn, smems);
+        }
+    }
+
+    private static void setSegments(PathEndNode endNode, SegmentPrototype[] smems) {
+        List<SegmentPrototype> eager = new ArrayList<>();
+        for (SegmentPrototype smem : smems) {
+            // The segments before the start of a subnetwork, will be null for a rian path.
+            if (smem != null && requiresAnEagerSegment(smem.getNodeTypesInSegment())) {
+                eager.add(smem);
+            }
+        }
+        endNode.setEagerSegmentPrototypes(eager.toArray(new SegmentPrototype[eager.size()]));
+
+        endNode.setSegmentPrototypes(smems);
     }
 
     // notes, looking into if/why I need stopNode
-    private static SegmentPrototype[] createPathMemories(LeftTupleSource lts, LeftTupleSource stopNode, RuleBase rbase) {
-        LeftTupleSource segmentRoot = lts;
-        LeftTupleSource segmentTip = lts;
+    public static SegmentPrototype[] createPathMemories(LeftTupleNode lts, LeftTupleSource stopNode, RuleBase rbase) {
+        LeftTupleNode segmentRoot = lts;
+        LeftTupleNode segmentTip = lts;
         List<SegmentPrototype> smems = new ArrayList<>();
         boolean inside = true; // as it starts at the terminal aor ria node, we know that it starts inside.
-        while (segmentRoot.getType() != NodeTypeEnums.LeftInputAdapterNode && segmentRoot != stopNode) {
+        do {
             // iterate to find the actual segment root
             while (!SegmentUtilities2.isRootNode(segmentRoot, null)) {
                 segmentRoot = segmentRoot.getLeftTupleSource();
             }
 
-            // only store segments that are inside of the subnetwork.
+            if (segmentRoot instanceof AlphaTerminalNode &&
+                NodeTypeEnums.isTerminalNode(segmentTip)) {
+                return null; // this path has no beta nodes, so no pmem is needed
+            }
+
+            // Store all nodes for the main path. If this is a subnetwork, only store nodes inside of it.
             if (inside) {
                 SegmentPrototype smem = createSegmentMemory(segmentRoot, segmentTip, rbase);
                 smems.add(smem);
@@ -87,19 +118,21 @@ public class SegmentUtilities2 {
                 inside = false;
             }
 
+            // this is the new segment so set both to same, and it iterates for the actual segmentRoot next loop.
             segmentRoot = segmentRoot.getLeftTupleSource();
-            segmentTip = segmentRoot.getLeftTupleSource();
-        }
+            segmentTip = segmentRoot;
+        } while (segmentRoot != null); // it's after lian
 
         // node 0 needs to go first.
         Collections.reverse(smems);
 
         // reset to find the next segments and set their position and their bit mask
-        LeftTupleSource pathRoot = segmentRoot;
         int ruleSegmentPosMask = 1;
-        for (int counter = 0; counter == smems.size(); counter++) {
-            smems.get(counter).setPos(counter);
-            smems.get(counter).setSegmentPosMaskBit(ruleSegmentPosMask);
+        for (int counter = 0; counter < smems.size(); counter++) {
+            if ( smems.get(counter) != null) { // The segments before the start of a subnetwork, will be null for a rian path.
+                smems.get(counter).setPos(counter);
+                smems.get(counter).setSegmentPosMaskBit(ruleSegmentPosMask);
+            }
             ruleSegmentPosMask = ruleSegmentPosMask << 1;
         }
 
@@ -109,8 +142,8 @@ public class SegmentUtilities2 {
     /**
      * Initialises the NodeSegment memory for all nodes in the segment.
      */
-    public static SegmentPrototype createSegmentMemory(LeftTupleSource segmentRoot, LeftTupleSource segmentTip, RuleBase rbase) {
-        LeftTupleSource tupleSource = segmentRoot;
+    public static SegmentPrototype createSegmentMemory(LeftTupleNode segmentRoot, LeftTupleNode segmentTip, RuleBase rbase) {
+        LeftTupleNode node = segmentRoot;
         int nodeTypesInSegment = 0;
 
         SegmentPrototype smem = new SegmentPrototype(segmentRoot, segmentTip);
@@ -124,38 +157,57 @@ public class SegmentUtilities2 {
         boolean updateNodeBit = true;  // nodes after a branch CE can notify, but they cannot impact linking
 
         while (true) {
-            nodeTypesInSegment = updateNodeTypesMask(tupleSource, nodeTypesInSegment);
-            if (NodeTypeEnums.isBetaNode(tupleSource)) {
-                allLinkedTestMask = processBetaNode((BetaNode)tupleSource, smem, memories, nodes, nodePosMask, allLinkedTestMask, updateNodeBit, rbase);
+            nodeTypesInSegment = updateNodeTypesMask(node, nodeTypesInSegment);
+            if (NodeTypeEnums.isBetaNode(node)) {
+                allLinkedTestMask = processBetaNode((BetaNode)node, smem, memories, nodes, nodePosMask, allLinkedTestMask, updateNodeBit, rbase);
             } else {
-                switch (tupleSource.getType()) {
+                switch (node.getType()) {
                     case NodeTypeEnums.LeftInputAdapterNode:
-                        allLinkedTestMask = processLiaNode((LeftInputAdapterNode) tupleSource, smem, memories, nodes, nodePosMask, allLinkedTestMask);
+                        allLinkedTestMask = processLiaNode((LeftInputAdapterNode) node, smem, memories, nodes, nodePosMask, allLinkedTestMask);
                         break;
                     case NodeTypeEnums.ConditionalBranchNode:
+                        processConditionalBranchNode((ConditionalBranchNode) node, smem, memories, nodes);
                         updateNodeBit = false;
                         break;
+                    case NodeTypeEnums.FromNode:
+                        processFromNode((FromNode) node, smem, memories, nodes);
+                        break;
+                    case NodeTypeEnums.EvalConditionNode:
+                        processEvalFromNode((EvalConditionNode) node, smem, memories, nodes);
+                        break;
                     case NodeTypeEnums.ReactiveFromNode:
-                        processReactiveFromNode((ReactiveFromNode) tupleSource, smem, memories, nodes, nodePosMask);
+                        processReactiveFromNode((ReactiveFromNode) node, smem, memories, nodes, nodePosMask);
                         break;
                     case NodeTypeEnums.TimerConditionNode:
-                        processTimerNode((TimerNode) tupleSource, smem, memories, nodes, nodePosMask);
+                        processTimerNode((TimerNode) node, smem, memories, nodes, nodePosMask);
+                        break;
+                    case NodeTypeEnums.AsyncSendNode:
+                        processAsyncSendNode((AsyncSendNode) node, smem, memories, nodes);
                         break;
                     case NodeTypeEnums.AsyncReceiveNode:
-                        processAsyncReceiveNode((AsyncReceiveNode) tupleSource, smem, memories, nodes, nodePosMask);
+                        processAsyncReceiveNode((AsyncReceiveNode) node, smem, memories, nodes, nodePosMask);
                         break;
                     case NodeTypeEnums.QueryElementNode:
-                        updateNodeBit = processQueryNode((QueryElementNode) tupleSource, segmentRoot, smem, memories, nodes, nodePosMask);
+                        updateNodeBit = processQueryNode((QueryElementNode) node, segmentRoot, smem, memories, nodes, nodePosMask);
                         break;
+                    case NodeTypeEnums.RightInputAdapterNode:
+                        processRightInputAdapterNode((RightInputAdapterNode) node, smem, memories, nodes);
+                        break;
+                    case NodeTypeEnums.RuleTerminalNode:
+                    case NodeTypeEnums.QueryTerminalNode:
+                        processTerminalNode((TerminalNode) node, smem, memories, nodes);
+                        break;
+                    default:
+                        System.out.println("Node: " + node);
                 }
             }
 
             nodePosMask = nextNodePosMask(nodePosMask);
 
-            if (tupleSource == segmentTip) {
+            if (node == segmentTip) {
                 break;
             }
-            tupleSource = (LeftTupleSource) tupleSource.getSinkPropagator().getFirstLeftTupleSink();
+            node = node.getSinkPropagator().getFirstLeftTupleSink();
         }
         smem.setAllLinkedMaskTest(allLinkedTestMask);
 
@@ -166,24 +218,30 @@ public class SegmentUtilities2 {
         smem.setNodesInSegment(nodes.toArray( new NetworkNode[nodes.size()]));
         smem.setMemories(memories.toArray( new MemoryPrototype[memories.size()]));
         smem.setPathEndNodes(endNodes.toArray( new PathEndNode[endNodes.size()]));
+        smem.setNodeTypesInSegment(nodeTypesInSegment);
 
         rbase.registerSegmentPrototype(segmentRoot, smem);
 
         return smem;
     }
 
+    public static boolean requiresAnEagerSegment(int nodeTypesInSegment) {
+        // A Not node has to be eagerly initialized unless in its segment there is at least a join node
+        return isSet(nodeTypesInSegment, NOT_NODE_BIT) &&
+             !isSet(nodeTypesInSegment, JOIN_NODE_BIT) &&
+             !isSet(nodeTypesInSegment, REACTIVE_EXISTS_NODE_BIT);
+    }
+
     private static void collectPathEndNodes(LeftTupleNode lt,
                                             List<PathEndNode> endNodes) {
+         if (NodeTypeEnums.isTerminalNode(lt)) {
+            endNodes.add((PathEndNode) lt);
+        } else if (NodeTypeEnums.RightInputAdapterNode == lt.getType()) {
+            endNodes.add( (PathEndNode) lt );
+        }
+
         for (LeftTupleSinkNode sink = lt.getSinkPropagator().getLastLeftTupleSink(); sink != null; sink = sink.getPreviousLeftTupleSinkNode()) {
-            if (NodeTypeEnums.isLeftTupleSource(sink)) {
-                collectPathEndNodes(sink, endNodes);
-            } else if (NodeTypeEnums.isTerminalNode(sink)) {
-                endNodes.add((PathEndNode) sink);
-            } else if (NodeTypeEnums.RightInputAdaterNode == sink.getType()) {
-                endNodes.add( (PathEndNode) sink );
-            } else {
-                throw new RuntimeException("Error: Unknown Node. Defensive programming test..");
-            }
+            collectPathEndNodes(sink, endNodes);
         }
     }
 
@@ -195,7 +253,7 @@ public class SegmentUtilities2 {
         return nextNodePosMask > 0 ? nextNodePosMask : nodePosMask;
     }
 
-    private static boolean processQueryNode(QueryElementNode queryNode, LeftTupleSource segmentRoot, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes, long nodePosMask) {
+    private static boolean processQueryNode(QueryElementNode queryNode, LeftTupleNode segmentRoot, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes, long nodePosMask) {
         SegmentPrototype querySmem = null; //getQuerySegmentMemory(reteEvaluator, segmentRoot, queryNode);
         QueryMemoryPrototype queryNodeMem = new QueryMemoryPrototype(nodePosMask, queryNode);
         memories.add(queryNodeMem);
@@ -204,9 +262,45 @@ public class SegmentUtilities2 {
         return ! queryNode.getQueryElement().isAbductive();
     }
 
+    private static void processAsyncSendNode(AsyncSendNode tupleSource, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes) {
+        AsyncSendMemoryPrototype mem = new AsyncSendMemoryPrototype();
+        memories.add(mem);
+        nodes.add(tupleSource);
+    }
+
     private static void processAsyncReceiveNode(AsyncReceiveNode tupleSource, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes,
                                                 long nodePosMask) {
         AsyncReceiveMemoryPrototype mem = new AsyncReceiveMemoryPrototype(nodePosMask);
+        memories.add(mem);
+        nodes.add(tupleSource);
+    }
+
+    private static void processConditionalBranchNode(ConditionalBranchNode tupleSource, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes) {
+        ConditionalBranchMemoryPrototype mem = new ConditionalBranchMemoryPrototype();
+        memories.add(mem);
+        nodes.add(tupleSource);
+    }
+
+    private static void processRightInputAdapterNode(RightInputAdapterNode tupleSource, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes) {
+        RightInputAdapterPrototype mem = new RightInputAdapterPrototype();
+        memories.add(mem);
+        nodes.add(tupleSource);
+    }
+
+    private static void processTerminalNode(TerminalNode tupleSource, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes) {
+        TerminalPrototype mem = new TerminalPrototype();
+        memories.add(mem);
+        nodes.add(tupleSource);
+    }
+
+    private static void processFromNode(FromNode tupleSource, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes) {
+        FromMemoryPrototype mem = new FromMemoryPrototype();
+        memories.add(mem);
+        nodes.add(tupleSource);
+    }
+
+    private static void processEvalFromNode(EvalConditionNode tupleSource, SegmentPrototype smem, List<MemoryPrototype> memories, List<NetworkNode> nodes) {
+        EvalMemoryPrototype mem = new EvalMemoryPrototype();
         memories.add(mem);
         nodes.add(tupleSource);
     }
@@ -240,8 +334,8 @@ public class SegmentUtilities2 {
             // there is a subnetwork, so create all it's segment memory prototypes
             riaNode = (RightInputAdapterNode) betaNode.getRightInput();
 
-            SegmentPrototype[] smems = createPathMemories(riaNode.getLeftTupleSource(), riaNode.getStartTupleSource(), rbase);
-            riaNode.setSegmentPrototypes(smems);
+            SegmentPrototype[] smems = createPathMemories(riaNode, riaNode.getStartTupleSource(), rbase);
+            setSegments(riaNode, smems);
 
             if (updateNodeBit && canBeDisabled(betaNode) && riaNode.getPathMemSpec().allLinkedTestMask() > 0) {
                 // only ria's with reactive subnetworks can be disabled and thus need checking
@@ -251,9 +345,20 @@ public class SegmentUtilities2 {
             allLinkedTestMask = allLinkedTestMask | nodePosMask;
 
         }
+        if (NodeTypeEnums.NotNode == betaNode.getType()) {
+            // not nodes start up linked in
+            smem.linkNode(nodePosMask);
+        }
 
         BetaMemoryPrototype bm = new BetaMemoryPrototype(nodePosMask, riaNode);
-        memories.add(bm);
+
+        if (NodeTypeEnums.AccumulateNode == betaNode.getType())  {
+            AccumulateMemoryPrototype am = new AccumulateMemoryPrototype(bm);
+            memories.add(am);
+        } else {
+            memories.add(bm);
+        }
+
         nodes.add(betaNode);
         return allLinkedTestMask;
     }

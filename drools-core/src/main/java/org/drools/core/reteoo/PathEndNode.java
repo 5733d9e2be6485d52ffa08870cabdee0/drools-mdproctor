@@ -34,6 +34,10 @@ public interface PathEndNode extends LeftTupleSinkNode {
 
     SegmentPrototype[] getSegmentPrototypes();
 
+    SegmentPrototype[] getEagerSegmentPrototypes();
+
+    void setEagerSegmentPrototypes(SegmentPrototype[] eagerSegmentPrototypes);
+
     PathMemSpec getPathMemSpec();
     void resetPathMemSpec();
 

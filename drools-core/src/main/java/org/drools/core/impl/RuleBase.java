@@ -117,7 +117,6 @@ public interface RuleBase {
 
     ClassFieldAccessorCache getClassFieldAccessorCache();
 
-    boolean hasSegmentPrototypes();
     void invalidateSegmentPrototype(LeftTupleNode rootNode);
     SegmentMemory createSegmentFromPrototype(ReteEvaluator reteEvaluator, LeftTupleSource tupleSource);
 
@@ -165,7 +164,7 @@ public interface RuleBase {
         return 0;
     }
 
-    void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentPrototype smem);
+    void registerSegmentPrototype(LeftTupleNode tupleSource, SegmentPrototype smem);
 
-    void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentMemory smem);
+    void registerSegmentPrototype(LeftTupleNode tupleSource, SegmentMemory smem);
 }

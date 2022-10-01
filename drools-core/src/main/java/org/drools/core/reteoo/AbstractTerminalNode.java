@@ -47,6 +47,8 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
 
     private SegmentPrototype[] segmentPrototypes;
 
+    private SegmentPrototype[] eagerSegmentPrototypes;
+
     private PathMemSpec pathMemSpec;
 
     private int objectCount;
@@ -93,6 +95,14 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
     @Override
     public SegmentPrototype[] getSegmentPrototypes() {
         return segmentPrototypes;
+    }
+
+    public SegmentPrototype[] getEagerSegmentPrototypes() {
+        return eagerSegmentPrototypes;
+    }
+
+    public void setEagerSegmentPrototypes(SegmentPrototype[] eagerSegmentPrototypes) {
+        this.eagerSegmentPrototypes = eagerSegmentPrototypes;
     }
 
     public int getPathIndex() {
@@ -154,9 +164,9 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
     }
 
     public static PathMemory initPathMemory( PathEndNode pathEndNode, PathMemory pmem ) {
+        // do not set the SegmentMemory[] here yet, as a null check is used to detect first time an smem is added
         PathMemSpec pathMemSpec = pathEndNode.getPathMemSpec();
         pmem.setAllLinkedMaskTest(pathMemSpec.allLinkedTestMask );
-        pmem.setSegmentMemories( new SegmentMemory[pathMemSpec.smemCount] );
         return pmem;
     }
 

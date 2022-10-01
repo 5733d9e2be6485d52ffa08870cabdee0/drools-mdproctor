@@ -27,6 +27,7 @@ import org.drools.core.common.PropagationContextFactory;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.impl.RuleBaseFactory;
 import org.drools.core.phreak.SegmentUtilities;
+import org.drools.core.phreak.SegmentUtilities2;
 import org.drools.core.reteoo.BetaMemory;
 import org.drools.core.reteoo.BetaNode;
 import org.drools.core.reteoo.ExistsNode;
@@ -40,6 +41,7 @@ import org.drools.core.reteoo.NotNode;
 import org.drools.core.reteoo.ObjectTypeNode;
 import org.drools.core.reteoo.PathMemory;
 import org.drools.core.reteoo.RuleTerminalNode;
+import org.drools.core.reteoo.TerminalNode;
 import org.drools.core.reteoo.builder.BuildContext;
 import org.drools.core.rule.GroupElement;
 import org.drools.core.rule.GroupElement.Type;
@@ -152,7 +154,6 @@ public class RuleUnlinkingWithSegmentMemoryTest {
         rule3.setActivationListener( "agenda" ); 
         rtn3 = ( RuleTerminalNode ) createNetworkNode( 20, RULE_TERMINAL_NODE, n8, rule3 );
 
-
         lian.addAssociation( rule1 );
         lian.addAssociation( rule2 );
         lian.addAssociation( rule3 );
@@ -174,6 +175,12 @@ public class RuleUnlinkingWithSegmentMemoryTest {
         n6.addAssociation( rule3 );
         n7.addAssociation( rule3 );
         n8.addAssociation( rule3 );
+
+        // assumes no subnetworks
+        for (TerminalNode tn : new TerminalNode[] {rtn1, rtn2, rtn3}) {
+            tn.resetPathMemSpec();
+            SegmentUtilities2.createPathMemories(tn, kBase);
+        }
     }
     
     @Test
@@ -201,7 +208,6 @@ public class RuleUnlinkingWithSegmentMemoryTest {
     public void testSegmentNodeReferencesToSegments() {
         setUp( JOIN_NODE );
 
-        InternalKnowledgeBase kBase = KnowledgeBaseFactory.newKnowledgeBase();
         StatefulKnowledgeSessionImpl wm = new StatefulKnowledgeSessionImpl( 1L, kBase );
 
         BetaMemory bm = null;
@@ -304,7 +310,6 @@ public class RuleUnlinkingWithSegmentMemoryTest {
     public void testRuleSegmentLinking() {
         setUp( JOIN_NODE );
 
-        InternalKnowledgeBase kBase = KnowledgeBaseFactory.newKnowledgeBase();
         StatefulKnowledgeSessionImpl wm = new StatefulKnowledgeSessionImpl( 1L, kBase );
 
         BetaMemory bm = null;

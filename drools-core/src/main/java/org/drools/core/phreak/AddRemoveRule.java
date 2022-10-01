@@ -95,16 +95,16 @@ public class AddRemoveRule {
             log.trace("Adding Rule {}", tn.getRule().getName());
         }
 
-        boolean hasProtos = kBase.hasSegmentPrototypes();
         boolean hasWms = !wms.isEmpty();
 
-        if (!hasProtos && !hasWms) {
-            return null;
-        }
 
         RuleImpl rule = tn.getRule();
         LeftTupleNode firstSplit = getNetworkSplitPoint(tn);
-        PathEndNodes pathEndNodes = getPathEndNodes(kBase, firstSplit, tn, rule, hasProtos, hasWms);
+        PathEndNodes pathEndNodes = getPathEndNodes(kBase, firstSplit, tn, rule, hasWms);
+
+        if (!hasWms) {
+            return pathEndNodes;
+        }
 
         // Insert the facts for the new paths. This will iterate each new path from EndNode to the splitStart - but will not process the splitStart itself (as tha already exist).
         // It does not matter that the prior segments have not yet been processed for splitting, as this will only apply for branches of paths that did not exist before
@@ -140,10 +140,9 @@ public class AddRemoveRule {
             log.trace("Adding Rule {}", tn.getRule().getName());
         }
 
-        boolean hasProtos = kBase.hasSegmentPrototypes();
         boolean hasWms = !wms.isEmpty();
 
-        if (!hasProtos && !hasWms) {
+        if (!hasWms) {
             return;
         }
 
@@ -194,16 +193,15 @@ public class AddRemoveRule {
             log.trace("Removing Rule {}", tn.getRule().getName());
         }
 
-        boolean hasProtos = kBase.hasSegmentPrototypes();
         boolean hasWms = !wms.isEmpty();
 
-        if (!hasProtos && !hasWms) {
+        if (!hasWms) {
             return null;
         }
 
         RuleImpl      rule       = tn.getRule();
         LeftTupleNode firstSplit = getNetworkSplitPoint(tn);
-        PathEndNodes pathEndNodes = getPathEndNodes(kBase, firstSplit, tn, rule, hasProtos, hasWms);
+        PathEndNodes pathEndNodes = getPathEndNodes(kBase, firstSplit, tn, rule, hasWms);
 
         for (InternalWorkingMemory wm : wms) {
             wm.flushPropagations();
@@ -516,7 +514,8 @@ public class AddRemoveRule {
                                              smemsToNotify, nodeToSegmentMap, wm);
                         smemSplitAdjustAmount++;
                     }
-                    SegmentUtilities.checkEagerSegmentCreation(parentNode, wm, nodeTypesInSegment );
+                    // TODO FIX BELOW mdp2022
+                    //SegmentUtilities.checkEagerSegmentCreation(parentNode, wm, nodeTypesInSegment );
                     nodeTypesInSegment = 0;
                 }
             } while (!NodeTypeEnums.isEndNode(node));
@@ -774,7 +773,7 @@ public class AddRemoveRule {
 
     public static List<PathMemory> findPathsToFlushFromRia(ReteEvaluator reteEvaluator, PathMemory pmem) {
         List<PathMemory> paths = null;
-        if (pmem.isDataDriven() && pmem.getNodeType() == NodeTypeEnums.RightInputAdaterNode) {
+        if (pmem.isDataDriven() && pmem.getNodeType() == NodeTypeEnums.RightInputAdapterNode) {
             for (PathEndNode pnode : pmem.getPathEndNode().getPathEndNodes()) {
                 if ( pnode instanceof TerminalNode ) {
                     PathMemory outPmem = reteEvaluator.getNodeMemory((TerminalNode) pnode);
@@ -1103,7 +1102,7 @@ public class AddRemoveRule {
                             for ( LeftTuple child = lt.getFirstChild(); child != null; child =  child.getHandleNext() ) {
                                 visitChild(child, insert, wm, rule);
                             }
-                        } else if (lt.getTupleSink().getType() == NodeTypeEnums.RightInputAdaterNode) {
+                        } else if (lt.getTupleSink().getType() == NodeTypeEnums.RightInputAdapterNode) {
                             insertPeerRightTuple(lt, wm, rule, insert);
                         }
                     } else if (!insert) {
@@ -1495,7 +1494,7 @@ public class AddRemoveRule {
 
     private static void populatePathMemories(InternalWorkingMemory wm, List<PathEndNode> nodes, List<PathMemory> pmems, List<PathMemory> otherPmems) {
         for (LeftTupleNode node : nodes) {
-            if (node.getType() == NodeTypeEnums.RightInputAdaterNode) {
+            if (node.getType() == NodeTypeEnums.RightInputAdapterNode) {
                 RiaNodeMemory riaMem = (RiaNodeMemory) wm.getNodeMemories().peekNodeMemory(node);
                 if (riaMem == null && otherPmems != null && !otherPmems.isEmpty()) {
                     riaMem = (RiaNodeMemory) wm.getNodeMemory((MemoryFactory<Memory>) node);
@@ -1522,7 +1521,6 @@ public class AddRemoveRule {
                                                 LeftTupleNode lt,
                                                 TerminalNode tn,
                                                 Rule processedRule,
-                                                boolean hasProtos,
                                                 boolean hasWms) {
         PathEndNodes endNodes = new PathEndNodes();
         endNodes.subjectEndNode = tn;
@@ -1532,11 +1530,9 @@ public class AddRemoveRule {
             endNodes.subjectSplits.add(lt);
         }
 
-        if (hasProtos) {
-            invalidateRootNode( kBase, lt );
-        }
+        invalidateRootNode( kBase, lt );
 
-        collectPathEndNodes(kBase, lt, endNodes, tn, processedRule, hasProtos, hasWms, hasProtos && isSplit(lt));
+        collectPathEndNodes(kBase, lt, endNodes, tn, processedRule, hasWms, isSplit(lt));
 
         return endNodes;
     }
@@ -1546,7 +1542,6 @@ public class AddRemoveRule {
                                             PathEndNodes endNodes,
                                             TerminalNode tn,
                                             Rule processedRule,
-                                            boolean hasProtos,
                                             boolean hasWms,
                                             boolean isBelowNewSplit) {
         // Traverses the sinks in reverse order in order to collect PathEndNodes so that
@@ -1555,16 +1550,14 @@ public class AddRemoveRule {
             if (sink == tn) {
                 continue;
             }
-            if (hasProtos) {
+            if (isBelowNewSplit) {
+                if ( isRootNode( sink, null )) {
+                    kBase.invalidateSegmentPrototype( sink );
+                }
+            } else {
+                isBelowNewSplit = isSplit(sink);
                 if (isBelowNewSplit) {
-                    if ( isRootNode( sink, null )) {
-                        kBase.invalidateSegmentPrototype( sink );
-                    }
-                } else {
-                    isBelowNewSplit = isSplit(sink);
-                    if (isBelowNewSplit) {
-                        invalidateRootNode( kBase, sink );
-                    }
+                    invalidateRootNode( kBase, sink );
                 }
             }
             if (NodeTypeEnums.isLeftTupleSource(sink)) {
@@ -1574,10 +1567,10 @@ public class AddRemoveRule {
                     }
                 }
 
-                collectPathEndNodes(kBase, sink, endNodes, tn, processedRule, hasProtos, hasWms, isBelowNewSplit);
+                collectPathEndNodes(kBase, sink, endNodes, tn, processedRule, hasWms, isBelowNewSplit);
             } else if (NodeTypeEnums.isTerminalNode(sink)) {
                 endNodes.otherEndNodes.add((PathEndNode) sink);
-            } else if (NodeTypeEnums.RightInputAdaterNode == sink.getType()) {
+            } else if (NodeTypeEnums.RightInputAdapterNode == sink.getType()) {
                 if (sink.isAssociatedWith( processedRule )) {
                     endNodes.subjectEndNodes.add( (PathEndNode) sink );
                 }

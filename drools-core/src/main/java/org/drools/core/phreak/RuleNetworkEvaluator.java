@@ -108,11 +108,13 @@ public class RuleNetworkEvaluator {
 
     public void evaluateNetwork(PathMemory pmem, RuleExecutor executor, ActivationsManager activationsManager) {
         SegmentMemory[] smems = pmem.getSegmentMemories();
-        SegmentMemory smem = smems[0];
-        if (smem == null) {
+
+        if (smems == null) {
             // if there's no first smem it's a pure alpha firing and then doesn't require any furthe evaluation
             return;
         }
+
+        SegmentMemory smem = smems[0];
 
         LeftInputAdapterNode liaNode = (LeftInputAdapterNode) smem.getRootNode();
 
@@ -155,7 +157,7 @@ public class RuleNetworkEvaluator {
         if (NodeTypeEnums.isTerminalNode(node)) {
             lt = ((TerminalNode) node).getLeftTupleSource();
             offset++;
-        } else if (node.getType() == NodeTypeEnums.RightInputAdaterNode) {
+        } else if (node.getType() == NodeTypeEnums.RightInputAdapterNode) {
             lt = ((RightInputAdapterNode) node).getLeftTupleSource();
         } else {
             lt = (LeftTupleSource) node;
@@ -330,7 +332,7 @@ public class RuleNetworkEvaluator {
                 case NodeTypeEnums.QueryTerminalNode:
                     pQtNode.doNode((QueryTerminalNode) node, activationsManager, srcTuples, stack);
                     break;
-                case NodeTypeEnums.RightInputAdaterNode:
+                case NodeTypeEnums.RightInputAdapterNode:
                     doRiaNode2(activationsManager.getReteEvaluator(), srcTuples, (RightInputAdapterNode) node);
                     break;
                 default:

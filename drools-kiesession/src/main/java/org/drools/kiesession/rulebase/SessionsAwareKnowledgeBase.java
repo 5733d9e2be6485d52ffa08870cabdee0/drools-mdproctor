@@ -482,11 +482,6 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     }
 
     @Override
-    public boolean hasSegmentPrototypes() {
-        return delegate.hasSegmentPrototypes();
-    }
-
-    @Override
     public void invalidateSegmentPrototype(LeftTupleNode rootNode) {
         delegate.invalidateSegmentPrototype(rootNode);
     }
@@ -814,12 +809,12 @@ public class SessionsAwareKnowledgeBase implements InternalKnowledgeBase {
     }
 
     @Override
-    public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentPrototype smem) {
+    public void registerSegmentPrototype(LeftTupleNode tupleSource, SegmentPrototype smem) {
         delegate.registerSegmentPrototype(tupleSource, smem);
     }
 
     @Override
-    public void registerSegmentPrototype(LeftTupleSource tupleSource, SegmentMemory smem) {
+    public void registerSegmentPrototype(LeftTupleNode tupleSource, SegmentMemory smem) {
         delegate.registerSegmentPrototype(tupleSource, smem);
     }
 }
