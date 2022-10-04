@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import org.drools.core.WorkingMemory;
 import org.drools.core.common.BaseNode;
 import org.drools.core.common.DroolsObjectInputStream;
 import org.drools.core.common.DroolsObjectOutputStream;
@@ -130,58 +130,49 @@ public class ReteooBuilder
         }
     }
 
-    public synchronized void addRules(final Collection<? extends Rule> ruleCol, Collection<InternalWorkingMemory> workingMemories) {
-        for (Rule rule : ruleCol) {
+    public synchronized void addRules(final Collection<? extends Rule> addedRules, Collection<InternalWorkingMemory> workingMemories) {
+        for (Rule rule : addedRules) {
             addRule((RuleImpl) rule, workingMemories);
         }
 
         List<PathEndNodes> pathEndNodes = new ArrayList<>();
-        for (Rule rule : ruleCol) {
+        for (Rule rule : addedRules) {
             TerminalNode[] nodes = rules.get(((RuleImpl)rule).getFullyQualifiedName());
             for (TerminalNode tn : nodes) {
                 pathEndNodes.add(AddRemoveRule.addRule1(tn, workingMemories, kBase));
             }
         }
 
+        resetPathMemSpecs(pathEndNodes, true);
+
+        pathEndNodes.stream().forEach( n -> {
+            AddRemoveRule.addRule2(n.subjectTerminalNode, n, workingMemories, kBase);
+        });
+    }
+
+    private void resetPathMemSpecs(List<PathEndNodes> pathEndNodes, boolean processSubjects) {
         // Reset the PathMemSpec for remaining pathEnds
-        // a subject node, might appear as a other node for a differnet rule, so use a set to avoid duplicate efforts.
-        Set<Integer> endNodes = new HashSet<>();
-        List<TerminalNode> rtns = new ArrayList<>(); // collect impacted rtns
+        // TerminalNode may appear in subject and other, so use Set to ensure uniqueness
+        Map<Integer, TerminalNode> rtns = new HashMap<>(); // collect impacted rtns
         for (PathEndNodes pathEndNode : pathEndNodes) {
             if (pathEndNode == null) {
                 continue;
             }
-            pathEndNode.subjectEndNodes.stream().filter(n-> !endNodes.contains(n.getId())).forEach(n -> {
+
+            Stream<PathEndNode> stream = processSubjects ? Stream.concat(pathEndNode.subjectEndNodes.stream(), pathEndNode.otherEndNodes.stream()) :
+                    pathEndNode.otherEndNodes.stream();
+            stream.forEach(n -> {
+                // do not reset on rian, it can only be called on the rtn. As the rtn will clear and get sub rians
                 if ( NodeTypeEnums.isTerminalNode(n)) {
-                    rtns.add( (TerminalNode) n);
+                    rtns.put( n.getId(), (TerminalNode) n);
                 }
-                n.resetPathMemSpec();
-                n.setSegmentPrototypes(null);
-                n.setEagerSegmentPrototypes(null);
-                endNodes.add(n.getId());
             });
 
-            pathEndNode.otherEndNodes.stream().filter(n-> !endNodes.contains(n.getId())).forEach(n -> {
-                if ( NodeTypeEnums.isTerminalNode(n)) {
-                    rtns.add( (TerminalNode) n);
-                }
-                n.resetPathMemSpec();
-                n.setSegmentPrototypes(null);
-                n.setEagerSegmentPrototypes(null);
-                endNodes.add(n.getId());
-            });
         }
 
-        rtns.forEach(tn -> SegmentUtilities2.createPathMemories(tn, kBase));
-
-
-        int i = 0;
-        for (Rule rule : ruleCol) {
-            TerminalNode[] nodes = rules.get(((RuleImpl)rule).getFullyQualifiedName());
-            for (TerminalNode tn : nodes) {
-                AddRemoveRule.addRule2(tn, pathEndNodes.get(i++), workingMemories, kBase);
-            }
-        }
+        // this will reset the PathMemSpecs as well as the segment and eagersegment arrays
+        rtns.values().forEach(tn -> tn.resetPathMemSpec());
+        rtns.values().forEach(tn -> SegmentUtilities2.createPathMemories(tn, kBase));
     }
 
     public void addEntryPoint( String id, Collection<InternalWorkingMemory> workingMemories ) {
@@ -227,7 +218,7 @@ public class ReteooBuilder
     }
 
     public synchronized void removeRules(Collection<? extends Rule> rulesToBeRemoved, Collection<InternalWorkingMemory> workingMemories) {
-        List<PathEndNodes[]> allPathEndNodes = new ArrayList<>();
+        List<PathEndNodes> pathEndNodesList = new ArrayList<>();
         // first run removeRule1 and remove the rules
         for (Rule r : rulesToBeRemoved) {
             RuleImpl rule = (RuleImpl) r;
@@ -240,16 +231,15 @@ public class ReteooBuilder
 
             TerminalNode[] rulesTerminalNodes = rules.remove( rule.getFullyQualifiedName() );
             if (rulesTerminalNodes == null) {
-                allPathEndNodes.add(null);
+                pathEndNodesList.add(null); // @mario shouldn't this throw an exception the rbase is toast @FIXME (MDP)
                 // there couldn't be any rule to be removed if it comes from a broken drl
                 continue;
             }
 
-            PathEndNodes[] pathEndNodesCol = new PathEndNodes[rulesTerminalNodes.length];
-            allPathEndNodes.add(pathEndNodesCol);
             int i = 0;
             for ( TerminalNode tn : rulesTerminalNodes ) {
-                pathEndNodesCol[i++] = AddRemoveRule.removeRule1( tn, workingMemories, kBase );
+                PathEndNodes endNodes = AddRemoveRule.removeRule1( tn, workingMemories, kBase );
+                pathEndNodesList.add(endNodes);
                 removeTerminalNode( context, tn, workingMemories );
             }
 
@@ -262,39 +252,15 @@ public class ReteooBuilder
             }
         }
 
-        // not iterate and reset all impacted RTN specs
-        List<TerminalNode> rtns = new ArrayList<>(); // collect the impacted RTNs
-        for (PathEndNodes[] pathEndNodesCol :  allPathEndNodes) {
-            if (pathEndNodesCol == null) {
-                continue;
-            }
-
-            // Reset the PathMemSpec for remaining pathEnds
-            // no need to reset the rules that have been removed, as they are no longer in the network
-            for (PathEndNodes pathEndNodes : pathEndNodesCol) {
-                pathEndNodes.otherEndNodes.forEach(n -> {
-                    if ( NodeTypeEnums.isTerminalNode(n)) {
-                        rtns.add( (TerminalNode) n);
-                    }
-                    n.resetPathMemSpec();
-                    n.setSegmentPrototypes(null);
-                    n.setEagerSegmentPrototypes(null);
-                });
-            }
-        }
-
-        // generate the segment protos for al impacted terminal nodes
-        rtns.forEach(tn -> SegmentUtilities2.createPathMemories(tn, kBase));
+        resetPathMemSpecs(pathEndNodesList, false);
 
         // Call remoteRule2 to fix the merged segments
-        for (PathEndNodes[] pathEndNodesCol :  allPathEndNodes) {
+        for (PathEndNodes pathEndNodesCol :  pathEndNodesList) {
             if (pathEndNodesCol == null) {
                 continue;
             }
 
-            for (PathEndNodes pathEndNodes : pathEndNodesCol) {
-                AddRemoveRule.removeRule2( pathEndNodes, workingMemories, kBase );
-            }
+            AddRemoveRule.removeRule2( pathEndNodesCol, workingMemories, kBase );
         }
     }
 

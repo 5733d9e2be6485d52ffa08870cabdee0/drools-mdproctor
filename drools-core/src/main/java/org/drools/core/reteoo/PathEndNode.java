@@ -25,6 +25,9 @@ import static org.drools.core.phreak.SegmentUtilities.nextNodePosMask;
 
 public interface PathEndNode extends LeftTupleSinkNode {
     LeftTupleNode[] getPathNodes();
+
+    public void nullPathMemSpec();
+
     boolean hasPathNode(LeftTupleNode node);
 
     void setPathEndNodes(PathEndNode[] pathEndNodes);

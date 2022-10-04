@@ -27,6 +27,7 @@ import org.drools.core.common.PhreakPropagationContextFactory;
 import org.drools.core.common.PropagationContextFactory;
 import org.drools.core.definitions.rule.impl.RuleImpl;
 import org.drools.core.phreak.SegmentUtilities2;
+import org.drools.core.reteoo.PathEndNode;
 import org.drools.core.reteoo.TerminalNode;
 import org.drools.kiesession.rulebase.InternalKnowledgeBase;
 import org.drools.core.phreak.SegmentUtilities;
@@ -181,6 +182,7 @@ public class RuleUnlinkingTest {
 
         // assumes no subnetworks
         for (TerminalNode tn : new TerminalNode[] {rtn1, rtn2, rtn3}) {
+            tn.setPathEndNodes( new PathEndNode[] {tn});
             tn.resetPathMemSpec();
             SegmentUtilities2.createPathMemories(tn, kBase);
         }
@@ -367,6 +369,7 @@ public class RuleUnlinkingTest {
 
         // assumes no subnetworks
         for (TerminalNode tn : new TerminalNode[] {rtn1, rtn2, rtn3}) {
+            tn.setPathEndNodes( new PathEndNode[] {tn});
             tn.resetPathMemSpec();
             SegmentUtilities2.createPathMemories(tn, kBase);
         }

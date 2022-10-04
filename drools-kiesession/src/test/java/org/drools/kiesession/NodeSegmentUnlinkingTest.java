@@ -184,6 +184,7 @@ public class NodeSegmentUnlinkingTest {
 
         // assumes no subnetworks
         for (TerminalNode tn : new TerminalNode[] {rtn1, rtn2, rtn3}) {
+            tn.setPathEndNodes( new PathEndNode[] {tn});
             tn.resetPathMemSpec();
             SegmentUtilities2.createPathMemories(tn, kBase);
         }

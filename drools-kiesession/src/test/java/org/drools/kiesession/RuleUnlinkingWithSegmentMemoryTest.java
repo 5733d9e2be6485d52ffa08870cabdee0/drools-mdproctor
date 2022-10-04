@@ -39,6 +39,7 @@ import org.drools.core.reteoo.MockObjectSource;
 import org.drools.core.reteoo.NodeTypeEnums;
 import org.drools.core.reteoo.NotNode;
 import org.drools.core.reteoo.ObjectTypeNode;
+import org.drools.core.reteoo.PathEndNode;
 import org.drools.core.reteoo.PathMemory;
 import org.drools.core.reteoo.RuleTerminalNode;
 import org.drools.core.reteoo.TerminalNode;
@@ -178,6 +179,7 @@ public class RuleUnlinkingWithSegmentMemoryTest {
 
         // assumes no subnetworks
         for (TerminalNode tn : new TerminalNode[] {rtn1, rtn2, rtn3}) {
+            tn.setPathEndNodes( new PathEndNode[] {tn});
             tn.resetPathMemSpec();
             SegmentUtilities2.createPathMemories(tn, kBase);
         }

@@ -196,7 +196,7 @@ public class PathMemory extends AbstractBaseLinkedListNode<Memory>
     }
 
     public boolean isInitialized() {
-        return agendaItem != null && segmentMemories[0] != null;
+        return agendaItem != null && segmentMemories != null;
     }
 
     public SegmentMemory[] getSegmentMemories() {

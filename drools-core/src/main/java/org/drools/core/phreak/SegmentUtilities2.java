@@ -101,11 +101,6 @@ public class SegmentUtilities2 {
                 segmentRoot = segmentRoot.getLeftTupleSource();
             }
 
-            if (segmentRoot instanceof AlphaTerminalNode &&
-                NodeTypeEnums.isTerminalNode(segmentTip)) {
-                return null; // this path has no beta nodes, so no pmem is needed
-            }
-
             // Store all nodes for the main path. If this is a subnetwork, only store nodes inside of it.
             if (inside) {
                 SegmentPrototype smem = createSegmentMemory(segmentRoot, segmentTip, rbase);

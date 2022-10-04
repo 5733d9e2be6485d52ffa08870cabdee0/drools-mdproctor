@@ -15,6 +15,7 @@
 
 package org.drools.core.reteoo;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.drools.core.RuleBaseConfiguration;
@@ -49,7 +50,7 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
 
     private SegmentPrototype[] eagerSegmentPrototypes;
 
-    private PathMemSpec pathMemSpec;
+    protected PathMemSpec pathMemSpec;
 
     private int objectCount;
 
@@ -73,7 +74,18 @@ public abstract class AbstractTerminalNode extends BaseNode implements TerminalN
 
     @Override
     public void resetPathMemSpec() {
+        // null all PathMemSpecs, for all pathEnds, or the recursion will use a previous value.
+        // calling calculatePathMemSpec, will eventually getPathMemSpec on all nested rians, so previous values must be nulled
+        Arrays.stream(pathEndNodes).forEach( n -> {
+            n.nullPathMemSpec();
+            n.setSegmentPrototypes(null);
+            n.setEagerSegmentPrototypes(null);}
+        );
         pathMemSpec = calculatePathMemSpec( null );
+    }
+
+    public void nullPathMemSpec() {
+        pathMemSpec = null;
     }
 
     @Override

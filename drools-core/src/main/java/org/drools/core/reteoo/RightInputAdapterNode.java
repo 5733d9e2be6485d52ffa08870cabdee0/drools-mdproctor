@@ -105,7 +105,12 @@ public class RightInputAdapterNode extends ObjectSource
 
     @Override
     public void resetPathMemSpec() {
-        pathMemSpec = calculatePathMemSpec( null );
+        throw new UnsupportedOperationException("This can only be called from the RuleTerminaNode");
+    }
+
+    @Override
+    public void nullPathMemSpec() {
+        pathMemSpec = null;
     }
 
     @Override
