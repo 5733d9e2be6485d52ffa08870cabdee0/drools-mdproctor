@@ -167,4 +167,6 @@ public interface RuleBase {
     }
 
     void registerSegmentPrototype(LeftTupleNode tupleSource, SegmentPrototype smem);
+
+    Map<Integer,SegmentPrototype> getSegmentPrototypes();
 }
